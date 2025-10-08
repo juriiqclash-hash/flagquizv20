@@ -1,0 +1,365 @@
+import { useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Mail, Edit3, Lock, Trash2, Upload, Eye } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { ProfileView } from './ProfileView';
+
+interface SettingsDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [currentUsername, setCurrentUsername] = useState<string>('');
+  const [showProfileView, setShowProfileView] = useState(false);
+  
+  // Form states
+  const [newEmail, setNewEmail] = useState('');
+  const [newUsername, setNewUsername] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      loadProfile();
+    }
+  }, [user]);
+
+  const loadProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('avatar_url, username')
+        .eq('user_id', user?.id)
+        .single();
+
+      if (error) throw error;
+      if (data?.avatar_url) {
+        setAvatarUrl(data.avatar_url);
+      }
+      if (data?.username) {
+        setCurrentUsername(data.username);
+      }
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    setIsLoading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/${Math.random()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName);
+
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: publicUrl })
+        .eq('user_id', user.id);
+
+      if (updateError) throw updateError;
+
+      setAvatarUrl(publicUrl);
+      toast({ title: 'Profilbild aktualisiert!' });
+    } catch (error: any) {
+      toast({
+        title: 'Fehler beim Hochladen',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleChangeEmail = async () => {
+    if (!newEmail.trim()) {
+      toast({
+        title: 'Fehler',
+        description: 'Bitte gib eine gültige E-Mail ein',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ email: newEmail });
+      if (error) throw error;
+
+      toast({
+        title: 'E-Mail geändert',
+        description: 'Bitte überprüfe deine E-Mail zur Bestätigung',
+      });
+      setNewEmail('');
+    } catch (error: any) {
+      toast({
+        title: 'Fehler',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleChangeUsername = async () => {
+    if (!newUsername.trim()) {
+      toast({
+        title: 'Fehler',
+        description: 'Bitte gib einen gültigen Benutzernamen ein',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ username: newUsername.trim() })
+        .eq('user_id', user?.id);
+
+      if (error) throw error;
+
+      setCurrentUsername(newUsername.trim());
+      toast({
+        title: 'Benutzername geändert',
+        description: 'Dein Benutzername wurde erfolgreich aktualisiert',
+      });
+      setNewUsername('');
+    } catch (error: any) {
+      toast({
+        title: 'Fehler',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    if (!newPassword.trim() || newPassword.length < 6) {
+      toast({
+        title: 'Fehler',
+        description: 'Passwort muss mindestens 6 Zeichen lang sein',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) throw error;
+
+      toast({
+        title: 'Passwort geändert',
+        description: 'Dein Passwort wurde erfolgreich aktualisiert',
+      });
+      setNewPassword('');
+    } catch (error: any) {
+      toast({
+        title: 'Fehler',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.admin.deleteUser(user?.id || '');
+      if (error) throw error;
+
+      toast({
+        title: 'Konto gelöscht',
+        description: 'Dein Konto wurde erfolgreich gelöscht',
+      });
+      onOpenChange(false);
+    } catch (error: any) {
+      toast({
+        title: 'Fehler',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-2xl">Einstellungen</DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-6">
+          {/* Avatar Upload */}
+          <div className="flex flex-col items-center space-y-4">
+            <Avatar className="h-24 w-24">
+              <AvatarImage src={avatarUrl || undefined} />
+              <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
+                {user?.email?.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="text-center">
+              <p className="font-semibold text-lg">{currentUsername || user?.email?.split('@')[0]}</p>
+            </div>
+            
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={() => setShowProfileView(true)}
+            >
+              <Eye className="h-4 w-4 mr-2" />
+              Profil ansehen
+            </Button>
+            
+            <Label htmlFor="avatar-upload" className="cursor-pointer">
+              <div className="flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-accent transition-colors">
+                <Upload className="h-4 w-4" />
+                <span>Profilbild ändern</span>
+              </div>
+              <Input
+                id="avatar-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarUpload}
+                className="hidden"
+              />
+            </Label>
+          </div>
+
+          {/* Email Change */}
+          <div className="space-y-2">
+            <Label htmlFor="new-email" className="flex items-center gap-2">
+              <Mail className="h-4 w-4" />
+              E-Mail ändern
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                id="new-email"
+                type="email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                placeholder={user?.email || ''}
+              />
+              <Button onClick={handleChangeEmail} disabled={isLoading || !newEmail}>
+                Ändern
+              </Button>
+            </div>
+          </div>
+
+          {/* Username Change */}
+          <div className="space-y-2">
+            <Label htmlFor="new-username" className="flex items-center gap-2">
+              <Edit3 className="h-4 w-4" />
+              Benutzername ändern
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                id="new-username"
+                type="text"
+                value={newUsername}
+                onChange={(e) => setNewUsername(e.target.value)}
+                placeholder="Neuer Benutzername"
+              />
+              <Button onClick={handleChangeUsername} disabled={isLoading || !newUsername}>
+                Ändern
+              </Button>
+            </div>
+          </div>
+
+          {/* Password Change */}
+          <div className="space-y-2">
+            <Label htmlFor="new-password" className="flex items-center gap-2">
+              <Lock className="h-4 w-4" />
+              Passwort ändern
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                id="new-password"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Neues Passwort"
+              />
+              <Button onClick={handleChangePassword} disabled={isLoading || !newPassword}>
+                Ändern
+              </Button>
+            </div>
+          </div>
+
+          {/* Delete Account */}
+          <div className="pt-4 border-t border-border">
+            {!showDeleteConfirm ? (
+              <Button
+                variant="outline"
+                className="w-full text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                onClick={() => setShowDeleteConfirm(true)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Konto löschen
+              </Button>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  Bist du sicher? Diese Aktion kann nicht rückgängig gemacht werden.
+                </p>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowDeleteConfirm(false)}
+                    className="flex-1"
+                  >
+                    Abbrechen
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={handleDeleteAccount}
+                    disabled={isLoading}
+                    className="flex-1"
+                  >
+                    Löschen
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </DialogContent>
+
+      <ProfileView open={showProfileView} onOpenChange={setShowProfileView} />
+    </Dialog>
+  );
+};
+
+export default SettingsDialog;
