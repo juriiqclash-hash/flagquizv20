@@ -503,7 +503,7 @@ export const ProfileView = ({
 
             {/* Rank Badge - Wider and taller with info icon */}
             <div className="col-span-4 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-6 flex items-center gap-5 min-h-[140px] relative overflow-hidden">
-              <div className="flex-shrink-0 w-24 h-24 flex items-center justify-center relative">
+              <div className="flex-shrink-0 w-30 h-30 flex items-center justify-center relative">
                 <img src={rank.badge} alt={rank.name} className="w-56 h-56 object-contain absolute" />
               </div>
               <div className="flex flex-col flex-1 ml-8">
