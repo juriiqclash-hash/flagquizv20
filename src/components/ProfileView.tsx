@@ -14,6 +14,14 @@ import platinumBadge from '@/assets/plartinum.webp';
 import diamondBadge from '@/assets/diamant.webp';
 import legendsBadge from '@/assets/legends.webp';
 import mastersBadge from '@/assets/masters.webp';
+
+const getFlagEmoji = (countryCode: string): string => {
+  const codePoints = countryCode
+    .toUpperCase()
+    .split('')
+    .map(char => 127397 + char.charCodeAt(0));
+  return String.fromCodePoint(...codePoints);
+};
 interface ProfileViewProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -415,10 +423,10 @@ export const ProfileView = ({
                   {profileData.flag ? (
                     <>
                       <span className="text-5xl mb-1" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
-                        {ALL_COUNTRIES.find(c => c.code === profileData.flag || c.flag === profileData.flag)?.flag || profileData.flag}
+                        {getFlagEmoji(profileData.flag)}
                       </span>
                       <span className="text-xs text-gray-600 font-semibold">
-                        {ALL_COUNTRIES.find(c => c.code === profileData.flag || c.flag === profileData.flag)?.code}
+                        {profileData.flag}
                       </span>
                     </>
                   ) : (
@@ -582,7 +590,7 @@ export const ProfileView = ({
         }} />
             <div className="grid grid-cols-6 gap-3">
               {ALL_COUNTRIES.map(country => <button key={country.code} onClick={() => updateProfileField('flag', country.code)} className="flex flex-col items-center justify-center p-3 hover:bg-gray-100 rounded-lg transition-all hover:scale-105">
-                  <span className="text-5xl mb-2" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>{country.flag}</span>
+                  <span className="text-5xl mb-2" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>{getFlagEmoji(country.code)}</span>
                   <span className="text-xs text-gray-600 font-medium">{country.code}</span>
                 </button>)}
             </div>
