@@ -375,16 +375,13 @@ export const ProfileView = ({
   };
   if (!open) return null;
   return <>
-      <div
-        className="fixed inset-0 z-0 bg-cover bg-center before:content-[''] before:absolute before:inset-0 before:bg-black/30"
-        style={{ backgroundImage: "url('/wallpaperpfp.png')" }}
-      >
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-gradient-to-br from-[#8B7355] via-[#4A4872] to-[#1a1a3e]">
         {/* Close Button */}
         <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
         </button>
         
-        <div className="relative z-10 w-full max-w-7xl flex flex-col h-full">
+        <div className="w-full max-w-7xl flex flex-col h-full">
           {/* Top Section: Avatar + Username + Level + Progress + Customization */}
           <div className="flex items-start gap-10 mb-4 pt-12">
             {/* Avatar Column - Balanced size */}
