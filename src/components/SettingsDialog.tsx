@@ -4,12 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Mail, Edit3, Lock, Trash2, Upload, Eye } from 'lucide-react';
+import { Mail, Edit3, Lock, Trash2, Upload } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { ProfileView } from './ProfileView';
-
 interface SettingsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -21,7 +19,6 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [currentUsername, setCurrentUsername] = useState<string>('');
-  const [showProfileView, setShowProfileView] = useState(false);
   
   // Form states
   const [newEmail, setNewEmail] = useState('');
@@ -233,16 +230,7 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
             <div className="text-center">
               <p className="font-semibold text-lg">{currentUsername || user?.email?.split('@')[0]}</p>
             </div>
-            
-            <Button 
-              variant="outline" 
-              className="w-full"
-              onClick={() => setShowProfileView(true)}
-            >
-              <Eye className="h-4 w-4 mr-2" />
-              Profil ansehen
-            </Button>
-            
+
             <Label htmlFor="avatar-upload" className="cursor-pointer">
               <div className="flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-accent transition-colors">
                 <Upload className="h-4 w-4" />
@@ -356,8 +344,6 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
           </div>
         </div>
       </DialogContent>
-
-      <ProfileView open={showProfileView} onOpenChange={setShowProfileView} />
     </Dialog>
   );
 };
