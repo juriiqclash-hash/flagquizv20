@@ -6,7 +6,7 @@ import ContinentSelector from "./ContinentSelector";
 import TimeSelector from "./TimeSelector";
 import CapitalVariantSelector from "./CapitalVariantSelector";
 import Leaderboard from "./Leaderboard";
-import LeaderboardButton from "./LeaderboardButton";
+import HamburgerMenu from "./HamburgerMenu";
 import ProfileButton from "./ProfileButton";
 import MultiplayerMenu from "./MultiplayerMenu";
 import BannedScreen from "./BannedScreen";
@@ -160,13 +160,11 @@ export default function StartScreen({
       
       {/* Buttons Container - Responsive Layout */}
       {!isProfileOpen && (
-        <div className="absolute top-4 left-4 z-50 flex flex-col md:flex-row gap-2">
-          <LeaderboardButton />
-          {onBackToMainMenu && (
-            <Button variant="outline" onClick={onBackToMainMenu} className="hidden md:flex">
-              <Home className="h-4 w-4" />
-            </Button>
-          )}
+        <div className="absolute top-4 left-4 z-50">
+          <HamburgerMenu
+            onNavigateHome={onBackToMainMenu || (() => {})}
+            currentPage="quiz"
+          />
         </div>
       )}
       

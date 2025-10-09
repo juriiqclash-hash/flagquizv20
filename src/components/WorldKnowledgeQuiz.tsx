@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Check, X } from "lucide-react";
+import HamburgerMenu from "@/components/HamburgerMenu";
 import { useToast } from "@/hooks/use-toast";
 import { getFactsByDifficulty, getDifficultyDisplayName, type DifficultyLevel, type WorldKnowledgeFact } from "@/data/worldKnowledge";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -93,14 +94,10 @@ export default function WorldKnowledgeQuiz({ difficulty, onBack }: WorldKnowledg
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-4">
-        <Button
-          onClick={onBack}
-          variant="ghost"
-          size="sm"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          {t.back}
-        </Button>
+        <HamburgerMenu
+          onNavigateHome={onBack}
+          currentPage="quiz"
+        />
         
         <div className="text-center">
           <h1 className="text-xl font-bold">{t.worldKnowledgeTitle}</h1>

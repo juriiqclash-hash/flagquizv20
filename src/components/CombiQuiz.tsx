@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Home, Eye, ArrowLeft, MapPin, Mountain, Languages, Smile, Globe } from "lucide-react";
+import HamburgerMenu from "@/components/HamburgerMenu";
 import { countries, shuffleArray, checkAnswer, getFlagUrl, type Country } from "@/data/countries";
 import { getMountainByCountry } from "@/data/mountains";
 import { getLanguageByCountry } from "@/data/languages";
@@ -281,10 +282,10 @@ export default function CombiQuiz({ onBackToStart }: CombiQuizProps) {
       <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 p-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-6">
-            <Button variant="outline" onClick={onBackToStart}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Zurück
-            </Button>
+            <HamburgerMenu
+              onNavigateHome={onBackToStart}
+              currentPage="quiz"
+            />
           </div>
 
           <Card>
@@ -328,10 +329,10 @@ export default function CombiQuiz({ onBackToStart }: CombiQuizProps) {
       <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 p-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-6">
-            <Button variant="outline" onClick={onBackToStart}>
-              <Home className="w-4 h-4 mr-2" />
-              Start
-            </Button>
+            <HamburgerMenu
+              onNavigateHome={onBackToStart}
+              currentPage="quiz"
+            />
             <div className="flex items-center gap-4">
               <Badge variant="outline" className="text-lg px-3 py-1">
                 🏆 {score}/{totalAnswered}
@@ -385,10 +386,10 @@ export default function CombiQuiz({ onBackToStart }: CombiQuizProps) {
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 p-4">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <Button variant="outline" onClick={onBackToStart}>
-            <Home className="w-4 h-4 mr-2" />
-            Start
-          </Button>
+          <HamburgerMenu
+            onNavigateHome={onBackToStart}
+            currentPage="quiz"
+          />
           <div className="flex items-center gap-4">
             <Badge variant="outline" className="text-lg px-3 py-1">
               🏆 {score}/{totalAnswered}
