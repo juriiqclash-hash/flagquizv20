@@ -411,8 +411,17 @@ export const ProfileView = ({
                 } else {
                   setEditingSlot('flag');
                 }
-              }} className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex items-center justify-center text-5xl hover:shadow-xl transition-all hover:scale-105">
-                  {profileData.flag || <Plus className="w-8 h-8 text-gray-500" />}
+              }} className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
+                  {profileData.flag ? (
+                    <>
+                      <span className="text-5xl mb-1">{profileData.flag}</span>
+                      <span className="text-xs text-gray-600 font-semibold">
+                        {ALL_COUNTRIES.find(c => c.flag === profileData.flag)?.code}
+                      </span>
+                    </>
+                  ) : (
+                    <Plus className="w-8 h-8 text-gray-500" />
+                  )}
                 </button>
 
                 {/* Continent Slot */}
