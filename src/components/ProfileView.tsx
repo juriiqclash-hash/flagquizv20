@@ -375,7 +375,7 @@ export const ProfileView = ({
   };
   if (!open) return null;
   return <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-gradient-to-br from-[#8B7355] via-[#4A4872] to-[#1a1a3e]">
+      <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-300 via-cyan-200 to-blue-400 flex items-center justify-center p-6">
         {/* Close Button */}
         <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
