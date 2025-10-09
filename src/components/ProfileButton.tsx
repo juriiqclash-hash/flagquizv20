@@ -289,7 +289,7 @@ const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOp
           <DialogHeader>
             <DialogTitle className="text-xl">Benutzer wechseln</DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-2">
             {savedAccounts.map((account) => {
               const isCurrentUser = account.userId === user.id;
               return (
@@ -301,22 +301,22 @@ const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOp
                       setShowAccountSwitchDialog(false);
                     }
                   }}
-                  className={`flex flex-col items-center gap-3 p-4 rounded-lg border transition-colors ${
-                    isCurrentUser
-                      ? 'border-primary bg-primary/10 cursor-default'
+                  className={`w-full flex items-center gap-4 p-4 rounded-lg border transition-colors ${
+                    isCurrentUser 
+                      ? 'border-primary bg-primary/10 cursor-default' 
                       : 'border-border hover:bg-accent cursor-pointer'
                   }`}
                 >
-                  <Avatar className="h-16 w-16">
+                  <Avatar className="h-12 w-12">
                     <AvatarImage src={account.avatarUrl} />
-                    <AvatarFallback className="bg-primary text-primary-foreground text-xl">
+                    <AvatarFallback className="bg-primary text-primary-foreground">
                       {account.email.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="text-center">
-                    <p className="font-medium text-sm truncate max-w-[120px]">{account.email}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {isCurrentUser ? 'Aktuell' : 'Wechseln'}
+                  <div className="flex-1 text-left">
+                    <p className="font-medium">{account.email}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {isCurrentUser ? 'Aktuell angemeldet' : 'Zum Wechseln klicken'}
                     </p>
                   </div>
                 </button>
