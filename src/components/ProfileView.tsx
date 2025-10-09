@@ -430,7 +430,7 @@ export const ProfileView = ({
                       </span>
                     </>
                   ) : (
-                    <Plus className="w-8 h-8 text-gray-500" />
+                    <Plus className="w-8 h-8 text-gray-300" />
                   )}
                 </button>
 
@@ -449,7 +449,7 @@ export const ProfileView = ({
                       <span className="text-xs text-gray-300 font-semibold">
                         {profileData.continent}
                       </span>
-                    </> : <Plus className="w-8 h-8 text-gray-500" />}
+                    </> : <Plus className="w-8 h-8 text-gray-300" />}
                 </button>
 
                 {/* Clan Slot */}
@@ -467,7 +467,7 @@ export const ProfileView = ({
                       <span className="text-xs text-gray-300 font-semibold">
                         {profileData.clan}
                       </span>
-                    </> : <Plus className="w-8 h-8 text-gray-500" />}
+                    </> : <Plus className="w-8 h-8 text-gray-300" />}
                 </button>
               </div>
             </div>
