@@ -39,7 +39,7 @@ interface ProfileData {
 }
 const CLANS = [{
   name: 'Agharta',
-  emoji: '🛕'
+  emoji: '🏯'
 }, {
   name: 'Shambhala',
   emoji: '☀️'
