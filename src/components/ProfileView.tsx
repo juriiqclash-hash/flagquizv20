@@ -11,6 +11,8 @@ import silverBadge from '@/assets/silber.webp';
 import goldBadge from '@/assets/gold.webp';
 import platinumBadge from '@/assets/plartinum.webp';
 import diamondBadge from '@/assets/diamant.webp';
+import legendsBadge from '@/assets/legends.webp';
+import mastersBadge from '@/assets/masters.webp';
 
 interface ProfileViewProps {
   open: boolean;
@@ -66,8 +68,8 @@ type RankTier = {
 const RANK_TIERS: RankTier[] = [
   {
     name: 'Legends',
-    badge: diamondBadge,
-    gradient: 'from-cyan-400 via-blue-400 to-cyan-300',
+    badge: legendsBadge,
+    gradient: 'from-purple-600 via-purple-500 to-pink-500',
     minStreak: 1000,
     minTimeSeconds: 480, // <8 minutes
     minDuelWins: 500,
@@ -75,8 +77,8 @@ const RANK_TIERS: RankTier[] = [
   },
   {
     name: 'Masters',
-    badge: platinumBadge,
-    gradient: 'from-slate-400 via-slate-300 to-slate-200',
+    badge: mastersBadge,
+    gradient: 'from-blue-600 via-blue-500 to-purple-500',
     minStreak: 100,
     minTimeSeconds: 480, // 8-9 minutes
     minDuelWins: 500,
@@ -536,7 +538,7 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
 
             {/* Rank Badge - Wider and taller with info icon */}
             <div className="col-span-4 bg-white/30 backdrop-blur-sm rounded-3xl shadow-md p-5 flex items-center gap-4 min-h-[110px] relative">
-              <div className="flex-shrink-0 w-20 h-20 flex items-center justify-center">
+              <div className="flex-shrink-0 w-40 h-40 flex items-center justify-center">
                 <img src={rank.badge} alt={rank.name} className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col flex-1">
@@ -579,7 +581,7 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
                     key={tier.name}
                     className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                   >
-                    <div className="w-16 h-16 flex items-center justify-center flex-shrink-0">
+                    <div className="w-32 h-32 flex items-center justify-center flex-shrink-0">
                       <img src={tier.badge} alt={tier.name} className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1">
