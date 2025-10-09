@@ -8,10 +8,11 @@ import { Card, CardContent } from '@/components/ui/card';
 
 interface HamburgerMenuProps {
   onNavigateHome: () => void;
+  onNavigateQuiz: () => void;
   currentPage?: 'home' | 'quiz';
 }
 
-const HamburgerMenu = ({ onNavigateHome, currentPage = 'quiz' }: HamburgerMenuProps) => {
+const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz' }: HamburgerMenuProps) => {
   const [open, setOpen] = useState(false);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [friendsDialogOpen, setFriendsDialogOpen] = useState(false);
@@ -30,7 +31,7 @@ const HamburgerMenu = ({ onNavigateHome, currentPage = 'quiz' }: HamburgerMenuPr
     const randomDelay = Math.floor(random * 1200) + 300;
     setTimeout(() => {
       setIsLoadingQuiz(false);
-      onNavigateHome();
+      onNavigateQuiz();
     }, randomDelay);
   };
 
@@ -51,6 +52,15 @@ const HamburgerMenu = ({ onNavigateHome, currentPage = 'quiz' }: HamburgerMenuPr
 
   return (
     <>
+      {isLoadingQuiz && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm">
+          <div className="text-center">
+            <Trophy className="w-16 h-16 text-primary animate-pulse mx-auto mb-4" />
+            <p className="text-2xl font-semibold">Lade Quiz...</p>
+          </div>
+        </div>
+      )}
+
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon">
@@ -77,7 +87,7 @@ const HamburgerMenu = ({ onNavigateHome, currentPage = 'quiz' }: HamburgerMenuPr
               onClick={handleNavigateQuiz}
               disabled={isLoadingQuiz}
             >
-              {isLoadingQuiz ? <Loader2 className="h-5 w-5 mr-3 animate-spin" /> : <Trophy className="h-5 w-5 mr-3" />}
+              <Trophy className="h-5 w-5 mr-3" />
               Quiz
             </Button>
 

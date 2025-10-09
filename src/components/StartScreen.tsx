@@ -163,6 +163,7 @@ export default function StartScreen({
         <div className="absolute top-4 left-4 z-50">
           <HamburgerMenu
             onNavigateHome={onBackToMainMenu || (() => {})}
+            onNavigateQuiz={() => {}}
             currentPage="quiz"
           />
         </div>
