@@ -622,10 +622,10 @@ export const ProfileView = ({
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="grid grid-cols-5 gap-3">
-              {CLANS.map(clan => <button key={clan.name} onClick={() => updateProfileField('clan', clan.name)} className="flex flex-col items-center gap-2 p-4 hover:bg-gray-100 rounded-lg transition-colors">
+            <div className="grid grid-cols-2 gap-3">
+              {CLANS.map(clan => <button key={clan.name} onClick={() => updateProfileField('clan', clan.name)} className="flex items-center gap-3 p-4 hover:bg-gray-100 rounded-lg transition-colors">
                   <span className="text-3xl">{clan.emoji}</span>
-                  <span className="font-medium text-sm text-center">{clan.name}</span>
+                  <span className="font-medium text-lg">{clan.name}</span>
                 </button>)}
             </div>
           </div>
