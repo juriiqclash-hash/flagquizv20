@@ -414,7 +414,7 @@ export const ProfileView = ({
               }} className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
                   {profileData.flag ? (
                     <>
-                      <span className="text-5xl mb-1">{profileData.flag}</span>
+                      <span className="text-5xl mb-1" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>{profileData.flag}</span>
                       <span className="text-xs text-gray-600 font-semibold">
                         {ALL_COUNTRIES.find(c => c.flag === profileData.flag)?.code}
                       </span>
@@ -580,7 +580,7 @@ export const ProfileView = ({
         }} />
             <div className="grid grid-cols-6 gap-3">
               {ALL_COUNTRIES.map(country => <button key={country.code} onClick={() => updateProfileField('flag', country.flag)} className="flex flex-col items-center justify-center p-3 hover:bg-gray-100 rounded-lg transition-all hover:scale-105">
-                  <span className="text-5xl mb-2">{country.flag}</span>
+                  <span className="text-5xl mb-2" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>{country.flag}</span>
                   <span className="text-xs text-gray-600 font-medium">{country.code}</span>
                 </button>)}
             </div>
