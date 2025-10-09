@@ -393,27 +393,27 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
         
         <div className="w-full max-w-7xl flex flex-col h-full">
           {/* Top Section: Avatar + Username + Level + Progress + Customization */}
-          <div className="flex items-start gap-12 mb-6 pt-4">
-            {/* Avatar Column - Much larger */}
-            <div className="flex flex-col items-center pt-4">
-              <Avatar className="h-72 w-72 ring-8 ring-white shadow-2xl">
+          <div className="flex items-start gap-10 mb-4 pt-2">
+            {/* Avatar Column - Balanced size */}
+            <div className="flex flex-col items-center pt-2">
+              <Avatar className="h-56 w-56 ring-8 ring-white shadow-2xl">
                 <AvatarImage src={avatarUrl} />
-                <AvatarFallback className="text-9xl bg-blue-500 text-white">
+                <AvatarFallback className="text-8xl bg-blue-500 text-white">
                   {username.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <p className="text-sm text-gray-600 mt-4 font-medium">Joined {accountCreated}</p>
+              <p className="text-sm text-gray-600 mt-3 font-medium">Joined {accountCreated}</p>
             </div>
 
             {/* Right Side: Username, Level Bar, and Customization Slots */}
-            <div className="flex-1 pt-8">
-              <h1 className="text-7xl font-bold text-gray-800 mb-3 leading-none">
+            <div className="flex-1 pt-6">
+              <h1 className="text-6xl font-bold text-gray-800 mb-2 leading-none">
                 {username}
               </h1>
-              <p className="text-2xl text-gray-600 mb-5 font-medium">Level {level}</p>
+              <p className="text-xl text-gray-600 mb-4 font-medium">Level {level}</p>
 
               {/* XP Progress Bar */}
-              <div className="h-7 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner max-w-2xl mb-8">
+              <div className="h-6 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner max-w-xl mb-6">
                 <div
                   className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-500 rounded-full"
                   style={{ width: `${Math.max(2, Math.min(levelProgress, 100))}%` }}
@@ -421,7 +421,7 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
               </div>
 
               {/* Customization Slots */}
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 {/* Flag Slot */}
                 <button
                   onClick={() => {
@@ -431,9 +431,9 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
                       setEditingSlot('flag');
                     }
                   }}
-                  className="w-32 h-32 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex items-center justify-center text-5xl hover:shadow-xl transition-all hover:scale-105"
+                  className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex items-center justify-center text-5xl hover:shadow-xl transition-all hover:scale-105"
                 >
-                  {profileData.flag || <Plus className="w-9 h-9 text-gray-500" />}
+                  {profileData.flag || <Plus className="w-8 h-8 text-gray-500" />}
                 </button>
 
                 {/* Continent Slot */}
@@ -445,11 +445,11 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
                       setEditingSlot('continent');
                     }
                   }}
-                  className="w-32 h-32 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105"
+                  className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105"
                 >
                   {profileData.continent ? (
                     <>
-                      <span className="text-5xl mb-1">
+                      <span className="text-4xl mb-1">
                         {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
                       </span>
                       <span className="text-xs text-gray-600 font-semibold">
@@ -457,7 +457,7 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
                       </span>
                     </>
                   ) : (
-                    <Plus className="w-9 h-9 text-gray-500" />
+                    <Plus className="w-8 h-8 text-gray-500" />
                   )}
                 </button>
 
@@ -470,11 +470,11 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
                       setEditingSlot('clan');
                     }
                   }}
-                  className="w-32 h-32 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105"
+                  className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105"
                 >
                   {profileData.clan ? (
                     <>
-                      <span className="text-5xl mb-1">
+                      <span className="text-4xl mb-1">
                         {CLANS.find(c => c.name === profileData.clan)?.emoji}
                       </span>
                       <span className="text-xs text-gray-600 font-semibold">
@@ -482,7 +482,7 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
                       </span>
                     </>
                   ) : (
-                    <Plus className="w-9 h-9 text-gray-500" />
+                    <Plus className="w-8 h-8 text-gray-500" />
                   )}
                 </button>
               </div>
@@ -491,67 +491,67 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
 
 
           {/* Player Stats Header */}
-          <h2 className="text-base font-bold text-gray-700 uppercase tracking-[0.25em] mb-5 mt-auto">
+          <h2 className="text-sm font-bold text-gray-700 uppercase tracking-[0.25em] mb-3 mt-auto">
             PLAYER STATS
           </h2>
 
           {/* Stats Grid - 3 narrow cards + 1 wider rank card */}
-          <div className="grid grid-cols-10 gap-5 pb-6">
+          <div className="grid grid-cols-10 gap-4 pb-4">
             {/* Best Streak */}
-            <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-6 flex flex-col items-center justify-center min-h-[160px]">
-              <p className="text-sm text-gray-700 uppercase tracking-wide font-bold mb-4">
+            <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-5 flex flex-col items-center justify-center min-h-[140px]">
+              <p className="text-xs text-gray-700 uppercase tracking-wide font-bold mb-3">
                 BESTE STREAK
               </p>
-              <div className="flex items-center gap-3">
-                <Flame className="w-10 h-10 text-orange-500" />
-                <span className="text-5xl font-bold text-gray-800">
+              <div className="flex items-center gap-2">
+                <Flame className="w-8 h-8 text-orange-500" />
+                <span className="text-4xl font-bold text-gray-800">
                   {leaderboardStats.bestStreak}
                 </span>
               </div>
             </div>
 
             {/* Time Mode */}
-            <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-6 flex flex-col items-center justify-center min-h-[160px]">
-              <p className="text-sm text-gray-700 uppercase tracking-wide font-bold mb-4">
+            <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-5 flex flex-col items-center justify-center min-h-[140px]">
+              <p className="text-xs text-gray-700 uppercase tracking-wide font-bold mb-3">
                 ZEITMODUS
               </p>
-              <div className="flex items-center gap-3">
-                <Clock className="w-10 h-10 text-blue-500" />
-                <span className="text-5xl font-bold text-gray-800">
+              <div className="flex items-center gap-2">
+                <Clock className="w-8 h-8 text-blue-500" />
+                <span className="text-4xl font-bold text-gray-800">
                   {formatTime(leaderboardStats.bestTimeMode)}
                 </span>
               </div>
             </div>
 
             {/* Duel Wins */}
-            <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-6 flex flex-col items-center justify-center min-h-[160px]">
-              <p className="text-sm text-gray-700 uppercase tracking-wide font-bold mb-4">
+            <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-5 flex flex-col items-center justify-center min-h-[140px]">
+              <p className="text-xs text-gray-700 uppercase tracking-wide font-bold mb-3">
                 DUELLE WINS
               </p>
-              <div className="flex items-center gap-3">
-                <Trophy className="w-10 h-10 text-yellow-500" />
-                <span className="text-5xl font-bold text-gray-800">
+              <div className="flex items-center gap-2">
+                <Trophy className="w-8 h-8 text-yellow-500" />
+                <span className="text-4xl font-bold text-gray-800">
                   {leaderboardStats.duelWins}
                 </span>
               </div>
             </div>
 
             {/* Rank Badge - Wider and taller with info icon */}
-            <div className="col-span-4 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-7 flex items-center gap-6 min-h-[160px] relative">
-              <div className="flex-shrink-0 w-28 h-28 flex items-center justify-center">
-                <img src={rank.badge} alt={rank.name} className="w-48 h-48 object-contain" />
+            <div className="col-span-4 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-6 flex items-center gap-5 min-h-[140px] relative">
+              <div className="flex-shrink-0 w-24 h-24 flex items-center justify-center">
+                <img src={rank.badge} alt={rank.name} className="w-40 h-40 object-contain" />
               </div>
               <div className="flex flex-col flex-1">
-                <p className="text-5xl font-bold text-blue-500 leading-tight">
+                <p className="text-4xl font-bold text-blue-500 leading-tight">
                   {rank.name}
                 </p>
-                <p className="text-base text-gray-700 mt-2 font-medium">
+                <p className="text-sm text-gray-700 mt-1 font-medium">
                   Best Position #{leaderboardStats.bestPosition}
                 </p>
               </div>
               <button
                 onClick={() => setShowRankInfo(true)}
-                className="absolute top-4 right-4 p-2 bg-white/60 hover:bg-white/80 rounded-full transition-colors"
+                className="absolute top-3 right-3 p-2 bg-white/60 hover:bg-white/80 rounded-full transition-colors"
               >
                 <Info className="w-5 h-5 text-gray-600" />
               </button>
@@ -575,7 +575,7 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
             </div>
 
             <div className="flex gap-4 justify-center mb-6">
-              {RANK_TIERS.map((tier) => {
+              {[...RANK_TIERS].reverse().map((tier) => {
                 return (
                   <div
                     key={tier.name}
