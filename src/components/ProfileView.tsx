@@ -14,7 +14,6 @@ import platinumBadge from '@/assets/plartinum.webp';
 import diamondBadge from '@/assets/diamant.webp';
 import legendsBadge from '@/assets/legends.webp';
 import mastersBadge from '@/assets/masters.webp';
-import profileBackground from '@/assets/image.png';
 
 const getFlagEmoji = (countryCode: string): string => {
   const codePoints = countryCode
@@ -243,56 +242,18 @@ export const ProfileView = ({
   const [editingSlot, setEditingSlot] = useState<'flag' | 'continent' | 'clan' | null>(null);
   const [loading, setLoading] = useState(true);
   const [showRankInfo, setShowRankInfo] = useState(false);
-  const [currentStreak, setCurrentStreak] = useState(0);
   useEffect(() => {
     if (open && user) {
       loadProfileData();
     }
   }, [open, user]);
-  const updateStreakIfNeeded = async (streak: number, lastActivityDate: string | null) => {
-    if (!user) return;
-
-    const today = new Date().toISOString().split('T')[0];
-    const lastActivity = lastActivityDate ? new Date(lastActivityDate).toISOString().split('T')[0] : null;
-
-    let newStreak = streak;
-
-    if (!lastActivity) {
-      newStreak = 1;
-    } else if (lastActivity === today) {
-      newStreak = streak || 1;
-    } else {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-      if (lastActivity === yesterdayStr) {
-        newStreak = (streak || 0) + 1;
-      } else {
-        newStreak = 1;
-      }
-    }
-
-    setCurrentStreak(newStreak);
-
-    if (newStreak !== streak || lastActivity !== today) {
-      await supabase
-        .from('profiles')
-        .update({
-          current_streak: newStreak,
-          last_activity_date: today
-        })
-        .eq('user_id', user.id);
-    }
-  };
-
   const loadProfileData = async () => {
     if (!user) return;
     try {
       // Load profile
       const {
         data: profile
-      } = await supabase.from('profiles').select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan, current_streak, last_activity_date').eq('user_id', user.id).single();
+      } = await supabase.from('profiles').select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan').eq('user_id', user.id).single();
       if (profile) {
         setUsername(profile.username || user.email?.split('@')[0] || 'User');
         setAvatarUrl(profile.avatar_url || '');
@@ -301,9 +262,6 @@ export const ProfileView = ({
           month: '2-digit',
           year: '2-digit'
         }));
-
-        // Update streak if needed
-        await updateStreakIfNeeded(profile.current_streak || 0, profile.last_activity_date);
 
         // Load customization data from Supabase
         setProfileData({
@@ -417,15 +375,7 @@ export const ProfileView = ({
   };
   if (!open) return null;
   return <>
-      <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-6"
-        style={{
-          backgroundImage: `url(${profileBackground})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
+      <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-300 via-cyan-200 to-blue-400 flex items-center justify-center p-6">
         {/* Close Button */}
         <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
@@ -447,15 +397,9 @@ export const ProfileView = ({
 
             {/* Right Side: Username, Level Bar, and Customization Slots */}
             <div className="flex-1 pt-6">
-              <div className="flex items-center gap-4 mb-3">
-                <h1 className="text-7xl font-bold text-gray-800 leading-none">
-                  {username}
-                </h1>
-                <div className="flex items-center gap-2 bg-orange-500/20 backdrop-blur-sm px-6 py-3 rounded-2xl border-2 border-orange-400">
-                  <Flame className="w-10 h-10 text-orange-500" />
-                  <span className="text-4xl font-bold text-orange-600">{currentStreak}</span>
-                </div>
-              </div>
+              <h1 className="text-7xl font-bold text-gray-800 mb-3 leading-none">
+                {username}
+              </h1>
               <p className="text-2xl text-gray-600 mb-2 font-medium">Level {level}</p>
               
 
