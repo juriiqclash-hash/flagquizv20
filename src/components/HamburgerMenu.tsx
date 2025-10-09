@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Home, Trophy, Users, Shield } from 'lucide-react';
+import { Menu, Home, Trophy, Users, Shield, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Leaderboard from '@/components/Leaderboard';
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,10 +16,22 @@ const HamburgerMenu = ({ onNavigateHome, currentPage = 'quiz' }: HamburgerMenuPr
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [friendsDialogOpen, setFriendsDialogOpen] = useState(false);
   const [clansDialogOpen, setClansDialogOpen] = useState(false);
+  const [isLoadingQuiz, setIsLoadingQuiz] = useState(false);
 
   const handleNavigateHome = () => {
     setOpen(false);
     onNavigateHome();
+  };
+
+  const handleNavigateQuiz = () => {
+    setOpen(false);
+    setIsLoadingQuiz(true);
+    const random = Math.random() * Math.random();
+    const randomDelay = Math.floor(random * 1200) + 300;
+    setTimeout(() => {
+      setIsLoadingQuiz(false);
+      onNavigateHome();
+    }, randomDelay);
   };
 
   const handleOpenLeaderboard = () => {
@@ -62,9 +74,10 @@ const HamburgerMenu = ({ onNavigateHome, currentPage = 'quiz' }: HamburgerMenuPr
             <Button
               variant={currentPage === 'quiz' ? 'default' : 'outline'}
               className="w-full justify-start text-lg h-14"
-              onClick={handleNavigateHome}
+              onClick={handleNavigateQuiz}
+              disabled={isLoadingQuiz}
             >
-              <Trophy className="h-5 w-5 mr-3" />
+              {isLoadingQuiz ? <Loader2 className="h-5 w-5 mr-3 animate-spin" /> : <Trophy className="h-5 w-5 mr-3" />}
               Quiz
             </Button>
 

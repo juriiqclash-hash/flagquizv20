@@ -185,11 +185,11 @@ export default function StartScreen({
                 {t.timedMode}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
                 Wie schnell schaffst du alle Flaggen zu benennen?
               </p>
-              <Button onClick={() => handleModeClick('timed')} className="w-full">
+              <Button onClick={() => handleModeClick('timed')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
@@ -204,11 +204,11 @@ export default function StartScreen({
                 {t.learnMode}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
                 Üben ohne Zeitdruck
               </p>
-              <Button onClick={() => handleModeClick('learn')} className="w-full">
+              <Button onClick={() => handleModeClick('learn')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
@@ -223,11 +223,11 @@ export default function StartScreen({
                 {t.streakMode}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
                 Wie viele Flaggen schaffst du hintereinander ohne Fehler?
               </p>
-              <Button onClick={() => handleModeClick('streak')} className="w-full">
+              <Button onClick={() => handleModeClick('streak')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
@@ -242,11 +242,11 @@ export default function StartScreen({
                 {t.continentMode}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
                 Flaggen nur von einem bestimmten Kontinent
               </p>
-              <Button onClick={() => handleModeClick('continent')} className="w-full">
+              <Button onClick={() => handleModeClick('continent')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
@@ -261,11 +261,11 @@ export default function StartScreen({
                 {t.speedRush}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
                 Wie viele Flaggen kannst du in einer bestimmten Zeit benennen?
               </p>
-              <Button onClick={() => handleModeClick('speedrush')} className="w-full">
+              <Button onClick={() => handleModeClick('speedrush')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
@@ -280,11 +280,11 @@ export default function StartScreen({
                 {t.capitalToCountry.split(' → ')[0]}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
                 {t.capitalToCountryDesc}
               </p>
-              <Button onClick={() => handleModeClick('capitals')} className="w-full">
+              <Button onClick={() => handleModeClick('capitals')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
@@ -299,11 +299,11 @@ export default function StartScreen({
                 {t.emojiMode}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
                 {t.emojiModeDesc}
               </p>
-              <Button onClick={() => handleModeClick('emoji')} className="w-full">
+              <Button onClick={() => handleModeClick('emoji')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
@@ -318,11 +318,11 @@ export default function StartScreen({
                 {t.mountainMode}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
                 {t.mountainModeDesc}
               </p>
-              <Button onClick={() => handleModeClick('highest-mountain')} className="w-full">
+              <Button onClick={() => handleModeClick('highest-mountain')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
@@ -337,11 +337,11 @@ export default function StartScreen({
                 {t.languageMode}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
                 {t.languageModeDesc}
               </p>
-              <Button onClick={() => handleModeClick('official-language')} className="w-full">
+              <Button onClick={() => handleModeClick('official-language')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
@@ -356,11 +356,11 @@ export default function StartScreen({
                 {t.worldKnowledge}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
                 {t.worldKnowledgeDesc}
               </p>
-              <Button onClick={() => handleModeClick('world-knowledge')} className="w-full">
+              <Button onClick={() => handleModeClick('world-knowledge')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
@@ -375,11 +375,11 @@ export default function StartScreen({
                 Combi-Quiz
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
                 Wähle deine Kategorien und spiele endlos
               </p>
-              <Button onClick={() => handleModeClick('combi-quiz')} className="w-full">
+              <Button onClick={() => handleModeClick('combi-quiz')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
@@ -394,11 +394,11 @@ export default function StartScreen({
                 {t.multiplayer}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
                 Trete gegen deine Freunde in einem 1vs1 Duell an!
               </p>
-              <Button onClick={() => handleModeClick('multiplayer')} className="w-full">
+              <Button onClick={() => handleModeClick('multiplayer')} className="w-full mt-auto">
                 <Users className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
