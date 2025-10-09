@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Plus, Flame, Clock, Trophy, Medal, Award, Gem, Crown, Star, X } from 'lucide-react';
+import { Plus, Flame, Clock, Trophy, Medal, Award, Gem, Crown, Star, X, Info } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from './ui/button';
 import { ALL_COUNTRIES } from '@/data/countries-full';
 import { Input } from './ui/input';
+import rankBadges from '@/assets/rank-badges-new.png';
 
 interface ProfileViewProps {
   open: boolean;
@@ -197,6 +198,7 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
   const [profileData, setProfileData] = useState<ProfileData>({});
   const [editingSlot, setEditingSlot] = useState<'flag' | 'continent' | 'clan' | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showRankInfo, setShowRankInfo] = useState(false);
 
   useEffect(() => {
     if (open && user) {
@@ -223,6 +225,12 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
           month: '2-digit',
           year: '2-digit'
         }));
+        
+        // Load customization data from local storage temporarily
+        const savedData = localStorage.getItem(`profile_data_${user.id}`);
+        if (savedData) {
+          setProfileData(JSON.parse(savedData));
+        }
       }
 
       // Load XP and level from user_stats
@@ -319,12 +327,16 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
     }
   };
 
-  const updateProfileField = async (field: keyof ProfileData, value: string) => {
+  const updateProfileField = async (field: keyof ProfileData, value: string | null) => {
     if (!user) return;
     
     try {
-      // For now, store in local state only - we'll add DB columns later
-      setProfileData(prev => ({ ...prev, [field]: value }));
+      const newData = { ...profileData, [field]: value || undefined };
+      setProfileData(newData);
+      
+      // Save to local storage temporarily until database columns are added
+      localStorage.setItem(`profile_data_${user.id}`, JSON.stringify(newData));
+      
       setEditingSlot(null);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -370,20 +382,20 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
         </button>
         
         <div className="w-full max-w-7xl flex flex-col h-full">
-          {/* Top Section: Avatar + Username + Level + Progress */}
-          <div className="flex items-start gap-6 mb-2 pt-2">
-            {/* Avatar Column */}
-            <div className="flex flex-col items-center">
-              <Avatar className="h-44 w-44 ring-4 ring-white shadow-2xl">
+          {/* Top Section: Avatar + Username + Level + Progress + Customization */}
+          <div className="flex items-start gap-8 mb-2 pt-2">
+            {/* Avatar Column - Larger and centered */}
+            <div className="flex flex-col items-center pt-8">
+              <Avatar className="h-56 w-56 ring-4 ring-white shadow-2xl">
                 <AvatarImage src={avatarUrl} />
-                <AvatarFallback className="text-6xl bg-blue-500 text-white">
+                <AvatarFallback className="text-7xl bg-blue-500 text-white">
                   {username.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <p className="text-xs text-gray-500 mt-2">Joined {accountCreated}</p>
+              <p className="text-xs text-gray-500 mt-3">Joined {accountCreated}</p>
             </div>
 
-            {/* Username and Level Bar */}
+            {/* Right Side: Username, Level Bar, and Customization Slots */}
             <div className="flex-1 pt-2">
               <h1 className="text-5xl font-bold text-gray-800 mb-2 leading-none">
                 {username}
@@ -391,63 +403,82 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
               <p className="text-xl text-gray-500 mb-3">Level {level}</p>
               
               {/* XP Progress Bar */}
-              <div className="h-5 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner max-w-md">
+              <div className="h-5 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner max-w-md mb-6">
                 <div 
                   className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-500 rounded-full"
                   style={{ width: `${Math.max(2, Math.min(levelProgress, 100))}%` }}
                 />
               </div>
+
+              {/* Customization Slots */}
+              <div className="flex gap-3">
+                {/* Flag Slot */}
+                <button
+                  onClick={() => {
+                    if (profileData.flag) {
+                      updateProfileField('flag', null);
+                    } else {
+                      setEditingSlot('flag');
+                    }
+                  }}
+                  className="w-24 h-24 bg-white/40 backdrop-blur-sm rounded-3xl shadow-md flex items-center justify-center text-4xl hover:shadow-lg transition-all hover:scale-105"
+                >
+                  {profileData.flag || <Plus className="w-7 h-7 text-gray-500" />}
+                </button>
+
+                {/* Continent Slot */}
+                <button
+                  onClick={() => {
+                    if (profileData.continent) {
+                      updateProfileField('continent', null);
+                    } else {
+                      setEditingSlot('continent');
+                    }
+                  }}
+                  className="w-24 h-24 bg-white/40 backdrop-blur-sm rounded-3xl shadow-md flex flex-col items-center justify-center hover:shadow-lg transition-all hover:scale-105"
+                >
+                  {profileData.continent ? (
+                    <>
+                      <span className="text-3xl mb-1">
+                        {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
+                      </span>
+                      <span className="text-[9px] text-gray-600 font-medium">
+                        {profileData.continent}
+                      </span>
+                    </>
+                  ) : (
+                    <Plus className="w-7 h-7 text-gray-500" />
+                  )}
+                </button>
+
+                {/* Clan Slot */}
+                <button
+                  onClick={() => {
+                    if (profileData.clan) {
+                      updateProfileField('clan', null);
+                    } else {
+                      setEditingSlot('clan');
+                    }
+                  }}
+                  className="w-24 h-24 bg-white/40 backdrop-blur-sm rounded-3xl shadow-md flex flex-col items-center justify-center hover:shadow-lg transition-all hover:scale-105"
+                >
+                  {profileData.clan ? (
+                    <>
+                      <span className="text-3xl mb-1">
+                        {CLANS.find(c => c.name === profileData.clan)?.emoji}
+                      </span>
+                      <span className="text-[9px] text-gray-600 font-medium">
+                        {profileData.clan}
+                      </span>
+                    </>
+                  ) : (
+                    <Plus className="w-7 h-7 text-gray-500" />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Customization Slots */}
-          <div className="flex gap-3 mb-3">
-            {/* Flag Slot */}
-            <button
-              onClick={() => setEditingSlot('flag')}
-              className="w-24 h-24 bg-white/40 backdrop-blur-sm rounded-3xl shadow-md flex items-center justify-center text-4xl hover:shadow-lg transition-all hover:scale-105"
-            >
-              {profileData.flag || <Plus className="w-7 h-7 text-gray-500" />}
-            </button>
-
-            {/* Continent Slot */}
-            <button
-              onClick={() => setEditingSlot('continent')}
-              className="w-24 h-24 bg-white/40 backdrop-blur-sm rounded-3xl shadow-md flex flex-col items-center justify-center hover:shadow-lg transition-all hover:scale-105"
-            >
-              {profileData.continent ? (
-                <>
-                  <span className="text-3xl mb-1">
-                    {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
-                  </span>
-                  <span className="text-[9px] text-gray-600 font-medium">
-                    {profileData.continent}
-                  </span>
-                </>
-              ) : (
-                <Plus className="w-7 h-7 text-gray-500" />
-              )}
-            </button>
-
-            {/* Clan Slot */}
-            <button
-              onClick={() => setEditingSlot('clan')}
-              className="w-24 h-24 bg-white/40 backdrop-blur-sm rounded-3xl shadow-md flex flex-col items-center justify-center hover:shadow-lg transition-all hover:scale-105"
-            >
-              {profileData.clan ? (
-                <>
-                  <span className="text-3xl mb-1">
-                    {CLANS.find(c => c.name === profileData.clan)?.emoji}
-                  </span>
-                  <span className="text-[9px] text-gray-600 font-medium">
-                    {profileData.clan}
-                  </span>
-                </>
-              ) : (
-                <Plus className="w-7 h-7 text-gray-500" />
-              )}
-            </button>
-          </div>
 
           {/* Player Stats Header */}
           <h2 className="text-sm font-bold text-gray-600 uppercase tracking-[0.2em] mb-3 mt-auto">
@@ -495,8 +526,8 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
               </div>
             </div>
 
-            {/* Rank Badge - Wider and taller */}
-            <div className="col-span-4 bg-white/30 backdrop-blur-sm rounded-3xl shadow-md p-5 flex items-center gap-4 min-h-[110px]">
+            {/* Rank Badge - Wider and taller with info icon */}
+            <div className="col-span-4 bg-white/30 backdrop-blur-sm rounded-3xl shadow-md p-5 flex items-center gap-4 min-h-[110px] relative">
               <div className={`p-4 rounded-2xl bg-gradient-to-br ${rank.gradient} shadow-xl flex-shrink-0`}>
                 <RankIcon className="w-14 h-14 text-white" />
               </div>
@@ -508,10 +539,64 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
                   Best Position #{leaderboardStats.bestPosition}
                 </p>
               </div>
+              <button
+                onClick={() => setShowRankInfo(true)}
+                className="absolute top-3 right-3 p-1.5 bg-white/60 hover:bg-white/80 rounded-full transition-colors"
+              >
+                <Info className="w-4 h-4 text-gray-600" />
+              </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Rank Info Dialog */}
+      {showRankInfo && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+          <div className="bg-white rounded-2xl p-6 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-bold text-2xl">Rank Übersicht</h3>
+              <button
+                onClick={() => setShowRankInfo(false)}
+                className="p-1 hover:bg-gray-100 rounded-full"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {RANK_TIERS.map((tier, index) => {
+                const TierIcon = tier.icon;
+                return (
+                  <div 
+                    key={tier.name}
+                    className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                  >
+                    <div className={`p-3 rounded-xl bg-gradient-to-br ${tier.gradient} shadow-lg`}>
+                      <TierIcon className="w-10 h-10 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-xl text-gray-800">{tier.name}</h4>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-2 text-sm text-gray-600">
+                        <p>Min Streak: {tier.minStreak}</p>
+                        <p>Min Duel Wins: {tier.minDuelWins}</p>
+                        <p>Max Time: {Math.floor(tier.minTimeSeconds / 60)}:{(tier.minTimeSeconds % 60).toString().padStart(2, '0')}</p>
+                        <p>Min Level: {tier.minLevel}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-6 p-4 bg-blue-50 rounded-xl">
+              <p className="text-sm text-gray-700">
+                <strong>Hinweis:</strong> Dein Rang wird basierend auf dem Durchschnitt deiner besten Streak, deiner schnellsten Zeit und deinen Duel-Siegen berechnet.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Selection Dialogs */}
       {editingSlot === 'flag' && (

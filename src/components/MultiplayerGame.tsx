@@ -85,6 +85,8 @@ export default function MultiplayerGame({ onBackToLobby, onBackToMenu }: Multipl
     if (currentLobby.status === 'finished') {
       if (currentLobby.winner_id === user?.id) {
         setGameStatus('won');
+        // Increment multiplayer wins when user wins
+        incrementMultiplayerWins();
         toast({
           title: '🏆 Gewonnen!',
           description: 'Du hast alle 10 Flaggen zuerst erraten!',
@@ -102,7 +104,7 @@ export default function MultiplayerGame({ onBackToLobby, onBackToMenu }: Multipl
       setGameStatus('playing');
       setTimeout(() => inputRef.current?.focus(), 100);
     }
-  }, [currentLobby?.status, currentLobby?.winner_id, user?.id, gameStatus, toast, myParticipant]);
+  }, [currentLobby?.status, currentLobby?.winner_id, user?.id, gameStatus, toast, myParticipant, incrementMultiplayerWins]);
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
