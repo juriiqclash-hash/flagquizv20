@@ -392,15 +392,15 @@ export const ProfileView = ({
                   {username.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <p className="text-sm text-gray-300 mt-3 font-medium">Joined {accountCreated}</p>
+              <p className="text-sm text-gray-300 mt-3 font-medium" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Joined {accountCreated}</p>
             </div>
 
             {/* Right Side: Username, Level Bar, and Customization Slots */}
             <div className="flex-1 pt-6">
-              <h1 className="text-7xl font-bold text-white mb-3 leading-none">
+              <h1 className="text-7xl font-bold text-white mb-3 leading-none" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                 {username}
               </h1>
-              <p className="text-2xl text-gray-300 mb-2 font-medium">Level {level}</p>
+              <p className="text-2xl text-gray-300 mb-2 font-medium" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Level {level}</p>
               
 
               {/* XP Progress Bar */}
@@ -425,7 +425,7 @@ export const ProfileView = ({
                       <span className="text-5xl mb-1" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
                         {getFlagEmoji(profileData.flag)}
                       </span>
-                      <span className="text-xs text-gray-300 font-semibold">
+                      <span className="text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.flag}
                       </span>
                     </>
@@ -446,7 +446,7 @@ export const ProfileView = ({
                       <span className="text-4xl mb-1">
                         {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
                       </span>
-                      <span className="text-xs text-gray-300 font-semibold">
+                      <span className="text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.continent}
                       </span>
                     </> : <Plus className="w-8 h-8 text-gray-300" />}
@@ -464,7 +464,7 @@ export const ProfileView = ({
                       <span className="text-4xl mb-1">
                         {CLANS.find(c => c.name === profileData.clan)?.emoji}
                       </span>
-                      <span className="text-xs text-gray-300 font-semibold">
+                      <span className="text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.clan}
                       </span>
                     </> : <Plus className="w-8 h-8 text-gray-300" />}
@@ -475,7 +475,7 @@ export const ProfileView = ({
 
 
           {/* Player Stats Header */}
-          <h2 className="text-sm font-bold text-gray-300 uppercase tracking-[0.25em] mb-3 mt-auto">
+          <h2 className="text-sm font-bold text-gray-300 uppercase tracking-[0.25em] mb-3 mt-auto" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
             PLAYER STATS
           </h2>
 
@@ -483,12 +483,12 @@ export const ProfileView = ({
           <div className="grid grid-cols-10 gap-4 pb-4">
             {/* Best Streak */}
             <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-5 flex flex-col items-center justify-center min-h-[140px]">
-              <p className="text-xs text-white uppercase tracking-wide font-bold mb-3">
+              <p className="text-xs text-gray-300 uppercase tracking-wide font-bold mb-3" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                 BESTE STREAK
               </p>
               <div className="flex items-center gap-2">
                 <Flame className="w-8 h-8 text-orange-500" />
-                <span className="text-4xl font-bold text-white">
+                <span className="text-4xl font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                   {leaderboardStats.bestStreak}
                 </span>
               </div>
@@ -496,12 +496,12 @@ export const ProfileView = ({
 
             {/* Time Mode */}
             <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-5 flex flex-col items-center justify-center min-h-[140px]">
-              <p className="text-xs text-white uppercase tracking-wide font-bold mb-3">
+              <p className="text-xs text-gray-300 uppercase tracking-wide font-bold mb-3" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                 ZEITMODUS
               </p>
               <div className="flex items-center gap-2">
                 <Clock className="w-8 h-8 text-blue-500" />
-                <span className="text-4xl font-bold text-white">
+                <span className="text-4xl font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                   {formatTime(leaderboardStats.bestTimeMode)}
                 </span>
               </div>
@@ -509,12 +509,12 @@ export const ProfileView = ({
 
             {/* Duel Wins */}
             <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-5 flex flex-col items-center justify-center min-h-[140px]">
-              <p className="text-xs text-white uppercase tracking-wide font-bold mb-3">
+              <p className="text-xs text-gray-300 uppercase tracking-wide font-bold mb-3" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                 DUELLE WINS
               </p>
               <div className="flex items-center gap-2">
                 <Trophy className="w-8 h-8 text-yellow-500" />
-                <span className="text-4xl font-bold text-white">
+                <span className="text-4xl font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                   {leaderboardStats.duelWins}
                 </span>
               </div>
@@ -531,10 +531,10 @@ export const ProfileView = ({
               </div>
 
               <div className="flex flex-col flex-1 ml-8">
-                <p className="text-4xl font-bold text-white leading-tight">
+                <p className="text-4xl font-bold text-white leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                   {rank.name}
                 </p>
-                <p className="text-sm text-gray-300 mt-1 font-medium">
+                <p className="text-sm text-gray-300 mt-1 font-medium" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                   Best Position #{leaderboardStats.bestPosition}
                 </p>
               </div>
