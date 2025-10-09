@@ -80,6 +80,10 @@ export const translations = {
     rank: 'Rang',
     player: 'Spieler',
     noScores: 'Noch keine Einträge',
+
+    // Social
+    friends: 'Freunde',
+    clans: 'Clans',
     
     // Multiplayer
     multiplayer: 'Mehrspieler',
@@ -240,6 +244,10 @@ export const translations = {
     rank: 'Rank',
     player: 'Player',
     noScores: 'No scores yet',
+
+    // Social
+    friends: 'Friends',
+    clans: 'Clans',
     
     // Multiplayer
     multiplayer: 'Multiplayer',
@@ -400,6 +408,10 @@ export const translations = {
     rank: 'Rango',
     player: 'Jugador',
     noScores: 'Aún no hay puntuaciones',
+
+    // Social
+    friends: 'Amigos',
+    clans: 'Clanes',
     
     // Multiplayer
     multiplayer: 'Multijugador',
@@ -560,6 +572,10 @@ export const translations = {
     rank: 'Rang',
     player: 'Joueur',
     noScores: 'Pas encore de scores',
+
+    // Social
+    friends: 'Amis',
+    clans: 'Clans',
     
     // Multiplayer
     multiplayer: 'Multijoueur',
@@ -720,6 +736,10 @@ export const translations = {
     rank: 'Rango',
     player: 'Giocatore',
     noScores: 'Nessun punteggio ancora',
+
+    // Social
+    friends: 'Amici',
+    clans: 'Clan',
     
     // Multiplayer
     multiplayer: 'Multigiocatore',
@@ -880,6 +900,10 @@ export const translations = {
     rank: 'ランク',
     player: 'プレイヤー',
     noScores: 'まだスコアがありません',
+
+    // Social
+    friends: '友達',
+    clans: 'クラン',
     
     // Multiplayer
     multiplayer: 'マルチプレイヤー',
