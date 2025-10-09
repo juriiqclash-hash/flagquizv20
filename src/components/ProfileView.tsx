@@ -377,7 +377,7 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-400 via-cyan-300 to-blue-500 flex items-center justify-center p-6">
+      <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-300 via-cyan-200 to-blue-400 flex items-center justify-center p-6">
         {/* Close Button */}
         <button
           onClick={() => onOpenChange(false)}
