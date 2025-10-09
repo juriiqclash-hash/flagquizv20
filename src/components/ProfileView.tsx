@@ -379,7 +379,6 @@ export const ProfileView = ({
         className="fixed inset-0 z-50 bg-cover bg-center flex items-center justify-center p-6"
         style={{ backgroundImage: "url('/wallpaperpfp.png')" }}
       >
->
         {/* Close Button */}
         <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
