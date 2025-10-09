@@ -375,7 +375,7 @@ export const ProfileView = ({
   };
   if (!open) return null;
   return <>
-      <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-300 via-cyan-200 to-blue-400 flex items-center justify-center p-6">
+      <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex items-center justify-center p-6">
         {/* Close Button */}
         <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
@@ -392,15 +392,15 @@ export const ProfileView = ({
                   {username.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <p className="text-sm text-gray-600 mt-3 font-medium">Joined {accountCreated}</p>
+              <p className="text-sm text-gray-300 mt-3 font-medium">Joined {accountCreated}</p>
             </div>
 
             {/* Right Side: Username, Level Bar, and Customization Slots */}
             <div className="flex-1 pt-6">
-              <h1 className="text-7xl font-bold text-gray-800 mb-3 leading-none">
+              <h1 className="text-7xl font-bold text-white mb-3 leading-none">
                 {username}
               </h1>
-              <p className="text-2xl text-gray-600 mb-2 font-medium">Level {level}</p>
+              <p className="text-2xl text-gray-300 mb-2 font-medium">Level {level}</p>
               
 
               {/* XP Progress Bar */}
@@ -475,7 +475,7 @@ export const ProfileView = ({
 
 
           {/* Player Stats Header */}
-          <h2 className="text-sm font-bold text-gray-700 uppercase tracking-[0.25em] mb-3 mt-auto">
+          <h2 className="text-sm font-bold text-gray-300 uppercase tracking-[0.25em] mb-3 mt-auto">
             PLAYER STATS
           </h2>
 
@@ -483,12 +483,12 @@ export const ProfileView = ({
           <div className="grid grid-cols-10 gap-4 pb-4">
             {/* Best Streak */}
             <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-5 flex flex-col items-center justify-center min-h-[140px]">
-              <p className="text-xs text-gray-700 uppercase tracking-wide font-bold mb-3">
+              <p className="text-xs text-gray-300 uppercase tracking-wide font-bold mb-3">
                 BESTE STREAK
               </p>
               <div className="flex items-center gap-2">
                 <Flame className="w-8 h-8 text-orange-500" />
-                <span className="text-4xl font-bold text-gray-800">
+                <span className="text-4xl font-bold text-white">
                   {leaderboardStats.bestStreak}
                 </span>
               </div>
@@ -496,12 +496,12 @@ export const ProfileView = ({
 
             {/* Time Mode */}
             <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-5 flex flex-col items-center justify-center min-h-[140px]">
-              <p className="text-xs text-gray-700 uppercase tracking-wide font-bold mb-3">
+              <p className="text-xs text-gray-300 uppercase tracking-wide font-bold mb-3">
                 ZEITMODUS
               </p>
               <div className="flex items-center gap-2">
                 <Clock className="w-8 h-8 text-blue-500" />
-                <span className="text-4xl font-bold text-gray-800">
+                <span className="text-4xl font-bold text-white">
                   {formatTime(leaderboardStats.bestTimeMode)}
                 </span>
               </div>
@@ -509,12 +509,12 @@ export const ProfileView = ({
 
             {/* Duel Wins */}
             <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-5 flex flex-col items-center justify-center min-h-[140px]">
-              <p className="text-xs text-gray-700 uppercase tracking-wide font-bold mb-3">
+              <p className="text-xs text-gray-300 uppercase tracking-wide font-bold mb-3">
                 DUELLE WINS
               </p>
               <div className="flex items-center gap-2">
                 <Trophy className="w-8 h-8 text-yellow-500" />
-                <span className="text-4xl font-bold text-gray-800">
+                <span className="text-4xl font-bold text-white">
                   {leaderboardStats.duelWins}
                 </span>
               </div>
@@ -531,10 +531,10 @@ export const ProfileView = ({
               </div>
 
               <div className="flex flex-col flex-1 ml-8">
-                <p className="text-4xl font-bold text-blue-500 leading-tight">
+                <p className="text-4xl font-bold text-white leading-tight">
                   {rank.name}
                 </p>
-                <p className="text-sm text-gray-700 mt-1 font-medium">
+                <p className="text-sm text-gray-300 mt-1 font-medium">
                   Best Position #{leaderboardStats.bestPosition}
                 </p>
               </div>
@@ -622,10 +622,10 @@ export const ProfileView = ({
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              {CLANS.map(clan => <button key={clan.name} onClick={() => updateProfileField('clan', clan.name)} className="flex items-center gap-3 p-4 hover:bg-gray-100 rounded-lg transition-colors">
+            <div className="grid grid-cols-5 gap-3">
+              {CLANS.map(clan => <button key={clan.name} onClick={() => updateProfileField('clan', clan.name)} className="flex flex-col items-center gap-2 p-4 hover:bg-gray-100 rounded-lg transition-colors">
                   <span className="text-3xl">{clan.emoji}</span>
-                  <span className="font-medium text-lg">{clan.name}</span>
+                  <span className="font-medium text-sm text-center">{clan.name}</span>
                 </button>)}
             </div>
           </div>
