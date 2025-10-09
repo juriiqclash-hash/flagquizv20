@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Users, Copy, Play, LogOut, Crown, User, Flag } from 'lucide-react';
+import { Users, Copy, Play, LogOut, Crown, User, Flag, UserX } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useMultiplayer } from '@/hooks/useMultiplayer';
 import { useToast } from '@/hooks/use-toast';
@@ -25,6 +25,7 @@ export default function MultiplayerLobby({
     participants,
     startMatch,
     leaveMatch,
+    kickPlayer,
     updateSettings,
     onlineUsers
   } = useMultiplayer();
@@ -216,6 +217,14 @@ export default function MultiplayerLobby({
                 {participants[1] && <div className={`absolute -bottom-2 -right-2 w-8 h-8 ${onlineUsers.includes(participants[1].user_id) ? 'bg-green-500' : 'bg-gray-500'} rounded-full border-3 border-white flex items-center justify-center shadow-lg`}>
                     <div className={`w-3 h-3 rounded-full ${onlineUsers.includes(participants[1].user_id) ? 'bg-white animate-pulse' : 'bg-gray-300'}`}></div>
                   </div>}
+                {participants[1] && isCreator && currentLobby?.owner_id !== participants[1].user_id && <Button
+                    variant="destructive"
+                    size="sm"
+                    className="absolute -top-2 -left-2 w-8 h-8 rounded-full p-0 shadow-lg"
+                    onClick={() => kickPlayer(participants[1].user_id)}
+                  >
+                    <UserX className="w-4 h-4" />
+                  </Button>}
               </div>
               <div className="text-center space-y-3">
                 <h3 className="text-2xl lg:text-3xl font-bold text-white">

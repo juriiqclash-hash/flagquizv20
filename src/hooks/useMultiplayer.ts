@@ -807,16 +807,40 @@ export const useMultiplayer = () => {
     }
   }, [currentLobby, user]);
 
+  const kickPlayer = useCallback(async (userId: string) => {
+    if (!currentLobby || !user || currentLobby.owner_id !== user.id) return;
+
+    try {
+      await supabase
+        .from('match_participants')
+        .delete()
+        .eq('lobby_id', currentLobby.id)
+        .eq('user_id', userId);
+
+      toast({
+        title: 'Spieler entfernt',
+        description: 'Der Spieler wurde aus der Lobby entfernt.',
+      });
+    } catch (error) {
+      console.error('Error kicking player:', error);
+      toast({
+        title: 'Fehler',
+        description: 'Spieler konnte nicht entfernt werden.',
+        variant: 'destructive',
+      });
+    }
+  }, [currentLobby, user, toast]);
+
   const updateSettings = useCallback(async (settings: { timeLimit?: number, gameMode?: string }) => {
     if (!currentLobby || !user || currentLobby.owner_id !== user.id) return;
 
     try {
       const updateData: any = {};
-      
+
       if (settings.timeLimit !== undefined) {
         updateData.time_limit = settings.timeLimit;
       }
-      
+
       if (settings.gameMode !== undefined) {
         updateData.game_mode = settings.gameMode;
       }
@@ -851,6 +875,7 @@ export const useMultiplayer = () => {
     submitAnswer,
     eliminatePlayer,
     leaveMatch,
+    kickPlayer,
     updateSettings
   };
 };
