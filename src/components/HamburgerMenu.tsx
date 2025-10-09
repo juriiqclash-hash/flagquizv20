@@ -53,10 +53,16 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz' }:
   return (
     <>
       {isLoadingQuiz && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+        <div className="min-h-screen flex items-center justify-center"
+          style={{
+            backgroundImage: `url("/F5BD60DF-0BF3-4DCD-B9C2-C433C2CB0628.png")`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
           <div className="text-center">
-            <Loader2 className="w-16 h-16 text-primary animate-spin mx-auto mb-4" />
-            <p className="text-2xl font-semibold">Lade Quiz...</p>
+            <Loader2 className="w-16 h-16 text-white animate-spin mx-auto mb-4" />
+            <p className="text-2xl text-white font-semibold">Lade Quiz...</p>
           </div>
         </div>
       )}
