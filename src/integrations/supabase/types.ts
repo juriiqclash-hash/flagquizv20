@@ -223,6 +223,9 @@ export type Database = {
           banned_by: string | null
           created_at: string
           id: string
+          selected_clan: string | null
+          selected_continent: string | null
+          selected_flag: string | null
           updated_at: string
           user_id: string
           username: string
@@ -235,6 +238,9 @@ export type Database = {
           banned_by?: string | null
           created_at?: string
           id?: string
+          selected_clan?: string | null
+          selected_continent?: string | null
+          selected_flag?: string | null
           updated_at?: string
           user_id: string
           username: string
@@ -247,6 +253,9 @@ export type Database = {
           banned_by?: string | null
           created_at?: string
           id?: string
+          selected_clan?: string | null
+          selected_continent?: string | null
+          selected_flag?: string | null
           updated_at?: string
           user_id?: string
           username?: string

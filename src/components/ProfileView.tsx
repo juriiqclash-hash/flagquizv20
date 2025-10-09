@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from './ui/button';
 import { ALL_COUNTRIES } from '@/data/countries-full';
 import { Input } from './ui/input';
-import rankBadges from '@/assets/rank-badges-new.png';
+import rankBadges from '@/assets/rank-badges-final.png';
 
 interface ProfileViewProps {
   open: boolean;
@@ -213,7 +213,7 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
       // Load profile
       const { data: profile } = await supabase
         .from('profiles')
-        .select('username, avatar_url, created_at')
+        .select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan')
         .eq('user_id', user.id)
         .single();
 
@@ -226,11 +226,12 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
           year: '2-digit'
         }));
         
-        // Load customization data from local storage temporarily
-        const savedData = localStorage.getItem(`profile_data_${user.id}`);
-        if (savedData) {
-          setProfileData(JSON.parse(savedData));
-        }
+        // Load customization data from Supabase
+        setProfileData({
+          flag: profile.selected_flag || undefined,
+          continent: profile.selected_continent || undefined,
+          clan: profile.selected_clan || undefined,
+        });
       }
 
       // Load XP and level from user_stats
@@ -334,8 +335,12 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
       const newData = { ...profileData, [field]: value || undefined };
       setProfileData(newData);
       
-      // Save to local storage temporarily until database columns are added
-      localStorage.setItem(`profile_data_${user.id}`, JSON.stringify(newData));
+      // Save to Supabase
+      const updateField = `selected_${field}` as 'selected_flag' | 'selected_continent' | 'selected_clan';
+      await supabase
+        .from('profiles')
+        .update({ [updateField]: value })
+        .eq('user_id', user.id);
       
       setEditingSlot(null);
     } catch (error) {

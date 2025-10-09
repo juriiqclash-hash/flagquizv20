@@ -263,7 +263,7 @@ serve(async (req) => {
         })
       }
 
-      const correctAnswers = participant.current_answer?.split(',').filter(a => a.trim()) || []
+      const correctAnswers = participant.current_answer?.split(',').filter((a: string) => a.trim()) || []
       
       // Determine required count based on game mode
       let requiredCount = 10 // Default for flags mode
