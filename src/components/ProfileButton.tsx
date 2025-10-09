@@ -307,7 +307,7 @@ const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOp
           <DialogHeader>
             <DialogTitle className="text-xl">Benutzer wechseln</DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="flex flex-col gap-2">
             {savedAccounts.map((account) => {
               const isCurrentUser = account.userId === user.id;
               return (
@@ -319,20 +319,20 @@ const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOp
                         setShowAccountSwitchDialog(false);
                       }
                     }}
-                    className={`w-full flex flex-col items-center gap-3 p-4 rounded-lg border transition-colors ${
+                    className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-colors ${
                       isCurrentUser
                         ? 'border-primary bg-primary/10 cursor-default'
                         : 'border-border hover:bg-accent cursor-pointer'
                     }`}
                   >
-                    <Avatar className="h-16 w-16">
+                    <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={account.avatarUrl} />
-                      <AvatarFallback className="bg-primary text-primary-foreground text-xl">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
                         {account.email.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="text-center">
-                      <p className="font-medium text-sm truncate max-w-[120px]">{account.email}</p>
+                    <div className="flex-1 text-left overflow-hidden">
+                      <p className="font-medium text-sm truncate">{account.email}</p>
                       <p className="text-xs text-muted-foreground">
                         {isCurrentUser ? 'Aktuell' : 'Wechseln'}
                       </p>
@@ -340,7 +340,7 @@ const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOp
                   </button>
                   <button
                     onClick={(e) => handleRemoveAccount(account.userId, e)}
-                    className="absolute top-2 right-2 p-1 rounded-full bg-background/80 hover:bg-destructive hover:text-destructive-foreground transition-colors border border-border"
+                    className="absolute top-1/2 -translate-y-1/2 right-2 p-1 rounded-full bg-background/80 hover:bg-destructive hover:text-destructive-foreground transition-colors border border-border"
                     title="Account entfernen"
                   >
                     <X className="h-4 w-4" />
