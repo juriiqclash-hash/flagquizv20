@@ -606,7 +606,7 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
       {/* Selection Dialogs */}
       {editingSlot === 'flag' && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-2xl p-6 max-w-3xl max-h-[80vh] overflow-y-auto w-full mx-4">
+          <div className="bg-white rounded-2xl p-6 max-w-4xl max-h-[80vh] overflow-y-auto w-full mx-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-xl">Wähle dein Land</h3>
               <button
@@ -624,21 +624,17 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
                 const filtered = ALL_COUNTRIES.filter(
                   c => c.name.toLowerCase().includes(search) || c.code.toLowerCase().includes(search)
                 );
-                // Update filtered list
               }}
             />
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-6 gap-3">
               {ALL_COUNTRIES.map(country => (
                 <button
                   key={country.code}
                   onClick={() => updateProfileField('flag', country.flag)}
-                  className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg transition-colors text-left"
+                  className="flex flex-col items-center justify-center p-3 hover:bg-gray-100 rounded-lg transition-all hover:scale-105"
                 >
-                  <span className="text-2xl">{country.flag}</span>
-                  <div className="flex flex-col flex-1 min-w-0">
-                    <span className="font-medium text-xs truncate">{country.name}</span>
-                    <span className="text-[10px] text-gray-500">{country.code}</span>
-                  </div>
+                  <span className="text-5xl mb-2">{country.flag}</span>
+                  <span className="text-xs text-gray-600 font-medium">{country.code}</span>
                 </button>
               ))}
             </div>
