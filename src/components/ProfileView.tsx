@@ -14,48 +14,74 @@ import platinumBadge from '@/assets/plartinum.webp';
 import diamondBadge from '@/assets/diamant.webp';
 import legendsBadge from '@/assets/legends.webp';
 import mastersBadge from '@/assets/masters.webp';
-
 interface ProfileViewProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
 interface LeaderboardStats {
   bestStreak: number;
   bestTimeMode: number; // in seconds
   duelWins: number;
   bestPosition: number;
 }
-
 interface ProfileData {
   flag?: string;
   continent?: string;
   clan?: string;
 }
-
-const CLANS = [
-  { name: 'Agharta', emoji: '🛕' },
-  { name: 'Shambhala', emoji: '☀️' },
-  { name: 'Atlantis', emoji: '💎' },
-  { name: 'Lemuria', emoji: '🌺' },
-  { name: 'Mu', emoji: '🌀' },
-  { name: 'Hyperborea', emoji: '🩵' },
-  { name: 'Avalon', emoji: '🌸' },
-  { name: 'Thule', emoji: '🧭' },
-  { name: 'El Dorado', emoji: '🪙' },
-  { name: 'Agni Order', emoji: '🔥' },
-];
-
-const CONTINENTS = [
-  { code: 'EU', emoji: '🌍' },
-  { code: 'AS', emoji: '🌏' },
-  { code: 'AF', emoji: '🌍' },
-  { code: 'NA', emoji: '🌎' },
-  { code: 'SA', emoji: '🌎' },
-  { code: 'OC', emoji: '🌏' },
-  { code: 'AN', emoji: '🌐' },
-];
-
+const CLANS = [{
+  name: 'Agharta',
+  emoji: '🛕'
+}, {
+  name: 'Shambhala',
+  emoji: '☀️'
+}, {
+  name: 'Atlantis',
+  emoji: '💎'
+}, {
+  name: 'Lemuria',
+  emoji: '🌺'
+}, {
+  name: 'Mu',
+  emoji: '🌀'
+}, {
+  name: 'Hyperborea',
+  emoji: '🩵'
+}, {
+  name: 'Avalon',
+  emoji: '🌸'
+}, {
+  name: 'Thule',
+  emoji: '🧭'
+}, {
+  name: 'El Dorado',
+  emoji: '🪙'
+}, {
+  name: 'Agni Order',
+  emoji: '🔥'
+}];
+const CONTINENTS = [{
+  code: 'EU',
+  emoji: '🌍'
+}, {
+  code: 'AS',
+  emoji: '🌏'
+}, {
+  code: 'AF',
+  emoji: '🌍'
+}, {
+  code: 'NA',
+  emoji: '🌎'
+}, {
+  code: 'SA',
+  emoji: '🌎'
+}, {
+  code: 'OC',
+  emoji: '🌏'
+}, {
+  code: 'AN',
+  emoji: '🌐'
+}];
 type RankTier = {
   name: string;
   badge: string;
@@ -65,72 +91,70 @@ type RankTier = {
   minDuelWins: number;
   minLevel: number;
 };
-
-const RANK_TIERS: RankTier[] = [
-  {
-    name: 'Legends',
-    badge: legendsBadge,
-    gradient: 'from-purple-600 via-purple-500 to-pink-500',
-    minStreak: 1000,
-    minTimeSeconds: 480, // <8 minutes
-    minDuelWins: 500,
-    minLevel: 7
-  },
-  {
-    name: 'Masters',
-    badge: mastersBadge,
-    gradient: 'from-blue-600 via-blue-500 to-purple-500',
-    minStreak: 100,
-    minTimeSeconds: 480, // 8-9 minutes
-    minDuelWins: 500,
-    minLevel: 6
-  },
-  {
-    name: 'Diamond',
-    badge: diamondBadge,
-    gradient: 'from-cyan-400 via-blue-400 to-cyan-300',
-    minStreak: 60,
-    minTimeSeconds: 480, // 8-10 minutes
-    minDuelWins: 400,
-    minLevel: 5
-  },
-  {
-    name: 'Platinum',
-    badge: platinumBadge,
-    gradient: 'from-slate-400 via-slate-300 to-slate-200',
-    minStreak: 30,
-    minTimeSeconds: 600, // 10-12 minutes
-    minDuelWins: 300,
-    minLevel: 4
-  },
-  {
-    name: 'Gold',
-    badge: goldBadge,
-    gradient: 'from-yellow-600 via-yellow-500 to-yellow-400',
-    minStreak: 15,
-    minTimeSeconds: 720, // 12-15 minutes
-    minDuelWins: 150,
-    minLevel: 3
-  },
-  {
-    name: 'Silver',
-    badge: silverBadge,
-    gradient: 'from-gray-400 via-gray-300 to-gray-400',
-    minStreak: 5,
-    minTimeSeconds: 900, // 15-20 minutes
-    minDuelWins: 50,
-    minLevel: 2
-  },
-  {
-    name: 'Bronze',
-    badge: bronzeBadge,
-    gradient: 'from-orange-600 via-orange-500 to-orange-400',
-    minStreak: 0,
-    minTimeSeconds: 1200, // >20 minutes
-    minDuelWins: 0,
-    minLevel: 1
-  },
-];
+const RANK_TIERS: RankTier[] = [{
+  name: 'Legends',
+  badge: legendsBadge,
+  gradient: 'from-purple-600 via-purple-500 to-pink-500',
+  minStreak: 1000,
+  minTimeSeconds: 480,
+  // <8 minutes
+  minDuelWins: 500,
+  minLevel: 7
+}, {
+  name: 'Masters',
+  badge: mastersBadge,
+  gradient: 'from-blue-600 via-blue-500 to-purple-500',
+  minStreak: 100,
+  minTimeSeconds: 480,
+  // 8-9 minutes
+  minDuelWins: 500,
+  minLevel: 6
+}, {
+  name: 'Diamond',
+  badge: diamondBadge,
+  gradient: 'from-cyan-400 via-blue-400 to-cyan-300',
+  minStreak: 60,
+  minTimeSeconds: 480,
+  // 8-10 minutes
+  minDuelWins: 400,
+  minLevel: 5
+}, {
+  name: 'Platinum',
+  badge: platinumBadge,
+  gradient: 'from-slate-400 via-slate-300 to-slate-200',
+  minStreak: 30,
+  minTimeSeconds: 600,
+  // 10-12 minutes
+  minDuelWins: 300,
+  minLevel: 4
+}, {
+  name: 'Gold',
+  badge: goldBadge,
+  gradient: 'from-yellow-600 via-yellow-500 to-yellow-400',
+  minStreak: 15,
+  minTimeSeconds: 720,
+  // 12-15 minutes
+  minDuelWins: 150,
+  minLevel: 3
+}, {
+  name: 'Silver',
+  badge: silverBadge,
+  gradient: 'from-gray-400 via-gray-300 to-gray-400',
+  minStreak: 5,
+  minTimeSeconds: 900,
+  // 15-20 minutes
+  minDuelWins: 50,
+  minLevel: 2
+}, {
+  name: 'Bronze',
+  badge: bronzeBadge,
+  gradient: 'from-orange-600 via-orange-500 to-orange-400',
+  minStreak: 0,
+  minTimeSeconds: 1200,
+  // >20 minutes
+  minDuelWins: 0,
+  minLevel: 1
+}];
 
 // Calculate rank tier based on duel wins
 const getDuelRank = (duelWins: number): number => {
@@ -164,33 +188,37 @@ const getTimeRank = (timeSeconds: number): number => {
   if (timeSeconds < 1200) return 2; // Silver (15-20 min)
   return 1; // Bronze (>20 min)
 };
-
 const calculateRank = (stats: LeaderboardStats, level: number): RankTier => {
-  const { bestStreak, bestTimeMode, duelWins } = stats;
-  
+  const {
+    bestStreak,
+    bestTimeMode,
+    duelWins
+  } = stats;
+
   // Calculate average rank
   const duelRank = getDuelRank(duelWins);
   const streakRank = getStreakRank(bestStreak);
   const timeRank = getTimeRank(bestTimeMode);
-  
   const averageRank = Math.round((duelRank + streakRank + timeRank) / 3);
-  
+
   // Map average rank to tier (1=Bronze, 2=Silver, 3=Gold, 4=Platinum, 5=Diamond, 6=Masters, 7=Legends)
   const tierIndex = 7 - averageRank; // Reverse because array is ordered from highest to lowest
   return RANK_TIERS[Math.max(0, Math.min(tierIndex, RANK_TIERS.length - 1))];
 };
-
 const calculateRankScore = (stats: LeaderboardStats, level: number): number => {
   // Calculate a composite score for ranking players based on average rank
   const duelRank = getDuelRank(stats.duelWins);
   const streakRank = getStreakRank(stats.bestStreak);
   const timeRank = getTimeRank(stats.bestTimeMode);
-  
   return (duelRank + streakRank + timeRank) / 3;
 };
-
-export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
-  const { user } = useAuth();
+export const ProfileView = ({
+  open,
+  onOpenChange
+}: ProfileViewProps) => {
+  const {
+    user
+  } = useAuth();
   const [username, setUsername] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [accountCreated, setAccountCreated] = useState('');
@@ -200,30 +228,24 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
     bestStreak: 0,
     bestTimeMode: 0,
     duelWins: 0,
-    bestPosition: 999,
+    bestPosition: 999
   });
   const [profileData, setProfileData] = useState<ProfileData>({});
   const [editingSlot, setEditingSlot] = useState<'flag' | 'continent' | 'clan' | null>(null);
   const [loading, setLoading] = useState(true);
   const [showRankInfo, setShowRankInfo] = useState(false);
-
   useEffect(() => {
     if (open && user) {
       loadProfileData();
     }
   }, [open, user]);
-
   const loadProfileData = async () => {
     if (!user) return;
-
     try {
       // Load profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan')
-        .eq('user_id', user.id)
-        .single();
-
+      const {
+        data: profile
+      } = await supabase.from('profiles').select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan').eq('user_id', user.id).single();
       if (profile) {
         setUsername(profile.username || user.email?.split('@')[0] || 'User');
         setAvatarUrl(profile.avatar_url || '');
@@ -232,101 +254,82 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
           month: '2-digit',
           year: '2-digit'
         }));
-        
+
         // Load customization data from Supabase
         setProfileData({
           flag: profile.selected_flag || undefined,
           continent: profile.selected_continent || undefined,
-          clan: profile.selected_clan || undefined,
+          clan: profile.selected_clan || undefined
         });
       }
 
       // Load XP and level from user_stats
-      const { data: userStats } = await supabase
-        .from('user_stats')
-        .select('xp, level, multiplayer_wins')
-        .eq('user_id', user.id)
-        .single();
-
+      const {
+        data: userStats
+      } = await supabase.from('user_stats').select('xp, level, multiplayer_wins').eq('user_id', user.id).single();
       if (userStats) {
         setLevel(userStats.level || 0);
         setXp(userStats.xp || 0);
       }
 
       // Load stats from leaderboard
-      const { data: streakData } = await supabase
-        .from('leaderboards')
-        .select('score')
-        .eq('user_id', user.id)
-        .eq('game_mode', 'streak')
-        .order('score', { ascending: false })
-        .limit(1)
-        .maybeSingle();
-
-      const { data: timedData } = await supabase
-        .from('leaderboards')
-        .select('score')
-        .eq('user_id', user.id)
-        .eq('game_mode', 'timed')
-        .order('score', { ascending: true })
-        .limit(1)
-        .maybeSingle();
-
+      const {
+        data: streakData
+      } = await supabase.from('leaderboards').select('score').eq('user_id', user.id).eq('game_mode', 'streak').order('score', {
+        ascending: false
+      }).limit(1).maybeSingle();
+      const {
+        data: timedData
+      } = await supabase.from('leaderboards').select('score').eq('user_id', user.id).eq('game_mode', 'timed').order('score', {
+        ascending: true
+      }).limit(1).maybeSingle();
       const bestStreak = streakData?.score || 0;
       const bestTimeMode = timedData?.score || 0;
       const duelWins = userStats?.multiplayer_wins || 0;
 
       // Calculate best position by comparing with all players
-      const { data: allPlayers } = await supabase
-        .from('user_stats')
-        .select('user_id, xp, level, multiplayer_wins');
-
+      const {
+        data: allPlayers
+      } = await supabase.from('user_stats').select('user_id, xp, level, multiplayer_wins');
       let bestPosition = 1;
-      const currentScore = calculateRankScore({ bestStreak, bestTimeMode, duelWins, bestPosition: 0 }, level);
-
+      const currentScore = calculateRankScore({
+        bestStreak,
+        bestTimeMode,
+        duelWins,
+        bestPosition: 0
+      }, level);
       if (allPlayers) {
         for (const player of allPlayers) {
           if (player.user_id === user.id) continue;
 
           // Get player's streak and time scores
-          const { data: playerStreak } = await supabase
-            .from('leaderboards')
-            .select('score')
-            .eq('user_id', player.user_id)
-            .eq('game_mode', 'streak')
-            .order('score', { ascending: false })
-            .limit(1)
-            .maybeSingle();
-
-          const { data: playerTime } = await supabase
-            .from('leaderboards')
-            .select('score')
-            .eq('user_id', player.user_id)
-            .eq('game_mode', 'timed')
-            .order('score', { ascending: true })
-            .limit(1)
-            .maybeSingle();
-
+          const {
+            data: playerStreak
+          } = await supabase.from('leaderboards').select('score').eq('user_id', player.user_id).eq('game_mode', 'streak').order('score', {
+            ascending: false
+          }).limit(1).maybeSingle();
+          const {
+            data: playerTime
+          } = await supabase.from('leaderboards').select('score').eq('user_id', player.user_id).eq('game_mode', 'timed').order('score', {
+            ascending: true
+          }).limit(1).maybeSingle();
           const playerStats = {
             bestStreak: playerStreak?.score || 0,
             bestTimeMode: playerTime?.score || 0,
             duelWins: player.multiplayer_wins || 0,
             bestPosition: 0
           };
-
           const playerScore = calculateRankScore(playerStats, player.level || 0);
-          
           if (playerScore > currentScore) {
             bestPosition++;
           }
         }
       }
-
       setLeaderboardStats({
         bestStreak,
         bestTimeMode,
         duelWins,
-        bestPosition,
+        bestPosition
       });
     } catch (error) {
       console.error('Error loading profile:', error);
@@ -334,50 +337,39 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
       setLoading(false);
     }
   };
-
   const updateProfileField = async (field: keyof ProfileData, value: string | null) => {
     if (!user) return;
-    
     try {
-      const newData = { ...profileData, [field]: value || undefined };
+      const newData = {
+        ...profileData,
+        [field]: value || undefined
+      };
       setProfileData(newData);
-      
+
       // Save to Supabase
       const updateField = `selected_${field}` as 'selected_flag' | 'selected_continent' | 'selected_clan';
-      await supabase
-        .from('profiles')
-        .update({ [updateField]: value })
-        .eq('user_id', user.id);
-      
+      await supabase.from('profiles').update({
+        [updateField]: value
+      }).eq('user_id', user.id);
       setEditingSlot(null);
     } catch (error) {
       console.error('Error updating profile:', error);
     }
   };
-
   const xpProgress = getXPProgress(xp);
   const levelProgress = xpProgress.progressPercentage;
-  
   const rank = calculateRank(leaderboardStats, level);
-
   const formatTime = (seconds: number) => {
     if (seconds === 0 || seconds === 9999) return '--:--';
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
-
-  
   if (!open) return null;
-
-  return (
-    <>
+  return <>
       <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-300 via-cyan-200 to-blue-400 flex items-center justify-center p-6">
         {/* Close Button */}
-        <button
-          onClick={() => onOpenChange(false)}
-          className="fixed top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors"
-        >
+        <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
         </button>
         
@@ -401,82 +393,62 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
                 {username}
               </h1>
               <p className="text-2xl text-gray-600 mb-2 font-medium">Level {level}</p>
-              <p className="text-sm text-gray-500 mb-4">
-                {xp} XP {level < 100 && `• ${xpProgress.xpInCurrentLevel}/${xpProgress.xpNeededForNextLevel} bis Level ${level + 1}`}
-              </p>
+              
 
               {/* XP Progress Bar */}
               <div className="h-7 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner max-w-2xl mb-6">
-                <div
-                  className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-500 rounded-full"
-                  style={{ width: `${Math.max(2, Math.min(levelProgress, 100))}%` }}
-                />
+                <div className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-500 rounded-full" style={{
+                width: `${Math.max(2, Math.min(levelProgress, 100))}%`
+              }} />
               </div>
 
               {/* Customization Slots */}
               <div className="flex gap-3">
                 {/* Flag Slot */}
-                <button
-                  onClick={() => {
-                    if (profileData.flag) {
-                      updateProfileField('flag', null);
-                    } else {
-                      setEditingSlot('flag');
-                    }
-                  }}
-                  className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex items-center justify-center text-5xl hover:shadow-xl transition-all hover:scale-105"
-                >
+                <button onClick={() => {
+                if (profileData.flag) {
+                  updateProfileField('flag', null);
+                } else {
+                  setEditingSlot('flag');
+                }
+              }} className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex items-center justify-center text-5xl hover:shadow-xl transition-all hover:scale-105">
                   {profileData.flag || <Plus className="w-8 h-8 text-gray-500" />}
                 </button>
 
                 {/* Continent Slot */}
-                <button
-                  onClick={() => {
-                    if (profileData.continent) {
-                      updateProfileField('continent', null);
-                    } else {
-                      setEditingSlot('continent');
-                    }
-                  }}
-                  className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105"
-                >
-                  {profileData.continent ? (
-                    <>
+                <button onClick={() => {
+                if (profileData.continent) {
+                  updateProfileField('continent', null);
+                } else {
+                  setEditingSlot('continent');
+                }
+              }} className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
+                  {profileData.continent ? <>
                       <span className="text-4xl mb-1">
                         {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
                       </span>
                       <span className="text-xs text-gray-600 font-semibold">
                         {profileData.continent}
                       </span>
-                    </>
-                  ) : (
-                    <Plus className="w-8 h-8 text-gray-500" />
-                  )}
+                    </> : <Plus className="w-8 h-8 text-gray-500" />}
                 </button>
 
                 {/* Clan Slot */}
-                <button
-                  onClick={() => {
-                    if (profileData.clan) {
-                      updateProfileField('clan', null);
-                    } else {
-                      setEditingSlot('clan');
-                    }
-                  }}
-                  className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105"
-                >
-                  {profileData.clan ? (
-                    <>
+                <button onClick={() => {
+                if (profileData.clan) {
+                  updateProfileField('clan', null);
+                } else {
+                  setEditingSlot('clan');
+                }
+              }} className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
+                  {profileData.clan ? <>
                       <span className="text-4xl mb-1">
                         {CLANS.find(c => c.name === profileData.clan)?.emoji}
                       </span>
                       <span className="text-xs text-gray-600 font-semibold">
                         {profileData.clan}
                       </span>
-                    </>
-                  ) : (
-                    <Plus className="w-8 h-8 text-gray-500" />
-                  )}
+                    </> : <Plus className="w-8 h-8 text-gray-500" />}
                 </button>
               </div>
             </div>
@@ -542,10 +514,7 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
                   Best Position #{leaderboardStats.bestPosition}
                 </p>
               </div>
-              <button
-                onClick={() => setShowRankInfo(true)}
-                className="absolute top-3 right-3 p-2 bg-white/60 hover:bg-white/80 rounded-full transition-colors"
-              >
+              <button onClick={() => setShowRankInfo(true)} className="absolute top-3 right-3 p-2 bg-white/60 hover:bg-white/80 rounded-full transition-colors">
                 <Info className="w-5 h-5 text-gray-600" />
               </button>
             </div>
@@ -554,33 +523,24 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
       </div>
 
       {/* Rank Info Dialog */}
-      {showRankInfo && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+      {showRankInfo && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
           <div className="bg-white rounded-2xl p-6 max-w-4xl w-full mx-4">
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-bold text-2xl">Rank Übersicht</h3>
-              <button
-                onClick={() => setShowRankInfo(false)}
-                className="p-1 hover:bg-gray-100 rounded-full"
-              >
+              <button onClick={() => setShowRankInfo(false)} className="p-1 hover:bg-gray-100 rounded-full">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="flex gap-4 justify-center mb-6">
-              {[...RANK_TIERS].reverse().map((tier) => {
-                return (
-                  <div
-                    key={tier.name}
-                    className="flex flex-col items-center gap-2"
-                  >
+              {[...RANK_TIERS].reverse().map(tier => {
+            return <div key={tier.name} className="flex flex-col items-center gap-2">
                     <div className="w-24 h-24 flex items-center justify-center">
                       <img src={tier.badge} alt={tier.name} className="w-full h-full object-contain" />
                     </div>
                     <p className="text-sm font-semibold text-gray-800">{tier.name}</p>
-                  </div>
-                );
-              })}
+                  </div>;
+          })}
             </div>
 
             <div className="p-4 bg-blue-50 rounded-xl">
@@ -589,103 +549,62 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
               </p>
             </div>
           </div>
-        </div>
-      )}
+        </div>}
 
       {/* Selection Dialogs */}
-      {editingSlot === 'flag' && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+      {editingSlot === 'flag' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
           <div className="bg-white rounded-2xl p-6 max-w-4xl max-h-[80vh] overflow-y-auto w-full mx-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-xl">Wähle dein Land</h3>
-              <button
-                onClick={() => setEditingSlot(null)}
-                className="p-1 hover:bg-gray-100 rounded-full"
-              >
+              <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <Input
-              placeholder="Land suchen..."
-              className="mb-4 bg-white"
-              onChange={(e) => {
-                const search = e.target.value.toLowerCase();
-                const filtered = ALL_COUNTRIES.filter(
-                  c => c.name.toLowerCase().includes(search) || c.code.toLowerCase().includes(search)
-                );
-              }}
-            />
+            <Input placeholder="Land suchen..." className="mb-4 bg-white" onChange={e => {
+          const search = e.target.value.toLowerCase();
+          const filtered = ALL_COUNTRIES.filter(c => c.name.toLowerCase().includes(search) || c.code.toLowerCase().includes(search));
+        }} />
             <div className="grid grid-cols-6 gap-3">
-              {ALL_COUNTRIES.map(country => (
-                <button
-                  key={country.code}
-                  onClick={() => updateProfileField('flag', country.flag)}
-                  className="flex flex-col items-center justify-center p-3 hover:bg-gray-100 rounded-lg transition-all hover:scale-105"
-                >
+              {ALL_COUNTRIES.map(country => <button key={country.code} onClick={() => updateProfileField('flag', country.flag)} className="flex flex-col items-center justify-center p-3 hover:bg-gray-100 rounded-lg transition-all hover:scale-105">
                   <span className="text-5xl mb-2">{country.flag}</span>
                   <span className="text-xs text-gray-600 font-medium">{country.code}</span>
-                </button>
-              ))}
+                </button>)}
             </div>
           </div>
-        </div>
-      )}
+        </div>}
 
-      {editingSlot === 'continent' && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+      {editingSlot === 'continent' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-xl">Wähle deinen Kontinent</h3>
-              <button
-                onClick={() => setEditingSlot(null)}
-                className="p-1 hover:bg-gray-100 rounded-full"
-              >
+              <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="space-y-2">
-              {CONTINENTS.map(continent => (
-                <button
-                  key={continent.code}
-                  onClick={() => updateProfileField('continent', continent.code)}
-                  className="w-full flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors"
-                >
+              {CONTINENTS.map(continent => <button key={continent.code} onClick={() => updateProfileField('continent', continent.code)} className="w-full flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors">
                   <span className="text-2xl">{continent.emoji}</span>
                   <span className="font-medium">{continent.code}</span>
-                </button>
-              ))}
+                </button>)}
             </div>
           </div>
-        </div>
-      )}
+        </div>}
 
-      {editingSlot === 'clan' && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+      {editingSlot === 'clan' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
           <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-xl">Wähle deinen Clan</h3>
-              <button
-                onClick={() => setEditingSlot(null)}
-                className="p-1 hover:bg-gray-100 rounded-full"
-              >
+              <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              {CLANS.map(clan => (
-                <button
-                  key={clan.name}
-                  onClick={() => updateProfileField('clan', clan.name)}
-                  className="flex items-center gap-3 p-4 hover:bg-gray-100 rounded-lg transition-colors"
-                >
+              {CLANS.map(clan => <button key={clan.name} onClick={() => updateProfileField('clan', clan.name)} className="flex items-center gap-3 p-4 hover:bg-gray-100 rounded-lg transition-colors">
                   <span className="text-3xl">{clan.emoji}</span>
                   <span className="font-medium text-lg">{clan.name}</span>
-                </button>
-              ))}
+                </button>)}
             </div>
           </div>
-        </div>
-      )}
-    </>
-  );
+        </div>}
+    </>;
 };
