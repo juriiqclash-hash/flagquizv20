@@ -393,12 +393,12 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
         
         <div className="w-full max-w-7xl flex flex-col h-full">
           {/* Top Section: Avatar + Username + Level + Progress + Customization */}
-          <div className="flex items-start gap-10 mb-4 pt-2">
+          <div className="flex items-start gap-10 mb-4 pt-12">
             {/* Avatar Column - Balanced size */}
             <div className="flex flex-col items-center pt-2">
-              <Avatar className="h-56 w-56 ring-8 ring-white shadow-2xl">
+              <Avatar className="h-64 w-64 ring-8 ring-white shadow-2xl">
                 <AvatarImage src={avatarUrl} />
-                <AvatarFallback className="text-8xl bg-blue-500 text-white">
+                <AvatarFallback className="text-9xl bg-blue-500 text-white">
                   {username.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
@@ -407,13 +407,13 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
 
             {/* Right Side: Username, Level Bar, and Customization Slots */}
             <div className="flex-1 pt-6">
-              <h1 className="text-6xl font-bold text-gray-800 mb-2 leading-none">
+              <h1 className="text-7xl font-bold text-gray-800 mb-3 leading-none">
                 {username}
               </h1>
-              <p className="text-xl text-gray-600 mb-4 font-medium">Level {level}</p>
+              <p className="text-2xl text-gray-600 mb-5 font-medium">Level {level}</p>
 
               {/* XP Progress Bar */}
-              <div className="h-6 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner max-w-xl mb-6">
+              <div className="h-7 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner max-w-2xl mb-6">
                 <div
                   className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-500 rounded-full"
                   style={{ width: `${Math.max(2, Math.min(levelProgress, 100))}%` }}
@@ -537,11 +537,11 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
             </div>
 
             {/* Rank Badge - Wider and taller with info icon */}
-            <div className="col-span-4 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-6 flex items-center gap-5 min-h-[140px] relative">
-              <div className="flex-shrink-0 w-24 h-24 flex items-center justify-center">
-                <img src={rank.badge} alt={rank.name} className="w-40 h-40 object-contain" />
+            <div className="col-span-4 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-6 flex items-center gap-5 min-h-[140px] relative overflow-hidden">
+              <div className="flex-shrink-0 w-24 h-24 flex items-center justify-center relative">
+                <img src={rank.badge} alt={rank.name} className="w-56 h-56 object-contain absolute" />
               </div>
-              <div className="flex flex-col flex-1">
+              <div className="flex flex-col flex-1 ml-8">
                 <p className="text-4xl font-bold text-blue-500 leading-tight">
                   {rank.name}
                 </p>
