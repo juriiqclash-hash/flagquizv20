@@ -45,7 +45,7 @@ const HamburgerMenu = ({ onNavigateHome, currentPage = 'quiz' }: HamburgerMenuPr
             <Menu className="h-5 w-5" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+        <SheetContent side="left" className="w-[300px] sm:w-[400px]">
           <SheetHeader>
             <SheetTitle>Menü</SheetTitle>
           </SheetHeader>
@@ -62,7 +62,7 @@ const HamburgerMenu = ({ onNavigateHome, currentPage = 'quiz' }: HamburgerMenuPr
             <Button
               variant={currentPage === 'quiz' ? 'default' : 'outline'}
               className="w-full justify-start text-lg h-14"
-              disabled={currentPage === 'quiz'}
+              onClick={handleNavigateHome}
             >
               <Trophy className="h-5 w-5 mr-3" />
               Quiz

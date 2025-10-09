@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Pause, Play, Home, Eye, EyeOff, SkipForward, MapPin, Map, Mountain, Languages, Menu } from "lucide-react";
-import HamburgerMenu from "@/components/HamburgerMenu";
+import QuizHomeButton from "@/components/QuizHomeButton";
 import { countries, shuffleArray, checkAnswer, continentEmojis, getFlagUrl, type Country } from "@/data/countries";
 import { countryMountains, getMountainByCountry } from "@/data/mountains";
 import { countryLanguages, getLanguageByCountry } from "@/data/languages";
@@ -476,10 +476,7 @@ export default function QuizGame({
           {/* Header with Home and Pause buttons */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
-              <HamburgerMenu
-                onNavigateHome={onBackToStart}
-                currentPage="quiz"
-              />
+              <QuizHomeButton onNavigateHome={onBackToStart} />
               <Button variant="outline" onClick={togglePause}>
                 {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
               </Button>
@@ -525,10 +522,7 @@ export default function QuizGame({
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
-            <HamburgerMenu
-              onNavigateHome={onBackToStart}
-              currentPage="quiz"
-            />
+            <QuizHomeButton onNavigateHome={onBackToStart} />
             <Button variant="outline" onClick={togglePause}>
               {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
             </Button>
