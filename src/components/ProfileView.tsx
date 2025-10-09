@@ -507,7 +507,7 @@ export const ProfileView = ({
                 <img
                   src={rank.badge}
                   alt={rank.name}
-                  className="absolute w-40 h-40 object-contain scale-125"
+                  className="absolute w-40 h-40 object-contain scale-140"
                 />
               </div>
 
