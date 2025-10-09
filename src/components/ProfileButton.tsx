@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, LogOut, UserPlus, Settings, Users, Shield } from 'lucide-react';
+import { User, LogOut, UserPlus, Settings, Users, Shield, X } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdmin } from '@/hooks/useAdmin';
 import { useToast } from '@/hooks/use-toast';
@@ -171,6 +171,24 @@ const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOp
     setShowAddUserDialog(true);
   };
 
+  const handleRemoveAccount = (accountUserId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    const accounts = localStorage.getItem('flagquiz_accounts');
+    if (!accounts) return;
+
+    const accountsList: SavedAccount[] = JSON.parse(accounts);
+    const updatedAccounts = accountsList.filter(acc => acc.userId !== accountUserId);
+
+    localStorage.setItem('flagquiz_accounts', JSON.stringify(updatedAccounts));
+    setSavedAccounts(updatedAccounts);
+
+    toast({
+      title: 'Account entfernt',
+      description: 'Der Account wurde aus der Liste entfernt',
+    });
+  };
+
   const handleLogout = async () => {
     await signOut();
     toast({
@@ -293,33 +311,41 @@ const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOp
             {savedAccounts.map((account) => {
               const isCurrentUser = account.userId === user.id;
               return (
-                <button
-                  key={account.userId}
-                  onClick={() => {
-                    if (!isCurrentUser) {
-                      handleSwitchAccount(account);
-                      setShowAccountSwitchDialog(false);
-                    }
-                  }}
-                  className={`flex flex-col items-center gap-3 p-4 rounded-lg border transition-colors ${
-                    isCurrentUser
-                      ? 'border-primary bg-primary/10 cursor-default'
-                      : 'border-border hover:bg-accent cursor-pointer'
-                  }`}
-                >
-                  <Avatar className="h-16 w-16">
-                    <AvatarImage src={account.avatarUrl} />
-                    <AvatarFallback className="bg-primary text-primary-foreground text-xl">
-                      {account.email.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="text-center">
-                    <p className="font-medium text-sm truncate max-w-[120px]">{account.email}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {isCurrentUser ? 'Aktuell' : 'Wechseln'}
-                    </p>
-                  </div>
-                </button>
+                <div key={account.userId} className="relative">
+                  <button
+                    onClick={() => {
+                      if (!isCurrentUser) {
+                        handleSwitchAccount(account);
+                        setShowAccountSwitchDialog(false);
+                      }
+                    }}
+                    className={`w-full flex flex-col items-center gap-3 p-4 rounded-lg border transition-colors ${
+                      isCurrentUser
+                        ? 'border-primary bg-primary/10 cursor-default'
+                        : 'border-border hover:bg-accent cursor-pointer'
+                    }`}
+                  >
+                    <Avatar className="h-16 w-16">
+                      <AvatarImage src={account.avatarUrl} />
+                      <AvatarFallback className="bg-primary text-primary-foreground text-xl">
+                        {account.email.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="text-center">
+                      <p className="font-medium text-sm truncate max-w-[120px]">{account.email}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {isCurrentUser ? 'Aktuell' : 'Wechseln'}
+                      </p>
+                    </div>
+                  </button>
+                  <button
+                    onClick={(e) => handleRemoveAccount(account.userId, e)}
+                    className="absolute top-2 right-2 p-1 rounded-full bg-background/80 hover:bg-destructive hover:text-destructive-foreground transition-colors border border-border"
+                    title="Account entfernen"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
               );
             })}
           </div>
