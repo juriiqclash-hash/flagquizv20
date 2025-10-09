@@ -107,32 +107,4 @@
     @apply bg-background text-foreground;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
   }
-
-  html {
-    font-size: 16px;
-  }
-
-  @media screen and (min-resolution: 1.25dppx) and (max-resolution: 1.5dppx) {
-    html {
-      font-size: 20px;
-    }
-  }
-
-  @media screen and (min-resolution: 1.5dppx) and (max-resolution: 1.75dppx) {
-    html {
-      font-size: 24px;
-    }
-  }
-
-  @media screen and (min-resolution: 1.75dppx) and (max-resolution: 2dppx) {
-    html {
-      font-size: 28px;
-    }
-  }
-
-  @media screen and (min-resolution: 2dppx) {
-    html {
-      font-size: 32px;
-    }
-  }
 }

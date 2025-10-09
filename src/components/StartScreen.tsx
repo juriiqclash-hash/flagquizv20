@@ -10,9 +10,6 @@ import LeaderboardButton from "./LeaderboardButton";
 import ProfileButton from "./ProfileButton";
 import MultiplayerMenu from "./MultiplayerMenu";
 import BannedScreen from "./BannedScreen";
-import HamburgerMenu from "./HamburgerMenu";
-import FriendsView from "./FriendsView";
-import ClansView from "./ClansView";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
 import { supabase } from "@/integrations/supabase/client";
@@ -42,8 +39,6 @@ export default function StartScreen({
   const [showCapitalVariantSelector, setShowCapitalVariantSelector] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showMultiplayerMenu, setShowMultiplayerMenu] = useState(false);
-  const [showFriends, setShowFriends] = useState(false);
-  const [showClans, setShowClans] = useState(false);
   const [isBanned, setIsBanned] = useState(false);
   const [banInfo, setBanInfo] = useState<{ reason?: string; bannedAt?: string }>({});
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -136,57 +131,13 @@ export default function StartScreen({
     setShowCapitalVariantSelector(false);
     setShowMultiplayerMenu(false);
   };
-
-  const handleHamburgerNavigation = (view: 'home' | 'leaderboard' | 'friends' | 'clans') => {
-    setShowLeaderboard(false);
-    setShowFriends(false);
-    setShowClans(false);
-
-    if (view === 'leaderboard') {
-      setShowLeaderboard(true);
-    } else if (view === 'friends') {
-      setShowFriends(true);
-    } else if (view === 'clans') {
-      setShowClans(true);
-    }
-  };
   if (isBanned) {
     return <BannedScreen banReason={banInfo.reason} bannedAt={banInfo.bannedAt} />;
   }
 
   if (showLeaderboard) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 p-4">
-        <div className="absolute top-4 left-4 z-50">
-          <HamburgerMenu onNavigate={handleHamburgerNavigation} currentView="leaderboard" />
-        </div>
-        <Leaderboard />
-      </div>
-    );
+    return <Leaderboard />;
   }
-
-  if (showFriends) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 p-4">
-        <div className="absolute top-4 left-4 z-50">
-          <HamburgerMenu onNavigate={handleHamburgerNavigation} currentView="friends" />
-        </div>
-        <FriendsView />
-      </div>
-    );
-  }
-
-  if (showClans) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 p-4">
-        <div className="absolute top-4 left-4 z-50">
-          <HamburgerMenu onNavigate={handleHamburgerNavigation} currentView="clans" />
-        </div>
-        <ClansView />
-      </div>
-    );
-  }
-
   if (showMultiplayerMenu) {
     return <MultiplayerMenu onMatchJoined={onStartMultiplayer} onBackToMain={() => setShowMultiplayerMenu(false)} />;
   }
@@ -207,10 +158,15 @@ export default function StartScreen({
         />
       </div>
       
-      {/* Hamburger Menu - Top Left */}
+      {/* Buttons Container - Responsive Layout */}
       {!isProfileOpen && (
-        <div className="absolute top-4 left-4 z-50">
-          <HamburgerMenu onNavigate={handleHamburgerNavigation} currentView="home" />
+        <div className="absolute top-4 left-4 z-50 flex flex-col md:flex-row gap-2">
+          <LeaderboardButton />
+          {onBackToMainMenu && (
+            <Button variant="outline" onClick={onBackToMainMenu} className="hidden md:flex">
+              <Home className="h-4 w-4" />
+            </Button>
+          )}
         </div>
       )}
       
