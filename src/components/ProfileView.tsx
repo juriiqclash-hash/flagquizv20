@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Plus, Flame, Clock, Trophy, Medal, Award, Gem, Crown, Star, X, Info } from 'lucide-react';
+import { Plus, Flame, Clock, Trophy, X, Info } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from './ui/button';
 import { ALL_COUNTRIES } from '@/data/countries-full';
 import { Input } from './ui/input';
-import rankBadges from '@/assets/rank-badges-final.png';
+import bronzeBadge from '@/assets/bronze.webp';
+import silverBadge from '@/assets/silber.webp';
+import goldBadge from '@/assets/gold.webp';
+import platinumBadge from '@/assets/plartinum.webp';
+import diamondBadge from '@/assets/diamant.webp';
 
 interface ProfileViewProps {
   open: boolean;
@@ -51,7 +55,7 @@ const CONTINENTS = [
 
 type RankTier = {
   name: string;
-  icon: React.ComponentType<any>;
+  badge: string;
   gradient: string;
   minStreak: number;
   minTimeSeconds: number;
@@ -60,63 +64,63 @@ type RankTier = {
 };
 
 const RANK_TIERS: RankTier[] = [
-  { 
-    name: 'Legends', 
-    icon: Crown, 
-    gradient: 'from-purple-600 via-purple-500 to-pink-500',
+  {
+    name: 'Legends',
+    badge: diamondBadge,
+    gradient: 'from-cyan-400 via-blue-400 to-cyan-300',
     minStreak: 1000,
     minTimeSeconds: 480, // <8 minutes
     minDuelWins: 500,
     minLevel: 7
   },
-  { 
-    name: 'Masters', 
-    icon: Star, 
-    gradient: 'from-yellow-500 via-yellow-400 to-amber-400',
+  {
+    name: 'Masters',
+    badge: platinumBadge,
+    gradient: 'from-slate-400 via-slate-300 to-slate-200',
     minStreak: 100,
     minTimeSeconds: 480, // 8-9 minutes
     minDuelWins: 500,
     minLevel: 6
   },
-  { 
-    name: 'Diamond', 
-    icon: Gem, 
+  {
+    name: 'Diamond',
+    badge: diamondBadge,
     gradient: 'from-cyan-400 via-blue-400 to-cyan-300',
     minStreak: 60,
     minTimeSeconds: 480, // 8-10 minutes
     minDuelWins: 400,
     minLevel: 5
   },
-  { 
-    name: 'Platinum', 
-    icon: Trophy, 
+  {
+    name: 'Platinum',
+    badge: platinumBadge,
     gradient: 'from-slate-400 via-slate-300 to-slate-200',
     minStreak: 30,
     minTimeSeconds: 600, // 10-12 minutes
     minDuelWins: 300,
     minLevel: 4
   },
-  { 
-    name: 'Gold', 
-    icon: Medal, 
+  {
+    name: 'Gold',
+    badge: goldBadge,
     gradient: 'from-yellow-600 via-yellow-500 to-yellow-400',
     minStreak: 15,
     minTimeSeconds: 720, // 12-15 minutes
     minDuelWins: 150,
     minLevel: 3
   },
-  { 
-    name: 'Silver', 
-    icon: Award, 
+  {
+    name: 'Silver',
+    badge: silverBadge,
     gradient: 'from-gray-400 via-gray-300 to-gray-400',
     minStreak: 5,
     minTimeSeconds: 900, // 15-20 minutes
     minDuelWins: 50,
     minLevel: 2
   },
-  { 
-    name: 'Bronze', 
-    icon: Award, 
+  {
+    name: 'Bronze',
+    badge: bronzeBadge,
     gradient: 'from-orange-600 via-orange-500 to-orange-400',
     minStreak: 0,
     minTimeSeconds: 1200, // >20 minutes
@@ -371,7 +375,6 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const RankIcon = rank.icon;
   
   if (!open) return null;
 
@@ -533,8 +536,8 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
 
             {/* Rank Badge - Wider and taller with info icon */}
             <div className="col-span-4 bg-white/30 backdrop-blur-sm rounded-3xl shadow-md p-5 flex items-center gap-4 min-h-[110px] relative">
-              <div className={`p-4 rounded-2xl bg-gradient-to-br ${rank.gradient} shadow-xl flex-shrink-0`}>
-                <RankIcon className="w-14 h-14 text-white" />
+              <div className="flex-shrink-0 w-20 h-20 flex items-center justify-center">
+                <img src={rank.badge} alt={rank.name} className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col flex-1">
                 <p className="text-3xl font-bold text-blue-500 leading-tight">
@@ -571,14 +574,13 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
             
             <div className="space-y-4">
               {RANK_TIERS.map((tier, index) => {
-                const TierIcon = tier.icon;
                 return (
-                  <div 
+                  <div
                     key={tier.name}
                     className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                   >
-                    <div className={`p-3 rounded-xl bg-gradient-to-br ${tier.gradient} shadow-lg`}>
-                      <TierIcon className="w-10 h-10 text-white" />
+                    <div className="w-16 h-16 flex items-center justify-center flex-shrink-0">
+                      <img src={tier.badge} alt={tier.name} className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1">
                       <h4 className="font-bold text-xl text-gray-800">{tier.name}</h4>
