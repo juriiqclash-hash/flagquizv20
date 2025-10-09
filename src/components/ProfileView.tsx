@@ -538,8 +538,8 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
 
             {/* Rank Badge - Wider and taller with info icon */}
             <div className="col-span-4 bg-white/30 backdrop-blur-sm rounded-3xl shadow-md p-5 flex items-center gap-4 min-h-[110px] relative">
-              <div className="flex-shrink-0 w-40 h-40 flex items-center justify-center">
-                <img src={rank.badge} alt={rank.name} className="w-full h-full object-contain" />
+              <div className="flex-shrink-0 w-20 h-20 flex items-center justify-center">
+                <img src={rank.badge} alt={rank.name} className="w-40 h-40 object-contain" />
               </div>
               <div className="flex flex-col flex-1">
                 <p className="text-3xl font-bold text-blue-500 leading-tight">
@@ -563,7 +563,7 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
       {/* Rank Info Dialog */}
       {showRankInfo && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-2xl p-6 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl p-6 max-w-4xl w-full mx-4">
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-bold text-2xl">Rank Übersicht</h3>
               <button
@@ -573,34 +573,26 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
-            <div className="space-y-4">
-              {RANK_TIERS.map((tier, index) => {
+
+            <div className="flex gap-4 justify-center mb-6">
+              {RANK_TIERS.map((tier) => {
                 return (
                   <div
                     key={tier.name}
-                    className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                    className="flex flex-col items-center gap-2"
                   >
-                    <div className="w-32 h-32 flex items-center justify-center flex-shrink-0">
+                    <div className="w-24 h-24 flex items-center justify-center">
                       <img src={tier.badge} alt={tier.name} className="w-full h-full object-contain" />
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-bold text-xl text-gray-800">{tier.name}</h4>
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-2 text-sm text-gray-600">
-                        <p>Min Streak: {tier.minStreak}</p>
-                        <p>Min Duel Wins: {tier.minDuelWins}</p>
-                        <p>Max Time: {Math.floor(tier.minTimeSeconds / 60)}:{(tier.minTimeSeconds % 60).toString().padStart(2, '0')}</p>
-                        <p>Min Level: {tier.minLevel}</p>
-                      </div>
-                    </div>
+                    <p className="text-sm font-semibold text-gray-800">{tier.name}</p>
                   </div>
                 );
               })}
             </div>
 
-            <div className="mt-6 p-4 bg-blue-50 rounded-xl">
-              <p className="text-sm text-gray-700">
-                <strong>Hinweis:</strong> Dein Rang wird basierend auf dem Durchschnitt deiner besten Streak, deiner schnellsten Zeit und deinen Duel-Siegen berechnet.
+            <div className="p-4 bg-blue-50 rounded-xl">
+              <p className="text-sm text-gray-700 text-center">
+                Dein Rang wird basierend auf dem Durchschnitt deiner Scores berechnet.
               </p>
             </div>
           </div>
