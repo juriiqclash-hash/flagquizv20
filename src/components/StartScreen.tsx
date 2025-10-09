@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Clock, BookOpen, Target, MapPin, Map, Zap, Building, Globe, Smile, Trophy, Users, Play, Mountain, Languages, ArrowLeft, Home } from "lucide-react";
+import { Clock, BookOpen, Target, MapPin, Map, Zap, Building, Globe, Smile, Trophy, Users, Play, Mountain, Languages, ArrowLeft, Home, Layers } from "lucide-react";
 import ContinentSelector from "./ContinentSelector";
 import TimeSelector from "./TimeSelector";
 import CapitalVariantSelector from "./CapitalVariantSelector";
@@ -16,7 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import FlagQuizLogo from "@/components/FlagQuizLogo";
 interface StartScreenProps {
-  onStartQuiz: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge', continent?: string, timeLimit?: number) => void;
+  onStartQuiz: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz', continent?: string, timeLimit?: number) => void;
   onStartMultiplayer: () => void;
   currentView: string;
   onOpenAdminPanel?: () => void;
@@ -363,6 +363,25 @@ export default function StartScreen({
                 {t.worldKnowledgeDesc}
               </p>
               <Button onClick={() => handleModeClick('world-knowledge')} className="w-full">
+                <Play className="mr-2 h-4 w-4" />
+                {t.start}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Combi-Quiz */}
+          <Card className="group cursor-pointer hover:shadow-lg transition-shadow duration-200">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Layers className="w-6 h-6 text-pink-500" />
+                Combi-Quiz
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Wähle deine Kategorien und spiele endlos
+              </p>
+              <Button onClick={() => handleModeClick('combi-quiz')} className="w-full">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>

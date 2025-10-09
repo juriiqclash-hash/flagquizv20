@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import MainMenu from "@/components/MainMenu";
 import StartScreen from "@/components/StartScreen";
 import QuizGame from "@/components/QuizGame";
+import CombiQuiz from "@/components/CombiQuiz";
 import MultiplayerMenu from "@/components/MultiplayerMenu";
 import MultiplayerLobby from "@/components/MultiplayerLobby";
 import MultiplayerGame from "@/components/MultiplayerGame";
@@ -15,24 +16,26 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { DifficultyLevel } from "@/data/worldKnowledge";
 
 function IndexContent() {
-  const [currentView, setCurrentView] = useState<'main-menu' | 'start' | 'quiz' | 'multiplayer-menu' | 'multiplayer-lobby' | 'multiplayer-countdown' | 'multiplayer-game' | 'multiplayer-continent-game' | 'world-knowledge-difficulty' | 'world-knowledge-quiz' | 'admin'>('main-menu');
-  const [gameMode, setGameMode] = useState<'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge'>('learn');
+  const [currentView, setCurrentView] = useState<'main-menu' | 'start' | 'quiz' | 'combi-quiz' | 'multiplayer-menu' | 'multiplayer-lobby' | 'multiplayer-countdown' | 'multiplayer-game' | 'multiplayer-continent-game' | 'world-knowledge-difficulty' | 'world-knowledge-quiz' | 'admin'>('main-menu');
+  const [gameMode, setGameMode] = useState<'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz'>('learn');
   const [selectedContinent, setSelectedContinent] = useState<string>();
   const [timeLimit, setTimeLimit] = useState<number>();
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('easy');
   const [multiplayerGameMode, setMultiplayerGameMode] = useState<string>('flags');
 
   const handleStartQuiz = (
-    mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge',
+    mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz',
     continent?: string,
     timeLimitValue?: number
   ) => {
     setGameMode(mode);
     setSelectedContinent(continent);
     setTimeLimit(timeLimitValue);
-    
+
     if (mode === 'world-knowledge') {
       setCurrentView('world-knowledge-difficulty');
+    } else if (mode === 'combi-quiz') {
+      setCurrentView('combi-quiz');
     } else {
       setCurrentView('quiz');
     }
@@ -140,6 +143,10 @@ function IndexContent() {
         <WorldKnowledgeQuiz
           difficulty={selectedDifficulty}
           onBack={handleBackToWorldKnowledgeDifficulty}
+        />
+      ) : currentView === 'combi-quiz' ? (
+        <CombiQuiz
+          onBackToStart={handleBackToStart}
         />
       ) : null}
     </>
