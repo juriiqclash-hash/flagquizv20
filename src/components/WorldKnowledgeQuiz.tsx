@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getFactsByDifficulty, getDifficultyDisplayName, type DifficultyLevel, type WorldKnowledgeFact } from "@/data/worldKnowledge";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
+import { useUserStats } from "@/hooks/useUserStats";
 
 interface WorldKnowledgeQuizProps {
   difficulty: DifficultyLevel;
@@ -16,6 +17,7 @@ export default function WorldKnowledgeQuiz({ difficulty, onBack }: WorldKnowledg
   const { toast } = useToast();
   const { language } = useLanguage();
   const t = useTranslation(language);
+  const { addXP } = useUserStats();
   const [facts, setFacts] = useState<WorldKnowledgeFact[]>([]);
   const [currentFact, setCurrentFact] = useState<WorldKnowledgeFact | null>(null);
   const [usedFactIds, setUsedFactIds] = useState<Set<number>>(new Set());
@@ -46,9 +48,10 @@ export default function WorldKnowledgeQuiz({ difficulty, onBack }: WorldKnowledg
     if (!currentFact) return;
 
     const isCorrect = userAnswer === currentFact.isTrue;
-    
+
     if (isCorrect) {
       setScore(prev => prev + 1);
+      addXP(1);
       toast({
         title: t.correctAnswer,
         description: t.correctAnswer,

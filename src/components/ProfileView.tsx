@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from './ui/button';
 import { ALL_COUNTRIES } from '@/data/countries-full';
 import { Input } from './ui/input';
+import { getXPProgress } from '@/lib/xpSystem';
 import bronzeBadge from '@/assets/bronze.webp';
 import silverBadge from '@/assets/silber.webp';
 import goldBadge from '@/assets/gold.webp';
@@ -354,19 +355,8 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
     }
   };
 
-  // XP calculation for level 1-100: each level needs progressively more XP
-  const xpForLevel = (lvl: number) => lvl * 100; // XP needed to reach this level
-  const totalXPForLevel = (lvl: number) => {
-    let total = 0;
-    for (let i = 1; i <= lvl; i++) {
-      total += xpForLevel(i);
-    }
-    return total;
-  };
-  
-  const currentLevelTotalXP = totalXPForLevel(level);
-  const nextLevelTotalXP = totalXPForLevel(level + 1);
-  const levelProgress = level >= 100 ? 100 : ((xp - currentLevelTotalXP) / (nextLevelTotalXP - currentLevelTotalXP)) * 100;
+  const xpProgress = getXPProgress(xp);
+  const levelProgress = xpProgress.progressPercentage;
   
   const rank = calculateRank(leaderboardStats, level);
 
@@ -410,7 +400,10 @@ export const ProfileView = ({ open, onOpenChange }: ProfileViewProps) => {
               <h1 className="text-7xl font-bold text-gray-800 mb-3 leading-none">
                 {username}
               </h1>
-              <p className="text-2xl text-gray-600 mb-5 font-medium">Level {level}</p>
+              <p className="text-2xl text-gray-600 mb-2 font-medium">Level {level}</p>
+              <p className="text-sm text-gray-500 mb-4">
+                {xp} XP {level < 100 && `• ${xpProgress.xpInCurrentLevel}/${xpProgress.xpNeededForNextLevel} bis Level ${level + 1}`}
+              </p>
 
               {/* XP Progress Bar */}
               <div className="h-7 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner max-w-2xl mb-6">

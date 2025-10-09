@@ -9,6 +9,7 @@ import { useMultiplayer } from '@/hooks/useMultiplayer';
 import { useAuth } from '@/hooks/useAuth';
 import { countries, checkAnswer } from '@/data/countries';
 import { useToast } from '@/hooks/use-toast';
+import { useUserStats } from '@/hooks/useUserStats';
 
 interface MultiplayerContinentGameProps {
   onBackToLobby: () => void;
@@ -19,6 +20,7 @@ export default function MultiplayerContinentGame({ onBackToLobby, onBackToMenu }
   const { currentLobby, participants, leaveMatch } = useMultiplayer();
   const { user } = useAuth();
   const { toast } = useToast();
+  const { addXP, incrementMultiplayerWins } = useUserStats();
   
   const [userInput, setUserInput] = useState('');
   const [correctAnswers, setCorrectAnswers] = useState<Set<string>>(new Set());
@@ -53,6 +55,7 @@ export default function MultiplayerContinentGame({ onBackToLobby, onBackToMenu }
     if (currentLobby.status === 'finished') {
       if (currentLobby.winner_id === user?.id) {
         setGameStatus('won');
+        incrementMultiplayerWins();
         toast({
           title: '🏆 Gewonnen!',
           description: `Du hast alle ${totalCountries} Länder zuerst genannt!`,
@@ -85,6 +88,8 @@ export default function MultiplayerContinentGame({ onBackToLobby, onBackToMenu }
         newCorrectAnswers.add(country.name);
         setCorrectAnswers(newCorrectAnswers);
         setUserInput('');
+
+        addXP(1);
         
         // Update Supabase with current progress
         const progressStr = Array.from(newCorrectAnswers).join(',');
