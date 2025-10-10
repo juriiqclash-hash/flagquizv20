@@ -414,38 +414,38 @@ export const ProfileView = ({
         <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
         </button>
-        
+
         <div className="w-full max-w-7xl flex flex-col h-full">
           {/* Top Section: Avatar + Username + Level + Progress + Customization */}
-          <div className="flex items-start gap-10 mb-4 pt-12">
-            {/* Avatar Column - Balanced size */}
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10 mb-4 pt-6 md:pt-12">
+            {/* Avatar Column - Centered on mobile */}
             <div className="flex flex-col items-center pt-2">
-              <Avatar className="h-64 w-64 ring-8 ring-white shadow-2xl">
+              <Avatar className="h-48 w-48 md:h-64 md:w-64 ring-8 ring-white shadow-2xl">
                 <AvatarImage src={avatarUrl} />
-                <AvatarFallback className="text-9xl bg-blue-500 text-white">
+                <AvatarFallback className="text-7xl md:text-9xl bg-blue-500 text-white">
                   {username.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <p className="text-sm text-gray-300 mt-3 font-medium" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Joined {accountCreated}</p>
+              <p className="text-sm text-gray-300 mt-3 font-medium hidden md:block" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Joined {accountCreated}</p>
             </div>
 
-            {/* Right Side: Username, Level Bar, and Customization Slots */}
-            <div className="flex-1 pt-6">
-              <h1 className="text-7xl font-bold text-white mb-3 leading-none" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+            {/* Right Side: Username, Level Bar, and Customization Slots - Centered on mobile */}
+            <div className="flex-1 pt-0 md:pt-6 flex flex-col items-center md:items-start w-full">
+              <h1 className="text-4xl md:text-7xl font-bold text-white mb-2 md:mb-3 leading-none text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                 {username}
               </h1>
-              <p className="text-2xl text-gray-300 mb-2 font-medium" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Level {level}</p>
-              
+              <p className="text-xl md:text-2xl text-gray-300 mb-3 md:mb-2 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Level {level}</p>
+
 
               {/* XP Progress Bar */}
-              <div className="h-7 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner max-w-2xl mb-6">
+              <div className="h-6 md:h-7 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner w-full max-w-md md:max-w-2xl mb-4 md:mb-6">
                 <div className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-500 rounded-full" style={{
                 width: `${Math.max(2, Math.min(levelProgress, 100))}%`
               }} />
               </div>
 
               {/* Customization Slots */}
-              <div className="flex gap-3">
+              <div className="flex gap-3 justify-center md:justify-start">
                 {/* Flag Slot */}
                 <button onClick={() => {
                 if (profileData.flag) {
@@ -453,10 +453,10 @@ export const ProfileView = ({
                 } else {
                   setEditingSlot('flag');
                 }
-              }} className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
+              }} className="w-24 h-24 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
                   {profileData.flag ? (
                     <>
-                      <span className="text-5xl mb-1" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
+                      <span className="text-4xl md:text-5xl mb-1" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
                         {getFlagEmoji(profileData.flag)}
                       </span>
                       <span className="text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
@@ -464,7 +464,7 @@ export const ProfileView = ({
                       </span>
                     </>
                   ) : (
-                    <Plus className="w-8 h-8 text-gray-300" />
+                    <Plus className="w-7 md:w-8 h-7 md:h-8 text-gray-300" />
                   )}
                 </button>
 
@@ -475,15 +475,15 @@ export const ProfileView = ({
                 } else {
                   setEditingSlot('continent');
                 }
-              }} className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
+              }} className="w-24 h-24 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
                   {profileData.continent ? <>
-                      <span className="text-4xl mb-1">
+                      <span className="text-3xl md:text-4xl mb-1">
                         {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
                       </span>
                       <span className="text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.continent}
                       </span>
-                    </> : <Plus className="w-8 h-8 text-gray-300" />}
+                    </> : <Plus className="w-7 md:w-8 h-7 md:h-8 text-gray-300" />}
                 </button>
 
                 {/* Clan Slot */}
@@ -493,15 +493,15 @@ export const ProfileView = ({
                 } else {
                   setEditingSlot('clan');
                 }
-              }} className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
+              }} className="w-24 h-24 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
                 {profileData.clan ? <>
-                      <span className="text-4xl mb-1">
+                      <span className="text-3xl md:text-4xl mb-1">
                         {allClans.find(c => c.name === profileData.clan)?.emoji}
                       </span>
                       <span className="text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.clan}
                       </span>
-                    </> : <Plus className="w-8 h-8 text-gray-300" />}
+                    </> : <Plus className="w-7 md:w-8 h-7 md:h-8 text-gray-300" />}
                 </button>
               </div>
             </div>
@@ -509,71 +509,71 @@ export const ProfileView = ({
 
 
           {/* Player Stats Header */}
-          <h2 className="text-sm font-bold text-gray-300 uppercase tracking-[0.25em] mb-3 mt-auto" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+          <h2 className="text-xs md:text-sm font-bold text-gray-300 uppercase tracking-[0.25em] mb-3 mt-auto text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
             PLAYER STATS
           </h2>
 
-          {/* Stats Grid - 3 narrow cards + 1 wider rank card */}
-          <div className="grid grid-cols-10 gap-4 pb-4">
+          {/* Stats Grid - Mobile: 3 in row, then rank full width. Desktop: 3 narrow + 1 wider */}
+          <div className="grid grid-cols-3 md:grid-cols-10 gap-3 md:gap-4 pb-4">
             {/* Best Streak */}
-            <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-5 flex flex-col items-center justify-center min-h-[140px]">
-              <p className="text-xs text-gray-300 uppercase tracking-wide font-bold mb-3" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+            <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg p-3 md:p-5 flex flex-col items-center justify-center min-h-[120px] md:min-h-[140px]">
+              <p className="text-[9px] md:text-xs text-gray-300 uppercase tracking-wide font-bold mb-2 md:mb-3 text-center" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                 BESTE STREAK
               </p>
-              <div className="flex items-center gap-2">
-                <Flame className="w-8 h-8 text-orange-500" />
-                <span className="text-4xl font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+              <div className="flex items-center gap-1 md:gap-2">
+                <Flame className="w-6 h-6 md:w-8 md:h-8 text-orange-500" />
+                <span className="text-2xl md:text-4xl font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                   {leaderboardStats.bestStreak}
                 </span>
               </div>
             </div>
 
             {/* Time Mode */}
-            <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-5 flex flex-col items-center justify-center min-h-[140px]">
-              <p className="text-xs text-gray-300 uppercase tracking-wide font-bold mb-3" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+            <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg p-3 md:p-5 flex flex-col items-center justify-center min-h-[120px] md:min-h-[140px]">
+              <p className="text-[9px] md:text-xs text-gray-300 uppercase tracking-wide font-bold mb-2 md:mb-3 text-center" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                 ZEITMODUS
               </p>
-              <div className="flex items-center gap-2">
-                <Clock className="w-8 h-8 text-blue-500" />
-                <span className="text-4xl font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+              <div className="flex items-center gap-1 md:gap-2">
+                <Clock className="w-6 h-6 md:w-8 md:h-8 text-blue-500" />
+                <span className="text-2xl md:text-4xl font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                   {formatTime(leaderboardStats.bestTimeMode)}
                 </span>
               </div>
             </div>
 
             {/* Duel Wins */}
-            <div className="col-span-2 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-5 flex flex-col items-center justify-center min-h-[140px]">
-              <p className="text-xs text-gray-300 uppercase tracking-wide font-bold mb-3" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+            <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg p-3 md:p-5 flex flex-col items-center justify-center min-h-[120px] md:min-h-[140px]">
+              <p className="text-[9px] md:text-xs text-gray-300 uppercase tracking-wide font-bold mb-2 md:mb-3 text-center" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                 DUELLE WINS
               </p>
-              <div className="flex items-center gap-2">
-                <Trophy className="w-8 h-8 text-yellow-500" />
-                <span className="text-4xl font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+              <div className="flex items-center gap-1 md:gap-2">
+                <Trophy className="w-6 h-6 md:w-8 md:h-8 text-yellow-500" />
+                <span className="text-2xl md:text-4xl font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                   {leaderboardStats.duelWins}
                 </span>
               </div>
             </div>
 
-            {/* Rank Badge - Wider and taller with info icon */}
-            <div className="col-span-4 bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-6 flex items-center gap-5 min-h-[140px] relative overflow-hidden">
-              <div className="flex-shrink-0 w-24 h-24 flex items-center justify-center relative overflow-visible">
+            {/* Rank Badge - Full width on mobile, wider on desktop */}
+            <div className="col-span-3 md:col-span-4 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg p-4 md:p-6 flex flex-col md:flex-row items-center md:gap-5 min-h-[140px] relative overflow-hidden">
+              <div className="flex-shrink-0 w-20 h-20 md:w-24 md:h-24 flex items-center justify-center relative overflow-visible mb-2 md:mb-0">
                 <img
                   src={rank.badge}
                   alt={rank.name}
-                  className="absolute w-56 h-56 object-contain scale-125"
+                  className="absolute w-40 h-40 md:w-56 md:h-56 object-contain scale-125"
                 />
               </div>
 
-              <div className="flex flex-col flex-1 ml-8">
-                <p className="text-4xl font-bold text-white leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+              <div className="flex flex-col flex-1 md:ml-8 items-center md:items-start">
+                <p className="text-3xl md:text-4xl font-bold text-white leading-tight text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                   {rank.name}
                 </p>
-                <p className="text-sm text-gray-300 mt-1 font-medium" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                <p className="text-sm text-gray-300 mt-1 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                   Best Position #{leaderboardStats.bestPosition}
                 </p>
               </div>
-              <button onClick={() => setShowRankInfo(true)} className="absolute top-3 right-3 p-2 bg-white/60 hover:bg-white/80 rounded-full transition-colors">
-                <Info className="w-5 h-5 text-gray-600" />
+              <button onClick={() => setShowRankInfo(true)} className="absolute top-2 right-2 md:top-3 md:right-3 p-1.5 md:p-2 bg-white/60 hover:bg-white/80 rounded-full transition-colors">
+                <Info className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
               </button>
             </div>
           </div>
