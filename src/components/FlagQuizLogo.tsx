@@ -64,10 +64,10 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
             <span
               className={isDark ? 'text-white' : 'text-white'}
               style={isDark ? {
-                WebkitTextStroke: '6px #3b82f6',
+                WebkitTextStroke: '10px #3b82f6',
                 paintOrder: 'stroke fill'
               } : {
-                WebkitTextStroke: '6px #3b82f6',
+                WebkitTextStroke: '10px #3b82f6',
                 paintOrder: 'stroke fill'
               }}>
               FLAG
@@ -79,10 +79,10 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
             <span
               className={isDark ? 'text-white' : 'text-white'}
               style={isDark ? {
-                WebkitTextStroke: '6px #3b82f6',
+                WebkitTextStroke: '10px #3b82f6',
                 paintOrder: 'stroke fill'
               } : {
-                WebkitTextStroke: '6px #3b82f6',
+                WebkitTextStroke: '10px #3b82f6',
                 paintOrder: 'stroke fill'
               }}>
               QUIZ
