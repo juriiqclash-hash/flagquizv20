@@ -39,8 +39,11 @@ interface ProfileData {
   clan?: string;
 }
 interface Clan {
+  id?: string;
   name: string;
   emoji: string;
+  custom?: boolean;
+  createdBy?: string;
 }
 
 const DEFAULT_CLANS: Clan[] = [{
@@ -261,11 +264,18 @@ export const ProfileView = ({
     try {
       const { data: customClans } = await supabase
         .from('clans')
-        .select('name, emoji')
+        .select('id, name, emoji, created_by')
         .order('created_at', { ascending: false });
 
       if (customClans) {
-        setAllClans([...DEFAULT_CLANS, ...customClans]);
+        const clansWithMeta = customClans.map(clan => ({
+          id: clan.id,
+          name: clan.name,
+          emoji: clan.emoji,
+          custom: true,
+          createdBy: clan.created_by
+        }));
+        setAllClans([...DEFAULT_CLANS, ...clansWithMeta]);
       }
     } catch (error) {
       console.error('Error loading clans:', error);
@@ -658,10 +668,41 @@ export const ProfileView = ({
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              {allClans.map(clan => <button key={clan.name} onClick={() => updateProfileField('clan', clan.name)} className="flex items-center gap-3 p-4 hover:bg-gray-100 rounded-lg transition-colors">
-                  <span className="text-3xl">{clan.emoji}</span>
-                  <span className="font-medium text-lg">{clan.name}</span>
-                </button>)}
+              {allClans.map(clan => <div key={clan.name} className="relative group">
+                  <button 
+                    onClick={() => updateProfileField('clan', clan.name)} 
+                    className="w-full flex items-center gap-3 p-4 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <span className="text-3xl">{clan.emoji}</span>
+                    <span className="font-medium text-lg">{clan.name}</span>
+                  </button>
+                  {clan.custom && clan.createdBy === user?.id && (
+                    <button
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        if (confirm(`Clan "${clan.name}" wirklich löschen?`)) {
+                          const { error } = await supabase
+                            .from('clans')
+                            .delete()
+                            .eq('id', clan.id);
+
+                          if (error) {
+                            console.error('Error deleting clan:', error);
+                          } else {
+                            if (profileData.clan === clan.name) {
+                              updateProfileField('clan', null);
+                            }
+                            loadClans();
+                          }
+                        }
+                      }}
+                      className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 hover:bg-red-600 transition-all"
+                      title="Clan löschen"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>)}
             </div>
           </div>
         </div>}
@@ -669,9 +710,9 @@ export const ProfileView = ({
       {showClanCreator && (
         <ClanCreator
           onClose={() => setShowClanCreator(false)}
-          onClanCreated={(clanName) => {
+          onClanCreated={(clan) => {
             loadClans(); // Reload clans list
-            updateProfileField('clan', clanName); // Auto-select the new clan
+            updateProfileField('clan', clan.name); // Auto-select the new clan
           }}
         />
       )}

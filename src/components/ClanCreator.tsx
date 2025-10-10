@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 
 interface ClanCreatorProps {
   onClose: () => void;
-  onClanCreated: (clanName: string) => void;
+  onClanCreated: (clan: { id: string; name: string; emoji: string; createdBy: string }) => void;
 }
 
 export const ClanCreator = ({ onClose, onClanCreated }: ClanCreatorProps) => {
@@ -32,13 +32,15 @@ export const ClanCreator = ({ onClose, onClanCreated }: ClanCreatorProps) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('clans')
         .insert({
           name: clanName.trim(),
           emoji: clanEmoji.trim(),
           created_by: user.id
-        });
+        })
+        .select()
+        .single();
 
       if (error) {
         if (error.code === '23505') { // Unique violation
@@ -58,7 +60,12 @@ export const ClanCreator = ({ onClose, onClanCreated }: ClanCreatorProps) => {
         description: 'Dein Clan wurde erstellt',
       });
 
-      onClanCreated(clanName.trim());
+      onClanCreated({
+        id: data.id,
+        name: clanName.trim(),
+        emoji: clanEmoji.trim(),
+        createdBy: user.id
+      });
       onClose();
     } catch (error: any) {
       console.error('Error creating clan:', error);
