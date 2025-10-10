@@ -590,27 +590,31 @@ export const ProfileView = ({
               </button>
             </div>
 
-            <div className="grid grid-cols-4 md:flex md:flex-row gap-4 justify-center mb-6">
-              {[...RANK_TIERS].reverse().map(tier => {
+            <div className="flex flex-wrap gap-4 justify-center mb-6">
+              {[...RANK_TIERS].reverse().map((tier, index) => {
                 const getRankGlowColor = (name: string) => {
                   switch(name) {
-                    case 'Bronze': return 'hover:shadow-[0_0_30px_rgba(194,120,3,0.6)]';
-                    case 'Silver': return 'hover:shadow-[0_0_30px_rgba(156,163,175,0.6)]';
-                    case 'Gold': return 'hover:shadow-[0_0_30px_rgba(234,179,8,0.6)]';
-                    case 'Platinum': return 'hover:shadow-[0_0_30px_rgba(6,182,212,0.6)]';
-                    case 'Diamond': return 'hover:shadow-[0_0_30px_rgba(56,189,248,0.6)]';
-                    case 'Masters': return 'hover:shadow-[0_0_30px_rgba(37,99,235,0.6)]';
-                    case 'Legends': return 'hover:shadow-[0_0_30px_rgba(168,85,247,0.6)]';
+                    case 'Bronze': return 'group-hover:drop-shadow-[0_0_20px_rgba(194,120,3,0.8)]';
+                    case 'Silver': return 'group-hover:drop-shadow-[0_0_20px_rgba(156,163,175,0.8)]';
+                    case 'Gold': return 'group-hover:drop-shadow-[0_0_20px_rgba(234,179,8,0.8)]';
+                    case 'Platinum': return 'group-hover:drop-shadow-[0_0_20px_rgba(6,182,212,0.8)]';
+                    case 'Diamond': return 'group-hover:drop-shadow-[0_0_20px_rgba(56,189,248,0.8)]';
+                    case 'Masters': return 'group-hover:drop-shadow-[0_0_20px_rgba(37,99,235,0.8)]';
+                    case 'Legends': return 'group-hover:drop-shadow-[0_0_20px_rgba(168,85,247,0.8)]';
                     default: return '';
                   }
                 };
 
-                return <div key={tier.name} className="flex flex-col items-center gap-2 group">
-                    <div className={`w-20 h-20 md:w-24 md:h-24 flex items-center justify-center transition-all duration-300 rounded-full ${getRankGlowColor(tier.name)}`}>
+                return <div
+                    key={tier.name}
+                    className={`flex flex-col items-center gap-2 group ${index >= 4 ? 'w-[calc(25%-0.75rem)] md:w-auto' : 'w-[calc(25%-0.75rem)] md:w-auto'}`}
+                    style={index >= 4 ? { marginLeft: index === 4 ? 'calc(12.5% + 0.5rem)' : '0' } : {}}
+                  >
+                    <div className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center transition-all duration-300">
                       <img
                         src={tier.badge}
                         alt={tier.name}
-                        className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-125"
+                        className={`w-full h-full object-contain transition-all duration-300 group-hover:scale-125 ${getRankGlowColor(tier.name)}`}
                       />
                     </div>
                     <p className="text-xs md:text-sm font-semibold text-gray-800">{tier.name}</p>
