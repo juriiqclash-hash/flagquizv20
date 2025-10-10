@@ -53,26 +53,33 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
     return (
       <>
         {/* Mobile: Horizontal Layout */}
-        <div className={`flex md:hidden items-center justify-center gap-4 ${className}`}>
-          {/* Map Pin Icon */}
-          <MapPin
-            className="w-20 h-20 drop-shadow-lg fill-white text-blue-500"
-          />
+        <div className={`flex md:hidden flex-col items-center justify-center ${className}`}>
+          <div className="flex items-center justify-center gap-4">
+            {/* Map Pin Icon */}
+            <MapPin
+              className="w-24 h-24 drop-shadow-lg fill-white text-blue-500"
+            />
 
-          {/* FLAGQUIZ Text */}
-          <div className="text-5xl font-black tracking-tight leading-none">
-            <span
-              className={isDark ? 'text-white' : 'text-white'}
-              style={isDark ? {
-                WebkitTextStroke: '3px #3b82f6',
-                paintOrder: 'stroke fill'
-              } : {
-                WebkitTextStroke: '3px #3b82f6',
-                paintOrder: 'stroke fill'
-              }}>
-              FLAGQUIZ
-            </span>
+            {/* FLAGQUIZ Text */}
+            <div className="text-6xl font-black tracking-tight leading-none">
+              <span
+                className={isDark ? 'text-white' : 'text-white'}
+                style={isDark ? {
+                  WebkitTextStroke: '4px #3b82f6',
+                  paintOrder: 'stroke fill'
+                } : {
+                  WebkitTextStroke: '4px #3b82f6',
+                  paintOrder: 'stroke fill'
+                }}>
+                FLAGQUIZ
+              </span>
+            </div>
           </div>
+
+          {/* Subtitle - Mobile Only */}
+          <p className="text-gray-300 text-sm mt-3 text-center px-4">
+            Teste dein Wissen über alle Länder der Welt
+          </p>
         </div>
 
         {/* Desktop: Vertical Layout */}
