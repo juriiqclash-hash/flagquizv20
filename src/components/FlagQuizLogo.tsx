@@ -47,24 +47,39 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
   };
   
   return (
-    <div className={`flex items-center justify-center ${currentSize.container} ${className}`}>
+    <div className={`flex flex-col items-center justify-center ${className}`}>
       {/* Map Pin Icon */}
-      <MapPin 
-        className={`${currentSize.icon} drop-shadow-lg ${isDark ? 'fill-white text-blue-500' : 'fill-white text-blue-500'}`} 
+      <MapPin
+        className={`${currentSize.icon} drop-shadow-lg ${isDark ? 'fill-white text-blue-500' : 'fill-white text-blue-500'} mb-2`}
       />
-      
-      {/* FLAGQUIZ Text */}
-      <div className={`${currentSize.text} font-black tracking-tight`}>
-        <span 
+
+      {/* FLAG Text */}
+      <div className={`${currentSize.text} font-black tracking-tight leading-none`}>
+        <span
           className={isDark ? 'text-white' : 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-600'}
-          style={isDark ? { 
+          style={isDark ? {
             WebkitTextStroke: getStrokeWidth(),
             paintOrder: 'stroke fill'
-          } : { 
+          } : {
             WebkitTextStroke: getStrokeWidth(),
             paintOrder: 'stroke fill'
           }}>
-          FLAGQUIZ
+          FLAG
+        </span>
+      </div>
+
+      {/* QUIZ Text */}
+      <div className={`${currentSize.text} font-black tracking-tight leading-none -mt-2`}>
+        <span
+          className={isDark ? 'text-white' : 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-600'}
+          style={isDark ? {
+            WebkitTextStroke: getStrokeWidth(),
+            paintOrder: 'stroke fill'
+          } : {
+            WebkitTextStroke: getStrokeWidth(),
+            paintOrder: 'stroke fill'
+          }}>
+          QUIZ
         </span>
       </div>
     </div>

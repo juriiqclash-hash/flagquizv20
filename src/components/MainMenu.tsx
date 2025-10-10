@@ -102,7 +102,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       </div>
 
       {/* Left Column */}
-      <div className="absolute top-6 left-6 z-10 flex flex-col gap-5" style={{ width: '420px', marginTop: '60px' }}>
+      <div className="absolute top-6 left-6 z-10 flex flex-col gap-5" style={{ width: '420px', marginTop: '60px', paddingBottom: '60px' }}>
         {/* News/Discord Panel */}
         <div
           className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20 transition-all duration-300 hover:bg-white/15 cursor-pointer overflow-hidden"
@@ -129,7 +129,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20">
           <h3 className="text-white text-xl font-bold mb-4">Quick access</h3>
 
-          {/* Multiplayer/Duels Card */}
+          {/* Multiplayer Card */}
           <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-5 border border-white/10">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
@@ -137,12 +137,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                   <Users className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h4 className="text-white text-lg font-bold">DUELS</h4>
-                  {user && (
-                    <p className="text-yellow-400 text-sm font-bold">
-                      {userRank.name.toUpperCase()} {rankTier}
-                    </p>
-                  )}
+                  <h4 className="text-white text-lg font-bold">Multiplayer</h4>
                 </div>
               </div>
               <Button
@@ -157,7 +152,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       </div>
 
       {/* Right Column */}
-      <div className="absolute top-6 right-6 z-10 flex flex-col gap-5" style={{ width: '420px', marginTop: '60px' }}>
+      <div className="absolute top-6 right-6 z-10 flex flex-col gap-5" style={{ width: '420px', marginTop: '60px', paddingBottom: '60px' }}>
         {/* Daily Challenge Panel */}
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20 transition-all duration-300 hover:bg-white/15">
           <div className="flex items-center justify-between">
@@ -178,49 +173,38 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           </div>
         </div>
 
-        {/* Daily Mission Panel */}
+        {/* Daily Streak Panel */}
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-white text-xl font-bold">Daily mission</h4>
-            <span className="text-white/60 text-sm">Expires in 02:10:00</span>
+            <h4 className="text-white text-xl font-bold">Daily Streak</h4>
           </div>
-          <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-5 border border-white/10">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-white text-lg font-bold mb-1">Score 30000 points</p>
-                <p className="text-white/70 text-sm">on any quiz mode</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-yellow-400 text-lg font-bold">+100 coins</span>
-              </div>
+          <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 rounded-2xl p-6 border border-orange-500/30 text-center">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <span className="text-5xl">🔥</span>
             </div>
+            <p className="text-white text-lg font-bold">Du bist auf einer {stats?.best_streak || 0} Streak</p>
           </div>
         </div>
 
-        {/* Daily Coins Panel */}
+        {/* Current Rank Panel */}
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-white text-xl font-bold">Daily coins</h4>
-            <button className="text-white/80 text-sm hover:text-white transition-colors">
-              GO TO SHOP
-            </button>
+            <h4 className="text-white text-xl font-bold">Dein aktueller Rang</h4>
           </div>
-          <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/40 rounded-2xl p-6 border border-purple-500/30 text-center">
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <div className="flex -space-x-2">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div
-                    key={i}
-                    className="w-8 h-8 rounded-full bg-purple-400/50 border-2 border-purple-300/50 flex items-center justify-center"
-                  >
-                    <span className="text-xs">🪙</span>
-                  </div>
-                ))}
+          {user && (
+            <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-6 border border-white/10 text-center">
+              <div className="flex items-center justify-center mb-3">
+                <img
+                  src={userRank.image}
+                  alt={userRank.name}
+                  className="w-24 h-24 object-contain drop-shadow-lg"
+                />
               </div>
+              <p className="text-white text-2xl font-bold" style={{ color: userRank.color }}>
+                {userRank.name.toUpperCase()}
+              </p>
             </div>
-            <p className="text-yellow-400 text-3xl font-bold mb-1">+ 75 coins</p>
-            <p className="text-white/60 text-sm">Next reward in 02:10:00</p>
-          </div>
+          )}
         </div>
       </div>
 

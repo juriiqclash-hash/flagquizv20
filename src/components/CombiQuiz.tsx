@@ -15,6 +15,8 @@ import { useUserStats } from "@/hooks/useUserStats";
 
 interface CombiQuizProps {
   onBackToStart: () => void;
+  isDailyChallenge?: boolean;
+  maxQuestions?: number;
 }
 
 type QuestionCategory =
@@ -33,8 +35,9 @@ interface CategoryConfig {
   enabled: boolean;
 }
 
-export default function CombiQuiz({ onBackToStart }: CombiQuizProps) {
-  const [showCategorySelection, setShowCategorySelection] = useState(true);
+export default function CombiQuiz({ onBackToStart, isDailyChallenge = false, maxQuestions }: CombiQuizProps) {
+  const [showCategorySelection, setShowCategorySelection] = useState(!isDailyChallenge);
+  const [showCompletionScreen, setShowCompletionScreen] = useState(false);
   const [categories, setCategories] = useState<CategoryConfig[]>([
     { id: 'flag', label: 'Flaggen', icon: <Globe className="w-4 h-4" />, enabled: true },
     { id: 'capital-to-country', label: 'Hauptstadt → Land', icon: <MapPin className="w-4 h-4" />, enabled: true },
@@ -145,8 +148,21 @@ export default function CombiQuiz({ onBackToStart }: CombiQuizProps) {
 
   const handleCorrectAnswer = () => {
     setScore(prev => prev + 1);
-    setTotalAnswered(prev => prev + 1);
+    const newTotalAnswered = totalAnswered + 1;
+    setTotalAnswered(newTotalAnswered);
     addXP(1);
+
+    if (maxQuestions && newTotalAnswered >= maxQuestions) {
+      toast({
+        title: "Richtig! ✅",
+        description: currentCountry?.name || '',
+        className: "bg-success text-success-foreground"
+      });
+      setTimeout(() => {
+        setShowCompletionScreen(true);
+      }, 500);
+      return;
+    }
 
     let correctAnswer = '';
     if (currentCountry) {
@@ -180,7 +196,14 @@ export default function CombiQuiz({ onBackToStart }: CombiQuizProps) {
 
   const handleReveal = () => {
     setIsRevealed(true);
-    setTotalAnswered(prev => prev + 1);
+    const newTotalAnswered = totalAnswered + 1;
+    setTotalAnswered(newTotalAnswered);
+
+    if (maxQuestions && newTotalAnswered >= maxQuestions) {
+      setTimeout(() => {
+        setShowCompletionScreen(true);
+      }, 500);
+    }
   };
 
   const handleNext = () => {
@@ -191,6 +214,7 @@ export default function CombiQuiz({ onBackToStart }: CombiQuizProps) {
     if (!currentFact) return;
 
     const isCorrect = userAnswer === currentFact.isTrue;
+    const newTotalAnswered = totalAnswered + 1;
 
     if (isCorrect) {
       setScore(prev => prev + 1);
@@ -208,7 +232,14 @@ export default function CombiQuiz({ onBackToStart }: CombiQuizProps) {
       });
     }
 
-    setTotalAnswered(prev => prev + 1);
+    setTotalAnswered(newTotalAnswered);
+
+    if (maxQuestions && newTotalAnswered >= maxQuestions) {
+      setTimeout(() => {
+        setShowCompletionScreen(true);
+      }, 1500);
+      return;
+    }
 
     setTimeout(() => {
       generateNextQuestion();
@@ -276,6 +307,35 @@ export default function CombiQuiz({ onBackToStart }: CombiQuizProps) {
         return currentCountry.name;
     }
   };
+
+  if (showCompletionScreen) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-500/10 to-blue-500/10 p-4 flex items-center justify-center">
+        <Card className="max-w-2xl w-full">
+          <CardContent className="py-12 text-center">
+            <div className="mb-6">
+              <span className="text-8xl">🎉</span>
+            </div>
+            <h1 className="text-4xl font-bold mb-4 text-green-600">Daily Challenge geschafft!</h1>
+            <div className="space-y-4 mb-8">
+              <div className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg p-6">
+                <p className="text-6xl font-bold text-primary mb-2">{score}/{totalAnswered}</p>
+                <p className="text-muted-foreground">Richtige Antworten</p>
+              </div>
+              <div className="bg-gradient-to-br from-yellow-500/10 to-orange-500/10 rounded-lg p-4">
+                <p className="text-2xl font-bold text-yellow-600">
+                  {totalAnswered > 0 ? Math.round((score / totalAnswered) * 100) : 0}% Erfolgsquote
+                </p>
+              </div>
+            </div>
+            <Button onClick={onBackToStart} size="lg" className="w-full max-w-md">
+              Zurück zum Hauptmenü
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (showCategorySelection) {
     return (

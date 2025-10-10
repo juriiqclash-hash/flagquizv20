@@ -16,7 +16,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { DifficultyLevel } from "@/data/worldKnowledge";
 
 function IndexContent() {
-  const [currentView, setCurrentView] = useState<'main-menu' | 'start' | 'quiz' | 'combi-quiz' | 'multiplayer-menu' | 'multiplayer-lobby' | 'multiplayer-countdown' | 'multiplayer-game' | 'multiplayer-continent-game' | 'world-knowledge-difficulty' | 'world-knowledge-quiz' | 'admin'>('main-menu');
+  const [currentView, setCurrentView] = useState<'main-menu' | 'start' | 'quiz' | 'combi-quiz' | 'daily-challenge' | 'multiplayer-menu' | 'multiplayer-lobby' | 'multiplayer-countdown' | 'multiplayer-game' | 'multiplayer-continent-game' | 'world-knowledge-difficulty' | 'world-knowledge-quiz' | 'admin'>('main-menu');
   const [gameMode, setGameMode] = useState<'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge'>('learn');
   const [selectedContinent, setSelectedContinent] = useState<string>();
   const [timeLimit, setTimeLimit] = useState<number>();
@@ -94,7 +94,11 @@ function IndexContent() {
   };
 
   const handleDailyChallengeStart = () => {
-    handleStartQuiz('speedrush');
+    setCurrentView('daily-challenge');
+  };
+
+  const handleDailyChallengeComplete = () => {
+    setCurrentView('main-menu');
   };
 
   return (
@@ -149,6 +153,12 @@ function IndexContent() {
         <WorldKnowledgeQuiz
           difficulty={selectedDifficulty}
           onBack={handleBackToWorldKnowledgeDifficulty}
+        />
+      ) : currentView === 'daily-challenge' ? (
+        <CombiQuiz
+          onBackToStart={handleDailyChallengeComplete}
+          isDailyChallenge
+          maxQuestions={10}
         />
       ) : null}
     </>
