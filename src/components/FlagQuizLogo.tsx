@@ -56,18 +56,18 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
         <div className={`flex md:hidden flex-col items-center justify-center ${className}`}>
           {/* Map Pin Icon */}
           <MapPin
-            className="w-20 h-20 drop-shadow-lg fill-white text-blue-500 mb-2"
+            className="w-32 h-32 drop-shadow-lg fill-white text-blue-500 mb-3"
           />
 
           {/* FLAG Text */}
-          <div className="text-5xl font-black tracking-tight leading-none">
+          <div className="text-8xl font-black tracking-tight leading-none">
             <span
               className={isDark ? 'text-white' : 'text-white'}
               style={isDark ? {
-                WebkitTextStroke: '4px #3b82f6',
+                WebkitTextStroke: '6px #3b82f6',
                 paintOrder: 'stroke fill'
               } : {
-                WebkitTextStroke: '4px #3b82f6',
+                WebkitTextStroke: '6px #3b82f6',
                 paintOrder: 'stroke fill'
               }}>
               FLAG
@@ -75,14 +75,14 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
           </div>
 
           {/* QUIZ Text */}
-          <div className="text-5xl font-black tracking-tight leading-none -mt-2">
+          <div className="text-8xl font-black tracking-tight leading-none -mt-3">
             <span
               className={isDark ? 'text-white' : 'text-white'}
               style={isDark ? {
-                WebkitTextStroke: '4px #3b82f6',
+                WebkitTextStroke: '6px #3b82f6',
                 paintOrder: 'stroke fill'
               } : {
-                WebkitTextStroke: '4px #3b82f6',
+                WebkitTextStroke: '6px #3b82f6',
                 paintOrder: 'stroke fill'
               }}>
               QUIZ
