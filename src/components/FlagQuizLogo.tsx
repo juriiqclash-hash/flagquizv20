@@ -53,21 +53,21 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
     return (
       <>
         {/* Mobile: Horizontal Layout */}
-        <div className={`flex md:hidden items-center justify-center gap-3 ${className}`}>
+        <div className={`flex md:hidden items-center justify-center gap-4 ${className}`}>
           {/* Map Pin Icon */}
           <MapPin
-            className="w-14 h-14 drop-shadow-lg fill-white text-blue-500"
+            className="w-20 h-20 drop-shadow-lg fill-white text-blue-500"
           />
 
           {/* FLAGQUIZ Text */}
-          <div className="text-4xl font-black tracking-tight leading-none">
+          <div className="text-5xl font-black tracking-tight leading-none">
             <span
               className={isDark ? 'text-white' : 'text-white'}
               style={isDark ? {
-                WebkitTextStroke: '2px #3b82f6',
+                WebkitTextStroke: '3px #3b82f6',
                 paintOrder: 'stroke fill'
               } : {
-                WebkitTextStroke: '2px #3b82f6',
+                WebkitTextStroke: '3px #3b82f6',
                 paintOrder: 'stroke fill'
               }}>
               FLAGQUIZ

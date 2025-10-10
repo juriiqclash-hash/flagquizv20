@@ -516,7 +516,7 @@ export const ProfileView = ({
           </h2>
 
           {/* Stats Grid - Mobile: 3 in row, then rank full width. Desktop: 3 narrow + 1 wider */}
-          <div className="grid grid-cols-3 md:grid-cols-10 gap-2 md:gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-10 gap-2 md:gap-4 mb-6 md:mb-4">
             {/* Best Streak */}
             <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm rounded-xl md:rounded-3xl shadow-lg p-2 md:p-5 flex flex-col items-center justify-center min-h-[70px] md:min-h-[140px]">
               <p className="text-[7px] md:text-xs text-gray-300 uppercase tracking-wide font-bold mb-0.5 md:mb-3 text-center leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
