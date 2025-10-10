@@ -52,34 +52,42 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
   if (isMainMenu) {
     return (
       <>
-        {/* Mobile: Horizontal Layout */}
+        {/* Mobile: Vertical Layout */}
         <div className={`flex md:hidden flex-col items-center justify-center ${className}`}>
-          <div className="flex items-center justify-center gap-4">
-            {/* Map Pin Icon */}
-            <MapPin
-              className="w-24 h-24 drop-shadow-lg fill-white text-blue-500"
-            />
+          {/* Map Pin Icon */}
+          <MapPin
+            className="w-20 h-20 drop-shadow-lg fill-white text-blue-500 mb-2"
+          />
 
-            {/* FLAGQUIZ Text */}
-            <div className="text-6xl font-black tracking-tight leading-none">
-              <span
-                className={isDark ? 'text-white' : 'text-white'}
-                style={isDark ? {
-                  WebkitTextStroke: '4px #3b82f6',
-                  paintOrder: 'stroke fill'
-                } : {
-                  WebkitTextStroke: '4px #3b82f6',
-                  paintOrder: 'stroke fill'
-                }}>
-                FLAGQUIZ
-              </span>
-            </div>
+          {/* FLAG Text */}
+          <div className="text-5xl font-black tracking-tight leading-none">
+            <span
+              className={isDark ? 'text-white' : 'text-white'}
+              style={isDark ? {
+                WebkitTextStroke: '4px #3b82f6',
+                paintOrder: 'stroke fill'
+              } : {
+                WebkitTextStroke: '4px #3b82f6',
+                paintOrder: 'stroke fill'
+              }}>
+              FLAG
+            </span>
           </div>
 
-          {/* Subtitle - Mobile Only */}
-          <p className="text-gray-300 text-sm mt-3 text-center px-4">
-            Teste dein Wissen über alle Länder der Welt
-          </p>
+          {/* QUIZ Text */}
+          <div className="text-5xl font-black tracking-tight leading-none -mt-2">
+            <span
+              className={isDark ? 'text-white' : 'text-white'}
+              style={isDark ? {
+                WebkitTextStroke: '4px #3b82f6',
+                paintOrder: 'stroke fill'
+              } : {
+                WebkitTextStroke: '4px #3b82f6',
+                paintOrder: 'stroke fill'
+              }}>
+              QUIZ
+            </span>
+          </div>
         </div>
 
         {/* Desktop: Vertical Layout */}

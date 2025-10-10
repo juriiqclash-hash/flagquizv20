@@ -79,7 +79,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       }}
     >
       {/* Language Selector - Top Left */}
-      <div className="absolute top-6 left-6 z-20">
+      <div className="absolute top-4 left-4 z-20">
         <Select value={language} onValueChange={setLanguage}>
           <SelectTrigger className="w-[160px] bg-white/10 text-white border-white/20 hover:bg-white/20">
             <Languages className="mr-2 h-4 w-4" />
@@ -97,7 +97,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       </div>
 
       {/* Profile Button - Top Right */}
-      <div className="absolute top-6 right-6 z-20">
+      <div className="absolute top-4 right-4 z-20">
         <ProfileButton transparentStyle onProfileOpenChange={() => {}} />
       </div>
 
