@@ -238,7 +238,7 @@ const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOp
             <span className="hidden md:inline">{t.profile}</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56 bg-popover border shadow-lg z-[60]" align="end">
+        <DropdownMenuContent className="w-56 bg-popover border shadow-lg z-[100]" align="end">
           <div className="px-2 py-2 text-sm text-muted-foreground">
             {user.email}
           </div>
