@@ -103,6 +103,28 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
       {/* Left Column */}
       <div className="absolute bottom-6 left-6 z-10 flex flex-col gap-5" style={{ width: '420px' }}>
+        {/* News/Discord Panel */}
+        <div
+          className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20 transition-all duration-300 hover:bg-white/15 cursor-pointer overflow-hidden"
+          onClick={handleDiscord}
+          style={{ height: '280px' }}
+        >
+          <div className="flex flex-col h-full">
+            <div className="flex-1 mb-4 bg-gradient-to-br from-purple-600/40 to-blue-600/40 rounded-2xl flex items-center justify-center">
+              <div className="text-center p-6">
+                <svg viewBox="0 0 24 24" className="w-16 h-16 fill-current text-white mx-auto mb-3">
+                  <path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z"/>
+                </svg>
+                <h3 className="text-white text-xl font-bold mb-1">DISCORD</h3>
+              </div>
+            </div>
+            <div className="text-center">
+              <h4 className="text-white text-lg font-bold mb-1">NEWS</h4>
+              <p className="text-white/70 text-sm">{t.joinDiscord}</p>
+            </div>
+          </div>
+        </div>
+
         {/* Quick Access Section */}
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20">
           <h3 className="text-white text-xl font-bold mb-4">Quick access</h3>
@@ -124,28 +146,6 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               >
                 {t.play}
               </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* News/Discord Panel */}
-        <div
-          className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20 transition-all duration-300 hover:bg-white/15 cursor-pointer overflow-hidden"
-          onClick={handleDiscord}
-          style={{ height: '280px' }}
-        >
-          <div className="flex flex-col h-full">
-            <div className="flex-1 mb-4 bg-gradient-to-br from-purple-600/40 to-blue-600/40 rounded-2xl flex items-center justify-center">
-              <div className="text-center p-6">
-                <svg viewBox="0 0 24 24" className="w-16 h-16 fill-current text-white mx-auto mb-3">
-                  <path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z"/>
-                </svg>
-                <h3 className="text-white text-xl font-bold mb-1">DISCORD</h3>
-              </div>
-            </div>
-            <div className="text-center">
-              <h4 className="text-white text-lg font-bold mb-1">NEWS</h4>
-              <p className="text-white/70 text-sm">{t.joinDiscord}</p>
             </div>
           </div>
         </div>
@@ -174,37 +174,43 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         </div>
 
         {/* Daily Streak Panel */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20" style={{ height: '280px' }}>
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="text-white text-xl font-bold">Daily Streak</h4>
-          </div>
-          <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 rounded-2xl p-6 border border-orange-500/30 text-center flex flex-col items-center justify-center" style={{ height: 'calc(100% - 50px)' }}>
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <span className="text-5xl">🔥</span>
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20 transition-all duration-300 hover:bg-white/15">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-orange-500/30 to-red-500/30 flex items-center justify-center border-2 border-orange-500/20">
+                <span className="text-2xl">🔥</span>
+              </div>
+              <div>
+                <h4 className="text-white text-xl font-bold">Daily Streak</h4>
+                <p className="text-white/70 text-sm">Du bist auf einer {stats?.best_streak || 0} Streak</p>
+              </div>
             </div>
-            <p className="text-white text-lg font-bold">Du bist auf einer {stats?.best_streak || 0} Streak</p>
           </div>
         </div>
 
         {/* Current Rank Panel */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20" style={{ height: '280px' }}>
-          <div className="mb-3">
-            <h4 className="text-white text-xl font-bold text-center">Dein aktueller Rang</h4>
-          </div>
-          {user && (
-            <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-6 border border-white/10 text-center flex flex-col items-center justify-center" style={{ height: 'calc(100% - 50px)' }}>
-              <div className="flex items-center justify-center mb-3">
-                <img
-                  src={userRank.image}
-                  alt={userRank.name}
-                  className="w-28 h-28 object-contain drop-shadow-2xl"
-                />
-              </div>
-              <p className="text-white text-xl font-bold" style={{ color: userRank.color }}>
-                {userRank.name.toUpperCase()}
-              </p>
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20" style={{ height: '280px' }}>
+          <div className="flex flex-col h-full">
+            <div className="flex-1 mb-4 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl flex items-center justify-center border border-white/10">
+              {user && (
+                <div className="text-center p-6">
+                  <div className="flex items-center justify-center mb-3">
+                    <img
+                      src={userRank.image}
+                      alt={userRank.name}
+                      className="w-24 h-24 object-contain drop-shadow-2xl"
+                    />
+                  </div>
+                  <p className="text-white text-xl font-bold" style={{ color: userRank.color }}>
+                    {userRank.name.toUpperCase()}
+                  </p>
+                </div>
+              )}
             </div>
-          )}
+            <div className="text-center">
+              <h4 className="text-white text-lg font-bold">Dein aktueller Rang</h4>
+            </div>
+          </div>
         </div>
       </div>
 
