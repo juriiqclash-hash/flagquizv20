@@ -61,6 +61,8 @@ export default function MultiplayerGame({ onBackToLobby, onBackToMenu }: Multipl
 
   const myParticipant = participants.find(p => p.user_id === user?.id);
   const opponentParticipant = participants.find(p => p.user_id !== user?.id);
+  const [gameStartTime, setGameStartTime] = useState<number | null>(null);
+  const [finishTime, setFinishTime] = useState<number | null>(null);
   
   // Generate 10 random countries deterministically based on room_code
   const selectedCountries = useMemo(() => {
@@ -68,6 +70,13 @@ export default function MultiplayerGame({ onBackToLobby, onBackToMenu }: Multipl
     const shuffled = seededShuffle(countries, currentLobby.room_code);
     return shuffled.slice(0, 10);
   }, [currentLobby?.room_code]);
+
+  // Track game start time
+  useEffect(() => {
+    if (currentLobby?.status === 'started' && !gameStartTime) {
+      setGameStartTime(Date.now());
+    }
+  }, [currentLobby?.status, gameStartTime]);
 
   // Monitor opponent's progress via realtime updates
   useEffect(() => {
@@ -83,13 +92,18 @@ export default function MultiplayerGame({ onBackToLobby, onBackToMenu }: Multipl
     if (!currentLobby || !myParticipant) return;
     
     if (currentLobby.status === 'finished') {
+      const timeTaken = gameStartTime ? Math.round((Date.now() - gameStartTime) / 1000) : 0;
+      setFinishTime(timeTaken);
+      
       if (currentLobby.winner_id === user?.id) {
         setGameStatus('won');
-        // Increment multiplayer wins when user wins
-        incrementMultiplayerWins();
+        // Increment multiplayer wins only once when user wins
+        if (gameStatus !== 'won') {
+          incrementMultiplayerWins();
+        }
         toast({
           title: '🏆 Gewonnen!',
-          description: 'Du hast alle 10 Flaggen zuerst erraten!',
+          description: `Du hast alle 10 Flaggen in ${timeTaken}s erraten!`,
           className: 'bg-success text-success-foreground',
         });
       } else {
@@ -173,6 +187,12 @@ export default function MultiplayerGame({ onBackToLobby, onBackToMenu }: Multipl
   }
 
   if (gameStatus === 'won') {
+    const formatTime = (seconds: number) => {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    };
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-success/10 to-success/20 p-4">
         <div className="max-w-2xl mx-auto flex items-center justify-center min-h-screen">
@@ -180,9 +200,14 @@ export default function MultiplayerGame({ onBackToLobby, onBackToMenu }: Multipl
             <CardContent className="py-12">
               <div className="text-6xl mb-4">🏆</div>
               <h2 className="text-3xl font-bold mb-4 text-success">Gewonnen!</h2>
-              <p className="text-muted-foreground mb-6">
+              <p className="text-muted-foreground mb-4">
                 Du hast alle 10 Flaggen zuerst erraten!
               </p>
+              {finishTime !== null && (
+                <div className="text-2xl font-bold mb-6 text-success">
+                  Zeit: {formatTime(finishTime)}
+                </div>
+              )}
               <div className="space-y-3">
                 <Button onClick={onBackToLobby} className="w-full">
                   Zurück zur Lobby
@@ -199,6 +224,12 @@ export default function MultiplayerGame({ onBackToLobby, onBackToMenu }: Multipl
   }
 
   if (gameStatus === 'lost') {
+    const formatTime = (seconds: number) => {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    };
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-destructive/10 to-destructive/20 p-4">
         <div className="max-w-2xl mx-auto flex items-center justify-center min-h-screen">
@@ -206,9 +237,14 @@ export default function MultiplayerGame({ onBackToLobby, onBackToMenu }: Multipl
             <CardContent className="py-12">
               <div className="text-6xl mb-4">😔</div>
               <h2 className="text-3xl font-bold mb-4 text-destructive">Verloren</h2>
-              <p className="text-muted-foreground mb-6">
+              <p className="text-muted-foreground mb-4">
                 Dein Gegner hat alle 10 Flaggen zuerst erraten!
               </p>
+              {finishTime !== null && (
+                <div className="text-lg mb-6 text-muted-foreground">
+                  Deine Zeit: {formatTime(finishTime)}
+                </div>
+              )}
               <div className="space-y-3">
                 <Button onClick={onBackToLobby} className="w-full">
                   Zurück zur Lobby

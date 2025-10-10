@@ -8,8 +8,9 @@ import { Switch } from './ui/switch';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Users, Settings, ArrowLeft, Trash2, Plus, Trophy, Ban, ShieldCheck } from 'lucide-react';
+import { Users, Settings, ArrowLeft, Trash2, Plus, Trophy, Ban, ShieldCheck, User } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import AdminProfileManager from './AdminProfileManager';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -415,6 +416,10 @@ export default function AdminPanel({ onBack }: AdminPanelProps) {
               <Settings className="mr-2 h-4 w-4" />
               Einstellungen
             </TabsTrigger>
+            <TabsTrigger value="profile">
+              <User className="mr-2 h-4 w-4" />
+              Profil
+            </TabsTrigger>
             <TabsTrigger value="users">
               <Users className="mr-2 h-4 w-4" />
               Benutzer
@@ -496,6 +501,10 @@ export default function AdminPanel({ onBack }: AdminPanelProps) {
                 </Button>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="profile" className="space-y-4">
+            <AdminProfileManager />
           </TabsContent>
 
           <TabsContent value="users" className="space-y-4">

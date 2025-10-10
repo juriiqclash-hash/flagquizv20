@@ -7,6 +7,7 @@ import { Button } from './ui/button';
 import { ALL_COUNTRIES } from '@/data/countries-full';
 import { Input } from './ui/input';
 import { getXPProgress } from '@/lib/xpSystem';
+import { ClanCreator } from './ClanCreator';
 import bronzeBadge from '@/assets/bronze.webp';
 import silverBadge from '@/assets/silber.webp';
 import goldBadge from '@/assets/gold.webp';
@@ -37,7 +38,12 @@ interface ProfileData {
   continent?: string;
   clan?: string;
 }
-const CLANS = [{
+interface Clan {
+  name: string;
+  emoji: string;
+}
+
+const DEFAULT_CLANS: Clan[] = [{
   name: 'Agharta',
   emoji: '🏯'
 }, {
@@ -242,11 +248,29 @@ export const ProfileView = ({
   const [editingSlot, setEditingSlot] = useState<'flag' | 'continent' | 'clan' | null>(null);
   const [loading, setLoading] = useState(true);
   const [showRankInfo, setShowRankInfo] = useState(false);
+  const [showClanCreator, setShowClanCreator] = useState(false);
+  const [allClans, setAllClans] = useState<Clan[]>([...DEFAULT_CLANS]);
   useEffect(() => {
     if (open && user) {
       loadProfileData();
+      loadClans();
     }
   }, [open, user]);
+
+  const loadClans = async () => {
+    try {
+      const { data: customClans } = await supabase
+        .from('clans')
+        .select('name, emoji')
+        .order('created_at', { ascending: false });
+
+      if (customClans) {
+        setAllClans([...DEFAULT_CLANS, ...customClans]);
+      }
+    } catch (error) {
+      console.error('Error loading clans:', error);
+    }
+  };
   const loadProfileData = async () => {
     if (!user) return;
     try {
@@ -460,9 +484,9 @@ export const ProfileView = ({
                   setEditingSlot('clan');
                 }
               }} className="w-28 h-28 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
-                  {profileData.clan ? <>
+                {profileData.clan ? <>
                       <span className="text-4xl mb-1">
-                        {CLANS.find(c => c.name === profileData.clan)?.emoji}
+                        {allClans.find(c => c.name === profileData.clan)?.emoji}
                       </span>
                       <span className="text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.clan}
@@ -615,20 +639,41 @@ export const ProfileView = ({
         </div>}
 
       {editingSlot === 'clan' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4">
+          <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-xl">Wähle deinen Clan</h3>
-              <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => {
+                    setShowClanCreator(true);
+                  }}
+                  className="p-2 hover:bg-blue-100 rounded-full transition-colors"
+                  title="Neuen Clan erstellen"
+                >
+                  <Plus className="w-5 h-5 text-blue-600" />
+                </button>
+                <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              {CLANS.map(clan => <button key={clan.name} onClick={() => updateProfileField('clan', clan.name)} className="flex items-center gap-3 p-4 hover:bg-gray-100 rounded-lg transition-colors">
+              {allClans.map(clan => <button key={clan.name} onClick={() => updateProfileField('clan', clan.name)} className="flex items-center gap-3 p-4 hover:bg-gray-100 rounded-lg transition-colors">
                   <span className="text-3xl">{clan.emoji}</span>
                   <span className="font-medium text-lg">{clan.name}</span>
                 </button>)}
             </div>
           </div>
         </div>}
+
+      {showClanCreator && (
+        <ClanCreator
+          onClose={() => setShowClanCreator(false)}
+          onClanCreated={(clanName) => {
+            loadClans(); // Reload clans list
+            updateProfileField('clan', clanName); // Auto-select the new clan
+          }}
+        />
+      )}
     </>;
 };

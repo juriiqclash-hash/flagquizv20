@@ -38,6 +38,30 @@ export type Database = {
         }
         Relationships: []
       }
+      clans: {
+        Row: {
+          created_at: string
+          created_by: string
+          emoji: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          emoji: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          emoji?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       leaderboards: {
         Row: {
           created_at: string
