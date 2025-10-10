@@ -97,6 +97,29 @@ export const translations = {
     // Daily Streak
     dailyStreak: 'Tägliche Serie',
     daysInRow: '{count} Tage in Folge',
+
+    // MainMenu Panels
+    quickAccess: 'Schnellzugriff',
+    dailyChallengeTitle: 'Die tägliche Herausforderung',
+    yourCurrentRank: 'Dein aktueller Rang',
+    youAreOnStreak: 'Du bist auf einer {count} Streak',
+    news: 'NEWS',
+    discord: 'DISCORD',
+
+    // ProfileView
+    statistics: 'Statistik',
+    achievements: 'Erfolge',
+    level: 'Level',
+    xpToNextLevel: '{xp} XP bis zum nächsten Level',
+    highestStreak: 'Höchste Serie',
+    bestTime: 'Beste Zeit',
+    duelWins: 'Duel Siege',
+    selectFlagProfile: 'Flagge auswählen',
+    selectContinentProfile: 'Kontinent auswählen',
+    selectClanProfile: 'Clan auswählen',
+    createClan: 'Clan erstellen',
+    settings: 'Einstellungen',
+    close: 'Schließen',
     
     // Profile
     addUser: 'Benutzer hinzufügen',
@@ -271,6 +294,29 @@ export const translations = {
     // Daily Streak
     dailyStreak: 'Daily Streak',
     daysInRow: '{count} Days in a Row',
+
+    // MainMenu Panels
+    quickAccess: 'Quick access',
+    dailyChallengeTitle: 'The Daily Challenge',
+    yourCurrentRank: 'Your Current Rank',
+    youAreOnStreak: 'You are on a {count} Streak',
+    news: 'NEWS',
+    discord: 'DISCORD',
+
+    // ProfileView
+    statistics: 'Statistics',
+    achievements: 'Achievements',
+    level: 'Level',
+    xpToNextLevel: '{xp} XP to next level',
+    highestStreak: 'Highest Streak',
+    bestTime: 'Best Time',
+    duelWins: 'Duel Wins',
+    selectFlagProfile: 'Select Flag',
+    selectContinentProfile: 'Select Continent',
+    selectClanProfile: 'Select Clan',
+    createClan: 'Create Clan',
+    settings: 'Settings',
+    close: 'Close',
     
     // Profile
     addUser: 'Add User',
@@ -445,6 +491,29 @@ export const translations = {
     // Daily Streak
     dailyStreak: 'Racha Diaria',
     daysInRow: '{count} Días Seguidos',
+
+    // MainMenu Panels
+    quickAccess: 'Acceso rápido',
+    dailyChallengeTitle: 'El Desafío Diario',
+    yourCurrentRank: 'Tu Rango Actual',
+    youAreOnStreak: 'Estás en una racha de {count}',
+    news: 'NOTICIAS',
+    discord: 'DISCORD',
+
+    // ProfileView
+    statistics: 'Estadísticas',
+    achievements: 'Logros',
+    level: 'Nivel',
+    xpToNextLevel: '{xp} XP hasta el próximo nivel',
+    highestStreak: 'Racha Más Alta',
+    bestTime: 'Mejor Tiempo',
+    duelWins: 'Victorias en Duelo',
+    selectFlagProfile: 'Seleccionar Bandera',
+    selectContinentProfile: 'Seleccionar Continente',
+    selectClanProfile: 'Seleccionar Clan',
+    createClan: 'Crear Clan',
+    settings: 'Configuración',
+    close: 'Cerrar',
     
     // Profile
     addUser: 'Agregar Usuario',
@@ -619,6 +688,29 @@ export const translations = {
     // Daily Streak
     dailyStreak: 'Série Quotidienne',
     daysInRow: '{count} Jours d\'Affilée',
+
+    // MainMenu Panels
+    quickAccess: 'Accès rapide',
+    dailyChallengeTitle: 'Le Défi Quotidien',
+    yourCurrentRank: 'Votre Rang Actuel',
+    youAreOnStreak: 'Vous êtes sur une série de {count}',
+    news: 'ACTUALITÉS',
+    discord: 'DISCORD',
+
+    // ProfileView
+    statistics: 'Statistiques',
+    achievements: 'Réalisations',
+    level: 'Niveau',
+    xpToNextLevel: '{xp} XP jusqu\'au prochain niveau',
+    highestStreak: 'Série la Plus Haute',
+    bestTime: 'Meilleur Temps',
+    duelWins: 'Victoires en Duel',
+    selectFlagProfile: 'Sélectionner le Drapeau',
+    selectContinentProfile: 'Sélectionner le Continent',
+    selectClanProfile: 'Sélectionner le Clan',
+    createClan: 'Créer un Clan',
+    settings: 'Paramètres',
+    close: 'Fermer',
     
     // Profile
     addUser: 'Ajouter un Utilisateur',
@@ -793,6 +885,29 @@ export const translations = {
     // Daily Streak
     dailyStreak: 'Serie Giornaliera',
     daysInRow: '{count} Giorni di Fila',
+
+    // MainMenu Panels
+    quickAccess: 'Accesso rapido',
+    dailyChallengeTitle: 'La Sfida Giornaliera',
+    yourCurrentRank: 'Il Tuo Rango Attuale',
+    youAreOnStreak: 'Sei su una serie di {count}',
+    news: 'NOTIZIE',
+    discord: 'DISCORD',
+
+    // ProfileView
+    statistics: 'Statistiche',
+    achievements: 'Risultati',
+    level: 'Livello',
+    xpToNextLevel: '{xp} XP al prossimo livello',
+    highestStreak: 'Serie Più Alta',
+    bestTime: 'Tempo Migliore',
+    duelWins: 'Vittorie in Duello',
+    selectFlagProfile: 'Seleziona Bandiera',
+    selectContinentProfile: 'Seleziona Continente',
+    selectClanProfile: 'Seleziona Clan',
+    createClan: 'Crea Clan',
+    settings: 'Impostazioni',
+    close: 'Chiudi',
     
     // Profile
     addUser: 'Aggiungi Utente',
@@ -967,6 +1082,29 @@ export const translations = {
     // Daily Streak
     dailyStreak: 'デイリーストリーク',
     daysInRow: '{count}日連続',
+
+    // MainMenu Panels
+    quickAccess: 'クイックアクセス',
+    dailyChallengeTitle: 'デイリーチャレンジ',
+    yourCurrentRank: '現在のランク',
+    youAreOnStreak: '{count}連続ストリーク中',
+    news: 'ニュース',
+    discord: 'DISCORD',
+
+    // ProfileView
+    statistics: '統計',
+    achievements: '実績',
+    level: 'レベル',
+    xpToNextLevel: '次のレベルまで{xp} XP',
+    highestStreak: '最高連続記録',
+    bestTime: 'ベストタイム',
+    duelWins: 'デュエル勝利',
+    selectFlagProfile: '旗を選択',
+    selectContinentProfile: '大陸を選択',
+    selectClanProfile: 'クランを選択',
+    createClan: 'クラン作成',
+    settings: '設定',
+    close: '閉じる',
     
     // Profile
     addUser: 'ユーザーを追加',

@@ -8,6 +8,8 @@ import { ALL_COUNTRIES } from '@/data/countries-full';
 import { Input } from './ui/input';
 import { getXPProgress } from '@/lib/xpSystem';
 import { ClanCreator } from './ClanCreator';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTranslation } from '@/data/translations';
 import bronzeBadge from '@/assets/bronze.webp';
 import silverBadge from '@/assets/silber.webp';
 import goldBadge from '@/assets/gold.webp';
@@ -236,6 +238,8 @@ export const ProfileView = ({
   const {
     user
   } = useAuth();
+  const { language } = useLanguage();
+  const t = useTranslation(language);
   const [username, setUsername] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [accountCreated, setAccountCreated] = useState('');
@@ -435,7 +439,7 @@ export const ProfileView = ({
               <h1 className="text-4xl md:text-7xl font-bold text-white mb-1 md:mb-3 leading-none text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                 {username}
               </h1>
-              <p className="text-xl md:text-2xl text-gray-300 mb-2 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Level {level}</p>
+              <p className="text-xl md:text-2xl text-gray-300 mb-2 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>{t.level} {level}</p>
 
 
               {/* XP Progress Bar */}
@@ -520,7 +524,7 @@ export const ProfileView = ({
             {/* Best Streak */}
             <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm rounded-xl md:rounded-3xl shadow-lg p-2 md:p-5 flex flex-col items-center justify-center min-h-[70px] md:min-h-[140px]">
               <p className="text-[7px] md:text-xs text-gray-300 uppercase tracking-wide font-bold mb-0.5 md:mb-3 text-center leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
-                STREAK
+                {t.highestStreak.toUpperCase()}
               </p>
               <div className="flex items-center gap-0.5 md:gap-2">
                 <Flame className="w-4 h-4 md:w-8 md:h-8 text-orange-500" />
@@ -533,7 +537,7 @@ export const ProfileView = ({
             {/* Time Mode */}
             <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm rounded-xl md:rounded-3xl shadow-lg p-2 md:p-5 flex flex-col items-center justify-center min-h-[70px] md:min-h-[140px]">
               <p className="text-[7px] md:text-xs text-gray-300 uppercase tracking-wide font-bold mb-0.5 md:mb-3 text-center leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
-                ZEIT
+                {t.bestTime.toUpperCase()}
               </p>
               <div className="flex items-center gap-0.5 md:gap-2">
                 <Clock className="w-4 h-4 md:w-8 md:h-8 text-blue-500" />
@@ -546,7 +550,7 @@ export const ProfileView = ({
             {/* Duel Wins */}
             <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm rounded-xl md:rounded-3xl shadow-lg p-2 md:p-5 flex flex-col items-center justify-center min-h-[70px] md:min-h-[140px]">
               <p className="text-[7px] md:text-xs text-gray-300 uppercase tracking-wide font-bold mb-0.5 md:mb-3 text-center leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
-                WINS
+                {t.duelWins.toUpperCase()}
               </p>
               <div className="flex items-center gap-0.5 md:gap-2">
                 <Trophy className="w-4 h-4 md:w-8 md:h-8 text-yellow-500" />
@@ -635,7 +639,7 @@ export const ProfileView = ({
       {editingSlot === 'flag' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
           <div className="bg-white rounded-2xl p-6 max-w-4xl max-h-[80vh] overflow-y-auto w-full mx-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-xl">Wähle dein Land</h3>
+              <h3 className="font-bold text-xl">{t.selectFlagProfile}</h3>
               <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
                 <X className="w-5 h-5" />
               </button>
@@ -656,7 +660,7 @@ export const ProfileView = ({
       {editingSlot === 'continent' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-xl">Wähle deinen Kontinent</h3>
+              <h3 className="font-bold text-xl">{t.selectContinentProfile}</h3>
               <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
                 <X className="w-5 h-5" />
               </button>
@@ -673,7 +677,7 @@ export const ProfileView = ({
       {editingSlot === 'clan' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
           <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-xl">Wähle deinen Clan</h3>
+              <h3 className="font-bold text-xl">{t.selectClanProfile}</h3>
               <div className="flex gap-2">
                 <button 
                   onClick={() => {

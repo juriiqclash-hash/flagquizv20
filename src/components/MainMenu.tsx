@@ -119,7 +119,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               </div>
             </div>
             <div className="text-center">
-              <h4 className="text-white text-lg font-bold mb-1">NEWS</h4>
+              <h4 className="text-white text-lg font-bold mb-1">{t.news}</h4>
               <p className="text-white/70 text-sm">{t.joinDiscord}</p>
             </div>
           </div>
@@ -127,7 +127,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
         {/* Quick Access Section */}
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20">
-          <h3 className="text-white text-xl font-bold mb-4">Quick access</h3>
+          <h3 className="text-white text-xl font-bold mb-4">{t.quickAccess}</h3>
 
           {/* Multiplayer Card */}
           <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-5 border border-white/10">
@@ -137,7 +137,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                   <Users className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h4 className="text-white text-lg font-bold">Multiplayer</h4>
+                  <h4 className="text-white text-lg font-bold">{t.multiplayer}</h4>
                 </div>
               </div>
               <Button
@@ -161,7 +161,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                 <Calendar className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h4 className="text-white text-xl font-bold">The Daily Challenge</h4>
+                <h4 className="text-white text-xl font-bold">{t.dailyChallengeTitle}</h4>
               </div>
             </div>
             <Button
@@ -175,13 +175,13 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
         {/* Daily Streak Panel */}
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20">
-          <h3 className="text-white text-xl font-bold mb-4">Daily Streak</h3>
+          <h3 className="text-white text-xl font-bold mb-4">{t.dailyStreak}</h3>
 
           {/* Streak Card */}
           <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 rounded-2xl p-5 border border-orange-500/30">
             <div className="flex items-center justify-center gap-3">
               <span className="text-4xl">🔥</span>
-              <p className="text-white text-lg font-bold">Du bist auf einer {stats?.best_streak || 0} Streak</p>
+              <p className="text-white text-lg font-bold">{t.youAreOnStreak.replace('{count}', String(stats?.best_streak || 0))}</p>
             </div>
           </div>
         </div>
@@ -190,7 +190,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20" style={{ height: '280px' }}>
           <div className="flex flex-col h-full">
             <div className="text-center mb-4">
-              <h4 className="text-white text-lg font-bold">Dein aktueller Rang</h4>
+              <h4 className="text-white text-lg font-bold">{t.yourCurrentRank}</h4>
             </div>
             <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl flex items-center justify-center border border-white/10">
               {user ? (
