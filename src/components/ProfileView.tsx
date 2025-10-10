@@ -416,8 +416,10 @@ export const ProfileView = ({
         </button>
 
         <div className="w-full max-w-7xl flex flex-col h-full max-h-screen">
-          {/* Top Section: Avatar + Username + Level + Progress - Centered */}
-          <div className="flex-1 flex items-center justify-center mb-3 md:mb-4">
+          {/* Top Section: Avatar + Username + Level + Progress + Customization */}
+          <div className="flex-1 flex items-end mb-3 md:mb-4 md:pl-2">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full">
+            {/* Avatar Column - Centered on mobile */}
             <div className="flex flex-col items-center">
               <Avatar className="h-40 w-40 md:h-64 md:w-64 ring-4 md:ring-8 ring-white shadow-2xl">
                 <AvatarImage src={avatarUrl} />
@@ -425,66 +427,68 @@ export const ProfileView = ({
                   {username.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
+              <p className="text-sm text-gray-300 mt-3 font-medium hidden md:block" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Joined {accountCreated}</p>
+            </div>
 
-              <h1 className="text-4xl md:text-7xl font-bold text-white mt-4 md:mt-6 mb-1 md:mb-2 leading-none" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+            {/* Right Side: Username, Level Bar, and Customization Slots - Centered on mobile */}
+            <div className="flex-1 flex flex-col items-center md:items-start w-full">
+              <h1 className="text-4xl md:text-7xl font-bold text-white mb-1 md:mb-3 leading-none text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                 {username}
               </h1>
-              <p className="text-xl md:text-2xl text-gray-300 mb-3 md:mb-4 font-medium" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Level {level}</p>
+              <p className="text-xl md:text-2xl text-gray-300 mb-2 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Level {level}</p>
+
 
               {/* XP Progress Bar */}
-              <div className="h-5 md:h-7 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner w-full max-w-md md:max-w-2xl">
+              <div className="h-5 md:h-7 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner w-full max-w-md md:max-w-2xl mb-3 md:mb-6">
                 <div className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-500 rounded-full" style={{
                 width: `${Math.max(2, Math.min(levelProgress, 100))}%`
               }} />
               </div>
-            </div>
-          </div>
 
-          {/* Customization Slots - Left aligned */}
-          <div className="mb-3 md:mb-4 flex justify-center md:justify-start md:pl-2">
-            <div className="flex gap-2 md:gap-3">
-              {/* Flag Slot */}
-              <button onClick={() => {
+              {/* Customization Slots */}
+              <div className="flex gap-2 md:gap-3 justify-center md:justify-start">
+                {/* Flag Slot */}
+                <button onClick={() => {
                 if (profileData.flag) {
                   updateProfileField('flag', null);
                 } else {
                   setEditingSlot('flag');
                 }
               }} className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
-                {profileData.flag ? (
-                  <>
-                    <span className="text-3xl md:text-5xl mb-0.5 md:mb-1" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
-                      {getFlagEmoji(profileData.flag)}
-                    </span>
-                    <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
-                      {profileData.flag}
-                    </span>
-                  </>
-                ) : (
-                  <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />
-                )}
-              </button>
+                  {profileData.flag ? (
+                    <>
+                      <span className="text-3xl md:text-5xl mb-0.5 md:mb-1" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
+                        {getFlagEmoji(profileData.flag)}
+                      </span>
+                      <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                        {profileData.flag}
+                      </span>
+                    </>
+                  ) : (
+                    <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />
+                  )}
+                </button>
 
-              {/* Continent Slot */}
-              <button onClick={() => {
+                {/* Continent Slot */}
+                <button onClick={() => {
                 if (profileData.continent) {
                   updateProfileField('continent', null);
                 } else {
                   setEditingSlot('continent');
                 }
               }} className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
-                {profileData.continent ? <>
-                    <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
-                      {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
-                    </span>
-                    <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
-                      {profileData.continent}
-                    </span>
-                  </> : <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />}
-              </button>
+                  {profileData.continent ? <>
+                      <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
+                        {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
+                      </span>
+                      <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                        {profileData.continent}
+                      </span>
+                    </> : <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />}
+                </button>
 
-              {/* Clan Slot */}
-              <button onClick={() => {
+                {/* Clan Slot */}
+                <button onClick={() => {
                 if (profileData.clan) {
                   updateProfileField('clan', null);
                 } else {
@@ -492,25 +496,27 @@ export const ProfileView = ({
                 }
               }} className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
                 {profileData.clan ? <>
-                    <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
-                      {allClans.find(c => c.name === profileData.clan)?.emoji}
-                    </span>
-                    <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
-                      {profileData.clan}
-                    </span>
-                  </> : <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />}
-              </button>
+                      <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
+                        {allClans.find(c => c.name === profileData.clan)?.emoji}
+                      </span>
+                      <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                        {profileData.clan}
+                      </span>
+                    </> : <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />}
+                </button>
+              </div>
             </div>
+          </div>
           </div>
 
 
           {/* Player Stats Header */}
-          <h2 className="text-[10px] md:text-sm font-bold text-gray-300 uppercase tracking-[0.2em] md:tracking-[0.25em] mb-2 md:mb-3 text-center md:text-left md:pl-2" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+          <h2 className="text-[10px] md:text-sm font-bold text-gray-300 uppercase tracking-[0.2em] md:tracking-[0.25em] mb-2 md:mb-3 text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
             PLAYER STATS
           </h2>
 
           {/* Stats Grid - Mobile: 3 in row, then rank full width. Desktop: 3 narrow + 1 wider */}
-          <div className="grid grid-cols-3 md:grid-cols-10 gap-2 md:gap-4 md:pl-2">
+          <div className="grid grid-cols-3 md:grid-cols-10 gap-2 md:gap-4">
             {/* Best Streak */}
             <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm rounded-xl md:rounded-3xl shadow-lg p-2 md:p-5 flex flex-col items-center justify-center min-h-[70px] md:min-h-[140px]">
               <p className="text-[7px] md:text-xs text-gray-300 uppercase tracking-wide font-bold mb-0.5 md:mb-3 text-center leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
