@@ -102,7 +102,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       </div>
 
       {/* Left Column */}
-      <div className="absolute bottom-6 left-6 z-10 flex flex-col gap-5" style={{ width: '420px' }}>
+      <div className="absolute bottom-6 left-6 z-10 flex flex-col gap-5 scale-90 origin-bottom-left" style={{ width: '420px' }}>
         {/* News/Discord Panel */}
         <div
           className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20 transition-all duration-300 hover:bg-white/15 cursor-pointer overflow-hidden"
@@ -152,7 +152,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       </div>
 
       {/* Right Column */}
-      <div className="absolute bottom-6 right-6 z-10 flex flex-col gap-5" style={{ width: '420px' }}>
+      <div className="absolute bottom-6 right-6 z-10 flex flex-col gap-5 scale-90 origin-bottom-right" style={{ width: '420px' }}>
         {/* Daily Challenge Panel */}
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20 transition-all duration-300 hover:bg-white/15">
           <div className="flex items-center justify-between">
@@ -218,7 +218,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         <Button
           onClick={handleStart}
           size="lg"
-          className="bg-blue-600 hover:bg-blue-700 text-white text-2xl py-8 px-16 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105"
+          className="bg-blue-600 hover:bg-blue-700 text-white text-2xl py-8 px-16 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 scale-90"
         >
           <Play className="mr-3 h-8 w-8" />
           {t.start}
