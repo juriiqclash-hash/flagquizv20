@@ -79,7 +79,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       }}
     >
       {/* Language Selector - Top Left */}
-      <div className="absolute top-6 left-6 z-20">
+      <div className="absolute top-6 left-6 z-20 scale-90">
         <Select value={language} onValueChange={setLanguage}>
           <SelectTrigger className="w-[160px] bg-white/10 text-white border-white/20 hover:bg-white/20">
             <Languages className="mr-2 h-4 w-4" />
@@ -97,12 +97,12 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       </div>
 
       {/* Profile Button - Top Right */}
-      <div className="absolute top-6 right-6 z-20">
+      <div className="absolute top-6 right-6 z-20 scale-90">
         <ProfileButton transparentStyle onProfileOpenChange={() => {}} />
       </div>
 
       {/* Left Column */}
-      <div className="absolute bottom-6 left-6 z-10 flex flex-col gap-5" style={{ width: '420px' }}>
+      <div className="absolute bottom-6 left-6 z-10 flex flex-col gap-5 scale-90" style={{ width: '420px' }}>
         {/* News/Discord Panel */}
         <div
           className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20 transition-all duration-300 hover:bg-white/15 cursor-pointer overflow-hidden"
@@ -152,7 +152,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       </div>
 
       {/* Right Column */}
-      <div className="absolute bottom-6 right-6 z-10 flex flex-col gap-5" style={{ width: '420px' }}>
+      <div className="absolute bottom-6 right-6 z-10 flex flex-col gap-5 scale-90" style={{ width: '420px' }}>
         {/* Daily Challenge Panel */}
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20 transition-all duration-300 hover:bg-white/15">
           <div className="flex items-center justify-between">
@@ -213,7 +213,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       </div>
 
       {/* Center Content */}
-      <div className="relative z-10 text-center max-w-2xl mx-auto">
+      <div className="relative z-10 text-center max-w-2xl mx-auto scale-90">
         <FlagQuizLogo size="xl" variant="dark" className="mb-20 drop-shadow-2xl scale-90 md:scale-125" />
         <Button
           onClick={handleStart}
