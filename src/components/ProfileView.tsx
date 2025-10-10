@@ -417,8 +417,8 @@ export const ProfileView = ({
 
         <div className="w-full max-w-7xl flex flex-col h-full max-h-screen">
           {/* Top Section: Avatar + Username + Level + Progress + Customization */}
-          <div className="flex-1 flex items-center justify-center">
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10">
+          <div className="flex-1 flex items-center">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full">
             {/* Avatar Column - Centered on mobile */}
             <div className="flex flex-col items-center">
               <Avatar className="h-40 w-40 md:h-64 md:w-64 ring-4 md:ring-8 ring-white shadow-2xl">
