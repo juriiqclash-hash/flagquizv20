@@ -590,13 +590,30 @@ export const ProfileView = ({
               </button>
             </div>
 
-            <div className="flex gap-4 justify-center mb-6">
+            <div className="grid grid-cols-4 md:flex md:flex-row gap-4 justify-center mb-6">
               {[...RANK_TIERS].reverse().map(tier => {
-            return <div key={tier.name} className="flex flex-col items-center gap-2">
-                    <div className="w-24 h-24 flex items-center justify-center">
-                      <img src={tier.badge} alt={tier.name} className="w-full h-full object-contain" />
+                const getRankGlowColor = (name: string) => {
+                  switch(name) {
+                    case 'Bronze': return 'hover:shadow-[0_0_30px_rgba(194,120,3,0.6)]';
+                    case 'Silver': return 'hover:shadow-[0_0_30px_rgba(156,163,175,0.6)]';
+                    case 'Gold': return 'hover:shadow-[0_0_30px_rgba(234,179,8,0.6)]';
+                    case 'Platinum': return 'hover:shadow-[0_0_30px_rgba(6,182,212,0.6)]';
+                    case 'Diamond': return 'hover:shadow-[0_0_30px_rgba(56,189,248,0.6)]';
+                    case 'Masters': return 'hover:shadow-[0_0_30px_rgba(37,99,235,0.6)]';
+                    case 'Legends': return 'hover:shadow-[0_0_30px_rgba(168,85,247,0.6)]';
+                    default: return '';
+                  }
+                };
+
+                return <div key={tier.name} className="flex flex-col items-center gap-2 group">
+                    <div className={`w-20 h-20 md:w-24 md:h-24 flex items-center justify-center transition-all duration-300 rounded-full ${getRankGlowColor(tier.name)}`}>
+                      <img
+                        src={tier.badge}
+                        alt={tier.name}
+                        className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-125"
+                      />
                     </div>
-                    <p className="text-sm font-semibold text-gray-800">{tier.name}</p>
+                    <p className="text-xs md:text-sm font-semibold text-gray-800">{tier.name}</p>
                   </div>;
           })}
             </div>
