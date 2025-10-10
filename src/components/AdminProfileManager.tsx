@@ -7,6 +7,7 @@ import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { User } from 'lucide-react';
+import { getCumulativeXP } from '@/lib/xpSystem';
 
 export default function AdminProfileManager() {
   const { toast } = useToast();
@@ -15,8 +16,7 @@ export default function AdminProfileManager() {
   const [streak, setStreak] = useState('');
   const [timeMode, setTimeMode] = useState('');
   const [duelWins, setDuelWins] = useState('');
-  const [xp, setXp] = useState('');
-  const [level, setLevel] = useState('');
+  const [selectedLevel, setSelectedLevel] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -33,7 +33,6 @@ export default function AdminProfileManager() {
   };
 
   const loadUserStats = async (userId: string) => {
-    // Load current stats
     const { data: stats } = await supabase
       .from('user_stats')
       .select('*')
@@ -41,8 +40,7 @@ export default function AdminProfileManager() {
       .single();
 
     if (stats) {
-      setXp(stats.xp.toString());
-      setLevel(stats.level.toString());
+      setSelectedLevel(stats.level.toString());
       setDuelWins(stats.multiplayer_wins.toString());
     }
 
@@ -77,7 +75,6 @@ export default function AdminProfileManager() {
 
     setLoading(true);
     try {
-      // Update streak leaderboard
       if (streak) {
         await supabase.rpc('upsert_leaderboard_score', {
           p_user_id: selectedUserId,
@@ -87,7 +84,6 @@ export default function AdminProfileManager() {
         });
       }
 
-      // Update time mode leaderboard
       if (timeMode) {
         await supabase.rpc('upsert_leaderboard_score', {
           p_user_id: selectedUserId,
@@ -97,17 +93,22 @@ export default function AdminProfileManager() {
         });
       }
 
-      // Update user stats
       const updates: any = {};
       if (duelWins) updates.multiplayer_wins = parseInt(duelWins);
-      if (xp) updates.xp = parseInt(xp);
-      if (level) updates.level = parseInt(level);
+      if (selectedLevel) {
+        const level = parseInt(selectedLevel);
+        const xp = getCumulativeXP(level);
+        updates.xp = xp;
+        updates.level = level;
+      }
 
       if (Object.keys(updates).length > 0) {
-        await supabase
+        const { error } = await supabase
           .from('user_stats')
           .update(updates)
           .eq('user_id', selectedUserId);
+
+        if (error) throw error;
       }
 
       toast({
@@ -115,12 +116,11 @@ export default function AdminProfileManager() {
         description: 'Benutzerprofil aktualisiert',
       });
 
-      // Reset form
       setStreak('');
       setTimeMode('');
       setDuelWins('');
-      setXp('');
-      setLevel('');
+      setSelectedLevel('');
+      setSelectedUserId('');
     } catch (error: any) {
       toast({
         title: 'Fehler',
@@ -199,28 +199,21 @@ export default function AdminProfileManager() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="xp">XP</Label>
-                <Input
-                  id="xp"
-                  type="number"
-                  value={xp}
-                  onChange={(e) => setXp(e.target.value)}
-                  placeholder="z.B. 1000"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="level">Level</Label>
-                <Input
-                  id="level"
-                  type="number"
-                  value={level}
-                  onChange={(e) => setLevel(e.target.value)}
-                  placeholder="z.B. 25"
-                  min="0"
-                  max="100"
-                />
+              <div className="space-y-2 col-span-2">
+                <Label htmlFor="level">Rang</Label>
+                <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+                  <SelectTrigger id="level">
+                    <SelectValue placeholder="Rang auswählen..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">Bronze (Level 0-19)</SelectItem>
+                    <SelectItem value="20">Silber (Level 20-39)</SelectItem>
+                    <SelectItem value="40">Gold (Level 40-59)</SelectItem>
+                    <SelectItem value="60">Platin (Level 60-79)</SelectItem>
+                    <SelectItem value="80">Diamant (Level 80-99)</SelectItem>
+                    <SelectItem value="100">Legende (Level 100)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 

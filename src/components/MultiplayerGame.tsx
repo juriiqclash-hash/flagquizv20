@@ -82,14 +82,11 @@ export default function MultiplayerGame({ onBackToLobby, onBackToMenu }: Multipl
   // Check for game end via lobby status
   useEffect(() => {
     if (!currentLobby || !myParticipant) return;
-    
-    if (currentLobby.status === 'finished') {
+
+    if (currentLobby.status === 'finished' && gameStatus !== 'won' && gameStatus !== 'lost') {
       if (currentLobby.winner_id === user?.id) {
         setGameStatus('won');
-        // Increment multiplayer wins only once when user wins
-        if (gameStatus !== 'won') {
-          incrementMultiplayerWins();
-        }
+        incrementMultiplayerWins();
         toast({
           title: '🏆 Gewonnen!',
           description: 'Du hast alle 10 Flaggen erraten!',

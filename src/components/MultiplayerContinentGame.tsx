@@ -51,8 +51,8 @@ export default function MultiplayerContinentGame({ onBackToLobby, onBackToMenu }
   // Check for game end via lobby status
   useEffect(() => {
     if (!currentLobby || !myParticipant) return;
-    
-    if (currentLobby.status === 'finished') {
+
+    if (currentLobby.status === 'finished' && gameStatus !== 'won' && gameStatus !== 'lost') {
       if (currentLobby.winner_id === user?.id) {
         setGameStatus('won');
         incrementMultiplayerWins();
@@ -73,7 +73,7 @@ export default function MultiplayerContinentGame({ onBackToLobby, onBackToMenu }
       setGameStatus('playing');
       setTimeout(() => inputRef.current?.focus(), 100);
     }
-  }, [currentLobby?.status, currentLobby?.winner_id, user?.id, gameStatus, toast, myParticipant, totalCountries]);
+  }, [currentLobby?.status, currentLobby?.winner_id, user?.id, gameStatus, toast, myParticipant, totalCountries, incrementMultiplayerWins]);
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
