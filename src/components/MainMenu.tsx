@@ -188,16 +188,16 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
         {/* Current Rank Panel */}
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20">
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="text-white text-xl font-bold">Dein aktueller Rang</h4>
+          <div className="mb-3">
+            <h4 className="text-white text-xl font-bold text-center">Dein aktueller Rang</h4>
           </div>
           {user && (
-            <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-6 border border-white/10 text-center">
-              <div className="flex items-center justify-center mb-3">
+            <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-8 border border-white/10 text-center">
+              <div className="flex items-center justify-center mb-4">
                 <img
                   src={userRank.image}
                   alt={userRank.name}
-                  className="w-24 h-24 object-contain drop-shadow-lg"
+                  className="w-32 h-32 object-contain drop-shadow-2xl"
                 />
               </div>
               <p className="text-white text-2xl font-bold" style={{ color: userRank.color }}>
@@ -210,10 +210,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
       {/* Center Content */}
       <div className="relative z-10 text-center max-w-2xl mx-auto">
-        <FlagQuizLogo size="xl" variant="dark" className="mb-6 drop-shadow-2xl scale-90 md:scale-125" />
-        <p className="text-xl md:text-2xl text-white/90 mb-16 drop-shadow-md">
-          {t.mainSubtitle}
-        </p>
+        <FlagQuizLogo size="xl" variant="dark" className="mb-12 drop-shadow-2xl scale-90 md:scale-125" />
         <Button
           onClick={handleStart}
           size="lg"

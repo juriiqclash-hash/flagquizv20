@@ -38,6 +38,12 @@ interface CategoryConfig {
 export default function CombiQuiz({ onBackToStart, isDailyChallenge = false, maxQuestions }: CombiQuizProps) {
   const [showCategorySelection, setShowCategorySelection] = useState(!isDailyChallenge);
   const [showCompletionScreen, setShowCompletionScreen] = useState(false);
+
+  useEffect(() => {
+    if (isDailyChallenge) {
+      generateNextQuestion();
+    }
+  }, [isDailyChallenge]);
   const [categories, setCategories] = useState<CategoryConfig[]>([
     { id: 'flag', label: 'Flaggen', icon: <Globe className="w-4 h-4" />, enabled: true },
     { id: 'capital-to-country', label: 'Hauptstadt → Land', icon: <MapPin className="w-4 h-4" />, enabled: true },

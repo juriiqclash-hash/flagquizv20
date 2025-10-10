@@ -31,6 +31,7 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
       icon: 'w-20 h-20',
       iconInner: 'w-10 h-10',
       text: 'text-6xl md:text-7xl',
+      isMainMenu: true,
     },
   };
 
@@ -46,15 +47,58 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
     return isDark ? '8px #3b82f6' : '3px #1e40af'; // xl
   };
   
+  const isMainMenu = currentSize.isMainMenu === true;
+
+  if (isMainMenu) {
+    return (
+      <div className={`flex flex-col items-center justify-center ${className}`}>
+        {/* Map Pin Icon */}
+        <MapPin
+          className={`${currentSize.icon} drop-shadow-lg ${isDark ? 'fill-white text-blue-500' : 'fill-white text-blue-500'} mb-2`}
+        />
+
+        {/* FLAG Text */}
+        <div className={`${currentSize.text} font-black tracking-tight leading-none`}>
+          <span
+            className={isDark ? 'text-white' : 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-600'}
+            style={isDark ? {
+              WebkitTextStroke: getStrokeWidth(),
+              paintOrder: 'stroke fill'
+            } : {
+              WebkitTextStroke: getStrokeWidth(),
+              paintOrder: 'stroke fill'
+            }}>
+            FLAG
+          </span>
+        </div>
+
+        {/* QUIZ Text */}
+        <div className={`${currentSize.text} font-black tracking-tight leading-none -mt-2`}>
+          <span
+            className={isDark ? 'text-white' : 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-600'}
+            style={isDark ? {
+              WebkitTextStroke: getStrokeWidth(),
+              paintOrder: 'stroke fill'
+            } : {
+              WebkitTextStroke: getStrokeWidth(),
+              paintOrder: 'stroke fill'
+            }}>
+            QUIZ
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={`flex flex-col items-center justify-center ${className}`}>
+    <div className={`flex items-center justify-center ${currentSize.container} ${className}`}>
       {/* Map Pin Icon */}
       <MapPin
-        className={`${currentSize.icon} drop-shadow-lg ${isDark ? 'fill-white text-blue-500' : 'fill-white text-blue-500'} mb-2`}
+        className={`${currentSize.icon} drop-shadow-lg ${isDark ? 'fill-white text-blue-500' : 'fill-white text-blue-500'}`}
       />
 
-      {/* FLAG Text */}
-      <div className={`${currentSize.text} font-black tracking-tight leading-none`}>
+      {/* FLAGQUIZ Text */}
+      <div className={`${currentSize.text} font-black tracking-tight`}>
         <span
           className={isDark ? 'text-white' : 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-600'}
           style={isDark ? {
@@ -64,22 +108,7 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
             WebkitTextStroke: getStrokeWidth(),
             paintOrder: 'stroke fill'
           }}>
-          FLAG
-        </span>
-      </div>
-
-      {/* QUIZ Text */}
-      <div className={`${currentSize.text} font-black tracking-tight leading-none -mt-2`}>
-        <span
-          className={isDark ? 'text-white' : 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-600'}
-          style={isDark ? {
-            WebkitTextStroke: getStrokeWidth(),
-            paintOrder: 'stroke fill'
-          } : {
-            WebkitTextStroke: getStrokeWidth(),
-            paintOrder: 'stroke fill'
-          }}>
-          QUIZ
+          FLAGQUIZ
         </span>
       </div>
     </div>
