@@ -409,44 +409,44 @@ export const ProfileView = ({
   };
   if (!open) return null;
   return <>
-      <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex items-center justify-center" style={{ padding: '1rem' }}>
         {/* Close Button */}
-        <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
-          <X className="w-5 h-5 text-gray-600" />
+        <button onClick={() => onOpenChange(false)} className="fixed z-50 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors" style={{ top: '1rem', right: '1rem', padding: '0.5rem' }}>
+          <X className="text-gray-600" style={{ width: '1.25rem', height: '1.25rem' }} />
         </button>
 
         <div className="w-full max-w-7xl flex flex-col h-full max-h-screen">
           {/* Top Section: Avatar + Username + Level + Progress + Customization */}
-          <div className="flex-1 flex items-center mb-3 md:mb-4 md:pl-2">
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full">
+          <div className="flex-1 flex items-center md:pl-2" style={{ marginBottom: '1rem' }}>
+          <div className="flex flex-col md:flex-row items-center md:items-start w-full" style={{ gap: '2.5rem' }}>
             {/* Avatar Column - Centered on mobile */}
             <div className="flex flex-col items-center">
-              <Avatar className="h-40 w-40 md:h-64 md:w-64 ring-4 md:ring-8 ring-white shadow-2xl">
+              <Avatar className="ring-white shadow-2xl" style={{ height: '10rem', width: '10rem', ringWidth: '0.5rem' }}>
                 <AvatarImage src={avatarUrl} />
-                <AvatarFallback className="text-6xl md:text-9xl bg-blue-500 text-white">
+                <AvatarFallback className="bg-blue-500 text-white" style={{ fontSize: '4rem' }}>
                   {username.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <p className="text-sm text-gray-300 mt-3 font-medium hidden md:block" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Joined {accountCreated}</p>
+              <p className="text-gray-300 font-medium hidden md:block" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '0.875rem', marginTop: '0.75rem' }}>Joined {accountCreated}</p>
             </div>
 
             {/* Right Side: Username, Level Bar, and Customization Slots - Centered on mobile */}
             <div className="flex-1 flex flex-col items-center md:items-start w-full">
-              <h1 className="text-4xl md:text-7xl font-bold text-white mb-1 md:mb-3 leading-none text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+              <h1 className="font-bold text-white leading-none text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '3rem', marginBottom: '0.75rem' }}>
                 {username}
               </h1>
-              <p className="text-xl md:text-2xl text-gray-300 mb-2 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Level {level}</p>
+              <p className="text-gray-300 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '1.5rem', marginBottom: '0.5rem' }}>Level {level}</p>
 
 
               {/* XP Progress Bar */}
-              <div className="h-5 md:h-7 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner w-full max-w-md md:max-w-2xl mb-3 md:mb-6">
+              <div className="bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner w-full max-w-2xl" style={{ height: '1.75rem', marginBottom: '1.5rem' }}>
                 <div className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-500 rounded-full" style={{
                 width: `${Math.max(2, Math.min(levelProgress, 100))}%`
               }} />
               </div>
 
               {/* Customization Slots */}
-              <div className="flex gap-2 md:gap-3 justify-center md:justify-start">
+              <div className="flex justify-center md:justify-start" style={{ gap: '0.75rem' }}>
                 {/* Flag Slot */}
                 <button onClick={() => {
                 if (profileData.flag) {
@@ -454,18 +454,18 @@ export const ProfileView = ({
                 } else {
                   setEditingSlot('flag');
                 }
-              }} className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
+              }} className="bg-white/40 backdrop-blur-sm shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105" style={{ width: '7rem', height: '7rem', borderRadius: '1.5rem' }}>
                   {profileData.flag ? (
                     <>
-                      <span className="text-3xl md:text-5xl mb-0.5 md:mb-1" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
+                      <span style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif', fontSize: '3rem', marginBottom: '0.25rem' }}>
                         {getFlagEmoji(profileData.flag)}
                       </span>
-                      <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                      <span className="text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '0.75rem' }}>
                         {profileData.flag}
                       </span>
                     </>
                   ) : (
-                    <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />
+                    <Plus className="text-gray-300" style={{ width: '2rem', height: '2rem' }} />
                   )}
                 </button>
 
@@ -476,15 +476,15 @@ export const ProfileView = ({
                 } else {
                   setEditingSlot('continent');
                 }
-              }} className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
+              }} className="bg-white/40 backdrop-blur-sm shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105" style={{ width: '7rem', height: '7rem', borderRadius: '1.5rem' }}>
                   {profileData.continent ? <>
-                      <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
+                      <span style={{ fontSize: '2.5rem', marginBottom: '0.25rem' }}>
                         {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
                       </span>
-                      <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                      <span className="text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '0.75rem' }}>
                         {profileData.continent}
                       </span>
-                    </> : <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />}
+                    </> : <Plus className="text-gray-300" style={{ width: '2rem', height: '2rem' }} />}
                 </button>
 
                 {/* Clan Slot */}
@@ -494,15 +494,15 @@ export const ProfileView = ({
                 } else {
                   setEditingSlot('clan');
                 }
-              }} className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
+              }} className="bg-white/40 backdrop-blur-sm shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105" style={{ width: '7rem', height: '7rem', borderRadius: '1.5rem' }}>
                 {profileData.clan ? <>
-                      <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
+                      <span style={{ fontSize: '2.5rem', marginBottom: '0.25rem' }}>
                         {allClans.find(c => c.name === profileData.clan)?.emoji}
                       </span>
-                      <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                      <span className="text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '0.75rem' }}>
                         {profileData.clan}
                       </span>
-                    </> : <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />}
+                    </> : <Plus className="text-gray-300" style={{ width: '2rem', height: '2rem' }} />}
                 </button>
               </div>
             </div>
@@ -511,71 +511,72 @@ export const ProfileView = ({
 
 
           {/* Player Stats Header */}
-          <h2 className="text-[10px] md:text-sm font-bold text-gray-300 uppercase tracking-[0.2em] md:tracking-[0.25em] mb-2 md:mb-3 text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+          <h2 className="font-bold text-gray-300 uppercase text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '0.875rem', letterSpacing: '0.25em', marginBottom: '0.75rem' }}>
             PLAYER STATS
           </h2>
 
           {/* Stats Grid - Mobile: 3 in row, then rank full width. Desktop: 3 narrow + 1 wider */}
-          <div className="grid grid-cols-3 md:grid-cols-10 gap-2 md:gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-10" style={{ gap: '1rem' }}>
             {/* Best Streak */}
-            <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm rounded-xl md:rounded-3xl shadow-lg p-2 md:p-5 flex flex-col items-center justify-center min-h-[70px] md:min-h-[140px]">
-              <p className="text-[7px] md:text-xs text-gray-300 uppercase tracking-wide font-bold mb-0.5 md:mb-3 text-center leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+            <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm shadow-lg flex flex-col items-center justify-center" style={{ borderRadius: '1.5rem', padding: '1.25rem', minHeight: '8.75rem' }}>
+              <p className="text-gray-300 uppercase tracking-wide font-bold text-center leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '0.75rem', marginBottom: '0.75rem' }}>
                 STREAK
               </p>
-              <div className="flex items-center gap-0.5 md:gap-2">
-                <Flame className="w-4 h-4 md:w-8 md:h-8 text-orange-500" />
-                <span className="text-base md:text-4xl font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+              <div className="flex items-center" style={{ gap: '0.5rem' }}>
+                <Flame className="text-orange-500" style={{ width: '2rem', height: '2rem' }} />
+                <span className="font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '2.5rem' }}>
                   {leaderboardStats.bestStreak}
                 </span>
               </div>
             </div>
 
             {/* Time Mode */}
-            <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm rounded-xl md:rounded-3xl shadow-lg p-2 md:p-5 flex flex-col items-center justify-center min-h-[70px] md:min-h-[140px]">
-              <p className="text-[7px] md:text-xs text-gray-300 uppercase tracking-wide font-bold mb-0.5 md:mb-3 text-center leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+            <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm shadow-lg flex flex-col items-center justify-center" style={{ borderRadius: '1.5rem', padding: '1.25rem', minHeight: '8.75rem' }}>
+              <p className="text-gray-300 uppercase tracking-wide font-bold text-center leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '0.75rem', marginBottom: '0.75rem' }}>
                 ZEIT
               </p>
-              <div className="flex items-center gap-0.5 md:gap-2">
-                <Clock className="w-4 h-4 md:w-8 md:h-8 text-blue-500" />
-                <span className="text-base md:text-4xl font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+              <div className="flex items-center" style={{ gap: '0.5rem' }}>
+                <Clock className="text-blue-500" style={{ width: '2rem', height: '2rem' }} />
+                <span className="font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '2.5rem' }}>
                   {formatTime(leaderboardStats.bestTimeMode)}
                 </span>
               </div>
             </div>
 
             {/* Duel Wins */}
-            <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm rounded-xl md:rounded-3xl shadow-lg p-2 md:p-5 flex flex-col items-center justify-center min-h-[70px] md:min-h-[140px]">
-              <p className="text-[7px] md:text-xs text-gray-300 uppercase tracking-wide font-bold mb-0.5 md:mb-3 text-center leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+            <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm shadow-lg flex flex-col items-center justify-center" style={{ borderRadius: '1.5rem', padding: '1.25rem', minHeight: '8.75rem' }}>
+              <p className="text-gray-300 uppercase tracking-wide font-bold text-center leading-tight" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '0.75rem', marginBottom: '0.75rem' }}>
                 WINS
               </p>
-              <div className="flex items-center gap-0.5 md:gap-2">
-                <Trophy className="w-4 h-4 md:w-8 md:h-8 text-yellow-500" />
-                <span className="text-base md:text-4xl font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+              <div className="flex items-center" style={{ gap: '0.5rem' }}>
+                <Trophy className="text-yellow-500" style={{ width: '2rem', height: '2rem' }} />
+                <span className="font-bold text-white" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '2.5rem' }}>
                   {leaderboardStats.duelWins}
                 </span>
               </div>
             </div>
 
             {/* Rank Badge - Full width on mobile, wider on desktop */}
-            <div className="col-span-3 md:col-span-4 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg p-3 md:p-6 flex flex-col md:flex-row items-center md:gap-5 min-h-[120px] md:min-h-[140px] relative overflow-hidden">
-              <div className="flex-shrink-0 w-16 h-16 md:w-24 md:h-24 flex items-center justify-center relative overflow-visible mb-1 md:mb-0">
+            <div className="col-span-3 md:col-span-4 bg-white/30 backdrop-blur-sm shadow-lg flex flex-col md:flex-row items-center relative overflow-hidden" style={{ borderRadius: '1.5rem', padding: '1.5rem', gap: '1.25rem', minHeight: '8.75rem' }}>
+              <div className="flex-shrink-0 flex items-center justify-center relative overflow-visible" style={{ width: '6rem', height: '6rem' }}>
                 <img
                   src={rank.badge}
                   alt={rank.name}
-                  className="absolute w-32 h-32 md:w-56 md:h-56 object-contain scale-125"
+                  className="absolute object-contain scale-125"
+                  style={{ width: '14rem', height: '14rem' }}
                 />
               </div>
 
-              <div className="flex flex-col flex-1 md:ml-8 items-center md:items-start">
-                <p className="text-2xl md:text-4xl font-bold text-white leading-tight text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+              <div className="flex flex-col flex-1 items-center md:items-start" style={{ marginLeft: '2rem' }}>
+                <p className="font-bold text-white leading-tight text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '2.5rem' }}>
                   {rank.name}
                 </p>
-                <p className="text-xs md:text-sm text-gray-300 mt-0.5 md:mt-1 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                <p className="text-gray-300 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif', fontSize: '0.875rem', marginTop: '0.25rem' }}>
                   Best Position #{leaderboardStats.bestPosition}
                 </p>
               </div>
-              <button onClick={() => setShowRankInfo(true)} className="absolute top-2 right-2 md:top-3 md:right-3 p-1 md:p-2 bg-white/60 hover:bg-white/80 rounded-full transition-colors">
-                <Info className="w-3 h-3 md:w-5 md:h-5 text-gray-600" />
+              <button onClick={() => setShowRankInfo(true)} className="absolute bg-white/60 hover:bg-white/80 rounded-full transition-colors" style={{ top: '0.75rem', right: '0.75rem', padding: '0.5rem' }}>
+                <Info className="text-gray-600" style={{ width: '1.25rem', height: '1.25rem' }} />
               </button>
             </div>
           </div>
@@ -584,15 +585,15 @@ export const ProfileView = ({
 
       {/* Rank Info Dialog */}
       {showRankInfo && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-2xl p-6 max-w-4xl w-full mx-4">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="font-bold text-2xl">Rank Übersicht</h3>
-              <button onClick={() => setShowRankInfo(false)} className="p-1 hover:bg-gray-100 rounded-full">
-                <X className="w-5 h-5" />
+          <div className="bg-white max-w-4xl w-full" style={{ borderRadius: '1rem', padding: '1.5rem', margin: '1rem' }}>
+            <div className="flex items-center justify-between" style={{ marginBottom: '1.5rem' }}>
+              <h3 className="font-bold" style={{ fontSize: '1.5rem' }}>Rank Übersicht</h3>
+              <button onClick={() => setShowRankInfo(false)} className="hover:bg-gray-100 rounded-full" style={{ padding: '0.25rem' }}>
+                <X style={{ width: '1.25rem', height: '1.25rem' }} />
               </button>
             </div>
 
-            <div className="flex flex-wrap gap-4 justify-center mb-6">
+            <div className="flex flex-wrap justify-center" style={{ gap: '1rem', marginBottom: '1.5rem' }}>
               {[...RANK_TIERS].reverse().map((tier, index) => {
                 const getRankGlowColor = (name: string) => {
                   switch(name) {
@@ -609,22 +610,23 @@ export const ProfileView = ({
 
                 return <div
                     key={tier.name}
-                    className="flex flex-col items-center gap-2 group w-[calc(25%-0.75rem)] md:w-auto"
+                    className="flex flex-col items-center group w-[calc(25%-0.75rem)] md:w-auto"
+                    style={{ gap: '0.5rem' }}
                   >
-                    <div className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center transition-all duration-300">
+                    <div className="flex items-center justify-center transition-all duration-300" style={{ width: '6rem', height: '6rem' }}>
                       <img
                         src={tier.badge}
                         alt={tier.name}
                         className={`w-full h-full object-contain transition-all duration-300 group-hover:scale-125 ${getRankGlowColor(tier.name)}`}
                       />
                     </div>
-                    <p className="text-xs md:text-sm font-semibold text-gray-800">{tier.name}</p>
+                    <p className="font-semibold text-gray-800" style={{ fontSize: '0.875rem' }}>{tier.name}</p>
                   </div>;
           })}
             </div>
 
-            <div className="p-4 bg-blue-50 rounded-xl">
-              <p className="text-sm text-gray-700 text-center">
+            <div className="bg-blue-50" style={{ padding: '1rem', borderRadius: '0.75rem' }}>
+              <p className="text-gray-700 text-center" style={{ fontSize: '0.875rem' }}>
                 Dein Rang wird basierend auf dem Durchschnitt deiner Scores berechnet.
               </p>
             </div>
@@ -633,37 +635,37 @@ export const ProfileView = ({
 
       {/* Selection Dialogs */}
       {editingSlot === 'flag' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-2xl p-6 max-w-4xl max-h-[80vh] overflow-y-auto w-full mx-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-xl">Wähle dein Land</h3>
-              <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
-                <X className="w-5 h-5" />
+          <div className="bg-white max-w-4xl max-h-[80vh] overflow-y-auto w-full" style={{ borderRadius: '1rem', padding: '1.5rem', margin: '1rem' }}>
+            <div className="flex items-center justify-between" style={{ marginBottom: '1rem' }}>
+              <h3 className="font-bold" style={{ fontSize: '1.25rem' }}>Wähle dein Land</h3>
+              <button onClick={() => setEditingSlot(null)} className="hover:bg-gray-100 rounded-full" style={{ padding: '0.25rem' }}>
+                <X style={{ width: '1.25rem', height: '1.25rem' }} />
               </button>
             </div>
-            <Input placeholder="Land suchen..." className="mb-4 bg-white" onChange={e => {
+            <Input placeholder="Land suchen..." className="bg-white" style={{ marginBottom: '1rem' }} onChange={e => {
           const search = e.target.value.toLowerCase();
           const filtered = ALL_COUNTRIES.filter(c => c.name.toLowerCase().includes(search) || c.code.toLowerCase().includes(search));
         }} />
-            <div className="grid grid-cols-6 gap-3">
-              {ALL_COUNTRIES.map(country => <button key={country.code} onClick={() => updateProfileField('flag', country.code)} className="flex flex-col items-center justify-center p-3 hover:bg-gray-100 rounded-lg transition-all hover:scale-105">
-                  <span className="text-5xl mb-2" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>{getFlagEmoji(country.code)}</span>
-                  <span className="text-xs text-gray-600 font-medium">{country.code}</span>
+            <div className="grid grid-cols-6" style={{ gap: '0.75rem' }}>
+              {ALL_COUNTRIES.map(country => <button key={country.code} onClick={() => updateProfileField('flag', country.code)} className="flex flex-col items-center justify-center hover:bg-gray-100 transition-all hover:scale-105" style={{ padding: '0.75rem', borderRadius: '0.5rem' }}>
+                  <span style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif', fontSize: '3rem', marginBottom: '0.5rem' }}>{getFlagEmoji(country.code)}</span>
+                  <span className="text-gray-600 font-medium" style={{ fontSize: '0.75rem' }}>{country.code}</span>
                 </button>)}
             </div>
           </div>
         </div>}
 
       {editingSlot === 'continent' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-xl">Wähle deinen Kontinent</h3>
-              <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
-                <X className="w-5 h-5" />
+          <div className="bg-white max-w-md w-full" style={{ borderRadius: '1rem', padding: '1.5rem', margin: '1rem' }}>
+            <div className="flex items-center justify-between" style={{ marginBottom: '1rem' }}>
+              <h3 className="font-bold" style={{ fontSize: '1.25rem' }}>Wähle deinen Kontinent</h3>
+              <button onClick={() => setEditingSlot(null)} className="hover:bg-gray-100 rounded-full" style={{ padding: '0.25rem' }}>
+                <X style={{ width: '1.25rem', height: '1.25rem' }} />
               </button>
             </div>
-            <div className="space-y-2">
-              {CONTINENTS.map(continent => <button key={continent.code} onClick={() => updateProfileField('continent', continent.code)} className="w-full flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors">
-                  <span className="text-2xl">{continent.emoji}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {CONTINENTS.map(continent => <button key={continent.code} onClick={() => updateProfileField('continent', continent.code)} className="w-full flex items-center hover:bg-gray-100 transition-colors" style={{ gap: '0.75rem', padding: '0.75rem', borderRadius: '0.5rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>{continent.emoji}</span>
                   <span className="font-medium">{continent.code}</span>
                 </button>)}
             </div>
@@ -671,32 +673,34 @@ export const ProfileView = ({
         </div>}
 
       {editingSlot === 'clan' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-xl">Wähle deinen Clan</h3>
-              <div className="flex gap-2">
-                <button 
+          <div className="bg-white max-w-2xl w-full max-h-[80vh] overflow-y-auto" style={{ borderRadius: '1rem', padding: '1.5rem', margin: '1rem' }}>
+            <div className="flex items-center justify-between" style={{ marginBottom: '1rem' }}>
+              <h3 className="font-bold" style={{ fontSize: '1.25rem' }}>Wähle deinen Clan</h3>
+              <div className="flex" style={{ gap: '0.5rem' }}>
+                <button
                   onClick={() => {
                     setShowClanCreator(true);
                   }}
-                  className="p-2 hover:bg-blue-100 rounded-full transition-colors"
+                  className="hover:bg-blue-100 rounded-full transition-colors"
                   title="Neuen Clan erstellen"
+                  style={{ padding: '0.5rem' }}
                 >
-                  <Plus className="w-5 h-5 text-blue-600" />
+                  <Plus className="text-blue-600" style={{ width: '1.25rem', height: '1.25rem' }} />
                 </button>
-                <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
-                  <X className="w-5 h-5" />
+                <button onClick={() => setEditingSlot(null)} className="hover:bg-gray-100 rounded-full" style={{ padding: '0.25rem' }}>
+                  <X style={{ width: '1.25rem', height: '1.25rem' }} />
                 </button>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2" style={{ gap: '0.75rem' }}>
               {allClans.map(clan => <div key={clan.name} className="relative group">
-                  <button 
-                    onClick={() => updateProfileField('clan', clan.name)} 
-                    className="w-full flex items-center gap-3 p-4 hover:bg-gray-100 rounded-lg transition-colors"
+                  <button
+                    onClick={() => updateProfileField('clan', clan.name)}
+                    className="w-full flex items-center hover:bg-gray-100 transition-colors"
+                    style={{ gap: '0.75rem', padding: '1rem', borderRadius: '0.5rem' }}
                   >
-                    <span className="text-3xl">{clan.emoji}</span>
-                    <span className="font-medium text-lg">{clan.name}</span>
+                    <span style={{ fontSize: '1.875rem' }}>{clan.emoji}</span>
+                    <span className="font-medium" style={{ fontSize: '1.125rem' }}>{clan.name}</span>
                   </button>
                   {clan.custom && clan.createdBy === user?.id && (
                     <button
@@ -718,10 +722,11 @@ export const ProfileView = ({
                           }
                         }
                       }}
-                      className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 hover:bg-red-600 transition-all"
+                      className="absolute bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 hover:bg-red-600 transition-all"
                       title="Clan löschen"
+                      style={{ top: '0.5rem', right: '0.5rem', padding: '0.25rem' }}
                     >
-                      <X className="w-4 h-4" />
+                      <X style={{ width: '1rem', height: '1rem' }} />
                     </button>
                   )}
                 </div>)}
