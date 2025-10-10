@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Play, Loader2, Languages, Users } from "lucide-react";
+import { Play, Loader2, Languages, Users, Calendar } from "lucide-react";
 import ProfileButton from "@/components/ProfileButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
@@ -101,8 +101,8 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         <ProfileButton transparentStyle onProfileOpenChange={() => {}} />
       </div>
 
-      {/* Left Column */}
-      <div className="absolute bottom-6 left-6 z-10 flex flex-col gap-5 scale-90 origin-bottom-left" style={{ width: '420px' }}>
+      {/* Left Column - Hidden on Mobile */}
+      <div className="hidden lg:flex absolute bottom-6 left-6 z-10 flex-col gap-5 scale-90 origin-bottom-left" style={{ width: '420px' }}>
         {/* News/Discord Panel */}
         <div
           className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20 transition-all duration-300 hover:bg-white/15 cursor-pointer overflow-hidden"
@@ -151,14 +151,14 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         </div>
       </div>
 
-      {/* Right Column */}
-      <div className="absolute bottom-6 right-6 z-10 flex flex-col gap-5 scale-90 origin-bottom-right" style={{ width: '420px' }}>
+      {/* Right Column - Hidden on Mobile */}
+      <div className="hidden lg:flex absolute bottom-6 right-6 z-10 flex-col gap-5 scale-90 origin-bottom-right" style={{ width: '420px' }}>
         {/* Daily Challenge Panel */}
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20 transition-all duration-300 hover:bg-white/15">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/30 to-purple-500/30 flex items-center justify-center border-2 border-white/20">
-                <span className="text-2xl">🏁</span>
+                <Calendar className="w-7 h-7 text-white" />
               </div>
               <div>
                 <h4 className="text-white text-xl font-bold">The Daily Challenge</h4>
@@ -193,7 +193,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               <h4 className="text-white text-lg font-bold">Dein aktueller Rang</h4>
             </div>
             <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl flex items-center justify-center border border-white/10">
-              {user && (
+              {user ? (
                 <div className="text-center p-6">
                   <div className="flex items-center justify-center mb-3">
                     <img
@@ -204,6 +204,12 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                   </div>
                   <p className="text-white text-xl font-bold" style={{ color: userRank.color }}>
                     {userRank.name.toUpperCase()}
+                  </p>
+                </div>
+              ) : (
+                <div className="text-center p-6">
+                  <p className="text-white/70 text-base">
+                    {t.loginToViewRank}
                   </p>
                 </div>
               )}

@@ -92,6 +92,7 @@ export const translations = {
 
     // Daily Challenge
     dailyChallenge: 'Tägliche Herausforderung',
+    loginToViewRank: 'Logge dich ein, um deinen Rang zu sehen',
 
     // Daily Streak
     dailyStreak: 'Tägliche Serie',
@@ -265,6 +266,7 @@ export const translations = {
 
     // Daily Challenge
     dailyChallenge: 'Daily Challenge',
+    loginToViewRank: 'Log in to view your rank',
 
     // Daily Streak
     dailyStreak: 'Daily Streak',
@@ -438,6 +440,7 @@ export const translations = {
 
     // Daily Challenge
     dailyChallenge: 'Desafío Diario',
+    loginToViewRank: 'Inicia sesión para ver tu rango',
 
     // Daily Streak
     dailyStreak: 'Racha Diaria',
@@ -611,6 +614,7 @@ export const translations = {
 
     // Daily Challenge
     dailyChallenge: 'Défi Quotidien',
+    loginToViewRank: 'Connectez-vous pour voir votre rang',
 
     // Daily Streak
     dailyStreak: 'Série Quotidienne',
@@ -784,6 +788,7 @@ export const translations = {
 
     // Daily Challenge
     dailyChallenge: 'Sfida Giornaliera',
+    loginToViewRank: 'Accedi per vedere il tuo rango',
 
     // Daily Streak
     dailyStreak: 'Serie Giornaliera',
@@ -957,6 +962,7 @@ export const translations = {
 
     // Daily Challenge
     dailyChallenge: 'デイリーチャレンジ',
+    loginToViewRank: 'ランクを表示するにはログインしてください',
 
     // Daily Streak
     dailyStreak: 'デイリーストリーク',
