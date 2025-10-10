@@ -93,10 +93,18 @@ function IndexContent() {
     setCurrentView('start');
   };
 
+  const handleDailyChallengeStart = () => {
+    handleStartQuiz('speedrush');
+  };
+
   return (
     <>
       {currentView === 'main-menu' ? (
-        <MainMenu onStart={handleMainMenuStart} />
+        <MainMenu
+          onStart={handleMainMenuStart}
+          onMultiplayerStart={handleStartMultiplayer}
+          onDailyChallengeStart={handleDailyChallengeStart}
+        />
       ) : currentView === 'start' ? (
         <StartScreen onStartQuiz={handleStartQuiz} onStartMultiplayer={handleStartMultiplayer} currentView={currentView} onOpenAdminPanel={handleOpenAdminPanel} onBackToMainMenu={handleBackToMainMenu} />
       ) : currentView === 'admin' ? (

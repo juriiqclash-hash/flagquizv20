@@ -83,6 +83,19 @@ export const translations = {
     
     // Multiplayer
     multiplayer: 'Mehrspieler',
+    playAgainstOthers: 'Spiele gegen andere in Echtzeit',
+    play: 'PLAY',
+
+    // News & Discord
+    joinDiscord: 'Trete unserer Discord-Community bei',
+    join: 'Beitreten',
+
+    // Daily Challenge
+    dailyChallenge: 'Tägliche Herausforderung',
+
+    // Daily Streak
+    dailyStreak: 'Tägliche Serie',
+    daysInRow: '{count} Tage in Folge',
     
     // Profile
     addUser: 'Benutzer hinzufügen',
@@ -243,6 +256,19 @@ export const translations = {
     
     // Multiplayer
     multiplayer: 'Multiplayer',
+    playAgainstOthers: 'Play against others in real time',
+    play: 'PLAY',
+
+    // News & Discord
+    joinDiscord: 'Join our Discord community',
+    join: 'Join',
+
+    // Daily Challenge
+    dailyChallenge: 'Daily Challenge',
+
+    // Daily Streak
+    dailyStreak: 'Daily Streak',
+    daysInRow: '{count} Days in a Row',
     
     // Profile
     addUser: 'Add User',
@@ -403,6 +429,19 @@ export const translations = {
     
     // Multiplayer
     multiplayer: 'Multijugador',
+    playAgainstOthers: 'Juega contra otros en tiempo real',
+    play: 'JUGAR',
+
+    // News & Discord
+    joinDiscord: 'Únete a nuestra comunidad de Discord',
+    join: 'Unirse',
+
+    // Daily Challenge
+    dailyChallenge: 'Desafío Diario',
+
+    // Daily Streak
+    dailyStreak: 'Racha Diaria',
+    daysInRow: '{count} Días Seguidos',
     
     // Profile
     addUser: 'Agregar Usuario',
@@ -563,6 +602,19 @@ export const translations = {
     
     // Multiplayer
     multiplayer: 'Multijoueur',
+    playAgainstOthers: 'Jouez contre d\'autres en temps réel',
+    play: 'JOUER',
+
+    // News & Discord
+    joinDiscord: 'Rejoignez notre communauté Discord',
+    join: 'Rejoindre',
+
+    // Daily Challenge
+    dailyChallenge: 'Défi Quotidien',
+
+    // Daily Streak
+    dailyStreak: 'Série Quotidienne',
+    daysInRow: '{count} Jours d\'Affilée',
     
     // Profile
     addUser: 'Ajouter un Utilisateur',
@@ -723,6 +775,19 @@ export const translations = {
     
     // Multiplayer
     multiplayer: 'Multigiocatore',
+    playAgainstOthers: 'Gioca contro altri in tempo reale',
+    play: 'GIOCA',
+
+    // News & Discord
+    joinDiscord: 'Unisciti alla nostra community Discord',
+    join: 'Unisciti',
+
+    // Daily Challenge
+    dailyChallenge: 'Sfida Giornaliera',
+
+    // Daily Streak
+    dailyStreak: 'Serie Giornaliera',
+    daysInRow: '{count} Giorni di Fila',
     
     // Profile
     addUser: 'Aggiungi Utente',
@@ -883,6 +948,19 @@ export const translations = {
     
     // Multiplayer
     multiplayer: 'マルチプレイヤー',
+    playAgainstOthers: 'リアルタイムで他のプレイヤーと対戦',
+    play: 'プレイ',
+
+    // News & Discord
+    joinDiscord: 'Discordコミュニティに参加',
+    join: '参加',
+
+    // Daily Challenge
+    dailyChallenge: 'デイリーチャレンジ',
+
+    // Daily Streak
+    dailyStreak: 'デイリーストリーク',
+    daysInRow: '{count}日連続',
     
     // Profile
     addUser: 'ユーザーを追加',
