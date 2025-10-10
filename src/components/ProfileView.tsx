@@ -607,8 +607,7 @@ export const ProfileView = ({
 
                 return <div
                     key={tier.name}
-                    className={`flex flex-col items-center gap-2 group ${index >= 4 ? 'w-[calc(25%-0.75rem)] md:w-auto' : 'w-[calc(25%-0.75rem)] md:w-auto'}`}
-                    style={index >= 4 ? { marginLeft: index === 4 ? 'calc(12.5% + 0.5rem)' : '0' } : {}}
+                    className="flex flex-col items-center gap-2 group w-[calc(25%-0.75rem)] md:w-auto"
                   >
                     <div className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center transition-all duration-300">
                       <img
