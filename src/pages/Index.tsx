@@ -96,7 +96,7 @@ function IndexContent() {
   return (
     <>
       {currentView === 'main-menu' ? (
-        <MainMenu onStart={handleMainMenuStart} onMultiplayerClick={handleStartMultiplayer} />
+        <MainMenu onStart={handleMainMenuStart} />
       ) : currentView === 'start' ? (
         <StartScreen onStartQuiz={handleStartQuiz} onStartMultiplayer={handleStartMultiplayer} currentView={currentView} onOpenAdminPanel={handleOpenAdminPanel} onBackToMainMenu={handleBackToMainMenu} />
       ) : currentView === 'admin' ? (
