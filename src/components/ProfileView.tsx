@@ -409,15 +409,15 @@ export const ProfileView = ({
   };
   if (!open) return null;
   return <>
-      <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex items-center justify-center p-6">
+      <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 overflow-y-auto">
         {/* Close Button */}
         <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
         </button>
 
-        <div className="w-full max-w-7xl flex flex-col h-full">
+        <div className="w-full max-w-7xl mx-auto flex flex-col min-h-full p-6 py-16 md:py-6">
           {/* Top Section: Avatar + Username + Level + Progress + Customization */}
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10 mb-4 pt-6 md:pt-12">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10 mb-4 pt-0 md:pt-12">
             {/* Avatar Column - Centered on mobile */}
             <div className="flex flex-col items-center pt-2">
               <Avatar className="h-48 w-48 md:h-64 md:w-64 ring-8 ring-white shadow-2xl">
@@ -509,12 +509,12 @@ export const ProfileView = ({
 
 
           {/* Player Stats Header */}
-          <h2 className="text-xs md:text-sm font-bold text-gray-300 uppercase tracking-[0.25em] mb-3 mt-auto text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+          <h2 className="text-xs md:text-sm font-bold text-gray-300 uppercase tracking-[0.25em] mb-3 md:mt-auto text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
             PLAYER STATS
           </h2>
 
           {/* Stats Grid - Mobile: 3 in row, then rank full width. Desktop: 3 narrow + 1 wider */}
-          <div className="grid grid-cols-3 md:grid-cols-10 gap-3 md:gap-4 pb-4">
+          <div className="grid grid-cols-3 md:grid-cols-10 gap-3 md:gap-4 pb-4 md:pb-4">
             {/* Best Streak */}
             <div className="col-span-1 md:col-span-2 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg p-3 md:p-5 flex flex-col items-center justify-center min-h-[120px] md:min-h-[140px]">
               <p className="text-[9px] md:text-xs text-gray-300 uppercase tracking-wide font-bold mb-2 md:mb-3 text-center" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
