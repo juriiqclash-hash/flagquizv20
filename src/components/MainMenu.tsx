@@ -152,7 +152,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       </div>
 
       {/* Right Column */}
-      <div className="absolute top-6 right-6 z-10 flex flex-col gap-5" style={{ width: '420px', marginTop: '60px', paddingBottom: '60px' }}>
+      <div className="absolute bottom-6 right-6 z-10 flex flex-col gap-5" style={{ width: '420px' }}>
         {/* Daily Challenge Panel */}
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20 transition-all duration-300 hover:bg-white/15">
           <div className="flex items-center justify-between">
@@ -174,16 +174,14 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         </div>
 
         {/* Daily Streak Panel */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20 transition-all duration-300 hover:bg-white/15">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-orange-500/30 to-red-500/30 flex items-center justify-center border-2 border-orange-500/20">
-                <span className="text-2xl">🔥</span>
-              </div>
-              <div>
-                <h4 className="text-white text-xl font-bold">Daily Streak</h4>
-                <p className="text-white/70 text-sm">Du bist auf einer {stats?.best_streak || 0} Streak</p>
-              </div>
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20">
+          <h3 className="text-white text-xl font-bold mb-4">Daily Streak</h3>
+
+          {/* Streak Card */}
+          <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 rounded-2xl p-5 border border-orange-500/30">
+            <div className="flex items-center justify-center gap-3">
+              <span className="text-4xl">🔥</span>
+              <p className="text-white text-lg font-bold">Du bist auf einer {stats?.best_streak || 0} Streak</p>
             </div>
           </div>
         </div>
@@ -191,7 +189,10 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         {/* Current Rank Panel */}
         <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20" style={{ height: '280px' }}>
           <div className="flex flex-col h-full">
-            <div className="flex-1 mb-4 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl flex items-center justify-center border border-white/10">
+            <div className="text-center mb-4">
+              <h4 className="text-white text-lg font-bold">Dein aktueller Rang</h4>
+            </div>
+            <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl flex items-center justify-center border border-white/10">
               {user && (
                 <div className="text-center p-6">
                   <div className="flex items-center justify-center mb-3">
@@ -206,9 +207,6 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                   </p>
                 </div>
               )}
-            </div>
-            <div className="text-center">
-              <h4 className="text-white text-lg font-bold">Dein aktueller Rang</h4>
             </div>
           </div>
         </div>
