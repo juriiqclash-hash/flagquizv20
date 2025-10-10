@@ -5,7 +5,6 @@ import { Menu, Home, Trophy, Users, Shield, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Leaderboard from '@/components/Leaderboard';
 import { Card, CardContent } from '@/components/ui/card';
-import { ClanMenu } from '@/components/ClanMenu';
 
 interface HamburgerMenuProps {
   onNavigateHome: () => void;
@@ -148,10 +147,22 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz' }:
         </DialogContent>
       </Dialog>
 
-      <ClanMenu
-        open={clansDialogOpen}
-        onClose={() => setClansDialogOpen(false)}
-      />
+      <Dialog open={clansDialogOpen} onOpenChange={setClansDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Clans</DialogTitle>
+          </DialogHeader>
+          <Card>
+            <CardContent className="py-12 text-center">
+              <Shield className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-xl font-semibold mb-2">Bald verfügbar!</h3>
+              <p className="text-muted-foreground">
+                Die Clan-Funktion wird in Kürze verfügbar sein. Hier kannst du bald einem Clan beitreten oder deinen eigenen erstellen.
+              </p>
+            </CardContent>
+          </Card>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
