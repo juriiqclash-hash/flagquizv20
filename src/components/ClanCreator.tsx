@@ -3,8 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
-import { X, Plus, Upload, Image as ImageIcon } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface ClanCreatorProps {
@@ -16,15 +15,13 @@ export const ClanCreator = ({ onClose, onClanCreated }: ClanCreatorProps) => {
   const { toast } = useToast();
   const [clanName, setClanName] = useState('');
   const [clanEmoji, setClanEmoji] = useState('');
-  const [description, setDescription] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleCreate = async () => {
     if (!clanName.trim() || !clanEmoji.trim()) {
       toast({
         title: 'Fehler',
-        description: 'Bitte fülle Name und Emoji aus',
+        description: 'Bitte fülle beide Felder aus',
         variant: 'destructive'
       });
       return;
@@ -40,8 +37,6 @@ export const ClanCreator = ({ onClose, onClanCreated }: ClanCreatorProps) => {
         .insert({
           name: clanName.trim(),
           emoji: clanEmoji.trim(),
-          description: description.trim() || null,
-          image_url: imageUrl.trim() || null,
           created_by: user.id
         })
         .select()
@@ -117,55 +112,6 @@ export const ClanCreator = ({ onClose, onClanCreated }: ClanCreatorProps) => {
             />
             <p className="text-xs text-muted-foreground">
               Tipp: Kopiere ein Emoji von deiner Tastatur oder verwende Windows + .
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="clan-description">Beschreibung (optional)</Label>
-            <Textarea
-              id="clan-description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Beschreibe deinen Clan..."
-              maxLength={200}
-              rows={3}
-              className="resize-none"
-            />
-            <p className="text-xs text-muted-foreground text-right">
-              {description.length}/200
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="clan-image">Bild-URL (optional)</Label>
-            <div className="flex gap-2">
-              <Input
-                id="clan-image"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://beispiel.com/bild.jpg"
-                type="url"
-              />
-            </div>
-            {imageUrl && (
-              <div className="mt-2 rounded-lg overflow-hidden border-2 border-border w-full h-32 bg-gradient-to-br from-primary/10 to-secondary/10">
-                <img
-                  src={imageUrl}
-                  alt="Vorschau"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    const parent = e.currentTarget.parentElement;
-                    if (parent) {
-                      parent.innerHTML = '<div class="flex items-center justify-center h-full text-muted-foreground"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></div>';
-                    }
-                  }}
-                />
-              </div>
-            )}
-            <p className="text-xs text-muted-foreground">
-              <ImageIcon className="w-3 h-3 inline mr-1" />
-              Nutze eine öffentlich zugängliche Bild-URL
             </p>
           </div>
 
