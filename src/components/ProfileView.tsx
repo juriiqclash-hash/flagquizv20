@@ -415,9 +415,10 @@ export const ProfileView = ({
           <X className="w-5 h-5 text-gray-600" />
         </button>
 
-        <div className="w-full max-w-7xl flex flex-col h-full max-h-screen justify-center">
+        <div className="w-full max-w-7xl flex flex-col h-full max-h-screen">
           {/* Top Section: Avatar + Username + Level + Progress + Customization */}
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 mb-3 md:mb-4">
+          <div className="flex-1 flex items-center justify-center">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10">
             {/* Avatar Column - Centered on mobile */}
             <div className="flex flex-col items-center">
               <Avatar className="h-40 w-40 md:h-64 md:w-64 ring-4 md:ring-8 ring-white shadow-2xl">
@@ -506,10 +507,11 @@ export const ProfileView = ({
               </div>
             </div>
           </div>
+          </div>
 
 
           {/* Player Stats Header */}
-          <h2 className="text-[10px] md:text-sm font-bold text-gray-300 uppercase tracking-[0.2em] md:tracking-[0.25em] mb-2 md:mb-3 md:mt-auto text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+          <h2 className="text-[10px] md:text-sm font-bold text-gray-300 uppercase tracking-[0.2em] md:tracking-[0.25em] mb-2 md:mb-3 text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
             PLAYER STATS
           </h2>
 
