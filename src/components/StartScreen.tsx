@@ -464,10 +464,11 @@ export default function StartScreen({
         </div>
         <ProfileButton
           onOpenAdminPanel={onOpenAdminPanel}
+          initialOpen={shouldOpenProfile}
           onProfileOpenChange={(open) => {
             setIsProfileOpen(open);
-            if (!open && shouldOpenProfile && onBackToMainMenu) {
-              onBackToMainMenu();
+            if (!open && shouldOpenProfile) {
+              onProfileOpened?.();
             }
           }}
         />

@@ -18,6 +18,7 @@ interface ProfileButtonProps {
   transparentStyle?: boolean;
   onOpenAdminPanel?: () => void;
   onProfileOpenChange?: (open: boolean) => void;
+  initialOpen?: boolean;
 }
 
 interface SavedAccount {
@@ -30,18 +31,18 @@ interface SavedAccount {
   };
 }
 
-const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOpenChange }: ProfileButtonProps) => {
+const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOpenChange, initialOpen = false }: ProfileButtonProps) => {
   const { user, signOut } = useAuth();
   const { isAdmin, loading: adminLoading } = useAdmin();
   const { toast } = useToast();
-  
+
   // Debug log
   useEffect(() => {
     if (user && !adminLoading) {
-      console.log('Admin check:', { 
-        email: user.email, 
-        isAdmin, 
-        hasCallback: !!onOpenAdminPanel 
+      console.log('Admin check:', {
+        email: user.email,
+        isAdmin,
+        hasCallback: !!onOpenAdminPanel
       });
     }
   }, [user, isAdmin, adminLoading, onOpenAdminPanel]);
@@ -50,7 +51,13 @@ const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOp
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [showAddUserDialog, setShowAddUserDialog] = useState(false);
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
-  const [showProfileView, setShowProfileView] = useState(false);
+  const [showProfileView, setShowProfileView] = useState(initialOpen);
+
+  useEffect(() => {
+    if (initialOpen && user) {
+      setShowProfileView(true);
+    }
+  }, [initialOpen, user]);
 
   const handleProfileViewChange = (open: boolean) => {
     setShowProfileView(open);
