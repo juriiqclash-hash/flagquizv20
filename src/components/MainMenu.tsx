@@ -8,8 +8,9 @@ import { useTranslation } from "@/data/translations";
 import FlagQuizLogo from "@/components/FlagQuizLogo";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserStats } from "@/hooks/useUserStats";
-import { getRankFromLevel, getRankTier } from "@/lib/rankSystem";
+
 import { calculateLevel } from "@/lib/xpSystem";
+import { calculateRank as calculateProfileRank } from "@/lib/profileRank";
 interface MainMenuProps {
   onStart: () => void;
   onMultiplayerStart?: () => void;
@@ -25,8 +26,12 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
   const userXP = stats?.xp ?? 0;
   const userLevel = calculateLevel(userXP);
-  const userRank = getRankFromLevel(userLevel);
-  const rankTier = getRankTier(userLevel, userRank);
+  const profileRank = stats ? calculateProfileRank({
+    bestStreak: stats.best_streak ?? 0,
+    bestTimeMode: stats.time_mode_best_score ?? 0,
+    duelWins: stats.multiplayer_wins ?? 0,
+    bestPosition: 0,
+  }, userLevel) : null;
 
   const handleStart = () => {
     setIsLoading(true);
@@ -198,13 +203,13 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                 <div className="text-center p-6">
                   <div className="flex items-center justify-center mb-3">
                     <img
-                      src={userRank.image}
-                      alt={userRank.name}
+                      src={profileRank?.badge}
+                      alt={profileRank?.name || 'Rank'}
                       className="w-24 h-24 object-contain drop-shadow-2xl"
                     />
                   </div>
-                  <p className="text-white text-xl font-bold" style={{ color: userRank.color }}>
-                    {userRank.name.toUpperCase()}
+                  <p className="text-white text-xl font-bold">
+                    {(profileRank?.name || 'Rank').toUpperCase()}
                   </p>
                 </div>
               ) : (
