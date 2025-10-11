@@ -447,7 +447,8 @@ export const PublicProfileView = ({ userId, onClose }: PublicProfileViewProps) =
                     </div>
                   ) : (
                     <div className="w-20 h-20 md:w-28 md:h-28 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center opacity-50">
-                      <span className="text-gray-400 text-xs">Flag</span>
+                      <span className="text-gray-400 text-3xl md:text-5xl mb-0.5 md:mb-1">+</span>
+                      <span className="text-gray-500 text-[8px] md:text-xs font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Flag</span>
                     </div>
                   )}
 
@@ -465,7 +466,8 @@ export const PublicProfileView = ({ userId, onClose }: PublicProfileViewProps) =
                     </div>
                   ) : (
                     <div className="w-20 h-20 md:w-28 md:h-28 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center opacity-50">
-                      <span className="text-gray-400 text-xs">Continent</span>
+                      <span className="text-gray-400 text-3xl md:text-5xl mb-0.5 md:mb-1">+</span>
+                      <span className="text-gray-500 text-[8px] md:text-xs font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Continent</span>
                     </div>
                   )}
 
@@ -483,7 +485,8 @@ export const PublicProfileView = ({ userId, onClose }: PublicProfileViewProps) =
                     </div>
                   ) : (
                     <div className="w-20 h-20 md:w-28 md:h-28 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center opacity-50">
-                      <span className="text-gray-400 text-xs">Clan</span>
+                      <span className="text-gray-400 text-3xl md:text-5xl mb-0.5 md:mb-1">+</span>
+                      <span className="text-gray-500 text-[8px] md:text-xs font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Clan</span>
                     </div>
                   )}
                 </div>

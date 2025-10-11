@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Play, Loader2, Languages, Users, Calendar, Search, UserPlus } from "lucide-react";
+import { Play, Loader2, Languages, Users, Calendar, Search } from "lucide-react";
 import ProfileButton from "@/components/ProfileButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
@@ -110,14 +110,6 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
       {/* Profile and Search Buttons - Top Right */}
       <div className="absolute top-4 right-4 z-20 flex gap-2">
-        <Button
-          onClick={() => setShowFriendsMenu(true)}
-          variant="ghost"
-          size="icon"
-          className="bg-white/10 hover:bg-white/20 text-white border-white/20"
-        >
-          <UserPlus className="h-5 w-5" />
-        </Button>
         <Button
           onClick={() => setShowPlayerSearch(true)}
           variant="ghost"
