@@ -590,10 +590,16 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       />
 
       {selectedUserId && (
-        <PublicProfileView
-          userId={selectedUserId}
-          onClose={() => setSelectedUserId(null)}
-        />
+        <Dialog open={true} onOpenChange={() => setSelectedUserId(null)}>
+          <DialogContent className="max-w-3xl relative overflow-hidden border-2 border-white/20 bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 p-0">
+            <div className="relative z-10">
+              <PublicProfileView
+                userId={selectedUserId}
+                onClose={() => setSelectedUserId(null)}
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
       )}
 
       <Dialog open={showLeaderboard} onOpenChange={setShowLeaderboard}>
