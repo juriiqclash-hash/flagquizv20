@@ -11,7 +11,7 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
   
   // Smaller stroke for smaller sizes to prevent overlap on mobile
   const getStrokeWidth = () => {
-    if (size === 'sm') return isDark ? '1px #3b82f6' : '1px #1e40af';
+    if (size === 'sm') return isDark ? '2px #3b82f6' : '2px #1e40af';
     if (size === 'md') return isDark ? '1.5px #3b82f6' : '1.5px #1e40af';
     if (size === 'lg') return isDark ? '2.5px #3b82f6' : '2.5px #1e40af';
     return isDark ? '8px #3b82f6' : '3px #1e40af'; // xl
