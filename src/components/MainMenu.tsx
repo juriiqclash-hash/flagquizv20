@@ -445,26 +445,33 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         </div>
 
         {/* Quick Access Section */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20">
-          <h3 className="text-white text-xl font-bold mb-4">{t.quickAccess}</h3>
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20" style={{ height: '280px' }}>
+          <div className="flex flex-col h-full">
+            <h3 className="text-white text-xl font-bold mb-4">{t.quickAccess}</h3>
 
-          {/* Multiplayer Card */}
-          <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-5 border border-white/10">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                  <img src="/10614367 copy.png" alt="Multiplayer" className="w-8 h-8 object-contain" />
+            {/* Multiplayer Card with diagonal stripes */}
+            <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-5 border border-white/10 relative overflow-hidden">
+              {/* Diagonal stripe pattern */}
+              <div className="absolute inset-0 opacity-20" style={{
+                backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,0.1) 35px, rgba(255,255,255,0.1) 70px)',
+              }}></div>
+
+              <div className="relative z-10 flex items-center justify-between h-full">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                    <img src="/10614367 copy.png" alt="Multiplayer" className="w-8 h-8 object-contain" />
+                  </div>
+                  <div>
+                    <h4 className="text-white text-lg font-bold">{t.multiplayer}</h4>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-white text-lg font-bold">{t.multiplayer}</h4>
-                </div>
+                <Button
+                  onClick={handleMultiplayer}
+                  className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg"
+                >
+                  <span className="text-lg">PLAY</span>
+                </Button>
               </div>
-              <Button
-                onClick={handleMultiplayer}
-                className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg"
-              >
-                <span className="text-lg">PLAY</span>
-              </Button>
             </div>
           </div>
         </div>
@@ -506,33 +513,29 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         </div>
 
         {/* Current Rank Panel */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20" style={{ height: '280px' }}>
-          <div className="flex flex-col h-full">
-            <div className="text-center mb-4">
-              <h4 className="text-white text-lg font-bold">{t.yourCurrentRank}</h4>
-            </div>
-            <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl flex items-center justify-center border border-white/10">
-              {user ? (
-                <div className="text-center p-6">
-                  <div className="flex items-center justify-center mb-3">
-                    <img
-                      src={profileRank?.badge}
-                      alt={profileRank?.name || 'Rank'}
-                      className="w-24 h-24 object-contain drop-shadow-2xl"
-                    />
-                  </div>
-                  <p className="text-white text-xl font-bold">
-                    {(profileRank?.name || 'Rank').toUpperCase()}
-                  </p>
-                </div>
-              ) : (
-                <div className="text-center p-6">
-                  <p className="text-white/70 text-base">
-                    {t.loginToViewRank}
-                  </p>
-                </div>
-              )}
-            </div>
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20">
+          <h3 className="text-white text-xl font-bold mb-4">{t.yourCurrentRank}</h3>
+
+          {/* Rank Card */}
+          <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-5 border border-white/10">
+            {user ? (
+              <div className="flex items-center gap-4">
+                <img
+                  src={profileRank?.badge}
+                  alt={profileRank?.name || 'Rank'}
+                  className="w-20 h-20 object-contain drop-shadow-2xl flex-shrink-0"
+                />
+                <p className="text-white text-2xl font-bold">
+                  {(profileRank?.name || 'Rank').toUpperCase()}
+                </p>
+              </div>
+            ) : (
+              <div className="text-center p-4">
+                <p className="text-white/70 text-base">
+                  {t.loginToViewRank}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
