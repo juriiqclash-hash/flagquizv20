@@ -351,8 +351,8 @@ export const PublicProfileView = ({
         </button>
 
         <div className="w-full max-w-7xl flex flex-col h-full max-h-screen">
-          <div className="flex-1 flex items-center mb-3 md:mb-4 md:pl-2">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full md:justify-center">
+          <div className="flex-1 flex items-start pt-8 md:pt-12 mb-3 md:mb-4 md:pl-2">
+            <div className="flex flex-col items-center md:items-start gap-4 md:gap-6 w-full">
               <div className="flex flex-col items-center md:items-start">
                 <Avatar className="h-40 w-40 md:h-64 md:w-64 ring-4 md:ring-8 ring-white shadow-2xl">
                   <AvatarImage src={avatarUrl} />
@@ -362,7 +362,7 @@ export const PublicProfileView = ({
                 </Avatar>
               </div>
 
-              <div className="flex flex-col items-center md:items-start">
+              <div className="flex flex-col items-center md:items-start w-full md:w-auto">
                 <h1 className="text-4xl md:text-7xl font-bold text-white mb-1 md:mb-3 leading-none text-center md:text-left" style={{
                 fontFamily: '"VAG Rounded", sans-serif'
               }}>
@@ -379,7 +379,9 @@ export const PublicProfileView = ({
                   width: `${Math.max(2, Math.min(levelProgress, 100))}%`
                 }} />
                 </div>
+              </div>
 
+              <div className="flex flex-col items-center md:items-start w-full md:w-auto">
                 <div className="flex gap-2 md:gap-3 justify-center md:justify-start mb-3">
                   {profileData.flag ? <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
                       <span className="text-3xl md:text-5xl mb-0.5 md:mb-1" style={{
@@ -440,7 +442,7 @@ export const PublicProfileView = ({
                         <UserMinus className="w-4 h-4 mr-2" />
                         Freund entfernen
                       </Button>}
-                    <Button onClick={() => setShowClanView(true)} className="bg-purple-500 hover:bg-purple-600 text-white">
+                    <Button onClick={() => setShowClanView(true)} className="bg-blue-500 hover:bg-blue-600 text-white">
                       <Users className="w-4 h-4 mr-2" />
                       Clan anschauen
                     </Button>
