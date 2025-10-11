@@ -452,7 +452,7 @@ export const ProfileView = ({
       </div>
 
       {/* Rank Info Dialog */}
-      {showRankInfo && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+      {showRankInfo && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[120]">
           <div className="bg-white rounded-2xl p-6 max-w-4xl w-full mx-4">
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-bold text-2xl">Rank Übersicht</h3>
@@ -501,7 +501,7 @@ export const ProfileView = ({
         </div>}
 
       {/* Selection Dialogs */}
-      {editingSlot === 'flag' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+      {editingSlot === 'flag' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[120]">
           <div className="bg-white rounded-2xl p-6 max-w-4xl max-h-[80vh] overflow-y-auto w-full mx-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-xl">{t.selectFlagProfile}</h3>
@@ -522,7 +522,7 @@ export const ProfileView = ({
           </div>
         </div>}
 
-      {editingSlot === 'continent' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+      {editingSlot === 'continent' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[120]">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-xl">{t.selectContinentProfile}</h3>
@@ -539,7 +539,7 @@ export const ProfileView = ({
           </div>
         </div>}
 
-      {editingSlot === 'clan' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+      {editingSlot === 'clan' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[120]">
           <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-xl">{t.selectClanProfile}</h3>
