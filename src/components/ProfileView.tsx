@@ -278,15 +278,15 @@ export const ProfileView = ({
   };
   if (!open) return null;
   return <>
-      <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-[100] bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex items-center justify-center p-4">
         {/* Close Button */}
-        <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
+        <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-[110] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
         </button>
 
-        <div className="w-full max-w-7xl flex flex-col h-full max-h-screen">
+        <div className="w-full max-w-7xl flex flex-col h-full max-h-screen pb-8">
           {/* Top Section: Avatar + Username + Level + Progress + Customization */}
-          <div className="flex-1 flex items-center mb-3 md:mb-4 md:pl-2">
+          <div className="flex-1 flex items-end mb-3 md:mb-4 md:pl-2">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full">
             {/* Avatar Column - Centered on mobile */}
             <div className="flex flex-col items-center">
