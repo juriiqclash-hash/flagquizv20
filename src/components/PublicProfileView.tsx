@@ -346,17 +346,16 @@ export const PublicProfileView = ({
   if (!userId) return null;
   return <>
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
         style={{
-          background: 'linear-gradient(to bottom right, #172554, #1e3a8a, #1e3a8a, #1e40af)',
-          backgroundImage: 'linear-gradient(to bottom right, rgb(23, 37, 84), rgb(30, 58, 138), rgb(30, 64, 175))',
+          background: 'linear-gradient(to bottom right, rgb(23, 37, 84), rgb(30, 58, 138), rgb(30, 64, 175))',
         }}
       >
-        <button onClick={onClose} className="fixed top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
+        <button onClick={onClose} className="fixed top-4 right-4 z-[60] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
         </button>
 
-        <div className="w-full max-w-7xl flex flex-col h-full max-h-screen">
+        <div className="w-full max-w-7xl flex flex-col py-16 md:py-8">
           <div className="flex-1 flex items-center mb-3 md:mb-4 md:pl-2">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full">
               <div className="flex flex-col items-center">
