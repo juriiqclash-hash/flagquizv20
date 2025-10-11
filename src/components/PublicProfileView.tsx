@@ -397,8 +397,8 @@ export const PublicProfileView = ({
                         {profileData.flag}
                       </span>
                     </div> : <div className="w-20 h-20 md:w-28 md:h-28 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center opacity-50">
-                      <span className="text-gray-400 text-3xl md:text-5xl mb-0.5 md:mb-1">+</span>
-                      
+                      <span className="text-gray-300 text-3xl md:text-5xl mb-0.5 md:mb-1">+</span>
+
                     </div>}
 
                   {profileData.continent ? <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
@@ -411,8 +411,8 @@ export const PublicProfileView = ({
                         {profileData.continent}
                       </span>
                     </div> : <div className="w-20 h-20 md:w-28 md:h-28 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center opacity-50">
-                      <span className="text-gray-400 text-3xl md:text-5xl mb-0.5 md:mb-1">+</span>
-                      
+                      <span className="text-gray-300 text-3xl md:text-5xl mb-0.5 md:mb-1">+</span>
+
                     </div>}
 
                   {profileData.clan ? <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
@@ -425,8 +425,8 @@ export const PublicProfileView = ({
                         {profileData.clan}
                       </span>
                     </div> : <div className="w-20 h-20 md:w-28 md:h-28 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center opacity-50">
-                      <span className="text-gray-400 text-3xl md:text-5xl mb-0.5 md:mb-1">+</span>
-                      
+                      <span className="text-gray-300 text-3xl md:text-5xl mb-0.5 md:mb-1">+</span>
+
                     </div>}
                 </div>
 
