@@ -110,9 +110,12 @@ export default function StartScreen({
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
+  const [cameFromMainMenu, setCameFromMainMenu] = useState(false);
+
   useEffect(() => {
     if (shouldOpenProfile) {
       setIsProfileOpen(true);
+      setCameFromMainMenu(true);
       onProfileOpened?.();
     }
   }, [shouldOpenProfile, onProfileOpened]);
@@ -467,8 +470,9 @@ export default function StartScreen({
           initialOpen={shouldOpenProfile}
           onProfileOpenChange={(open) => {
             setIsProfileOpen(open);
-            if (!open && shouldOpenProfile) {
-              onProfileOpened?.();
+            if (!open && cameFromMainMenu && onBackToMainMenu) {
+              setCameFromMainMenu(false);
+              onBackToMainMenu();
             }
           }}
         />
