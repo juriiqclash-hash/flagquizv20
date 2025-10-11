@@ -339,7 +339,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                   size="icon"
                   className="text-white hover:bg-white/20 rounded-lg flex-shrink-0 w-10 h-10"
                 >
-                  <Search className="h-5 w-5" />
+                  <Search className="h-6 w-6" strokeWidth={3} />
                 </Button>
                 {searchExpanded && (
                   <Input

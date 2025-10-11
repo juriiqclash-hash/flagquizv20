@@ -338,7 +338,7 @@ export default function StartScreen({
               size="icon"
               className="rounded-lg flex-shrink-0"
             >
-              <Search className="h-5 w-5" />
+              <Search className="h-6 w-6" strokeWidth={3} />
             </Button>
             {searchExpanded && (
               <Input
