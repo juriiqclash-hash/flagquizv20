@@ -504,12 +504,12 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           <div className="flex flex-col h-full">
             <h3 className="text-white text-xl font-bold mb-4">{t.quickAccess}</h3>
 
-            <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl py-6 px-8 border border-white/10 relative overflow-hidden flex flex-col items-center justify-center gap-3">
-              <img src="/trophy-3d-icon-illustration-png copy.webp" alt="Trophy" className="w-20 h-20 object-contain drop-shadow-2xl" />
-              <h4 className="text-white text-xl font-bold italic">{t.multiplayer.toUpperCase()}</h4>
+            <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl py-6 px-8 border border-white/10 relative overflow-hidden flex flex-col items-center justify-center gap-2">
+              <img src="/trophy-3d-icon-illustration-png copy.webp" alt="Trophy" className="w-20 h-20 object-contain drop-shadow-2xl -mt-4" />
+              <h4 className="text-white text-xl font-bold italic -mt-2">{t.multiplayer.toUpperCase()}</h4>
               <Button
                 onClick={handleMultiplayer}
-                className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-12 py-3 rounded-full transition-all duration-300 shadow-lg"
+                className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-12 py-3 rounded-full transition-all duration-300 shadow-lg -mt-1"
               >
                 <span className="text-lg">PLAY</span>
               </Button>
