@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Flame, Clock, Trophy, X, Info, UserPlus, UserMinus, Check, Plus } from 'lucide-react';
+import { Flame, Clock, Trophy, X, Info, UserPlus, UserMinus, Check, Plus, Users } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { getXPProgress } from '@/lib/xpSystem';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -107,6 +107,7 @@ export const PublicProfileView = ({
   const [profileData, setProfileData] = useState<ProfileData>({});
   const [loading, setLoading] = useState(true);
   const [showRankInfo, setShowRankInfo] = useState(false);
+  const [showClanView, setShowClanView] = useState(false);
   const [allClans, setAllClans] = useState<Clan[]>([...DEFAULT_CLANS]);
   const [friendshipStatus, setFriendshipStatus] = useState<'none' | 'pending_sent' | 'pending_received' | 'friends'>('none');
   const [friendRequestId, setFriendRequestId] = useState<string | null>(null);
@@ -351,22 +352,17 @@ export const PublicProfileView = ({
 
         <div className="w-full max-w-7xl flex flex-col h-full max-h-screen">
           <div className="flex-1 flex items-center mb-3 md:mb-4 md:pl-2">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full">
-              <div className="flex flex-col items-center">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full md:justify-center">
+              <div className="flex flex-col items-center md:items-start">
                 <Avatar className="h-40 w-40 md:h-64 md:w-64 ring-4 md:ring-8 ring-white shadow-2xl">
                   <AvatarImage src={avatarUrl} />
                   <AvatarFallback className="text-6xl md:text-9xl bg-blue-500 text-white">
                     {username.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <p className="text-sm text-gray-300 mt-3 font-medium hidden md:block" style={{
-                fontFamily: '"VAG Rounded", sans-serif'
-              }}>
-                  Joined {accountCreated}
-                </p>
               </div>
 
-              <div className="flex-1 flex flex-col items-center md:items-start w-full">
+              <div className="flex flex-col items-center md:items-start">
                 <h1 className="text-4xl md:text-7xl font-bold text-white mb-1 md:mb-3 leading-none text-center md:text-left" style={{
                 fontFamily: '"VAG Rounded", sans-serif'
               }}>
@@ -384,7 +380,7 @@ export const PublicProfileView = ({
                 }} />
                 </div>
 
-                <div className="flex gap-2 md:gap-3 justify-center md:justify-start mb-4">
+                <div className="flex gap-2 md:gap-3 justify-center md:justify-start mb-3">
                   {profileData.flag ? <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
                       <span className="text-3xl md:text-5xl mb-0.5 md:mb-1" style={{
                     fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif'
@@ -427,7 +423,7 @@ export const PublicProfileView = ({
                     </div>}
                 </div>
 
-                {currentUser && currentUser.id !== userId && <div className="flex gap-2 justify-center md:justify-start">
+                {currentUser && currentUser.id !== userId && <div className="flex gap-2 justify-center md:justify-start flex-wrap">
                     {friendshipStatus === 'none' && <Button onClick={sendFriendRequest} className="bg-blue-500 hover:bg-blue-600 text-white">
                         <UserPlus className="w-4 h-4 mr-2" />
                         Freund hinzufügen
@@ -444,6 +440,10 @@ export const PublicProfileView = ({
                         <UserMinus className="w-4 h-4 mr-2" />
                         Freund entfernen
                       </Button>}
+                    <Button onClick={() => setShowClanView(true)} className="bg-purple-500 hover:bg-purple-600 text-white">
+                      <Users className="w-4 h-4 mr-2" />
+                      Clan anschauen
+                    </Button>
                   </div>}
               </div>
             </div>
@@ -572,6 +572,25 @@ export const PublicProfileView = ({
             <div className="p-4 bg-blue-50 rounded-xl">
               <p className="text-sm text-gray-700 text-center">
                 Dein Rang wird basierend auf dem Durchschnitt deiner Scores berechnet.
+              </p>
+            </div>
+          </div>
+        </div>}
+
+      {showClanView && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+          <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-bold text-2xl">Clan System</h3>
+              <button onClick={() => setShowClanView(false)} className="p-1 hover:bg-gray-100 rounded-full">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-8 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl text-center">
+              <Users className="w-16 h-16 mx-auto mb-4 text-purple-500" />
+              <h4 className="text-xl font-bold text-gray-800 mb-2">Clans kommen bald!</h4>
+              <p className="text-gray-600">
+                Das Clan-System befindet sich derzeit in der Entwicklung. Bald kannst du hier die Clan-Details sehen.
               </p>
             </div>
           </div>
