@@ -200,10 +200,10 @@ const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOp
   if (!user) {
     return (
       <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
-        <Button 
-          variant="outline" 
-          className={transparentStyle 
-            ? "bg-white/10 text-white border-white/20 hover:bg-white/20" 
+        <Button
+          variant="outline"
+          className={transparentStyle
+            ? "bg-transparent text-white border-white/20 hover:bg-white/20"
             : ""
           }
           onClick={() => setShowAuthDialog(true)}
@@ -222,10 +222,10 @@ const ProfileButton = ({ transparentStyle = false, onOpenAdminPanel, onProfileOp
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button 
-            variant="outline" 
-            className={transparentStyle 
-              ? "bg-white/10 text-white border-white/20 hover:bg-white/20 gap-2" 
+          <Button
+            variant="outline"
+            className={transparentStyle
+              ? "bg-transparent text-white border-white/20 hover:bg-white/20 gap-2"
               : "gap-2"
             }
           >
