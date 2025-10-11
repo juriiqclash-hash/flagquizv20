@@ -278,7 +278,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         <div ref={searchRef} className="relative">
           <div
             className={`flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 transition-all duration-300 ${
-              searchExpanded ? 'w-[350px]' : 'w-10 h-10'
+              searchExpanded ? 'w-[280px]' : 'w-10 h-10'
             }`}
           >
             <Button
@@ -301,7 +301,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           </div>
 
           {searchExpanded && (searchQuery || loading) && (
-            <div className="absolute top-12 right-0 w-[350px] bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto">
+            <div className="absolute top-12 right-0 w-[280px] bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto">
               {loading && (
                 <div className="text-center py-8 text-gray-400">
                   {t.loading || 'Lädt...'}
@@ -327,7 +327,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                       }}
                       className="w-full flex items-center gap-3 p-3 hover:bg-white/20 rounded-lg transition-colors"
                     >
-                      <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center flex-shrink-0 text-white">
+                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500/30 to-purple-500/30 border border-blue-400/30 flex items-center justify-center flex-shrink-0 text-blue-200">
                         {QUIZ_MODE_ICONS[quiz.id]}
                       </div>
                       <div className="flex-1 text-left min-w-0">
