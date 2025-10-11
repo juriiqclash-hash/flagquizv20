@@ -352,7 +352,7 @@ export const PublicProfileView = ({
 
         <div className="w-full max-w-7xl flex flex-col h-full max-h-screen">
           <div className="flex-1 flex items-center mb-3 md:mb-4 md:pl-2">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full md:justify-center">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full">
               <div className="flex flex-col items-center md:items-start">
                 <Avatar className="h-40 w-40 md:h-64 md:w-64 ring-4 md:ring-8 ring-white shadow-2xl">
                   <AvatarImage src={avatarUrl} />
@@ -360,9 +360,14 @@ export const PublicProfileView = ({
                     {username.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
+                <p className="text-sm text-gray-300 mt-3 font-medium hidden md:block" style={{
+                fontFamily: '"VAG Rounded", sans-serif'
+              }}>
+                  Joined {accountCreated}
+                </p>
               </div>
 
-              <div className="flex flex-col items-center md:items-start">
+              <div className="flex-1 flex flex-col items-center md:items-start w-full">
                 <h1 className="text-4xl md:text-7xl font-bold text-white mb-1 md:mb-3 leading-none text-center md:text-left" style={{
                 fontFamily: '"VAG Rounded", sans-serif'
               }}>
@@ -440,7 +445,7 @@ export const PublicProfileView = ({
                         <UserMinus className="w-4 h-4 mr-2" />
                         Freund entfernen
                       </Button>}
-                    <Button onClick={() => setShowClanView(true)} className="bg-purple-500 hover:bg-purple-600 text-white">
+                    <Button onClick={() => setShowClanView(true)} className="bg-blue-500 hover:bg-blue-600 text-white">
                       <Users className="w-4 h-4 mr-2" />
                       Clan anschauen
                     </Button>
