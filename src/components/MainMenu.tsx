@@ -278,10 +278,10 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
       {/* Profile and Search Buttons - Top Right */}
       <div className="absolute top-4 right-4 z-20 flex gap-2 items-center">
-        <div ref={searchRef} className="relative hidden md:block">
+        <div ref={searchRef} className="relative">
           <div
             className={`flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 transition-all duration-300 ${
-              searchExpanded ? 'w-[350px]' : 'w-10 h-10'
+              searchExpanded ? 'w-full md:w-[350px]' : 'w-10 h-10'
             }`}
           >
             <Button
@@ -304,7 +304,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           </div>
 
           {searchExpanded && (searchQuery || loading) && (
-            <div className="absolute top-12 right-0 w-[350px] bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto">
+            <div className="absolute top-12 right-0 w-full md:w-[350px] bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto">
               {loading && (
                 <div className="text-center py-8 text-gray-400">
                   {t.loading || 'Lädt...'}
