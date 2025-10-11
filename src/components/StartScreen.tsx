@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, BookOpen, Target, MapPin, Map, Zap, Building, Globe, Smile, Trophy, Users, Play, Mountain, Languages, ArrowLeft, Home, Layers, Search } from "lucide-react";
 import ContinentSelector from "./ContinentSelector";
@@ -10,7 +12,6 @@ import HamburgerMenu from "./HamburgerMenu";
 import ProfileButton from "./ProfileButton";
 import MultiplayerMenu from "./MultiplayerMenu";
 import BannedScreen from "./BannedScreen";
-import { PlayerSearch } from "./PlayerSearch";
 import { PublicProfileView } from "./PublicProfileView";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
@@ -24,6 +25,36 @@ interface StartScreenProps {
   onOpenAdminPanel?: () => void;
   onBackToMainMenu?: () => void;
 }
+interface QuizResult {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+}
+
+interface SearchResult {
+  user_id: string;
+  username: string;
+  avatar_url: string | null;
+  level: number;
+  xp: number;
+}
+
+const QUIZ_MODES: QuizResult[] = [
+  { id: 'timed', name: 'Zeitlimit Modus', description: 'Beantworte so viele Fragen wie möglich', icon: '⏱️' },
+  { id: 'learn', name: 'Lernmodus', description: 'Üben ohne Zeitdruck', icon: '📖' },
+  { id: 'streak', name: 'Streak Modus', description: 'Wie viele richtige Antworten schaffst du in Folge?', icon: '🎯' },
+  { id: 'continent', name: 'Kontinent Modus', description: 'Wähle einen spezifischen Kontinent', icon: '🌍' },
+  { id: 'speedrush', name: 'Speed Rush', description: 'Beantworte 10 Fragen so schnell wie möglich', icon: '⚡' },
+  { id: 'capitals', name: 'Hauptstädte', description: 'Erkenne das Land anhand der Hauptstadt', icon: '🏛️' },
+  { id: 'emoji', name: 'Emoji Modus', description: 'Erkenne Länder anhand ihrer Flaggen-Emojis', icon: '😃' },
+  { id: 'highest-mountain', name: 'Höchste Berge', description: 'Erkenne den höchsten Berg jedes Landes', icon: '⛰️' },
+  { id: 'official-language', name: 'Amtssprachen', description: 'Erkenne die Amtssprache jedes Landes', icon: '🗣️' },
+  { id: 'world-knowledge', name: 'Weltwissen Quiz', description: 'Teste dein Wissen über Weltfakten', icon: '🌏' },
+  { id: 'combi-quiz', name: 'Combi-Quiz', description: 'Wähle deine Kategorien und spiele endlos', icon: '🎭' },
+  { id: 'multiplayer', name: 'Mehrspieler', description: 'Spiele gegen andere in Echtzeit', icon: '👥' },
+];
+
 export default function StartScreen({
   onStartQuiz,
   onStartMultiplayer,
@@ -44,8 +75,13 @@ export default function StartScreen({
   const [isBanned, setIsBanned] = useState(false);
   const [banInfo, setBanInfo] = useState<{ reason?: string; bannedAt?: string }>({});
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [showPlayerSearch, setShowPlayerSearch] = useState(false);
+  const [searchExpanded, setSearchExpanded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [playerResults, setPlayerResults] = useState<SearchResult[]>([]);
+  const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
+  const [loading, setLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkBanStatus = async () => {
@@ -102,6 +138,76 @@ export default function StartScreen({
       supabase.removeChannel(channel);
     };
   }, [user]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setSearchExpanded(false);
+        setSearchQuery('');
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const search = async () => {
+      if (!searchQuery.trim()) {
+        setPlayerResults([]);
+        setQuizResults([]);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const query = searchQuery.toLowerCase();
+
+        const filteredQuizzes = QUIZ_MODES.filter(quiz =>
+          quiz.name.toLowerCase().includes(query) ||
+          quiz.description.toLowerCase().includes(query)
+        );
+        setQuizResults(filteredQuizzes);
+
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('user_id, username, avatar_url')
+          .ilike('username', `${searchQuery}%`)
+          .limit(20);
+
+        if (profiles) {
+          const userIds = profiles.map(p => p.user_id);
+          const { data: statsData } = await supabase
+            .from('user_stats')
+            .select('user_id, level, xp')
+            .in('user_id', userIds);
+
+          const combined = profiles.map(profile => {
+            const userStat = statsData?.find(s => s.user_id === profile.user_id);
+            return {
+              user_id: profile.user_id,
+              username: profile.username,
+              avatar_url: profile.avatar_url,
+              level: userStat?.level || 0,
+              xp: userStat?.xp || 0,
+            };
+          });
+
+          setPlayerResults(combined);
+        }
+      } catch (error) {
+        console.error('Error searching:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const debounce = setTimeout(() => {
+      search();
+    }, 300);
+
+    return () => clearTimeout(debounce);
+  }, [searchQuery]);
   const handleModeClick = (mode: string) => {
     if (isBanned) return;
     
@@ -155,14 +261,103 @@ export default function StartScreen({
     return <CapitalVariantSelector onSelectVariant={handleCapitalVariantSelect} onBack={handleBack} />;
   }
   return <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 p-4 relative">
-      <div className="absolute top-4 right-4 z-50 flex gap-2">
-        <Button
-          onClick={() => setShowPlayerSearch(true)}
-          variant="outline"
-          size="icon"
-        >
-          <Search className="h-5 w-5" />
-        </Button>
+      <div className="absolute top-4 right-4 z-50 flex gap-2 items-center">
+        <div ref={searchRef} className="relative">
+          <div
+            className={`flex items-center gap-2 bg-background border rounded-full transition-all duration-300 ${
+              searchExpanded ? 'w-[400px]' : 'w-10 h-10'
+            }`}
+          >
+            <Button
+              onClick={() => setSearchExpanded(!searchExpanded)}
+              variant="outline"
+              size="icon"
+              className="rounded-full flex-shrink-0"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+            {searchExpanded && (
+              <Input
+                placeholder={t.searchPlayersPlaceholder}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-transparent border-none h-10 focus-visible:ring-0 pr-4"
+                autoFocus
+              />
+            )}
+          </div>
+
+          {searchExpanded && (searchQuery || loading) && (
+            <div className="absolute top-12 right-0 w-[400px] bg-background border rounded-2xl shadow-2xl max-h-[500px] overflow-y-auto">
+              {loading && (
+                <div className="text-center py-8 text-muted-foreground">
+                  {t.loading || 'Lädt...'}
+                </div>
+              )}
+
+              {!loading && searchQuery && playerResults.length === 0 && quizResults.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  Keine Ergebnisse gefunden
+                </div>
+              )}
+
+              {!loading && quizResults.length > 0 && (
+                <div className="p-2">
+                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2 py-2">Quiz</h3>
+                  {quizResults.map((quiz) => (
+                    <button
+                      key={quiz.id}
+                      onClick={() => {
+                        setSearchExpanded(false);
+                        setSearchQuery('');
+                      }}
+                      className="w-full flex items-center gap-3 p-3 hover:bg-accent rounded-lg transition-colors"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-lg flex-shrink-0">
+                        {quiz.icon}
+                      </div>
+                      <div className="flex-1 text-left min-w-0">
+                        <p className="font-semibold text-sm truncate">{quiz.name}</p>
+                        <p className="text-xs text-muted-foreground truncate">{quiz.description}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {!loading && playerResults.length > 0 && (
+                <div className="p-2">
+                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2 py-2">Spieler</h3>
+                  {playerResults.map((player) => (
+                    <button
+                      key={player.user_id}
+                      onClick={() => {
+                        setSelectedUserId(player.user_id);
+                        setSearchExpanded(false);
+                        setSearchQuery('');
+                      }}
+                      className="w-full flex items-center gap-3 p-3 hover:bg-accent rounded-lg transition-colors"
+                    >
+                      <Avatar className="h-8 w-8 ring-2 ring-border flex-shrink-0">
+                        <AvatarImage src={player.avatar_url || undefined} />
+                        <AvatarFallback className="bg-primary text-primary-foreground text-sm">
+                          {player.username.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+
+                      <div className="flex-1 text-left min-w-0">
+                        <p className="font-semibold text-sm truncate">{player.username}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {t.level || 'Level'} {player.level} • {player.xp} XP
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
         <ProfileButton
           onOpenAdminPanel={onOpenAdminPanel}
           onProfileOpenChange={setIsProfileOpen}
@@ -423,12 +618,6 @@ export default function StartScreen({
           <p className="text-sm text-muted-foreground">Erkenne die Flaggen von Afrika, Asien, Europa, Nord- und Südamerika sowie Ozeanien. Made by ijuriqu</p>
         </div>
       </div>
-
-      <PlayerSearch
-        open={showPlayerSearch}
-        onOpenChange={setShowPlayerSearch}
-        onPlayerSelect={(userId) => setSelectedUserId(userId)}
-      />
 
       {selectedUserId && (
         <PublicProfileView
