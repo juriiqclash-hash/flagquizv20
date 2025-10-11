@@ -170,9 +170,9 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
             </div>
             <Button
               onClick={handleDailyChallenge}
-              className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 relative overflow-hidden shadow-lg"
+              className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 relative overflow-hidden shadow-lg"
               style={{
-                boxShadow: '0 6px 20px rgba(34, 197, 94, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
+                boxShadow: '0 6px 20px rgba(168, 85, 247, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
               }}
             >
               <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/50 via-white/20 to-transparent opacity-80" style={{ clipPath: 'ellipse(80% 35% at 50% 0%)' }}></span>
@@ -232,13 +232,10 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         <Button
           onClick={handleStart}
           size="lg"
-          className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white text-2xl py-8 px-20 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 scale-90 relative overflow-hidden font-bold"
-          style={{
-            boxShadow: '0 8px 24px rgba(34, 197, 94, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.5)'
-          }}
+          className="bg-blue-600 hover:bg-blue-700 text-white text-2xl py-8 px-16 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 scale-90"
         >
-          <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/50 via-white/20 to-transparent opacity-80" style={{ clipPath: 'ellipse(80% 35% at 50% 0%)' }}></span>
-          <span className="relative z-10" style={{ textShadow: '0 2px 6px rgba(0, 0, 0, 0.3)' }}>PLAY</span>
+          <Play className="mr-3 h-8 w-8" />
+          {t.start}
         </Button>
       </div>
     </div>
