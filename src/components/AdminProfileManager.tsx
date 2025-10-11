@@ -75,24 +75,43 @@ export default function AdminProfileManager() {
 
     setLoading(true);
     try {
+      // Update streak leaderboard
       if (streak) {
-        await supabase.rpc('upsert_leaderboard_score', {
+        const { error: streakError } = await supabase.rpc('upsert_leaderboard_score', {
           p_user_id: selectedUserId,
           p_game_mode: 'streak',
           p_score: parseInt(streak),
           p_details: {}
         });
+        if (streakError) throw streakError;
+
+        // Also update best_streak in user_stats
+        const { error: statsStreakError } = await supabase
+          .from('user_stats')
+          .update({ best_streak: parseInt(streak) })
+          .eq('user_id', selectedUserId);
+        if (statsStreakError) throw statsStreakError;
       }
 
+      // Update time mode leaderboard
       if (timeMode) {
-        await supabase.rpc('upsert_leaderboard_score', {
+        const { error: timeError } = await supabase.rpc('upsert_leaderboard_score', {
           p_user_id: selectedUserId,
           p_game_mode: 'timed',
           p_score: parseInt(timeMode),
           p_details: {}
         });
+        if (timeError) throw timeError;
+
+        // Also update time_mode_best_score in user_stats
+        const { error: statsTimeError } = await supabase
+          .from('user_stats')
+          .update({ time_mode_best_score: parseInt(timeMode) })
+          .eq('user_id', selectedUserId);
+        if (statsTimeError) throw statsTimeError;
       }
 
+      // Update multiplayer wins and level
       const updates: any = {};
       if (duelWins) updates.multiplayer_wins = parseInt(duelWins);
       if (selectedLevel) {
@@ -113,9 +132,10 @@ export default function AdminProfileManager() {
 
       toast({
         title: 'Erfolg',
-        description: 'Benutzerprofil aktualisiert',
+        description: 'Benutzerprofil wurde erfolgreich gespeichert',
       });
 
+      // Clear form
       setStreak('');
       setTimeMode('');
       setDuelWins('');

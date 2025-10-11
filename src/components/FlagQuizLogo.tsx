@@ -2,11 +2,21 @@ import { MapPin } from 'lucide-react';
 
 interface FlagQuizLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'light' | 'dark'; // dark = für dunklen Hintergrund (blau innen, weiß außen), light = für hellen Hintergrund (weiß innen, blau außen)
+  variant?: 'light' | 'dark';
   className?: string;
 }
 
 export default function FlagQuizLogo({ size = 'md', variant = 'light', className = '' }: FlagQuizLogoProps) {
+  const isDark = variant === 'dark';
+  
+  // Smaller stroke for smaller sizes to prevent overlap on mobile
+  const getStrokeWidth = () => {
+    if (size === 'sm') return isDark ? '1px #3b82f6' : '1px #1e40af';
+    if (size === 'md') return isDark ? '1.5px #3b82f6' : '1.5px #1e40af';
+    if (size === 'lg') return isDark ? '2.5px #3b82f6' : '2.5px #1e40af';
+    return isDark ? '8px #3b82f6' : '3px #1e40af'; // xl
+  };
+
   const sizes = {
     sm: {
       container: 'gap-2',
@@ -31,23 +41,11 @@ export default function FlagQuizLogo({ size = 'md', variant = 'light', className
       icon: 'w-20 h-20',
       iconInner: 'w-10 h-10',
       text: 'text-6xl md:text-7xl',
-      isMainMenu: true,
     },
   };
 
   const currentSize = sizes[size];
-
-  const isDark = variant === 'dark';
-  
-  // Smaller stroke for smaller sizes to prevent overlap on mobile
-  const getStrokeWidth = () => {
-    if (size === 'sm') return isDark ? '1px #3b82f6' : '1px #1e40af';
-    if (size === 'md') return isDark ? '1.5px #3b82f6' : '1.5px #1e40af';
-    if (size === 'lg') return isDark ? '2.5px #3b82f6' : '2.5px #1e40af';
-    return isDark ? '8px #3b82f6' : '3px #1e40af'; // xl
-  };
-  
-  const isMainMenu = currentSize.isMainMenu === true;
+  const isMainMenu = size === 'xl';
 
   if (isMainMenu) {
     return (
