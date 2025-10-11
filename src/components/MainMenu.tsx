@@ -278,7 +278,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
       {/* Profile and Search Buttons - Top Right */}
       <div className="absolute top-4 right-4 z-20 flex gap-2 items-center">
-        <div ref={searchRef} className="relative">
+        <div ref={searchRef} className="relative hidden md:block">
           <div
             className={`flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 transition-all duration-300 ${
               searchExpanded ? 'w-[350px]' : 'w-10 h-10'
