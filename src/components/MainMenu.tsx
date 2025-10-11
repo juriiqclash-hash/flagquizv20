@@ -55,7 +55,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
   };
 
   const handleDiscord = () => {
-    window.open('https://discord.gg/yourserver', '_blank');
+    window.open('https://discord.gg/cCfHpubn', '_blank');
   };
 
   if (isLoading) {
