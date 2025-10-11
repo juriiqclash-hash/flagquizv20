@@ -353,7 +353,12 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               </div>
 
               {searchExpanded && (searchQuery || loading) && (
-                <div className="absolute top-12 right-0 w-[200px] md:w-[350px] bg-black/60 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto z-50">
+                <>
+                  <div className="fixed inset-0 backdrop-blur-md z-40" onClick={() => {
+                    setSearchExpanded(false);
+                    setSearchQuery('');
+                  }} />
+                  <div className="absolute top-12 right-0 w-[200px] md:w-[350px] bg-white/20 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto z-50">
                   {loading && (
                     <div className="text-center py-8 text-gray-400">
                       {t.loading || 'Lädt...'}
@@ -464,6 +469,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                     </div>
                   )}
                 </div>
+                </>
               )}
             </div>
             <ProfileButton transparentStyle onProfileOpenChange={(open) => {
