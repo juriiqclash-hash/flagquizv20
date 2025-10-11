@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Card, CardContent } from "@/components/ui/card";
 import { Play, Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield } from "lucide-react";
 
 const QUIZ_MODE_ICONS: { [key: string]: React.ReactNode } = {
@@ -492,23 +493,15 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           <div className="flex flex-col h-full">
             <h3 className="text-white text-xl font-bold mb-4">{t.quickAccess}</h3>
 
-            {/* Multiplayer Card with diagonal stripes */}
-            <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-6 border border-white/10 relative overflow-hidden">
-              {/* Diagonal stripe pattern */}
-              <div className="absolute inset-0" style={{
-                backgroundImage: 'repeating-linear-gradient(-45deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 30px, transparent 30px, transparent 60px)',
-              }}></div>
-
-              <div className="relative z-10 flex flex-col items-center justify-center h-full gap-3">
-                <img src="/trophy-3d-icon-illustration-png copy.webp" alt="Trophy" className="w-20 h-20 object-contain drop-shadow-2xl" />
-                <h4 className="text-white text-xl font-bold italic">{t.multiplayer.toUpperCase()}</h4>
-                <Button
-                  onClick={handleMultiplayer}
-                  className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-12 py-3 rounded-full transition-all duration-300 shadow-lg"
-                >
-                  <span className="text-lg">PLAY</span>
-                </Button>
-              </div>
+            <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-6 border border-white/10 relative overflow-hidden flex flex-col items-center justify-center gap-3">
+              <img src="/trophy-3d-icon-illustration-png copy.webp" alt="Trophy" className="w-20 h-20 object-contain drop-shadow-2xl" />
+              <h4 className="text-white text-xl font-bold italic">{t.multiplayer.toUpperCase()}</h4>
+              <Button
+                onClick={handleMultiplayer}
+                className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-12 py-3 rounded-full transition-all duration-300 shadow-lg"
+              >
+                <span className="text-lg">PLAY</span>
+              </Button>
             </div>
           </div>
         </div>
@@ -612,12 +605,17 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       <Dialog open={showClanNotAvailable} onOpenChange={setShowClanNotAvailable}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-center text-2xl">Clan Menu</DialogTitle>
+            <DialogTitle>Clans</DialogTitle>
           </DialogHeader>
-          <div className="text-center py-8">
-            <Shield className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-            <p className="text-lg text-muted-foreground">Noch nicht verfügbar</p>
-          </div>
+          <Card>
+            <CardContent className="py-12 text-center">
+              <Shield className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-xl font-semibold mb-2">Bald verfügbar!</h3>
+              <p className="text-muted-foreground">
+                Die Clan-Funktion wird in Kürze verfügbar sein. Hier kannst du bald einem Clan beitreten oder deinen eigenen erstellen.
+              </p>
+            </CardContent>
+          </Card>
         </DialogContent>
       </Dialog>
     </div>
