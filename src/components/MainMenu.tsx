@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Play, Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield } from "lucide-react";
 
 const QUIZ_MODE_ICONS: { [key: string]: React.ReactNode } = {
@@ -31,6 +32,7 @@ import { FriendsMenu } from "@/components/FriendsMenu";
 
 import { calculateLevel } from "@/lib/xpSystem";
 import { calculateRank as calculateProfileRank } from "@/lib/profileRank";
+import Leaderboard from "@/components/Leaderboard";
 interface MainMenuProps {
   onStart: () => void;
   onMultiplayerStart?: () => void;
@@ -85,6 +87,8 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
   const [loading, setLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [showFriendsMenu, setShowFriendsMenu] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showClanNotAvailable, setShowClanNotAvailable] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const { stats } = useUserStats();
@@ -260,7 +264,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
     >
       {/* Top Navigation Bar */}
       <div className="absolute top-0 left-0 right-0 z-20 bg-white/10 backdrop-blur-sm border-b border-white/20">
-        <div className="flex items-center justify-between px-6 py-3">
+        <div className="flex items-center justify-between px-6 py-2">
           {/* Left Side - Logo, Language, Leaderboard, Friends, Clan */}
           <div className="flex items-center gap-3">
             {/* FlagQuiz Logo */}
@@ -287,7 +291,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               variant="ghost"
               size="icon"
               className="text-white hover:bg-white/20 rounded-lg"
-              onClick={() => {}}
+              onClick={() => setShowLeaderboard(true)}
             >
               <Trophy className="h-5 w-5" />
             </Button>
@@ -307,7 +311,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               variant="ghost"
               size="icon"
               className="text-white hover:bg-white/20 rounded-lg"
-              onClick={() => {}}
+              onClick={() => setShowClanNotAvailable(true)}
             >
               <Shield className="h-5 w-5" />
             </Button>
@@ -598,6 +602,24 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           onClose={() => setSelectedUserId(null)}
         />
       )}
+
+      <Dialog open={showLeaderboard} onOpenChange={setShowLeaderboard}>
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+          <Leaderboard />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showClanNotAvailable} onOpenChange={setShowClanNotAvailable}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center text-2xl">Clan Menu</DialogTitle>
+          </DialogHeader>
+          <div className="text-center py-8">
+            <Shield className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+            <p className="text-lg text-muted-foreground">Noch nicht verfügbar</p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
