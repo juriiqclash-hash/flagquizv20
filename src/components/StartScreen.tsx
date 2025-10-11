@@ -40,6 +40,13 @@ interface SearchResult {
   xp: number;
 }
 
+interface ClanResult {
+  id: string;
+  name: string;
+  emoji: string;
+  member_count: number;
+}
+
 const QUIZ_MODES: QuizResult[] = [
   { id: 'timed', name: 'Zeitlimit Modus', description: 'Beantworte so viele Fragen wie möglich', icon: '⏱️' },
   { id: 'learn', name: 'Lernmodus', description: 'Üben ohne Zeitdruck', icon: '📖' },
@@ -52,7 +59,7 @@ const QUIZ_MODES: QuizResult[] = [
   { id: 'official-language', name: 'Amtssprachen', description: 'Erkenne die Amtssprache jedes Landes', icon: '🗣️' },
   { id: 'world-knowledge', name: 'Weltwissen Quiz', description: 'Teste dein Wissen über Weltfakten', icon: '🌏' },
   { id: 'combi-quiz', name: 'Combi-Quiz', description: 'Wähle deine Kategorien und spiele endlos', icon: '🎭' },
-  { id: 'multiplayer', name: 'Mehrspieler', description: 'Spiele gegen andere in Echtzeit', icon: '👥' },
+  { id: 'multiplayer', name: 'Multiplayer', description: 'Spiele gegen andere in Echtzeit', icon: '👥' },
 ];
 
 export default function StartScreen({
@@ -79,6 +86,7 @@ export default function StartScreen({
   const [searchQuery, setSearchQuery] = useState('');
   const [playerResults, setPlayerResults] = useState<SearchResult[]>([]);
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
+  const [clanResults, setClanResults] = useState<ClanResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -156,6 +164,7 @@ export default function StartScreen({
       if (!searchQuery.trim()) {
         setPlayerResults([]);
         setQuizResults([]);
+        setClanResults([]);
         return;
       }
 
@@ -194,6 +203,32 @@ export default function StartScreen({
           });
 
           setPlayerResults(combined);
+        }
+
+        const { data: clans } = await supabase
+          .from('clans')
+          .select('id, name, emoji')
+          .ilike('name', `%${searchQuery}%`)
+          .limit(10);
+
+        if (clans) {
+          const clanIds = clans.map(c => c.id);
+          const { data: memberCounts } = await supabase
+            .from('profiles')
+            .select('clan_id')
+            .in('clan_id', clanIds);
+
+          const clansWithCounts = clans.map(clan => {
+            const count = memberCounts?.filter(m => m.clan_id === clan.id).length || 0;
+            return {
+              id: clan.id,
+              name: clan.name,
+              emoji: clan.emoji,
+              member_count: count,
+            };
+          });
+
+          setClanResults(clansWithCounts);
         }
       } catch (error) {
         console.error('Error searching:', error);
@@ -295,7 +330,7 @@ export default function StartScreen({
                 </div>
               )}
 
-              {!loading && searchQuery && playerResults.length === 0 && quizResults.length === 0 && (
+              {!loading && searchQuery && playerResults.length === 0 && quizResults.length === 0 && clanResults.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">
                   Keine Ergebnisse gefunden
                 </div>
@@ -313,12 +348,38 @@ export default function StartScreen({
                       }}
                       className="w-full flex items-center gap-3 p-3 hover:bg-accent rounded-lg transition-colors"
                     >
-                      <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-lg flex-shrink-0">
+                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-slate-700/50 to-slate-800/50 border border-white/10 flex items-center justify-center text-2xl flex-shrink-0">
                         {quiz.icon}
                       </div>
                       <div className="flex-1 text-left min-w-0">
                         <p className="font-semibold text-sm truncate">{quiz.name}</p>
                         <p className="text-xs text-muted-foreground truncate">{quiz.description}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {!loading && clanResults.length > 0 && (
+                <div className="p-2">
+                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2 py-2">Clans</h3>
+                  {clanResults.map((clan) => (
+                    <button
+                      key={clan.id}
+                      onClick={() => {
+                        setSearchExpanded(false);
+                        setSearchQuery('');
+                      }}
+                      className="w-full flex items-center gap-3 p-3 hover:bg-accent rounded-lg transition-colors"
+                    >
+                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-slate-700/50 to-slate-800/50 border border-white/10 flex items-center justify-center text-2xl flex-shrink-0">
+                        {clan.emoji}
+                      </div>
+                      <div className="flex-1 text-left min-w-0">
+                        <p className="font-semibold text-sm truncate">{clan.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {clan.member_count} {clan.member_count === 1 ? 'Mitglied' : 'Mitglieder'}
+                        </p>
                       </div>
                     </button>
                   ))}
@@ -338,7 +399,7 @@ export default function StartScreen({
                       }}
                       className="w-full flex items-center gap-3 p-3 hover:bg-accent rounded-lg transition-colors"
                     >
-                      <Avatar className="h-8 w-8 ring-2 ring-border flex-shrink-0">
+                      <Avatar className="h-12 w-12 ring-2 ring-border flex-shrink-0">
                         <AvatarImage src={player.avatar_url || undefined} />
                         <AvatarFallback className="bg-primary text-primary-foreground text-sm">
                           {player.username.charAt(0).toUpperCase()}

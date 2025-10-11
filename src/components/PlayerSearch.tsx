@@ -39,7 +39,7 @@ const QUIZ_MODES: QuizResult[] = [
   { id: 'official-language', name: 'Amtssprachen', description: 'Erkenne die Amtssprache jedes Landes', icon: '🗣️' },
   { id: 'world-knowledge', name: 'Weltwissen Quiz', description: 'Teste dein Wissen über Weltfakten', icon: '🌏' },
   { id: 'combi-quiz', name: 'Combi-Quiz', description: 'Wähle deine Kategorien und spiele endlos', icon: '🎭' },
-  { id: 'multiplayer', name: 'Mehrspieler', description: 'Spiele gegen andere in Echtzeit', icon: '👥' },
+  { id: 'multiplayer', name: 'Multiplayer', description: 'Spiele gegen andere in Echtzeit', icon: '👥' },
 ];
 
 export const PlayerSearch = ({ open, onOpenChange, onPlayerSelect }: PlayerSearchProps) => {

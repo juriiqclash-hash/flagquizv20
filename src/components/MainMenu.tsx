@@ -37,6 +37,13 @@ interface SearchResult {
   xp: number;
 }
 
+interface ClanResult {
+  id: string;
+  name: string;
+  emoji: string;
+  member_count: number;
+}
+
 const QUIZ_MODES: QuizResult[] = [
   { id: 'timed', name: 'Zeitlimit Modus', description: 'Beantworte so viele Fragen wie möglich', icon: '⏱️' },
   { id: 'learn', name: 'Lernmodus', description: 'Üben ohne Zeitdruck', icon: '📖' },
@@ -58,6 +65,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
   const [searchQuery, setSearchQuery] = useState('');
   const [playerResults, setPlayerResults] = useState<SearchResult[]>([]);
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
+  const [clanResults, setClanResults] = useState<ClanResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [showFriendsMenu, setShowFriendsMenu] = useState(false);
@@ -93,6 +101,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       if (!searchQuery.trim()) {
         setPlayerResults([]);
         setQuizResults([]);
+        setClanResults([]);
         return;
       }
 
@@ -131,6 +140,32 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           });
 
           setPlayerResults(combined);
+        }
+
+        const { data: clans } = await supabase
+          .from('clans')
+          .select('id, name, emoji')
+          .ilike('name', `%${searchQuery}%`)
+          .limit(10);
+
+        if (clans) {
+          const clanIds = clans.map(c => c.id);
+          const { data: memberCounts } = await supabase
+            .from('profiles')
+            .select('clan_id')
+            .in('clan_id', clanIds);
+
+          const clansWithCounts = clans.map(clan => {
+            const count = memberCounts?.filter(m => m.clan_id === clan.id).length || 0;
+            return {
+              id: clan.id,
+              name: clan.name,
+              emoji: clan.emoji,
+              member_count: count,
+            };
+          });
+
+          setClanResults(clansWithCounts);
         }
       } catch (error) {
         console.error('Error searching:', error);
@@ -250,7 +285,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                 </div>
               )}
 
-              {!loading && searchQuery && playerResults.length === 0 && quizResults.length === 0 && (
+              {!loading && searchQuery && playerResults.length === 0 && quizResults.length === 0 && clanResults.length === 0 && (
                 <div className="text-center py-8 text-gray-400">
                   Keine Ergebnisse gefunden
                 </div>
@@ -274,6 +309,32 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                       <div className="flex-1 text-left min-w-0">
                         <p className="font-semibold text-white text-sm truncate">{quiz.name}</p>
                         <p className="text-xs text-gray-400 truncate">{quiz.description}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {!loading && clanResults.length > 0 && (
+                <div className="p-2">
+                  <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 py-2">Clans</h3>
+                  {clanResults.map((clan) => (
+                    <button
+                      key={clan.id}
+                      onClick={() => {
+                        setSearchExpanded(false);
+                        setSearchQuery('');
+                      }}
+                      className="w-full flex items-center gap-3 p-3 hover:bg-white/20 rounded-lg transition-colors"
+                    >
+                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-slate-700/50 to-slate-800/50 border border-white/10 flex items-center justify-center text-2xl flex-shrink-0">
+                        {clan.emoji}
+                      </div>
+                      <div className="flex-1 text-left min-w-0">
+                        <p className="font-semibold text-white text-sm truncate">{clan.name}</p>
+                        <p className="text-xs text-gray-400">
+                          {clan.member_count} {clan.member_count === 1 ? 'Mitglied' : 'Mitglieder'}
+                        </p>
                       </div>
                     </button>
                   ))}
