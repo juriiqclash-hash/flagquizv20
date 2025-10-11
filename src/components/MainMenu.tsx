@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Play, Loader2, Languages, Users, Calendar } from "lucide-react";
+import { Play, Loader2, Languages, Users, Calendar, Search } from "lucide-react";
 import ProfileButton from "@/components/ProfileButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
 import FlagQuizLogo from "@/components/FlagQuizLogo";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserStats } from "@/hooks/useUserStats";
+import { PlayerSearch } from "@/components/PlayerSearch";
+import { PublicProfileView } from "@/components/PublicProfileView";
 
 import { calculateLevel } from "@/lib/xpSystem";
 import { calculateRank as calculateProfileRank } from "@/lib/profileRank";
@@ -19,6 +21,8 @@ interface MainMenuProps {
 
 export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallengeStart }: MainMenuProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPlayerSearch, setShowPlayerSearch] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const { user } = useAuth();
   const { stats } = useUserStats();
   const { language, setLanguage } = useLanguage();
@@ -102,8 +106,16 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         </Select>
       </div>
 
-      {/* Profile Button - Top Right */}
-      <div className="absolute top-4 right-4 z-20">
+      {/* Profile and Search Buttons - Top Right */}
+      <div className="absolute top-4 right-4 z-20 flex gap-2">
+        <Button
+          onClick={() => setShowPlayerSearch(true)}
+          variant="ghost"
+          size="icon"
+          className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+        >
+          <Search className="h-5 w-5" />
+        </Button>
         <ProfileButton transparentStyle onProfileOpenChange={() => {}} />
       </div>
 
@@ -236,6 +248,19 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           {t.start}
         </Button>
       </div>
+
+      <PlayerSearch
+        open={showPlayerSearch}
+        onOpenChange={setShowPlayerSearch}
+        onPlayerSelect={(userId) => setSelectedUserId(userId)}
+      />
+
+      {selectedUserId && (
+        <PublicProfileView
+          userId={selectedUserId}
+          onClose={() => setSelectedUserId(null)}
+        />
+      )}
     </div>
   );
 }

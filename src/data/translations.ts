@@ -197,6 +197,12 @@ export const translations = {
     addNewUser: 'Neuen Benutzer hinzufügen',
     changing: 'Ändern...',
     deleting: 'Löschen...',
+
+    // Player Search
+    searchPlayers: 'Spieler suchen',
+    searchPlayersPlaceholder: 'Spielername eingeben...',
+    noPlayersFound: 'Keine Spieler gefunden',
+    startTypingToSearch: 'Beginne zu tippen um Spieler zu suchen',
   },
   en: {
     // Main Menu
@@ -394,6 +400,12 @@ export const translations = {
     addNewUser: 'Add new user',
     changing: 'Changing...',
     deleting: 'Deleting...',
+
+    // Player Search
+    searchPlayers: 'Search Players',
+    searchPlayersPlaceholder: 'Enter player name...',
+    noPlayersFound: 'No players found',
+    startTypingToSearch: 'Start typing to search for players',
   },
   es: {
     // Main Menu
@@ -591,6 +603,12 @@ export const translations = {
     addNewUser: 'Agregar nuevo usuario',
     changing: 'Cambiando...',
     deleting: 'Eliminando...',
+
+    // Player Search
+    searchPlayers: 'Buscar Jugadores',
+    searchPlayersPlaceholder: 'Introduce el nombre del jugador...',
+    noPlayersFound: 'No se encontraron jugadores',
+    startTypingToSearch: 'Empieza a escribir para buscar jugadores',
   },
   fr: {
     // Main Menu
@@ -788,6 +806,12 @@ export const translations = {
     addNewUser: 'Ajouter un nouvel utilisateur',
     changing: 'Modification...',
     deleting: 'Suppression...',
+
+    // Player Search
+    searchPlayers: 'Rechercher des Joueurs',
+    searchPlayersPlaceholder: 'Entrez le nom du joueur...',
+    noPlayersFound: 'Aucun joueur trouvé',
+    startTypingToSearch: 'Commencez à taper pour rechercher des joueurs',
   },
   it: {
     // Main Menu
@@ -985,6 +1009,12 @@ export const translations = {
     addNewUser: 'Aggiungi nuovo utente',
     changing: 'Modifica...',
     deleting: 'Eliminazione...',
+
+    // Player Search
+    searchPlayers: 'Cerca Giocatori',
+    searchPlayersPlaceholder: 'Inserisci il nome del giocatore...',
+    noPlayersFound: 'Nessun giocatore trovato',
+    startTypingToSearch: 'Inizia a digitare per cercare giocatori',
   },
   ja: {
     // Main Menu
@@ -1182,6 +1212,12 @@ export const translations = {
     addNewUser: '新しいユーザーを追加',
     changing: '変更中...',
     deleting: '削除中...',
+
+    // Player Search
+    searchPlayers: 'プレイヤー検索',
+    searchPlayersPlaceholder: 'プレイヤー名を入力...',
+    noPlayersFound: 'プレイヤーが見つかりません',
+    startTypingToSearch: '入力して検索を開始',
   },
 };
 
