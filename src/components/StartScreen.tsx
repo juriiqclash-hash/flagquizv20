@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Clock, BookOpen, Target, MapPin, Map, Zap, Building, Globe, Smile, Trophy, Users, Play, Mountain, Languages, ArrowLeft, Home, Layers } from "lucide-react";
+import { Clock, BookOpen, Target, MapPin, Map, Zap, Building, Globe, Smile, Trophy, Users, Play, Mountain, Languages, ArrowLeft, Home, Layers, Search } from "lucide-react";
 import ContinentSelector from "./ContinentSelector";
 import TimeSelector from "./TimeSelector";
 import CapitalVariantSelector from "./CapitalVariantSelector";
@@ -10,6 +10,8 @@ import HamburgerMenu from "./HamburgerMenu";
 import ProfileButton from "./ProfileButton";
 import MultiplayerMenu from "./MultiplayerMenu";
 import BannedScreen from "./BannedScreen";
+import { PlayerSearch } from "./PlayerSearch";
+import { PublicProfileView } from "./PublicProfileView";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
 import { supabase } from "@/integrations/supabase/client";
@@ -42,6 +44,8 @@ export default function StartScreen({
   const [isBanned, setIsBanned] = useState(false);
   const [banInfo, setBanInfo] = useState<{ reason?: string; bannedAt?: string }>({});
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [showPlayerSearch, setShowPlayerSearch] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const checkBanStatus = async () => {
@@ -151,13 +155,20 @@ export default function StartScreen({
     return <CapitalVariantSelector onSelectVariant={handleCapitalVariantSelect} onBack={handleBack} />;
   }
   return <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 p-4 relative">
-      <div className="absolute top-4 right-4 z-50">
-        <ProfileButton 
-          onOpenAdminPanel={onOpenAdminPanel} 
+      <div className="absolute top-4 right-4 z-50 flex gap-2">
+        <Button
+          onClick={() => setShowPlayerSearch(true)}
+          variant="outline"
+          size="icon"
+        >
+          <Search className="h-5 w-5" />
+        </Button>
+        <ProfileButton
+          onOpenAdminPanel={onOpenAdminPanel}
           onProfileOpenChange={setIsProfileOpen}
         />
       </div>
-      
+
       {/* Buttons Container - Responsive Layout */}
       {!isProfileOpen && (
         <div className="absolute top-4 left-4 z-50">
@@ -165,6 +176,7 @@ export default function StartScreen({
             onNavigateHome={onBackToMainMenu || (() => {})}
             onNavigateQuiz={() => {}}
             currentPage="quiz"
+            onProfileSelect={(userId) => setSelectedUserId(userId)}
           />
         </div>
       )}
@@ -411,5 +423,18 @@ export default function StartScreen({
           <p className="text-sm text-muted-foreground">Erkenne die Flaggen von Afrika, Asien, Europa, Nord- und Südamerika sowie Ozeanien. Made by ijuriqu</p>
         </div>
       </div>
+
+      <PlayerSearch
+        open={showPlayerSearch}
+        onOpenChange={setShowPlayerSearch}
+        onPlayerSelect={(userId) => setSelectedUserId(userId)}
+      />
+
+      {selectedUserId && (
+        <PublicProfileView
+          userId={selectedUserId}
+          onClose={() => setSelectedUserId(null)}
+        />
+      )}
     </div>;
 }

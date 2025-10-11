@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Flame, Clock, Trophy, X, Info } from 'lucide-react';
+import { Flame, Clock, Trophy, X, Info, UserPlus, UserMinus, Check } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { getXPProgress } from '@/lib/xpSystem';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTranslation } from '@/data/translations';
 import { calculateRank, calculateRankScore, RANK_TIERS } from '@/lib/profileRank';
+import { useAuth } from '@/hooks/useAuth';
+import { Button } from './ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 const getFlagEmoji = (countryCode: string): string => {
   const codePoints = countryCode
@@ -79,13 +82,18 @@ export const PublicProfileView = ({ userId, onClose }: PublicProfileViewProps) =
   const [loading, setLoading] = useState(true);
   const [showRankInfo, setShowRankInfo] = useState(false);
   const [allClans, setAllClans] = useState<Clan[]>([...DEFAULT_CLANS]);
+  const [friendshipStatus, setFriendshipStatus] = useState<'none' | 'pending_sent' | 'pending_received' | 'friends'>('none');
+  const [friendRequestId, setFriendRequestId] = useState<string | null>(null);
+  const { user: currentUser } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (userId) {
       loadProfileData();
       loadClans();
+      loadFriendshipStatus();
     }
-  }, [userId]);
+  }, [userId, currentUser]);
 
   const loadClans = async () => {
     try {
@@ -99,6 +107,137 @@ export const PublicProfileView = ({ userId, onClose }: PublicProfileViewProps) =
       }
     } catch (error) {
       console.error('Error loading clans:', error);
+    }
+  };
+
+  const loadFriendshipStatus = async () => {
+    if (!currentUser || !userId || currentUser.id === userId) return;
+
+    try {
+      const { data: request } = await supabase
+        .from('friend_requests')
+        .select('*')
+        .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${userId}),and(sender_id.eq.${userId},receiver_id.eq.${currentUser.id})`)
+        .maybeSingle();
+
+      if (request) {
+        setFriendRequestId(request.id);
+        if (request.status === 'accepted') {
+          setFriendshipStatus('friends');
+        } else if (request.sender_id === currentUser.id) {
+          setFriendshipStatus('pending_sent');
+        } else {
+          setFriendshipStatus('pending_received');
+        }
+      } else {
+        setFriendshipStatus('none');
+      }
+    } catch (error) {
+      console.error('Error loading friendship status:', error);
+    }
+  };
+
+  const sendFriendRequest = async () => {
+    if (!currentUser || !userId) return;
+
+    try {
+      const { error } = await supabase
+        .from('friend_requests')
+        .insert({
+          sender_id: currentUser.id,
+          receiver_id: userId,
+          status: 'pending'
+        });
+
+      if (error) throw error;
+
+      setFriendshipStatus('pending_sent');
+      toast({
+        title: 'Freundschaftsanfrage gesendet',
+        description: 'Die Anfrage wurde erfolgreich gesendet.'
+      });
+    } catch (error) {
+      console.error('Error sending friend request:', error);
+      toast({
+        title: 'Fehler',
+        description: 'Die Anfrage konnte nicht gesendet werden.',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const acceptFriendRequest = async () => {
+    if (!friendRequestId) return;
+
+    try {
+      const { error } = await supabase
+        .from('friend_requests')
+        .update({ status: 'accepted' })
+        .eq('id', friendRequestId);
+
+      if (error) throw error;
+
+      setFriendshipStatus('friends');
+      toast({
+        title: 'Freundschaft bestätigt',
+        description: 'Ihr seid jetzt Freunde!'
+      });
+      loadFriendshipStatus();
+    } catch (error) {
+      console.error('Error accepting friend request:', error);
+      toast({
+        title: 'Fehler',
+        description: 'Die Anfrage konnte nicht angenommen werden.',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const removeFriend = async () => {
+    if (!currentUser || !userId) return;
+
+    try {
+      const { error } = await supabase
+        .from('friendships')
+        .delete()
+        .or(`and(user_id_1.eq.${Math.min(currentUser.id, userId)},user_id_2.eq.${Math.max(currentUser.id, userId)})`);
+
+      if (error) throw error;
+
+      setFriendshipStatus('none');
+      toast({
+        title: 'Freundschaft beendet',
+        description: 'Die Freundschaft wurde entfernt.'
+      });
+    } catch (error) {
+      console.error('Error removing friend:', error);
+      toast({
+        title: 'Fehler',
+        description: 'Die Freundschaft konnte nicht entfernt werden.',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const cancelFriendRequest = async () => {
+    if (!friendRequestId) return;
+
+    try {
+      const { error } = await supabase
+        .from('friend_requests')
+        .delete()
+        .eq('id', friendRequestId);
+
+      if (error) throw error;
+
+      setFriendshipStatus('none');
+      setFriendRequestId(null);
+      toast({
+        title: 'Anfrage zurückgezogen',
+        description: 'Die Freundschaftsanfrage wurde abgebrochen.'
+      });
+    } catch (error) {
+      console.error('Error canceling friend request:', error);
     }
   };
 
@@ -287,8 +426,8 @@ export const PublicProfileView = ({ userId, onClose }: PublicProfileViewProps) =
                   />
                 </div>
 
-                <div className="flex gap-2 md:gap-3 justify-center md:justify-start">
-                  {profileData.flag && (
+                <div className="flex gap-2 md:gap-3 justify-center md:justify-start mb-4">
+                  {profileData.flag ? (
                     <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
                       <span
                         className="text-3xl md:text-5xl mb-0.5 md:mb-1"
@@ -306,9 +445,13 @@ export const PublicProfileView = ({ userId, onClose }: PublicProfileViewProps) =
                         {profileData.flag}
                       </span>
                     </div>
+                  ) : (
+                    <div className="w-20 h-20 md:w-28 md:h-28 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center opacity-50">
+                      <span className="text-gray-400 text-xs">Flag</span>
+                    </div>
                   )}
 
-                  {profileData.continent && (
+                  {profileData.continent ? (
                     <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
                       <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
                         {CONTINENTS.find((c) => c.code === profileData.continent)?.emoji}
@@ -320,9 +463,13 @@ export const PublicProfileView = ({ userId, onClose }: PublicProfileViewProps) =
                         {profileData.continent}
                       </span>
                     </div>
+                  ) : (
+                    <div className="w-20 h-20 md:w-28 md:h-28 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center opacity-50">
+                      <span className="text-gray-400 text-xs">Continent</span>
+                    </div>
                   )}
 
-                  {profileData.clan && (
+                  {profileData.clan ? (
                     <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
                       <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
                         {allClans.find((c) => c.name === profileData.clan)?.emoji}
@@ -334,8 +481,55 @@ export const PublicProfileView = ({ userId, onClose }: PublicProfileViewProps) =
                         {profileData.clan}
                       </span>
                     </div>
+                  ) : (
+                    <div className="w-20 h-20 md:w-28 md:h-28 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center opacity-50">
+                      <span className="text-gray-400 text-xs">Clan</span>
+                    </div>
                   )}
                 </div>
+
+                {currentUser && currentUser.id !== userId && (
+                  <div className="flex gap-2 justify-center md:justify-start">
+                    {friendshipStatus === 'none' && (
+                      <Button
+                        onClick={sendFriendRequest}
+                        className="bg-blue-500 hover:bg-blue-600 text-white"
+                      >
+                        <UserPlus className="w-4 h-4 mr-2" />
+                        Freund hinzufügen
+                      </Button>
+                    )}
+                    {friendshipStatus === 'pending_sent' && (
+                      <Button
+                        onClick={cancelFriendRequest}
+                        variant="outline"
+                        className="bg-white/20 border-white/40 text-white hover:bg-white/30"
+                      >
+                        <Clock className="w-4 h-4 mr-2" />
+                        Anfrage gesendet
+                      </Button>
+                    )}
+                    {friendshipStatus === 'pending_received' && (
+                      <Button
+                        onClick={acceptFriendRequest}
+                        className="bg-green-500 hover:bg-green-600 text-white"
+                      >
+                        <Check className="w-4 h-4 mr-2" />
+                        Anfrage annehmen
+                      </Button>
+                    )}
+                    {friendshipStatus === 'friends' && (
+                      <Button
+                        onClick={removeFriend}
+                        variant="outline"
+                        className="bg-red-500/20 border-red-500/40 text-white hover:bg-red-500/30"
+                      >
+                        <UserMinus className="w-4 h-4 mr-2" />
+                        Freund entfernen
+                      </Button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>

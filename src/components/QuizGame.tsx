@@ -12,8 +12,6 @@ import { countryLanguages, getLanguageByCountry } from "@/data/languages";
 import { useToast } from "@/hooks/use-toast";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { useUserStats } from "@/hooks/useUserStats";
-import { PlayerSearch } from "@/components/PlayerSearch";
-import { PublicProfileView } from "@/components/PublicProfileView";
 interface QuizGameProps {
   mode: 'timed' | 'learn' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge';
   onBackToStart: () => void;
@@ -40,8 +38,6 @@ export default function QuizGame({
   const [streak, setStreak] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(timeLimit || 0);
-  const [showPlayerSearch, setShowPlayerSearch] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const intervalRef = useRef<NodeJS.Timeout>();
   const {
@@ -530,9 +526,6 @@ export default function QuizGame({
             <Button variant="outline" onClick={togglePause}>
               {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
             </Button>
-            <Button variant="outline" onClick={() => setShowPlayerSearch(true)}>
-              <Search className="w-4 h-4" />
-            </Button>
           </div>
           
           <div className="flex items-center gap-4">
@@ -673,18 +666,5 @@ export default function QuizGame({
             </CardContent>
           </Card>}
       </div>
-
-      <PlayerSearch
-        open={showPlayerSearch}
-        onOpenChange={setShowPlayerSearch}
-        onPlayerSelect={(userId) => setSelectedUserId(userId)}
-      />
-
-      {selectedUserId && (
-        <PublicProfileView
-          userId={selectedUserId}
-          onClose={() => setSelectedUserId(null)}
-        />
-      )}
     </div>;
 }

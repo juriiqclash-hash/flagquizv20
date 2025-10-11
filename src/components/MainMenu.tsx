@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Play, Loader2, Languages, Users, Calendar, Search } from "lucide-react";
+import { Play, Loader2, Languages, Users, Calendar, Search, UserPlus } from "lucide-react";
 import ProfileButton from "@/components/ProfileButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserStats } from "@/hooks/useUserStats";
 import { PlayerSearch } from "@/components/PlayerSearch";
 import { PublicProfileView } from "@/components/PublicProfileView";
+import { FriendsMenu } from "@/components/FriendsMenu";
 
 import { calculateLevel } from "@/lib/xpSystem";
 import { calculateRank as calculateProfileRank } from "@/lib/profileRank";
@@ -23,6 +24,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
   const [isLoading, setIsLoading] = useState(false);
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [showFriendsMenu, setShowFriendsMenu] = useState(false);
   const { user } = useAuth();
   const { stats } = useUserStats();
   const { language, setLanguage } = useLanguage();
@@ -108,6 +110,14 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
       {/* Profile and Search Buttons - Top Right */}
       <div className="absolute top-4 right-4 z-20 flex gap-2">
+        <Button
+          onClick={() => setShowFriendsMenu(true)}
+          variant="ghost"
+          size="icon"
+          className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+        >
+          <UserPlus className="h-5 w-5" />
+        </Button>
         <Button
           onClick={() => setShowPlayerSearch(true)}
           variant="ghost"
@@ -253,6 +263,12 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         open={showPlayerSearch}
         onOpenChange={setShowPlayerSearch}
         onPlayerSelect={(userId) => setSelectedUserId(userId)}
+      />
+
+      <FriendsMenu
+        open={showFriendsMenu}
+        onOpenChange={setShowFriendsMenu}
+        onProfileSelect={(userId) => setSelectedUserId(userId)}
       />
 
       {selectedUserId && (

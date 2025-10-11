@@ -5,14 +5,16 @@ import { Menu, Home, Trophy, Users, Shield, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Leaderboard from '@/components/Leaderboard';
 import { Card, CardContent } from '@/components/ui/card';
+import { FriendsMenu } from '@/components/FriendsMenu';
 
 interface HamburgerMenuProps {
   onNavigateHome: () => void;
   onNavigateQuiz: () => void;
   currentPage?: 'home' | 'quiz';
+  onProfileSelect?: (userId: string) => void;
 }
 
-const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz' }: HamburgerMenuProps) => {
+const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', onProfileSelect }: HamburgerMenuProps) => {
   const [open, setOpen] = useState(false);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [friendsDialogOpen, setFriendsDialogOpen] = useState(false);
@@ -130,22 +132,11 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz' }:
         </DialogContent>
       </Dialog>
 
-      <Dialog open={friendsDialogOpen} onOpenChange={setFriendsDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Freunde</DialogTitle>
-          </DialogHeader>
-          <Card>
-            <CardContent className="py-12 text-center">
-              <Users className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-xl font-semibold mb-2">Bald verfügbar!</h3>
-              <p className="text-muted-foreground">
-                Die Freunde-Funktion wird in Kürze verfügbar sein. Hier kannst du bald Freunde hinzufügen und ihre Fortschritte sehen.
-              </p>
-            </CardContent>
-          </Card>
-        </DialogContent>
-      </Dialog>
+      <FriendsMenu
+        open={friendsDialogOpen}
+        onOpenChange={setFriendsDialogOpen}
+        onProfileSelect={onProfileSelect}
+      />
 
       <Dialog open={clansDialogOpen} onOpenChange={setClansDialogOpen}>
         <DialogContent className="max-w-md">
