@@ -424,7 +424,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       <div className="hidden lg:flex absolute bottom-6 left-6 z-10 flex-col gap-5 scale-90 origin-bottom-left" style={{ width: '420px' }}>
         {/* News/Discord Panel */}
         <div
-          className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20 transition-all duration-300 hover:bg-white/15 cursor-pointer overflow-hidden"
+          className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border-2 border-white/30 transition-all duration-300 hover:bg-white/15 cursor-pointer overflow-hidden"
           onClick={handleDiscord}
           style={{ height: '280px' }}
         >
@@ -445,7 +445,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         </div>
 
         {/* Quick Access Section */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20" style={{ height: '280px' }}>
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border-2 border-white/30" style={{ height: '280px' }}>
           <div className="flex flex-col h-full">
             <h3 className="text-white text-xl font-bold mb-4">{t.quickAccess}</h3>
 
@@ -453,12 +453,12 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
             <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-6 border border-white/10 relative overflow-hidden">
               {/* Diagonal stripe pattern */}
               <div className="absolute inset-0" style={{
-                backgroundImage: 'repeating-linear-gradient(-45deg, rgba(0,0,0,0.3) 0px, rgba(0,0,0,0.3) 20px, transparent 20px, transparent 40px)',
+                backgroundImage: 'repeating-linear-gradient(-45deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 30px, transparent 30px, transparent 60px)',
               }}></div>
 
               <div className="relative z-10 flex flex-col items-center justify-center h-full gap-3">
-                <img src="/trophy-3d-icon-illustration-png copy.webp" alt="Trophy" className="w-24 h-24 object-contain drop-shadow-2xl" />
-                <h4 className="text-white text-2xl font-bold italic">{t.multiplayer.toUpperCase()}</h4>
+                <img src="/trophy-3d-icon-illustration-png copy.webp" alt="Trophy" className="w-20 h-20 object-contain drop-shadow-2xl" />
+                <h4 className="text-white text-xl font-bold italic">{t.multiplayer.toUpperCase()}</h4>
                 <Button
                   onClick={handleMultiplayer}
                   className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-12 py-3 rounded-full transition-all duration-300 shadow-lg"
@@ -474,14 +474,14 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       {/* Right Column - Hidden on Mobile */}
       <div className="hidden lg:flex absolute bottom-6 right-6 z-10 flex-col gap-5 scale-90 origin-bottom-right" style={{ width: '420px' }}>
         {/* Daily Challenge Panel */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20 transition-all duration-300 hover:bg-white/15">
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border-2 border-white/30 transition-all duration-300 hover:bg-white/15">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/30 to-purple-500/30 flex items-center justify-center border-2 border-white/20">
                 <img src="/pngtree-july-31-calendar-date-month-picture-image_7830645 copy.png" alt="Daily Challenge" className="w-9 h-9 object-contain" />
               </div>
               <div>
-                <h4 className="text-white text-xl font-bold whitespace-nowrap">The Daily Challenge</h4>
+                <h4 className="text-white text-lg font-bold whitespace-nowrap">The Daily Challenge</h4>
               </div>
             </div>
             <Button
@@ -494,7 +494,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         </div>
 
         {/* Daily Streak Panel */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20">
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border-2 border-white/30">
           <h3 className="text-white text-xl font-bold mb-4">{t.dailyStreak}</h3>
 
           {/* Streak Card */}
@@ -507,7 +507,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         </div>
 
         {/* Current Rank Panel */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border border-white/20">
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border-2 border-white/30">
           <h3 className="text-white text-xl font-bold mb-4">{t.yourCurrentRank}</h3>
 
           {/* Rank Card */}
