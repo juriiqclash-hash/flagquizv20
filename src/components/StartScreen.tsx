@@ -39,6 +39,8 @@ interface StartScreenProps {
   currentView: string;
   onOpenAdminPanel?: () => void;
   onBackToMainMenu?: () => void;
+  shouldOpenProfile?: boolean;
+  onProfileOpened?: () => void;
 }
 interface QuizResult {
   id: string;
@@ -82,7 +84,9 @@ export default function StartScreen({
   onStartMultiplayer,
   currentView,
   onOpenAdminPanel,
-  onBackToMainMenu
+  onBackToMainMenu,
+  shouldOpenProfile = false,
+  onProfileOpened
 }: StartScreenProps) {
   const {
     language
@@ -105,6 +109,13 @@ export default function StartScreen({
   const [loading, setLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (shouldOpenProfile) {
+      setIsProfileOpen(true);
+      onProfileOpened?.();
+    }
+  }, [shouldOpenProfile, onProfileOpened]);
 
   useEffect(() => {
     const checkBanStatus = async () => {
@@ -453,7 +464,12 @@ export default function StartScreen({
         </div>
         <ProfileButton
           onOpenAdminPanel={onOpenAdminPanel}
-          onProfileOpenChange={setIsProfileOpen}
+          onProfileOpenChange={(open) => {
+            setIsProfileOpen(open);
+            if (!open && shouldOpenProfile && onBackToMainMenu) {
+              onBackToMainMenu();
+            }
+          }}
         />
       </div>
 

@@ -22,6 +22,7 @@ function IndexContent() {
   const [timeLimit, setTimeLimit] = useState<number>();
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('easy');
   const [multiplayerGameMode, setMultiplayerGameMode] = useState<string>('flags');
+  const [shouldOpenProfile, setShouldOpenProfile] = useState(false);
 
   const handleStartQuiz = (
     mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge',
@@ -101,6 +102,11 @@ function IndexContent() {
     setCurrentView('main-menu');
   };
 
+  const handleProfileOpenFromMainMenu = () => {
+    setShouldOpenProfile(true);
+    setCurrentView('start');
+  };
+
   return (
     <>
       {currentView === 'main-menu' ? (
@@ -109,9 +115,18 @@ function IndexContent() {
           onMultiplayerStart={handleStartMultiplayer}
           onDailyChallengeStart={handleDailyChallengeStart}
           onStartQuiz={handleStartQuiz}
+          onProfileOpen={handleProfileOpenFromMainMenu}
         />
       ) : currentView === 'start' ? (
-        <StartScreen onStartQuiz={handleStartQuiz} onStartMultiplayer={handleStartMultiplayer} currentView={currentView} onOpenAdminPanel={handleOpenAdminPanel} onBackToMainMenu={handleBackToMainMenu} />
+        <StartScreen
+          onStartQuiz={handleStartQuiz}
+          onStartMultiplayer={handleStartMultiplayer}
+          currentView={currentView}
+          onOpenAdminPanel={handleOpenAdminPanel}
+          onBackToMainMenu={handleBackToMainMenu}
+          shouldOpenProfile={shouldOpenProfile}
+          onProfileOpened={() => setShouldOpenProfile(false)}
+        />
       ) : currentView === 'admin' ? (
         <AdminPanel onBack={handleBackFromAdmin} />
       ) : currentView === 'quiz' ? (
