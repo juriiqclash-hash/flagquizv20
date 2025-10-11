@@ -142,9 +142,13 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               </div>
               <Button
                 onClick={handleMultiplayer}
-                className="bg-green-600 hover:bg-green-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300"
+                className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 relative overflow-hidden shadow-lg"
+                style={{
+                  boxShadow: '0 6px 20px rgba(34, 197, 94, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
+                }}
               >
-                <span className="text-lg">PLAY</span>
+                <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/50 via-white/20 to-transparent opacity-80" style={{ clipPath: 'ellipse(80% 35% at 50% 0%)' }}></span>
+                <span className="relative z-10 text-lg" style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)' }}>PLAY</span>
               </Button>
             </div>
           </div>
@@ -166,7 +170,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
             </div>
             <Button
               onClick={handleDailyChallenge}
-              className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300"
+              className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg"
             >
               <span className="text-lg">PLAY</span>
             </Button>
@@ -199,7 +203,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                     <img
                       src={userRank.image}
                       alt={userRank.name}
-                      className="w-40 h-40 object-contain drop-shadow-2xl"
+                      className="w-24 h-24 object-contain drop-shadow-2xl"
                     />
                   </div>
                   <p className="text-white text-xl font-bold" style={{ color: userRank.color }}>
