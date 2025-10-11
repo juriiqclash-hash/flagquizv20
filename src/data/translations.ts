@@ -82,7 +82,7 @@ export const translations = {
     noScores: 'Noch keine Einträge',
     
     // Multiplayer
-    multiplayer: 'Mehrspieler',
+    multiplayer: 'Multiplayer',
     playAgainstOthers: 'Spiele gegen andere in Echtzeit',
     play: 'PLAY',
 
