@@ -99,8 +99,8 @@ export const translations = {
     daysInRow: '{count} Tage in Folge',
 
     // MainMenu Panels
-    quickAccess: 'Schnellzugriff',
-    dailyChallengeTitle: 'Die tägliche Herausforderung',
+    quickAccess: 'Quick Access',
+    dailyChallengeTitle: 'Daily Challenge',
     yourCurrentRank: 'Dein aktueller Rang',
     youAreOnStreak: 'Du bist auf einer {count} Streak',
     news: 'NEWS',
@@ -200,7 +200,7 @@ export const translations = {
 
     // Player Search
     searchPlayers: 'Spieler suchen',
-    searchPlayersPlaceholder: 'Spielername eingeben...',
+    searchPlayersPlaceholder: 'Suche nach anderen Spielern, Quiz oder Clan',
     noPlayersFound: 'Keine Spieler gefunden',
     startTypingToSearch: 'Beginne zu tippen um Spieler zu suchen',
   },

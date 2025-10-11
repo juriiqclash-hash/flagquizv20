@@ -114,7 +114,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           onClick={() => setShowPlayerSearch(true)}
           variant="ghost"
           size="icon"
-          className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+          className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm"
         >
           <Search className="h-5 w-5" />
         </Button>
@@ -181,12 +181,12 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                 <img src="/pngtree-july-31-calendar-date-month-picture-image_7830645 copy.png" alt="Daily Challenge" className="w-9 h-9 object-contain" />
               </div>
               <div>
-                <h4 className="text-white text-xl font-bold">{t.dailyChallengeTitle}</h4>
+                <h4 className="text-white text-xl font-bold whitespace-nowrap">{t.dailyChallengeTitle}</h4>
               </div>
             </div>
             <Button
               onClick={handleDailyChallenge}
-              className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg"
+              className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg flex-shrink-0"
             >
               <span className="text-lg">PLAY</span>
             </Button>
