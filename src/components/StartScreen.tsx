@@ -315,7 +315,7 @@ export default function StartScreen({
         <div ref={searchRef} className="relative">
           <div
             className={`flex items-center gap-2 bg-background border rounded-lg transition-all duration-300 ${
-              searchExpanded ? 'w-[350px]' : 'w-10 h-10'
+              searchExpanded ? 'w-[280px]' : 'w-10 h-10'
             }`}
           >
             <Button
@@ -338,7 +338,7 @@ export default function StartScreen({
           </div>
 
           {searchExpanded && (searchQuery || loading) && (
-            <div className="absolute top-12 right-0 w-[350px] bg-background border rounded-2xl shadow-2xl max-h-[500px] overflow-y-auto">
+            <div className="absolute top-12 right-0 w-[280px] bg-background border rounded-2xl shadow-2xl max-h-[500px] overflow-y-auto">
               {loading && (
                 <div className="text-center py-8 text-muted-foreground">
                   {t.loading || 'Lädt...'}
@@ -365,7 +365,23 @@ export default function StartScreen({
                       className="w-full flex items-center gap-3 p-3 hover:bg-accent rounded-lg transition-colors"
                     >
                       <div className="w-12 h-12 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-                        {QUIZ_MODE_ICONS[quiz.id]}
+                        <div className={`${
+                          quiz.id === 'timed' ? 'text-blue-500' :
+                          quiz.id === 'learn' ? 'text-green-500' :
+                          quiz.id === 'streak' ? 'text-red-500' :
+                          quiz.id === 'continent' ? 'text-purple-500' :
+                          quiz.id === 'speedrush' ? 'text-orange-500' :
+                          quiz.id === 'capitals' ? 'text-indigo-500' :
+                          quiz.id === 'emoji' ? 'text-yellow-500' :
+                          quiz.id === 'highest-mountain' ? 'text-emerald-500' :
+                          quiz.id === 'official-language' ? 'text-cyan-500' :
+                          quiz.id === 'world-knowledge' ? 'text-teal-500' :
+                          quiz.id === 'combi-quiz' ? 'text-pink-500' :
+                          quiz.id === 'multiplayer' ? 'text-purple-500' :
+                          ''
+                        }`}>
+                          {QUIZ_MODE_ICONS[quiz.id]}
+                        </div>
                       </div>
                       <div className="flex-1 text-left min-w-0">
                         <p className="font-semibold text-sm truncate">{quiz.name}</p>
