@@ -134,7 +134,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-white" />
+                  <img src="/src/assets/10614367.png" alt="Multiplayer" className="w-8 h-8 object-contain" />
                 </div>
                 <div>
                   <h4 className="text-white text-lg font-bold">{t.multiplayer}</h4>
@@ -142,7 +142,10 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               </div>
               <Button
                 onClick={handleMultiplayer}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-2 rounded-full transition-all duration-300"
+                className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-8 py-2 rounded-xl transition-all duration-300"
+                style={{
+                  boxShadow: '0 6px 0 rgba(21, 128, 61, 0.8), 0 8px 20px rgba(34, 197, 94, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25)'
+                }}
               >
                 {t.play}
               </Button>
@@ -158,7 +161,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/30 to-purple-500/30 flex items-center justify-center border-2 border-white/20">
-                <Calendar className="w-7 h-7 text-white" />
+                <img src="/src/assets/pngtree-july-31-calendar-date-month-picture-image_7830645.png" alt="Daily Challenge" className="w-9 h-9 object-contain" />
               </div>
               <div>
                 <h4 className="text-white text-xl font-bold">{t.dailyChallengeTitle}</h4>
@@ -166,7 +169,10 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
             </div>
             <Button
               onClick={handleDailyChallenge}
-              className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-2 rounded-full transition-all duration-300"
+              className="bg-gradient-to-b from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white font-bold px-8 py-2 rounded-xl transition-all duration-300"
+              style={{
+                boxShadow: '0 6px 0 rgba(109, 40, 217, 0.8), 0 8px 20px rgba(168, 85, 247, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25)'
+              }}
             >
               {t.play}
             </Button>
