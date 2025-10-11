@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Flame, Clock, Trophy, X, Info, UserPlus, UserMinus, Check } from 'lucide-react';
+import { Flame, Clock, Trophy, X, Info, UserPlus, UserMinus, Check, Plus } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { getXPProgress } from '@/lib/xpSystem';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -396,9 +396,8 @@ export const PublicProfileView = ({
                   }}>
                         {profileData.flag}
                       </span>
-                    </div> : <div className="w-20 h-20 md:w-28 md:h-28 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center opacity-50">
-                      <span className="text-gray-300 text-3xl md:text-5xl mb-0.5 md:mb-1">+</span>
-
+                    </div> : <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
+                      <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />
                     </div>}
 
                   {profileData.continent ? <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
@@ -410,9 +409,8 @@ export const PublicProfileView = ({
                   }}>
                         {profileData.continent}
                       </span>
-                    </div> : <div className="w-20 h-20 md:w-28 md:h-28 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center opacity-50">
-                      <span className="text-gray-300 text-3xl md:text-5xl mb-0.5 md:mb-1">+</span>
-
+                    </div> : <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
+                      <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />
                     </div>}
 
                   {profileData.clan ? <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
@@ -424,9 +422,8 @@ export const PublicProfileView = ({
                   }}>
                         {profileData.clan}
                       </span>
-                    </div> : <div className="w-20 h-20 md:w-28 md:h-28 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center opacity-50">
-                      <span className="text-gray-300 text-3xl md:text-5xl mb-0.5 md:mb-1">+</span>
-
+                    </div> : <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
+                      <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />
                     </div>}
                 </div>
 
