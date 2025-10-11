@@ -354,7 +354,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
               {searchExpanded && (searchQuery || loading) && (
                 <>
-                  <div className="fixed inset-0 backdrop-blur-md z-40" onClick={() => {
+                  <div className="fixed inset-0 bg-black/20 z-40" onClick={() => {
                     setSearchExpanded(false);
                     setSearchQuery('');
                   }} />
