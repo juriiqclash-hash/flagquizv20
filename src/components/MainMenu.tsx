@@ -142,7 +142,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               </div>
               <Button
                 onClick={handleMultiplayer}
-                className="bg-green-600 hover:bg-green-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300"
+                className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg"
               >
                 <span className="text-lg">PLAY</span>
               </Button>
