@@ -35,6 +35,7 @@ interface MainMenuProps {
   onStart: () => void;
   onMultiplayerStart?: () => void;
   onDailyChallengeStart?: () => void;
+  onStartQuiz?: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz', continent?: string, timeLimit?: number) => void;
 }
 
 interface QuizResult {
@@ -74,7 +75,7 @@ const QUIZ_MODES: QuizResult[] = [
   { id: 'multiplayer', name: 'Multiplayer', description: 'Spiele gegen andere in Echtzeit', icon: '👥' },
 ];
 
-export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallengeStart }: MainMenuProps) {
+export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallengeStart, onStartQuiz }: MainMenuProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -224,6 +225,8 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
   const handleQuizClick = (quizId: string) => {
     if (quizId === 'multiplayer') {
       handleMultiplayer();
+    } else if (onStartQuiz) {
+      onStartQuiz(quizId as any);
     } else {
       handleStart();
     }

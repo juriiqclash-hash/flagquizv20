@@ -108,6 +108,7 @@ function IndexContent() {
           onStart={handleMainMenuStart}
           onMultiplayerStart={handleStartMultiplayer}
           onDailyChallengeStart={handleDailyChallengeStart}
+          onStartQuiz={handleStartQuiz}
         />
       ) : currentView === 'start' ? (
         <StartScreen onStartQuiz={handleStartQuiz} onStartMultiplayer={handleStartMultiplayer} currentView={currentView} onOpenAdminPanel={handleOpenAdminPanel} onBackToMainMenu={handleBackToMainMenu} />
