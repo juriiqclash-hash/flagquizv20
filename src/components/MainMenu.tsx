@@ -346,7 +346,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               </div>
 
               {searchExpanded && (searchQuery || loading) && (
-                <div className="absolute top-12 right-0 w-[200px] md:w-[350px] bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto z-50">
+                <div className="absolute top-12 right-0 w-[200px] md:w-[350px] bg-white/20 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto z-50">
                   {loading && (
                     <div className="text-center py-8 text-gray-400">
                       {t.loading || 'Lädt...'}
@@ -493,7 +493,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           <div className="flex flex-col h-full">
             <h3 className="text-white text-xl font-bold mb-4">{t.quickAccess}</h3>
 
-            <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-6 border border-white/10 relative overflow-hidden flex flex-col items-center justify-center gap-3">
+            <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-8 border border-white/10 relative overflow-hidden flex flex-col items-center justify-center gap-3">
               <img src="/trophy-3d-icon-illustration-png copy.webp" alt="Trophy" className="w-20 h-20 object-contain drop-shadow-2xl" />
               <h4 className="text-white text-xl font-bold italic">{t.multiplayer.toUpperCase()}</h4>
               <Button
