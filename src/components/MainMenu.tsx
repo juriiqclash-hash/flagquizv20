@@ -239,13 +239,19 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center"
+      <div
+        className="min-h-screen flex items-center justify-center relative overflow-hidden"
         style={{
-          backgroundImage: `url("/F5BD60DF-0BF3-4DCD-B9C2-C433C2CB0628.png")`, // <--- dein Wallpaper hier
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
+          backgroundImage: `
+            linear-gradient(to bottom, rgba(10, 20, 72, 0.95), rgba(27, 46, 122, 0.95)),
+            url("/F5BD60DF-0BF3-4DCD-B9C2-C433C2CB0628.png")
+    `      ,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
+
         <div className="text-center">
           <Loader2 className="w-16 h-16 text-white animate-spin mx-auto mb-4" />
           <p className="text-2xl text-white font-semibold">{t.loading}</p>
