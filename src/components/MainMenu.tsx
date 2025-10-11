@@ -271,7 +271,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       }}
     >
       {/* Top Navigation Bar */}
-      <div className="absolute top-0 left-0 right-0 z-20 bg-white/10 backdrop-blur-sm border-b border-white/20">
+      <div className="absolute top-0 left-0 right-0 z-20 bg-black/40 backdrop-blur-sm border-b border-white/20">
         <div className="flex items-center justify-between px-6 py-2">
           {/* Left Side - Logo, Language, Leaderboard, Friends, Clan */}
           <div className="flex items-center gap-3">
@@ -358,7 +358,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                     setSearchExpanded(false);
                     setSearchQuery('');
                   }} />
-                  <div className="absolute top-12 right-0 w-[200px] md:w-[350px] bg-white/20 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto z-50">
+                  <div className="absolute top-12 right-0 w-[200px] md:w-[350px] bg-black/70 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto z-50">
                   {loading && (
                     <div className="text-center py-8 text-gray-400">
                       {t.loading || 'Lädt...'}
