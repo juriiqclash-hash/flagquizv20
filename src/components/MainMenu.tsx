@@ -9,7 +9,7 @@ import FlagQuizLogo from "@/components/FlagQuizLogo";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserStats } from "@/hooks/useUserStats";
 import { getRankFromLevel, getRankTier } from "@/lib/rankSystem";
-
+import { calculateLevel } from "@/lib/xpSystem";
 interface MainMenuProps {
   onStart: () => void;
   onMultiplayerStart?: () => void;
@@ -23,7 +23,8 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
   const { language, setLanguage } = useLanguage();
   const t = useTranslation(language);
 
-  const userLevel = stats?.level || 0;
+  const userXP = stats?.xp ?? 0;
+  const userLevel = calculateLevel(userXP);
   const userRank = getRankFromLevel(userLevel);
   const rankTier = getRankTier(userLevel, userRank);
 
