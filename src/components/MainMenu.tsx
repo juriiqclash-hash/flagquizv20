@@ -49,7 +49,7 @@ const QUIZ_MODES: QuizResult[] = [
   { id: 'official-language', name: 'Amtssprachen', description: 'Erkenne die Amtssprache jedes Landes', icon: '🗣️' },
   { id: 'world-knowledge', name: 'Weltwissen Quiz', description: 'Teste dein Wissen über Weltfakten', icon: '🌏' },
   { id: 'combi-quiz', name: 'Combi-Quiz', description: 'Wähle deine Kategorien und spiele endlos', icon: '🎭' },
-  { id: 'multiplayer', name: 'Mehrspieler', description: 'Spiele gegen andere in Echtzeit', icon: '👥' },
+  { id: 'multiplayer', name: 'Multiplayer', description: 'Spiele gegen andere in Echtzeit', icon: '👥' },
 ];
 
 export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallengeStart }: MainMenuProps) {
@@ -219,7 +219,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       <div className="absolute top-4 right-4 z-20 flex gap-2 items-center">
         <div ref={searchRef} className="relative">
           <div
-            className={`flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 transition-all duration-300 ${
+            className={`flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 transition-all duration-300 ${
               searchExpanded ? 'w-[400px]' : 'w-10 h-10'
             }`}
           >
@@ -227,7 +227,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               onClick={() => setSearchExpanded(!searchExpanded)}
               variant="ghost"
               size="icon"
-              className="text-white hover:bg-white/20 rounded-full flex-shrink-0"
+              className="text-white hover:bg-white/20 rounded-lg flex-shrink-0"
             >
               <Search className="h-5 w-5" />
             </Button>
@@ -243,7 +243,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           </div>
 
           {searchExpanded && (searchQuery || loading) && (
-            <div className="absolute top-12 right-0 w-[400px] bg-slate-800/95 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto">
+            <div className="absolute top-12 right-0 w-[400px] bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto">
               {loading && (
                 <div className="text-center py-8 text-gray-400">
                   {t.loading || 'Lädt...'}
@@ -266,9 +266,9 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                         setSearchExpanded(false);
                         setSearchQuery('');
                       }}
-                      className="w-full flex items-center gap-3 p-3 hover:bg-white/10 rounded-lg transition-colors"
+                      className="w-full flex items-center gap-3 p-3 hover:bg-white/20 rounded-lg transition-colors"
                     >
-                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-lg flex-shrink-0">
+                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-slate-700/50 to-slate-800/50 border border-white/10 flex items-center justify-center text-2xl flex-shrink-0">
                         {quiz.icon}
                       </div>
                       <div className="flex-1 text-left min-w-0">
@@ -291,9 +291,9 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                         setSearchExpanded(false);
                         setSearchQuery('');
                       }}
-                      className="w-full flex items-center gap-3 p-3 hover:bg-white/10 rounded-lg transition-colors"
+                      className="w-full flex items-center gap-3 p-3 hover:bg-white/20 rounded-lg transition-colors"
                     >
-                      <Avatar className="h-8 w-8 ring-2 ring-white/20 flex-shrink-0">
+                      <Avatar className="h-12 w-12 ring-2 ring-white/20 flex-shrink-0">
                         <AvatarImage src={player.avatar_url || undefined} />
                         <AvatarFallback className="bg-blue-500 text-white text-sm">
                           {player.username.charAt(0).toUpperCase()}
