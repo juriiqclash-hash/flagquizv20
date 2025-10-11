@@ -314,7 +314,7 @@ export default function StartScreen({
       <div className="absolute top-4 right-4 z-50 flex gap-2 items-center">
         <div ref={searchRef} className="relative">
           <div
-            className={`flex items-center gap-2 bg-background border rounded-full transition-all duration-300 ${
+            className={`flex items-center gap-2 bg-background border rounded-lg transition-all duration-300 ${
               searchExpanded ? 'w-[350px]' : 'w-10 h-10'
             }`}
           >
@@ -322,7 +322,7 @@ export default function StartScreen({
               onClick={() => setSearchExpanded(!searchExpanded)}
               variant="outline"
               size="icon"
-              className="rounded-full flex-shrink-0"
+              className="rounded-lg flex-shrink-0"
             >
               <Search className="h-5 w-5" />
             </Button>
@@ -358,6 +358,7 @@ export default function StartScreen({
                     <button
                       key={quiz.id}
                       onClick={() => {
+                        handleModeClick(quiz.id);
                         setSearchExpanded(false);
                         setSearchQuery('');
                       }}

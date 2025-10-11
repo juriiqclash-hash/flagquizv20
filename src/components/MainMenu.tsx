@@ -221,6 +221,14 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
     window.open('https://discord.gg/cC4fHpubn', '_blank');
   };
 
+  const handleQuizClick = (quizId: string) => {
+    if (quizId === 'multiplayer') {
+      handleMultiplayer();
+    } else {
+      handleStart();
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center"
@@ -277,7 +285,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               onClick={() => setSearchExpanded(!searchExpanded)}
               variant="ghost"
               size="icon"
-              className="text-white hover:bg-white/20 rounded-lg flex-shrink-0"
+              className="text-white hover:bg-white/20 rounded-lg flex-shrink-0 w-10 h-10"
             >
               <Search className="h-5 w-5" />
             </Button>
@@ -313,6 +321,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                     <button
                       key={quiz.id}
                       onClick={() => {
+                        handleQuizClick(quiz.id);
                         setSearchExpanded(false);
                         setSearchQuery('');
                       }}
