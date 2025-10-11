@@ -134,7 +134,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                  <img src="/src/assets/10614367.png" alt="Multiplayer" className="w-8 h-8 object-contain" />
+                  <img src="/10614367 copy.png" alt="Multiplayer" className="w-8 h-8 object-contain" />
                 </div>
                 <div>
                   <h4 className="text-white text-lg font-bold">{t.multiplayer}</h4>
@@ -142,13 +142,13 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               </div>
               <Button
                 onClick={handleMultiplayer}
-                className="bg-gradient-to-br from-green-400 via-green-500 to-green-600 hover:from-green-500 hover:via-green-600 hover:to-green-700 text-white font-bold px-8 py-2 rounded-full transition-all duration-300 relative overflow-hidden"
+                className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 relative overflow-hidden shadow-lg"
                 style={{
-                  boxShadow: '0 4px 12px rgba(34, 197, 94, 0.4)'
+                  boxShadow: '0 6px 20px rgba(34, 197, 94, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
                 }}
               >
-                <span className="absolute inset-0 rounded-full bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-60" style={{ clipPath: 'ellipse(60% 40% at 30% 20%)' }}></span>
-                <span className="relative z-10">{t.play}</span>
+                <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/50 via-white/20 to-transparent opacity-80" style={{ clipPath: 'ellipse(80% 35% at 50% 0%)' }}></span>
+                <span className="relative z-10 text-lg" style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)' }}>PLAY</span>
               </Button>
             </div>
           </div>
@@ -162,7 +162,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/30 to-purple-500/30 flex items-center justify-center border-2 border-white/20">
-                <img src="/src/assets/pngtree-july-31-calendar-date-month-picture-image_7830645.png" alt="Daily Challenge" className="w-9 h-9 object-contain" />
+                <img src="/pngtree-july-31-calendar-date-month-picture-image_7830645 copy.png" alt="Daily Challenge" className="w-9 h-9 object-contain" />
               </div>
               <div>
                 <h4 className="text-white text-xl font-bold">{t.dailyChallengeTitle}</h4>
@@ -170,13 +170,13 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
             </div>
             <Button
               onClick={handleDailyChallenge}
-              className="bg-gradient-to-br from-purple-500 via-purple-600 to-purple-700 hover:from-purple-600 hover:via-purple-700 hover:to-purple-800 text-white font-bold px-8 py-2 rounded-full transition-all duration-300 relative overflow-hidden"
+              className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 relative overflow-hidden shadow-lg"
               style={{
-                boxShadow: '0 4px 12px rgba(168, 85, 247, 0.4)'
+                boxShadow: '0 6px 20px rgba(34, 197, 94, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
               }}
             >
-              <span className="absolute inset-0 rounded-full bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-60" style={{ clipPath: 'ellipse(60% 40% at 30% 20%)' }}></span>
-              <span className="relative z-10">{t.play}</span>
+              <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/50 via-white/20 to-transparent opacity-80" style={{ clipPath: 'ellipse(80% 35% at 50% 0%)' }}></span>
+              <span className="relative z-10 text-lg" style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)' }}>PLAY</span>
             </Button>
           </div>
         </div>
@@ -232,10 +232,13 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         <Button
           onClick={handleStart}
           size="lg"
-          className="bg-blue-600 hover:bg-blue-700 text-white text-2xl py-8 px-16 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 scale-90"
+          className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white text-2xl py-8 px-20 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 scale-90 relative overflow-hidden font-bold"
+          style={{
+            boxShadow: '0 8px 24px rgba(34, 197, 94, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.5)'
+          }}
         >
-          <Play className="mr-3 h-8 w-8" />
-          {t.start}
+          <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/50 via-white/20 to-transparent opacity-80" style={{ clipPath: 'ellipse(80% 35% at 50% 0%)' }}></span>
+          <span className="relative z-10" style={{ textShadow: '0 2px 6px rgba(0, 0, 0, 0.3)' }}>PLAY</span>
         </Button>
       </div>
     </div>
