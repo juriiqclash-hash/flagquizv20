@@ -360,7 +360,7 @@ export const PublicProfileView = ({
                     {username.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <p className="text-sm text-gray-300 mt-3 font-medium hidden md:block" style={{
+                <p className="text-sm text-gray-300 mt-3 font-medium" style={{
                 fontFamily: '"VAG Rounded", sans-serif'
               }}>
                   Joined {accountCreated}
@@ -429,23 +429,23 @@ export const PublicProfileView = ({
                 </div>
 
                 {currentUser && currentUser.id !== userId && <div className="flex gap-2 justify-center md:justify-start flex-wrap">
-                    {friendshipStatus === 'none' && <Button onClick={sendFriendRequest} className="bg-blue-500 hover:bg-blue-600 text-white">
+                    {friendshipStatus === 'none' && <Button onClick={sendFriendRequest} className="bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
                         <UserPlus className="w-4 h-4 mr-2" />
                         Freund hinzufügen
                       </Button>}
-                    {friendshipStatus === 'pending_sent' && <Button onClick={cancelFriendRequest} variant="outline" className="bg-white/20 border-white/40 text-white hover:bg-white/30">
+                    {friendshipStatus === 'pending_sent' && <Button onClick={cancelFriendRequest} className="bg-gradient-to-b from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
                         <Clock className="w-4 h-4 mr-2" />
                         Anfrage gesendet
                       </Button>}
-                    {friendshipStatus === 'pending_received' && <Button onClick={acceptFriendRequest} className="bg-green-500 hover:bg-green-600 text-white">
+                    {friendshipStatus === 'pending_received' && <Button onClick={acceptFriendRequest} className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
                         <Check className="w-4 h-4 mr-2" />
                         Anfrage annehmen
                       </Button>}
-                    {friendshipStatus === 'friends' && <Button onClick={removeFriend} variant="outline" className="bg-red-500/20 border-red-500/40 text-white hover:bg-red-500/30">
+                    {friendshipStatus === 'friends' && <Button onClick={removeFriend} className="bg-gradient-to-b from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
                         <UserMinus className="w-4 h-4 mr-2" />
                         Freund entfernen
                       </Button>}
-                    <Button onClick={() => setShowClanView(true)} className="bg-blue-500 hover:bg-blue-600 text-white">
+                    <Button onClick={() => setShowClanView(true)} className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
                       <Users className="w-4 h-4 mr-2" />
                       Clan anschauen
                     </Button>
