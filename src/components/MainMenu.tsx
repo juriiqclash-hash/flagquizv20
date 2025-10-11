@@ -142,12 +142,13 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               </div>
               <Button
                 onClick={handleMultiplayer}
-                className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-8 py-2 rounded-xl transition-all duration-300"
+                className="bg-gradient-to-br from-green-400 via-green-500 to-green-600 hover:from-green-500 hover:via-green-600 hover:to-green-700 text-white font-bold px-8 py-2 rounded-full transition-all duration-300 relative overflow-hidden"
                 style={{
-                  boxShadow: '0 6px 0 rgba(21, 128, 61, 0.8), 0 8px 20px rgba(34, 197, 94, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25)'
+                  boxShadow: '0 4px 12px rgba(34, 197, 94, 0.4)'
                 }}
               >
-                {t.play}
+                <span className="absolute inset-0 rounded-full bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-60" style={{ clipPath: 'ellipse(60% 40% at 30% 20%)' }}></span>
+                <span className="relative z-10">{t.play}</span>
               </Button>
             </div>
           </div>
@@ -169,12 +170,13 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
             </div>
             <Button
               onClick={handleDailyChallenge}
-              className="bg-gradient-to-b from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white font-bold px-8 py-2 rounded-xl transition-all duration-300"
+              className="bg-gradient-to-br from-purple-500 via-purple-600 to-purple-700 hover:from-purple-600 hover:via-purple-700 hover:to-purple-800 text-white font-bold px-8 py-2 rounded-full transition-all duration-300 relative overflow-hidden"
               style={{
-                boxShadow: '0 6px 0 rgba(109, 40, 217, 0.8), 0 8px 20px rgba(168, 85, 247, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25)'
+                boxShadow: '0 4px 12px rgba(168, 85, 247, 0.4)'
               }}
             >
-              {t.play}
+              <span className="absolute inset-0 rounded-full bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-60" style={{ clipPath: 'ellipse(60% 40% at 30% 20%)' }}></span>
+              <span className="relative z-10">{t.play}</span>
             </Button>
           </div>
         </div>
