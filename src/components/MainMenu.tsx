@@ -249,7 +249,6 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
     );
   }
 
-
   return (
     <div
       className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden"
@@ -259,64 +258,169 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         backgroundPosition: "center",
       }}
     >
-      {/* Top Navigation Bar */}
-      <div className="absolute top-0 left-0 right-0 z-20">
-        <div className="mx-6 mt-4 bg-white/10 backdrop-blur-sm rounded-2xl border-2 border-white/30 px-6 py-3">
-          <div className="flex items-center justify-between">
-            {/* Left Side - Logo */}
-            <div className="flex items-center gap-4">
-              <FlagQuizLogo size="sm" variant="dark" className="scale-75" />
-            </div>
-
-            {/* Right Side - Language, Search, Profile */}
-            <div className="flex items-center gap-3">
-              {/* Language Selector */}
-              <Select value={language} onValueChange={setLanguage}>
-                <SelectTrigger className="w-[140px] bg-white/10 text-white border-white/20 hover:bg-white/20 h-10">
-                  <Languages className="mr-2 h-4 w-4" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="de">Deutsch</SelectItem>
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="es">Español</SelectItem>
-                  <SelectItem value="fr">Français</SelectItem>
-                  <SelectItem value="it">Italiano</SelectItem>
-                  <SelectItem value="ja">日本語</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Search Button */}
-              <Button
-                onClick={() => setSearchExpanded(!searchExpanded)}
-                variant="ghost"
-                size="icon"
-                className="text-white hover:bg-white/20 rounded-lg w-10 h-10"
-              >
-                <Search className="h-5 w-5" />
-              </Button>
-
-              {/* Profile Button */}
-              <ProfileButton transparentStyle onProfileOpenChange={() => {}} />
-            </div>
-          </div>
-        </div>
+      {/* Language Selector - Top Left */}
+      <div className="absolute top-4 left-4 z-20">
+        <Select value={language} onValueChange={setLanguage}>
+          <SelectTrigger className="w-[160px] bg-white/10 text-white border-white/20 hover:bg-white/20">
+            <Languages className="mr-2 h-4 w-4" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="de">Deutsch</SelectItem>
+            <SelectItem value="en">English</SelectItem>
+            <SelectItem value="es">Español</SelectItem>
+            <SelectItem value="fr">Français</SelectItem>
+            <SelectItem value="it">Italiano</SelectItem>
+            <SelectItem value="ja">日本語</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
-      {/* Search Expanded Dropdown */}
-      {searchExpanded && (
-        <div ref={searchRef} className="absolute top-20 right-10 z-30 w-[300px] bg-white/10 backdrop-blur-sm rounded-2xl border-2 border-white/30 shadow-2xl p-4">
-          <Input
-            placeholder={t.searchPlayersPlaceholder}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
-            autoFocus
-          />
-          {/* Search results rendering code would go here later */}
-        </div>
-      )}
+      {/* Profile and Search Buttons - Top Right */}
+      <div className="absolute top-4 right-4 z-20 flex gap-2 items-center">
+        <div ref={searchRef} className="relative">
+          <div
+            className={`flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 transition-all duration-300 ${
+              searchExpanded ? 'w-[200px] md:w-[350px]' : 'w-10 h-10'
+            }`}
+          >
+            <Button
+              onClick={() => setSearchExpanded(!searchExpanded)}
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-white/20 rounded-lg flex-shrink-0 w-10 h-10"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+            {searchExpanded && (
+              <Input
+                placeholder={t.searchPlayersPlaceholder}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-transparent border-none text-white placeholder:text-white/60 h-10 focus-visible:ring-0 pr-4"
+                autoFocus
+              />
+            )}
+          </div>
 
+          {searchExpanded && (searchQuery || loading) && (
+            <div className="absolute top-12 right-0 w-[200px] md:w-[350px] bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto">
+              {loading && (
+                <div className="text-center py-8 text-gray-400">
+                  {t.loading || 'Lädt...'}
+                </div>
+              )}
+
+              {!loading && searchQuery && playerResults.length === 0 && quizResults.length === 0 && clanResults.length === 0 && (
+                <div className="text-center py-8 text-gray-400">
+                  Keine Ergebnisse gefunden
+                </div>
+              )}
+
+              {!loading && quizResults.length > 0 && (
+                <div className="p-2">
+                  <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 py-2">Quiz</h3>
+                  {quizResults.map((quiz) => (
+                    <button
+                      key={quiz.id}
+                      onClick={() => {
+                        handleQuizClick(quiz.id);
+                        setSearchExpanded(false);
+                        setSearchQuery('');
+                      }}
+                      className="w-full flex items-center gap-3 p-3 hover:bg-white/20 rounded-lg transition-colors"
+                    >
+                      <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center flex-shrink-0">
+                        <div className={`${
+                          quiz.id === 'timed' ? 'text-blue-500' :
+                          quiz.id === 'learn' ? 'text-green-500' :
+                          quiz.id === 'streak' ? 'text-red-500' :
+                          quiz.id === 'continent' ? 'text-purple-500' :
+                          quiz.id === 'speedrush' ? 'text-orange-500' :
+                          quiz.id === 'capitals' ? 'text-indigo-500' :
+                          quiz.id === 'emoji' ? 'text-yellow-500' :
+                          quiz.id === 'highest-mountain' ? 'text-emerald-500' :
+                          quiz.id === 'official-language' ? 'text-cyan-500' :
+                          quiz.id === 'world-knowledge' ? 'text-teal-500' :
+                          quiz.id === 'combi-quiz' ? 'text-pink-500' :
+                          quiz.id === 'multiplayer' ? 'text-purple-500' :
+                          'text-white'
+                        }`}>
+                          {QUIZ_MODE_ICONS[quiz.id]}
+                        </div>
+                      </div>
+                      <div className="flex-1 text-left min-w-0">
+                        <p className="font-semibold text-white text-sm truncate">{quiz.name}</p>
+                        <p className="text-xs text-gray-400 truncate">{quiz.description}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {!loading && clanResults.length > 0 && (
+                <div className="p-2">
+                  <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 py-2">Clans</h3>
+                  {clanResults.map((clan) => (
+                    <button
+                      key={clan.id}
+                      onClick={() => {
+                        setSearchExpanded(false);
+                        setSearchQuery('');
+                      }}
+                      className="w-full flex items-center gap-3 p-3 hover:bg-white/20 rounded-lg transition-colors"
+                    >
+                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-slate-700/50 to-slate-800/50 border border-white/10 flex items-center justify-center text-2xl flex-shrink-0">
+                        {clan.emoji}
+                      </div>
+                      <div className="flex-1 text-left min-w-0">
+                        <p className="font-semibold text-white text-sm truncate">{clan.name}</p>
+                        <p className="text-xs text-gray-400">
+                          {clan.member_count} {clan.member_count === 1 ? 'Mitglied' : 'Mitglieder'}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {!loading && playerResults.length > 0 && (
+                <div className="p-2">
+                  <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 py-2">Spieler</h3>
+                  {playerResults.map((player) => (
+                    <button
+                      key={player.user_id}
+                      onClick={() => {
+                        setSelectedUserId(player.user_id);
+                        setSearchExpanded(false);
+                        setSearchQuery('');
+                      }}
+                      className="w-full flex items-center gap-3 p-3 hover:bg-white/20 rounded-lg transition-colors"
+                    >
+                      <Avatar className="h-12 w-12 ring-2 ring-white/20 flex-shrink-0">
+                        <AvatarImage src={player.avatar_url || undefined} />
+                        <AvatarFallback className="bg-blue-500 text-white text-sm">
+                          {player.username.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+
+                      <div className="flex-1 text-left min-w-0">
+                        <p className="font-semibold text-white text-sm truncate">{player.username}</p>
+                        <p className="text-xs text-gray-400">
+                          {t.level || 'Level'} {player.level} • {player.xp} XP
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        <ProfileButton transparentStyle onProfileOpenChange={() => {}} />
+      </div>
+
+      {/* Left Column - Hidden on Mobile */}
       <div className="hidden lg:flex absolute bottom-6 left-6 z-10 flex-col gap-5 scale-90 origin-bottom-left" style={{ width: '420px' }}>
         {/* News/Discord Panel */}
         <div
@@ -352,7 +456,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                 backgroundImage: 'repeating-linear-gradient(-45deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 30px, transparent 30px, transparent 60px)',
               }}></div>
 
-              <div className="relative z-10 flex flex-col items-center justify-start h-full gap-2 pt-4">
+              <div className="relative z-10 flex flex-col items-center justify-center h-full gap-3">
                 <img src="/trophy-3d-icon-illustration-png copy.webp" alt="Trophy" className="w-20 h-20 object-contain drop-shadow-2xl" />
                 <h4 className="text-white text-xl font-bold italic">{t.multiplayer.toUpperCase()}</h4>
                 <Button
