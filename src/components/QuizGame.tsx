@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Pause, Play, Home, Eye, EyeOff, SkipForward, MapPin, Map, Mountain, Languages, Menu, Search } from "lucide-react";
+import { Pause, Play, Home, Eye, EyeOff, SkipForward, MapPin, Map, Mountain, Languages, Menu } from "lucide-react";
 import QuizHomeButton from "@/components/QuizHomeButton";
 import { countries, shuffleArray, checkAnswer, continentEmojis, getFlagUrl, type Country } from "@/data/countries";
 import { countryMountains, getMountainByCountry } from "@/data/mountains";
