@@ -3,7 +3,22 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Play, Loader2, Languages, Users, Calendar, Search } from "lucide-react";
+import { Play, Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers } from "lucide-react";
+
+const QUIZ_MODE_ICONS: { [key: string]: React.ReactNode } = {
+  'timed': <Clock className="w-5 h-5" />,
+  'learn': <BookOpen className="w-5 h-5" />,
+  'streak': <Target className="w-5 h-5" />,
+  'continent': <Globe className="w-5 h-5" />,
+  'speedrush': <Zap className="w-5 h-5" />,
+  'capitals': <Building className="w-5 h-5" />,
+  'emoji': <Smile className="w-5 h-5" />,
+  'highest-mountain': <Mountain className="w-5 h-5" />,
+  'official-language': <LanguagesIcon className="w-5 h-5" />,
+  'world-knowledge': <Globe className="w-5 h-5" />,
+  'combi-quiz': <Layers className="w-5 h-5" />,
+  'multiplayer': <Users className="w-5 h-5" />,
+};
 import ProfileButton from "@/components/ProfileButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
@@ -255,7 +270,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         <div ref={searchRef} className="relative">
           <div
             className={`flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 transition-all duration-300 ${
-              searchExpanded ? 'w-[400px]' : 'w-10 h-10'
+              searchExpanded ? 'w-[350px]' : 'w-10 h-10'
             }`}
           >
             <Button
@@ -278,7 +293,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           </div>
 
           {searchExpanded && (searchQuery || loading) && (
-            <div className="absolute top-12 right-0 w-[400px] bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto">
+            <div className="absolute top-12 right-0 w-[350px] bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto">
               {loading && (
                 <div className="text-center py-8 text-gray-400">
                   {t.loading || 'Lädt...'}
@@ -303,8 +318,8 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                       }}
                       className="w-full flex items-center gap-3 p-3 hover:bg-white/20 rounded-lg transition-colors"
                     >
-                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-slate-700/50 to-slate-800/50 border border-white/10 flex items-center justify-center text-2xl flex-shrink-0">
-                        {quiz.icon}
+                      <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center flex-shrink-0 text-white">
+                        {QUIZ_MODE_ICONS[quiz.id]}
                       </div>
                       <div className="flex-1 text-left min-w-0">
                         <p className="font-semibold text-white text-sm truncate">{quiz.name}</p>

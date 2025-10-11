@@ -4,6 +4,21 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, BookOpen, Target, MapPin, Map, Zap, Building, Globe, Smile, Trophy, Users, Play, Mountain, Languages, ArrowLeft, Home, Layers, Search } from "lucide-react";
+
+const QUIZ_MODE_ICONS: { [key: string]: React.ReactNode } = {
+  'timed': <Clock className="w-5 h-5" />,
+  'learn': <BookOpen className="w-5 h-5" />,
+  'streak': <Target className="w-5 h-5" />,
+  'continent': <Globe className="w-5 h-5" />,
+  'speedrush': <Zap className="w-5 h-5" />,
+  'capitals': <Building className="w-5 h-5" />,
+  'emoji': <Smile className="w-5 h-5" />,
+  'highest-mountain': <Mountain className="w-5 h-5" />,
+  'official-language': <Languages className="w-5 h-5" />,
+  'world-knowledge': <Globe className="w-5 h-5" />,
+  'combi-quiz': <Layers className="w-5 h-5" />,
+  'multiplayer': <Users className="w-5 h-5" />,
+};
 import ContinentSelector from "./ContinentSelector";
 import TimeSelector from "./TimeSelector";
 import CapitalVariantSelector from "./CapitalVariantSelector";
@@ -300,7 +315,7 @@ export default function StartScreen({
         <div ref={searchRef} className="relative">
           <div
             className={`flex items-center gap-2 bg-background border rounded-full transition-all duration-300 ${
-              searchExpanded ? 'w-[400px]' : 'w-10 h-10'
+              searchExpanded ? 'w-[350px]' : 'w-10 h-10'
             }`}
           >
             <Button
@@ -323,7 +338,7 @@ export default function StartScreen({
           </div>
 
           {searchExpanded && (searchQuery || loading) && (
-            <div className="absolute top-12 right-0 w-[400px] bg-background border rounded-2xl shadow-2xl max-h-[500px] overflow-y-auto">
+            <div className="absolute top-12 right-0 w-[350px] bg-background border rounded-2xl shadow-2xl max-h-[500px] overflow-y-auto">
               {loading && (
                 <div className="text-center py-8 text-muted-foreground">
                   {t.loading || 'Lädt...'}
@@ -348,8 +363,8 @@ export default function StartScreen({
                       }}
                       className="w-full flex items-center gap-3 p-3 hover:bg-accent rounded-lg transition-colors"
                     >
-                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-slate-700/50 to-slate-800/50 border border-white/10 flex items-center justify-center text-2xl flex-shrink-0">
-                        {quiz.icon}
+                      <div className="w-12 h-12 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
+                        {QUIZ_MODE_ICONS[quiz.id]}
                       </div>
                       <div className="flex-1 text-left min-w-0">
                         <p className="font-semibold text-sm truncate">{quiz.name}</p>
