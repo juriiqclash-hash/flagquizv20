@@ -49,7 +49,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
   };
 
   const handleDiscord = () => {
-    window.open('https://discord.gg/cC4fHpubn', '_blank');
+    window.open('https://discord.gg/yourserver', '_blank');
   };
 
   if (isLoading) {
