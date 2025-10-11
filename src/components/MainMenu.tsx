@@ -272,7 +272,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
     >
       {/* Top Navigation Bar */}
       <div className="absolute top-0 left-0 right-0 z-20 bg-white/10 backdrop-blur-sm border-b border-white/30">
-        <div className="flex items-center justify-between px-6 py-2">
+        <div className="flex items-center justify-between px-6 py-3">
           {/* Left Side - Logo, Language, Leaderboard, Friends, Clan */}
           <div className="flex items-center gap-3">
             {/* FlagQuiz Logo */}
