@@ -5,7 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
-import { Play, Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield } from "lucide-react";
+import { Play, Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const QUIZ_MODE_ICONS: { [key: string]: React.ReactNode } = {
   'timed': <Clock className="w-5 h-5" />,
@@ -91,11 +93,13 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
   const [showFriendsMenu, setShowFriendsMenu] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showClanNotAvailable, setShowClanNotAvailable] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const { stats } = useUserStats();
   const { language, setLanguage } = useLanguage();
   const t = useTranslation(language);
+  const isMobile = useIsMobile();
 
   const userXP = stats?.xp ?? 0;
   const userLevel = calculateLevel(userXP);
@@ -263,57 +267,140 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
     >
       {/* Top Navigation Bar */}
       <div className="absolute top-0 left-0 right-0 z-20 bg-white/10 backdrop-blur-sm border-b border-white/30">
-        <div className="flex items-center justify-between px-6 py-3">
-          {/* Left Side - Logo, Language, Leaderboard, Friends, Clan */}
+        <div className="flex items-center justify-between px-4 md:px-6 py-3">
+          {/* Left Side - Desktop: Logo, Language, Leaderboard, Friends, Clan | Mobile: Hamburger Menu */}
           <div className="flex items-center gap-3">
-            {/* FlagQuiz Logo */}
-            <FlagQuizLogo size="sm" variant="dark" />
+            {isMobile ? (
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-white hover:bg-white/20 rounded-lg"
+                  >
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-[280px] bg-slate-900/95 backdrop-blur-md border-white/20">
+                  <SheetHeader>
+                    <SheetTitle className="text-white">Menü</SheetTitle>
+                  </SheetHeader>
+                  <div className="flex flex-col gap-3 mt-6">
+                    <Select value={language} onValueChange={(value) => {
+                      setLanguage(value);
+                      setMobileMenuOpen(false);
+                    }}>
+                      <SelectTrigger className="w-full bg-white/10 text-white border-white/20">
+                        <Languages className="mr-2 h-4 w-4" />
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="de">Deutsch</SelectItem>
+                        <SelectItem value="en">English</SelectItem>
+                        <SelectItem value="es">Español</SelectItem>
+                        <SelectItem value="fr">Français</SelectItem>
+                        <SelectItem value="it">Italiano</SelectItem>
+                        <SelectItem value="ja">日本語</SelectItem>
+                      </SelectContent>
+                    </Select>
 
-            {/* Language Selector */}
-            <Select value={language} onValueChange={setLanguage}>
-              <SelectTrigger className="w-[160px] bg-transparent text-white border-white/20 hover:bg-white/20">
-                <Languages className="mr-2 h-4 w-4" />
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="de">Deutsch</SelectItem>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="es">Español</SelectItem>
-                <SelectItem value="fr">Français</SelectItem>
-                <SelectItem value="it">Italiano</SelectItem>
-                <SelectItem value="ja">日本語</SelectItem>
-              </SelectContent>
-            </Select>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12"
+                      onClick={() => {
+                        setShowFriendsMenu(true);
+                        setMobileMenuOpen(false);
+                      }}
+                    >
+                      <Users className="h-5 w-5 mr-3" />
+                      Freunde
+                    </Button>
 
-            {/* Leaderboard Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-white hover:bg-white/20 rounded-lg"
-              onClick={() => setShowLeaderboard(true)}
-            >
-              <Trophy className="h-5 w-5" />
-            </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12"
+                      onClick={() => {
+                        setShowClanNotAvailable(true);
+                        setMobileMenuOpen(false);
+                      }}
+                    >
+                      <Shield className="h-5 w-5 mr-3" />
+                      Clans
+                    </Button>
 
-            {/* Friends Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-white hover:bg-white/20 rounded-lg"
-              onClick={() => setShowFriendsMenu(true)}
-            >
-              <Users className="h-5 w-5" />
-            </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12"
+                      onClick={() => {
+                        setShowLeaderboard(true);
+                        setMobileMenuOpen(false);
+                      }}
+                    >
+                      <Trophy className="h-5 w-5 mr-3" />
+                      Bestenliste
+                    </Button>
 
-            {/* Clan Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-white hover:bg-white/20 rounded-lg"
-              onClick={() => setShowClanNotAvailable(true)}
-            >
-              <Shield className="h-5 w-5" />
-            </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12"
+                      onClick={() => {
+                        handleStart();
+                        setMobileMenuOpen(false);
+                      }}
+                    >
+                      <Play className="h-5 w-5 mr-3" />
+                      Quiz
+                    </Button>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            ) : (
+              <>
+                <FlagQuizLogo size="sm" variant="dark" />
+
+                <Select value={language} onValueChange={setLanguage}>
+                  <SelectTrigger className="w-[160px] bg-transparent text-white border-white/20 hover:bg-white/20">
+                    <Languages className="mr-2 h-4 w-4" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="de">Deutsch</SelectItem>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="es">Español</SelectItem>
+                    <SelectItem value="fr">Français</SelectItem>
+                    <SelectItem value="it">Italiano</SelectItem>
+                    <SelectItem value="ja">日本語</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-white hover:bg-white/20 rounded-lg"
+                  onClick={() => setShowLeaderboard(true)}
+                >
+                  <Trophy className="h-5 w-5" />
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-white hover:bg-white/20 rounded-lg"
+                  onClick={() => setShowFriendsMenu(true)}
+                >
+                  <Users className="h-5 w-5" />
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-white hover:bg-white/20 rounded-lg"
+                  onClick={() => setShowClanNotAvailable(true)}
+                >
+                  <Shield className="h-5 w-5" />
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Right Side - Search and Profile */}
@@ -578,18 +665,122 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         </div>
       </div>
 
-      {/* Center Content */}
-      <div className="relative z-10 text-center max-w-2xl mx-auto mt-16">
-        <FlagQuizLogo size="xl" variant="dark" className="mb-20 drop-shadow-2xl scale-90 md:scale-125" />
-        <Button
-          onClick={handleStart}
-          size="lg"
-          className="bg-blue-600 hover:bg-blue-700 text-white text-2xl py-8 px-16 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 scale-90"
-        >
-          <Play className="mr-3 h-8 w-8" />
-          {t.start}
-        </Button>
-      </div>
+      {/* Center Content - Desktop and Mobile Versions */}
+      {isMobile ? (
+        <div className="relative z-10 flex flex-col items-center justify-start w-full px-4 pt-20 pb-8 overflow-y-auto max-h-[calc(100vh-64px)]">
+          <FlagQuizLogo size="xl" variant="dark" className="mb-8 drop-shadow-2xl" />
+
+          <Button
+            onClick={handleStart}
+            size="lg"
+            className="bg-blue-600 hover:bg-blue-700 text-white text-xl py-6 px-12 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 mb-12"
+          >
+            <Play className="mr-3 h-6 w-6" />
+            {t.start}
+          </Button>
+
+          <div className="w-full max-w-md flex flex-col gap-5">
+            <div
+              className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border-2 border-white/30 transition-all duration-300 active:bg-white/15 cursor-pointer"
+              onClick={handleDiscord}
+            >
+              <div className="flex flex-col">
+                <div className="mb-3 bg-gradient-to-br from-purple-600/40 to-blue-600/40 rounded-2xl flex items-center justify-center py-8">
+                  <div className="text-center">
+                    <svg viewBox="0 0 24 24" className="w-12 h-12 fill-current text-white mx-auto mb-2">
+                      <path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z"/>
+                    </svg>
+                    <h3 className="text-white text-lg font-bold">DISCORD</h3>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <h4 className="text-white text-base font-bold mb-1">{t.news}</h4>
+                  <p className="text-white/70 text-sm">{t.joinDiscord}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border-2 border-white/30">
+              <h3 className="text-white text-lg font-bold mb-3">{t.quickAccess}</h3>
+              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl py-5 px-6 border border-white/10 flex flex-col items-center justify-center gap-2">
+                <img src="/trophy-3d-icon-illustration-png copy.webp" alt="Trophy" className="w-16 h-16 object-contain drop-shadow-2xl" />
+                <h4 className="text-white text-lg font-bold italic">{t.multiplayer.toUpperCase()}</h4>
+                <Button
+                  onClick={handleMultiplayer}
+                  className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-10 py-2 rounded-full transition-all duration-300 shadow-lg"
+                >
+                  <span className="text-base">PLAY</span>
+                </Button>
+              </div>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 border-2 border-white/30 transition-all duration-300 active:bg-white/15">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500/30 to-purple-500/30 flex items-center justify-center border-2 border-white/20">
+                    <img src="/pngtree-july-31-calendar-date-month-picture-image_7830645 copy.png" alt="Daily Challenge" className="w-7 h-7 object-contain" />
+                  </div>
+                  <div>
+                    <h4 className="text-white text-sm font-bold">Daily Challenge</h4>
+                  </div>
+                </div>
+                <Button
+                  onClick={handleDailyChallenge}
+                  className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-6 py-2 rounded-full transition-all duration-300 shadow-lg"
+                >
+                  <span className="text-sm">PLAY</span>
+                </Button>
+              </div>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 border-2 border-white/30">
+              <h3 className="text-white text-lg font-bold mb-3">{t.dailyStreak}</h3>
+              <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 rounded-2xl p-4 border border-orange-500/30">
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-3xl">🔥</span>
+                  <p className="text-white text-base font-bold">{t.youAreOnStreak.replace('{count}', String(stats?.daily_streak || 0))}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 border-2 border-white/30 mb-4">
+              <h3 className="text-white text-lg font-bold mb-3">{t.yourCurrentRank}</h3>
+              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-4 border border-white/10">
+                {user ? (
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={profileRank?.badge}
+                      alt={profileRank?.name || 'Rank'}
+                      className="w-16 h-16 object-contain drop-shadow-2xl flex-shrink-0"
+                    />
+                    <p className="text-white text-xl font-bold">
+                      {(profileRank?.name || 'Rank').toUpperCase()}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="text-center p-3">
+                    <p className="text-white/70 text-sm">
+                      {t.loginToViewRank}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="relative z-10 text-center max-w-2xl mx-auto mt-16">
+          <FlagQuizLogo size="xl" variant="dark" className="mb-20 drop-shadow-2xl scale-90 md:scale-125" />
+          <Button
+            onClick={handleStart}
+            size="lg"
+            className="bg-blue-600 hover:bg-blue-700 text-white text-2xl py-8 px-16 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 scale-90"
+          >
+            <Play className="mr-3 h-8 w-8" />
+            {t.start}
+          </Button>
+        </div>
+      )}
 
       <FriendsMenu
         open={showFriendsMenu}
