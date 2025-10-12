@@ -113,8 +113,10 @@ export default function AdminProfileManager() {
 
       // Update multiplayer wins and level
       const updates: any = {};
-      if (duelWins) updates.multiplayer_wins = parseInt(duelWins);
-      if (selectedLevel) {
+      if (duelWins && duelWins.trim() !== '') {
+        updates.multiplayer_wins = parseInt(duelWins);
+      }
+      if (selectedLevel && selectedLevel.trim() !== '') {
         const level = parseInt(selectedLevel);
         const xp = getCumulativeXP(level);
         updates.xp = xp;
@@ -128,6 +130,8 @@ export default function AdminProfileManager() {
           .eq('user_id', selectedUserId);
 
         if (error) throw error;
+
+        console.log('Admin updated user stats:', { selectedUserId, updates });
       }
 
       toast({
