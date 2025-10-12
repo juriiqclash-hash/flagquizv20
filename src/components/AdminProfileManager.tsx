@@ -16,7 +16,6 @@ export default function AdminProfileManager() {
   const [streak, setStreak] = useState('');
   const [timeMode, setTimeMode] = useState('');
   const [duelWins, setDuelWins] = useState('');
-  const [selectedLevel, setSelectedLevel] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -40,7 +39,6 @@ export default function AdminProfileManager() {
       .single();
 
     if (stats) {
-      setSelectedLevel(stats.level.toString());
       setDuelWins(stats.multiplayer_wins.toString());
     }
 
@@ -111,16 +109,10 @@ export default function AdminProfileManager() {
         if (statsTimeError) throw statsTimeError;
       }
 
-      // Update multiplayer wins and level
+      // Update multiplayer wins
       const updates: any = {};
       if (duelWins && duelWins.trim() !== '') {
         updates.multiplayer_wins = parseInt(duelWins);
-      }
-      if (selectedLevel && selectedLevel.trim() !== '') {
-        const level = parseInt(selectedLevel);
-        const xp = getCumulativeXP(level);
-        updates.xp = xp;
-        updates.level = level;
       }
 
       if (Object.keys(updates).length > 0) {
@@ -143,7 +135,6 @@ export default function AdminProfileManager() {
       setStreak('');
       setTimeMode('');
       setDuelWins('');
-      setSelectedLevel('');
       setSelectedUserId('');
     } catch (error: any) {
       toast({
@@ -212,7 +203,7 @@ export default function AdminProfileManager() {
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 col-span-2">
                 <Label htmlFor="duel-wins">Duelle gewonnen</Label>
                 <Input
                   id="duel-wins"
@@ -221,23 +212,6 @@ export default function AdminProfileManager() {
                   onChange={(e) => setDuelWins(e.target.value)}
                   placeholder="z.B. 10"
                 />
-              </div>
-
-              <div className="space-y-2 col-span-2">
-                <Label htmlFor="level">Rang</Label>
-                <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                  <SelectTrigger id="level">
-                    <SelectValue placeholder="Rang auswählen..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0">Bronze (Level 0-19)</SelectItem>
-                    <SelectItem value="20">Silber (Level 20-39)</SelectItem>
-                    <SelectItem value="40">Gold (Level 40-59)</SelectItem>
-                    <SelectItem value="60">Platin (Level 60-79)</SelectItem>
-                    <SelectItem value="80">Diamant (Level 80-99)</SelectItem>
-                    <SelectItem value="100">Legende (Level 100)</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
             </div>
 
