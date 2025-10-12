@@ -405,39 +405,38 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
           {/* Right Side - Search and Profile */}
           <div className="flex gap-2 items-center">
-            {!isMobile && (
-              <div ref={searchRef} className="relative">
-                <div
-                  className={`flex items-center gap-2 bg-transparent rounded-lg transition-all duration-300 ${
-                    searchExpanded ? 'w-[200px] md:w-[350px]' : 'w-10 h-10'
-                  }`}
+            <div ref={searchRef} className="relative">
+              <div
+                className={`flex items-center gap-2 bg-transparent rounded-lg transition-all duration-300 ${
+                  searchExpanded ? 'w-[200px] md:w-[350px]' : 'w-10 h-10'
+                }`}
+              >
+                <Button
+                  onClick={() => setSearchExpanded(!searchExpanded)}
+                  variant="ghost"
+                  size="icon"
+                  className="text-white hover:bg-white/20 rounded-lg flex-shrink-0 w-10 h-10"
                 >
-                  <Button
-                    onClick={() => setSearchExpanded(!searchExpanded)}
-                    variant="ghost"
-                    size="icon"
-                    className="text-white hover:bg-white/20 rounded-lg flex-shrink-0 w-10 h-10"
-                  >
-                    <Search className="h-6 w-6" strokeWidth={3} />
-                  </Button>
-                  {searchExpanded && (
-                    <Input
-                      placeholder={t.searchPlayersPlaceholder}
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="bg-transparent border-none text-white placeholder:text-white/60 h-10 focus-visible:ring-0 pr-4"
-                      autoFocus
-                    />
-                  )}
-                </div>
+                  <Search className="h-6 w-6" strokeWidth={3} />
+                </Button>
+                {searchExpanded && (
+                  <Input
+                    placeholder={t.searchPlayersPlaceholder}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="bg-transparent border-none text-white placeholder:text-white/60 h-10 focus-visible:ring-0 pr-4"
+                    autoFocus
+                  />
+                )}
+              </div>
 
-                {searchExpanded && (searchQuery || loading) && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => {
-                      setSearchExpanded(false);
-                      setSearchQuery('');
-                    }} />
-                    <div className="absolute top-12 right-0 w-[200px] md:w-[350px] bg-black/70 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto z-50">
+              {searchExpanded && (searchQuery || loading) && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => {
+                    setSearchExpanded(false);
+                    setSearchQuery('');
+                  }} />
+                  <div className="absolute top-12 right-0 w-[200px] md:w-[350px] bg-black/70 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl max-h-[500px] overflow-y-auto z-50">
                   {loading && (
                     <div className="text-center py-8 text-gray-400">
                       {t.loading || 'Lädt...'}
@@ -546,12 +545,11 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                         </button>
                       ))}
                     </div>
-                    )}
-                  </div>
-                  </>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+                </>
+              )}
+            </div>
             <ProfileButton transparentStyle onProfileOpenChange={(open) => {
               if (open && onProfileOpen) {
                 onProfileOpen();

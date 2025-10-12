@@ -251,14 +251,6 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
               Clans
             </Button>
 
-            <Button
-              variant="outline"
-              className="w-full justify-start text-lg h-14 md:hidden"
-              onClick={handleOpenSearch}
-            >
-              <Search className="h-5 w-5 mr-3" />
-              Suchen
-            </Button>
           </div>
         </SheetContent>
       </Sheet>
