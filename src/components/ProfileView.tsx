@@ -174,34 +174,23 @@ export const ProfileView = ({
         });
       }
 
-      // Load XP and level from user_stats
+      // Load XP, level and stats from user_stats
       const {
         data: userStats
-      } = await supabase.from('user_stats').select('xp, level, multiplayer_wins').eq('user_id', user.id).single();
+      } = await supabase.from('user_stats').select('xp, level, multiplayer_wins, best_streak, time_mode_best_score').eq('user_id', user.id).single();
       if (userStats) {
         setLevel(userStats.level || 0);
         setXp(userStats.xp || 0);
       }
 
-      // Load stats from leaderboard
-      const {
-        data: streakData
-      } = await supabase.from('leaderboards').select('score').eq('user_id', user.id).eq('game_mode', 'streak').order('score', {
-        ascending: false
-      }).limit(1).maybeSingle();
-      const {
-        data: timedData
-      } = await supabase.from('leaderboards').select('score').eq('user_id', user.id).eq('game_mode', 'timed').order('score', {
-        ascending: true
-      }).limit(1).maybeSingle();
-      const bestStreak = streakData?.score || 0;
-      const bestTimeMode = timedData?.score || 0;
+      const bestStreak = userStats?.best_streak || 0;
+      const bestTimeMode = userStats?.time_mode_best_score || 0;
       const duelWins = userStats?.multiplayer_wins || 0;
 
       // Calculate best position by comparing with all players
       const {
         data: allPlayers
-      } = await supabase.from('user_stats').select('user_id, xp, level, multiplayer_wins');
+      } = await supabase.from('user_stats').select('user_id, xp, level, multiplayer_wins, best_streak, time_mode_best_score');
       let bestPosition = 1;
       const currentScore = calculateRankScore({
         bestStreak,
@@ -213,20 +202,9 @@ export const ProfileView = ({
         for (const player of allPlayers) {
           if (player.user_id === user.id) continue;
 
-          // Get player's streak and time scores
-          const {
-            data: playerStreak
-          } = await supabase.from('leaderboards').select('score').eq('user_id', player.user_id).eq('game_mode', 'streak').order('score', {
-            ascending: false
-          }).limit(1).maybeSingle();
-          const {
-            data: playerTime
-          } = await supabase.from('leaderboards').select('score').eq('user_id', player.user_id).eq('game_mode', 'timed').order('score', {
-            ascending: true
-          }).limit(1).maybeSingle();
           const playerStats = {
-            bestStreak: playerStreak?.score || 0,
-            bestTimeMode: playerTime?.score || 0,
+            bestStreak: player.best_streak || 0,
+            bestTimeMode: player.time_mode_best_score || 0,
             duelWins: player.multiplayer_wins || 0,
             bestPosition: 0
           };
