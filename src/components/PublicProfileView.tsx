@@ -139,113 +139,36 @@ export const PublicProfileView = ({
     }
   };
   const loadFriendshipStatus = async () => {
-    if (!currentUser || !userId || currentUser.id === userId) return;
-    try {
-      const {
-        data: request
-      } = await supabase.from('friend_requests').select('*').or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${userId}),and(sender_id.eq.${userId},receiver_id.eq.${currentUser.id})`).maybeSingle();
-      if (request) {
-        setFriendRequestId(request.id);
-        if (request.status === 'accepted') {
-          setFriendshipStatus('friends');
-        } else if (request.sender_id === currentUser.id) {
-          setFriendshipStatus('pending_sent');
-        } else {
-          setFriendshipStatus('pending_received');
-        }
-      } else {
-        setFriendshipStatus('none');
-      }
-    } catch (error) {
-      console.error('Error loading friendship status:', error);
-    }
+    // Friend requests not implemented yet
+    setFriendshipStatus('none');
   };
   const sendFriendRequest = async () => {
-    if (!currentUser || !userId) return;
-    try {
-      const {
-        error
-      } = await supabase.from('friend_requests').insert({
-        sender_id: currentUser.id,
-        receiver_id: userId,
-        status: 'pending'
-      });
-      if (error) throw error;
-      setFriendshipStatus('pending_sent');
-      toast({
-        title: 'Freundschaftsanfrage gesendet',
-        description: 'Die Anfrage wurde erfolgreich gesendet.'
-      });
-    } catch (error) {
-      console.error('Error sending friend request:', error);
-      toast({
-        title: 'Fehler',
-        description: 'Die Anfrage konnte nicht gesendet werden.',
-        variant: 'destructive'
-      });
-    }
+    // Not implemented yet
+    toast({
+      title: 'Bald verfügbar',
+      description: 'Das Freundessystem wird bald verfügbar sein.'
+    });
   };
   const acceptFriendRequest = async () => {
-    if (!friendRequestId) return;
-    try {
-      const {
-        error
-      } = await supabase.from('friend_requests').update({
-        status: 'accepted'
-      }).eq('id', friendRequestId);
-      if (error) throw error;
-      setFriendshipStatus('friends');
-      toast({
-        title: 'Freundschaft bestätigt',
-        description: 'Ihr seid jetzt Freunde!'
-      });
-      loadFriendshipStatus();
-    } catch (error) {
-      console.error('Error accepting friend request:', error);
-      toast({
-        title: 'Fehler',
-        description: 'Die Anfrage konnte nicht angenommen werden.',
-        variant: 'destructive'
-      });
-    }
+    // Not implemented yet
+    toast({
+      title: 'Bald verfügbar',
+      description: 'Das Freundessystem wird bald verfügbar sein.'
+    });
   };
   const removeFriend = async () => {
-    if (!currentUser || !userId) return;
-    try {
-      const {
-        error
-      } = await supabase.from('friendships').delete().or(`and(user_id_1.eq.${Math.min(currentUser.id, userId)},user_id_2.eq.${Math.max(currentUser.id, userId)})`);
-      if (error) throw error;
-      setFriendshipStatus('none');
-      toast({
-        title: 'Freundschaft beendet',
-        description: 'Die Freundschaft wurde entfernt.'
-      });
-    } catch (error) {
-      console.error('Error removing friend:', error);
-      toast({
-        title: 'Fehler',
-        description: 'Die Freundschaft konnte nicht entfernt werden.',
-        variant: 'destructive'
-      });
-    }
+    // Not implemented yet
+    toast({
+      title: 'Bald verfügbar',
+      description: 'Das Freundessystem wird bald verfügbar sein.'
+    });
   };
   const cancelFriendRequest = async () => {
-    if (!friendRequestId) return;
-    try {
-      const {
-        error
-      } = await supabase.from('friend_requests').delete().eq('id', friendRequestId);
-      if (error) throw error;
-      setFriendshipStatus('none');
-      setFriendRequestId(null);
-      toast({
-        title: 'Anfrage zurückgezogen',
-        description: 'Die Freundschaftsanfrage wurde abgebrochen.'
-      });
-    } catch (error) {
-      console.error('Error canceling friend request:', error);
-    }
+    // Not implemented yet
+    toast({
+      title: 'Bald verfügbar',
+      description: 'Das Freundessystem wird bald verfügbar sein.'
+    });
   };
   const loadProfileData = async () => {
     if (!userId) return;

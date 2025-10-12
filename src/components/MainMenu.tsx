@@ -171,21 +171,12 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           .limit(10);
 
         if (clans) {
-          const clanIds = clans.map(c => c.id);
-          const { data: memberCounts } = await supabase
-            .from('profiles')
-            .select('clan_id')
-            .in('clan_id', clanIds);
-
-          const clansWithCounts = clans.map(clan => {
-            const count = memberCounts?.filter(m => m.clan_id === clan.id).length || 0;
-            return {
-              id: clan.id,
-              name: clan.name,
-              emoji: clan.emoji,
-              member_count: count,
-            };
-          });
+          const clansWithCounts = clans.map(clan => ({
+            id: clan.id,
+            name: clan.name,
+            emoji: clan.emoji,
+            member_count: 0,
+          }));
 
           setClanResults(clansWithCounts);
         }
@@ -554,7 +545,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 rounded-2xl p-5 border border-orange-500/30">
             <div className="flex items-center justify-center gap-3">
               <span className="text-4xl">🔥</span>
-              <p className="text-white text-lg font-bold">{t.youAreOnStreak.replace('{count}', String(stats?.best_streak || 0))}</p>
+              <p className="text-white text-lg font-bold">{t.youAreOnStreak.replace('{count}', String(stats?.daily_streak || 0))}</p>
             </div>
           </div>
         </div>

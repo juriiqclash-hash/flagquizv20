@@ -335,7 +335,9 @@ export type Database = {
         Row: {
           best_streak: number
           created_at: string
+          daily_streak: number
           id: string
+          last_played_date: string | null
           level: number
           multiplayer_wins: number
           time_mode_best_score: number
@@ -347,7 +349,9 @@ export type Database = {
         Insert: {
           best_streak?: number
           created_at?: string
+          daily_streak?: number
           id?: string
+          last_played_date?: string | null
           level?: number
           multiplayer_wins?: number
           time_mode_best_score?: number
@@ -359,7 +363,9 @@ export type Database = {
         Update: {
           best_streak?: number
           created_at?: string
+          daily_streak?: number
           id?: string
+          last_played_date?: string | null
           level?: number
           multiplayer_wins?: number
           time_mode_best_score?: number
@@ -400,6 +406,10 @@ export type Database = {
       }
       update_best_streak: {
         Args: { p_streak: number; p_user_id: string }
+        Returns: undefined
+      }
+      update_daily_streak: {
+        Args: { p_user_id: string }
         Returns: undefined
       }
       update_time_mode_score: {

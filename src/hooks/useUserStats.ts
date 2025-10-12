@@ -10,6 +10,8 @@ export interface UserStats {
   multiplayer_wins: number;
   total_correct_answers: number;
   created_at: string;
+  daily_streak: number;
+  last_played_date: string | null;
 }
 
 export const useUserStats = () => {
@@ -115,6 +117,20 @@ export const useUserStats = () => {
     }
   };
 
+  const updateDailyStreak = async () => {
+    if (!user) return;
+
+    try {
+      await supabase.rpc('update_daily_streak', {
+        p_user_id: user.id
+      });
+
+      await fetchStats();
+    } catch (error) {
+      console.error('Error updating daily streak:', error);
+    }
+  };
+
   useEffect(() => {
     fetchStats();
   }, [user]);
@@ -126,6 +142,7 @@ export const useUserStats = () => {
     updateBestStreak,
     updateTimeModeScore,
     incrementMultiplayerWins,
+    updateDailyStreak,
     refreshStats: fetchStats
   };
 };

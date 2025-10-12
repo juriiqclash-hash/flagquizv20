@@ -241,21 +241,12 @@ export default function StartScreen({
           .limit(10);
 
         if (clans) {
-          const clanIds = clans.map(c => c.id);
-          const { data: memberCounts } = await supabase
-            .from('profiles')
-            .select('clan_id')
-            .in('clan_id', clanIds);
-
-          const clansWithCounts = clans.map(clan => {
-            const count = memberCounts?.filter(m => m.clan_id === clan.id).length || 0;
-            return {
-              id: clan.id,
-              name: clan.name,
-              emoji: clan.emoji,
-              member_count: count,
-            };
-          });
+          const clansWithCounts = clans.map(clan => ({
+            id: clan.id,
+            name: clan.name,
+            emoji: clan.emoji,
+            member_count: 0,
+          }));
 
           setClanResults(clansWithCounts);
         }
