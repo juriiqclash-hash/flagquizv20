@@ -139,36 +139,140 @@ export const PublicProfileView = ({
     }
   };
   const loadFriendshipStatus = async () => {
-    // Friend requests not implemented yet
-    setFriendshipStatus('none');
+    if (!currentUser || !userId || currentUser.id === userId) {
+      setFriendshipStatus('none');
+      return;
+    }
+
+    try {
+      const { data: existingRequest } = await supabase
+        .from('friend_requests')
+        .select('*')
+        .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${userId}),and(sender_id.eq.${userId},receiver_id.eq.${currentUser.id})`)
+        .maybeSingle();
+
+      if (existingRequest) {
+        setFriendRequestId(existingRequest.id);
+        
+        if (existingRequest.status === 'accepted') {
+          setFriendshipStatus('friends');
+        } else if (existingRequest.sender_id === currentUser.id) {
+          setFriendshipStatus('pending_sent');
+        } else {
+          setFriendshipStatus('pending_received');
+        }
+      } else {
+        setFriendshipStatus('none');
+        setFriendRequestId(null);
+      }
+    } catch (error) {
+      console.error('Error loading friendship status:', error);
+    }
   };
+
   const sendFriendRequest = async () => {
-    // Not implemented yet
-    toast({
-      title: 'Bald verfügbar',
-      description: 'Das Freundessystem wird bald verfügbar sein.'
-    });
+    if (!currentUser || !userId) return;
+
+    try {
+      const { error } = await supabase
+        .from('friend_requests')
+        .insert({
+          sender_id: currentUser.id,
+          receiver_id: userId,
+          status: 'pending'
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: 'Freundschaftsanfrage gesendet',
+        className: 'bg-success text-success-foreground'
+      });
+
+      loadFriendshipStatus();
+    } catch (error: any) {
+      toast({
+        title: 'Fehler',
+        description: error.message || 'Anfrage konnte nicht gesendet werden',
+        variant: 'destructive'
+      });
+    }
   };
+
   const acceptFriendRequest = async () => {
-    // Not implemented yet
-    toast({
-      title: 'Bald verfügbar',
-      description: 'Das Freundessystem wird bald verfügbar sein.'
-    });
+    if (!friendRequestId) return;
+
+    try {
+      const { error } = await supabase
+        .from('friend_requests')
+        .update({ status: 'accepted' })
+        .eq('id', friendRequestId);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Freundschaftsanfrage angenommen',
+        className: 'bg-success text-success-foreground'
+      });
+
+      loadFriendshipStatus();
+    } catch (error) {
+      toast({
+        title: 'Fehler',
+        description: 'Anfrage konnte nicht angenommen werden',
+        variant: 'destructive'
+      });
+    }
   };
+
   const removeFriend = async () => {
-    // Not implemented yet
-    toast({
-      title: 'Bald verfügbar',
-      description: 'Das Freundessystem wird bald verfügbar sein.'
-    });
+    if (!friendRequestId) return;
+
+    try {
+      const { error } = await supabase
+        .from('friend_requests')
+        .delete()
+        .eq('id', friendRequestId);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Freund entfernt'
+      });
+
+      loadFriendshipStatus();
+    } catch (error) {
+      toast({
+        title: 'Fehler',
+        description: 'Freund konnte nicht entfernt werden',
+        variant: 'destructive'
+      });
+    }
   };
+
   const cancelFriendRequest = async () => {
-    // Not implemented yet
-    toast({
-      title: 'Bald verfügbar',
-      description: 'Das Freundessystem wird bald verfügbar sein.'
-    });
+    if (!friendRequestId) return;
+
+    try {
+      const { error } = await supabase
+        .from('friend_requests')
+        .delete()
+        .eq('id', friendRequestId);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Anfrage zurückgezogen'
+      });
+
+      loadFriendshipStatus();
+    } catch (error) {
+      toast({
+        title: 'Fehler',
+        description: 'Anfrage konnte nicht zurückgezogen werden',
+        variant: 'destructive'
+      });
+    }
   };
   const loadProfileData = async () => {
     if (!userId) return;

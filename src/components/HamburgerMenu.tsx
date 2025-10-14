@@ -267,7 +267,6 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
       <FriendsMenu
         open={friendsDialogOpen}
         onOpenChange={setFriendsDialogOpen}
-        onProfileSelect={onProfileSelect}
       />
 
       <Dialog open={clansDialogOpen} onOpenChange={setClansDialogOpen}>

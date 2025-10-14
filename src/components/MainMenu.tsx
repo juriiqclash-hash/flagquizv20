@@ -787,7 +787,6 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
       <FriendsMenu
         open={showFriendsMenu}
         onOpenChange={setShowFriendsMenu}
-        onProfileSelect={(userId) => setSelectedUserId(userId)}
       />
 
       {selectedUserId && (
