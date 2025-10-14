@@ -11,8 +11,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTranslation } from '@/data/translations';
-import { useFriendRequests } from '@/hooks/useFriendRequests';
-import { Badge } from '@/components/ui/badge';
 
 interface HamburgerMenuProps {
   onNavigateHome: () => void;
@@ -72,7 +70,6 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
   const [clanResults, setClanResults] = useState<ClanResult[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
-  const { pendingCount } = useFriendRequests();
 
   const handleNavigateHome = () => {
     setOpen(false);
@@ -238,16 +235,11 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
 
             <Button
               variant="outline"
-              className="w-full justify-start text-lg h-14 relative"
+              className="w-full justify-start text-lg h-14"
               onClick={handleOpenFriends}
             >
               <Users className="h-5 w-5 mr-3" />
               Freunde
-              {pendingCount > 0 && (
-                <Badge className="ml-auto bg-red-500 text-white text-xs min-w-[20px] h-5 flex items-center justify-center px-1.5">
-                  {pendingCount}
-                </Badge>
-              )}
             </Button>
 
             <Button

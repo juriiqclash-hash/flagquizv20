@@ -7,7 +7,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { UserCheck, UserX, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { PublicProfileView } from '@/components/PublicProfileView';
 
 interface FriendsMenuProps {
   open: boolean;
@@ -37,7 +36,6 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
   const [friends, setFriends] = useState<FriendRequest[]>([]);
   const [pendingRequests, setPendingRequests] = useState<FriendRequest[]>([]);
   const [sentRequests, setSentRequests] = useState<FriendRequest[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   useEffect(() => {
     if (open && user) {
@@ -225,7 +223,6 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
   };
 
   return (
-    <>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
@@ -258,13 +255,9 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
               ) : (
                 friends.map((friend) => {
                   const friendProfile = friend.sender_id === user?.id ? friend.receiver : friend.sender;
-                  const friendId = friend.sender_id === user?.id ? friend.receiver_id : friend.sender_id;
                   return (
                     <div key={friend.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                      <button
-                        onClick={() => setSelectedUserId(friendId)}
-                        className="flex items-center gap-3 hover:opacity-80 transition-opacity flex-1 text-left"
-                      >
+                      <div className="flex items-center gap-3">
                         <Avatar>
                           <AvatarImage src={friendProfile?.avatar_url || undefined} />
                           <AvatarFallback>
@@ -272,7 +265,7 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
                           </AvatarFallback>
                         </Avatar>
                         <span className="font-medium">{friendProfile?.username}</span>
-                      </button>
+                      </div>
                       <Button
                         variant="destructive"
                         size="sm"
@@ -359,12 +352,5 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
         )}
       </DialogContent>
     </Dialog>
-    {selectedUserId && (
-      <PublicProfileView
-        userId={selectedUserId}
-        onClose={() => setSelectedUserId(null)}
-      />
-    )}
-    </>
   );
 };
