@@ -40,7 +40,7 @@ export default function CombiQuiz({ onBackToStart, isDailyChallenge = false, max
   const [showCompletionScreen, setShowCompletionScreen] = useState(false);
 
   useEffect(() => {
-    if (isDailyChallenge) {
+    if (isDailyChallenge && categories.some(cat => cat.enabled)) {
       generateNextQuestion();
     }
   }, [isDailyChallenge]);

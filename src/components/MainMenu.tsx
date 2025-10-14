@@ -286,7 +286,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                     <SheetTitle className="text-white">Menü</SheetTitle>
                   </SheetHeader>
                   <div className="flex flex-col gap-3 mt-6">
-                    <Select value={language} onValueChange={(value) => {
+                    <Select value={language} onValueChange={(value: any) => {
                       setLanguage(value);
                       setMobileMenuOpen(false);
                     }}>
