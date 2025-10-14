@@ -32,6 +32,8 @@ import { useUserStats } from "@/hooks/useUserStats";
 import { supabase } from "@/integrations/supabase/client";
 import { PublicProfileView } from "@/components/PublicProfileView";
 import { FriendsMenu } from "@/components/FriendsMenu";
+import { useFriendRequests } from "@/hooks/useFriendRequests";
+import { Badge } from "@/components/ui/badge";
 
 import { calculateLevel } from "@/lib/xpSystem";
 import { calculateRank as calculateProfileRank } from "@/lib/profileRank";
@@ -100,6 +102,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
   const { language, setLanguage } = useLanguage();
   const t = useTranslation(language);
   const isMobile = useIsMobile();
+  const { pendingCount } = useFriendRequests();
 
   const userXP = stats?.xp ?? 0;
   const userLevel = calculateLevel(userXP);
@@ -308,7 +311,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12"
+                      className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12 relative"
                       onClick={() => {
                         setShowFriendsMenu(true);
                         setMobileMenuOpen(false);
@@ -316,6 +319,11 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                     >
                       <Users className="h-5 w-5 mr-3" />
                       Freunde
+                      {pendingCount > 0 && (
+                        <Badge className="ml-auto bg-red-500 text-white text-xs min-w-[20px] h-5 flex items-center justify-center px-1.5">
+                          {pendingCount}
+                        </Badge>
+                      )}
                     </Button>
 
                     <Button
@@ -387,10 +395,15 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-white hover:bg-white/20 rounded-lg"
+                  className="text-white hover:bg-white/20 rounded-lg relative"
                   onClick={() => setShowFriendsMenu(true)}
                 >
                   <Users className="h-5 w-5" />
+                  {pendingCount > 0 && (
+                    <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs min-w-[18px] h-[18px] flex items-center justify-center p-0 rounded-full">
+                      {pendingCount}
+                    </Badge>
+                  )}
                 </Button>
 
                 <Button
