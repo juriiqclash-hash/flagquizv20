@@ -103,6 +103,8 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
   const userXP = stats?.xp ?? 0;
   const userLevel = calculateLevel(userXP);
+  
+  // Calculate rank using the same method as ProfileView
   const profileRank = stats ? calculateProfileRank({
     bestStreak: stats.best_streak ?? 0,
     bestTimeMode: stats.time_mode_best_score ?? 0,
