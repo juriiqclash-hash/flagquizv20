@@ -510,18 +510,21 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                 <div className="space-y-6">
                   {myClans.map((clan) => (
                     <div key={clan.id} className="space-y-4">
-                      <Card className="p-8 relative overflow-hidden min-h-[280px]">
-                        <div className="absolute top-6 left-0 right-0 text-center">
-                          <h2 className="text-3xl font-bold">{clan.name}</h2>
-                        </div>
-
-                        <div className="flex items-center justify-between h-full pt-16 pb-12">
-                          <Avatar className="h-40 w-40 border-4 border-primary shadow-xl">
-                            <AvatarImage src={clan.avatar_url || undefined} className="object-cover" />
-                            <AvatarFallback className="text-7xl">{clan.emoji}</AvatarFallback>
-                          </Avatar>
-
-                          <div className="flex flex-col items-center gap-2">
+                      <Card className="p-6">
+                        <div className="flex items-start gap-6">
+                          <div className="flex items-start gap-6 flex-1">
+                            <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
+                              <AvatarImage src={clan.avatar_url || undefined} />
+                              <AvatarFallback className="text-5xl">{clan.emoji}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1 max-w-[50%]">
+                              <h2 className="text-3xl font-bold mb-2">{clan.name}</h2>
+                              {clan.description && (
+                                <p className="text-muted-foreground">{clan.description}</p>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-center gap-2 min-w-[160px]">
                             {clan.average_rank && clan.average_rank_image ? (
                               <>
                                 <img
@@ -540,12 +543,6 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                               </>
                             )}
                           </div>
-                        </div>
-
-                        <div className="absolute bottom-6 left-0 right-0 text-center px-8">
-                          {clan.description && (
-                            <p className="text-muted-foreground text-sm italic">{clan.description}</p>
-                          )}
                         </div>
                       </Card>
 
@@ -758,18 +755,21 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
               </DialogHeader>
 
               <div className="space-y-6">
-                <Card className="p-8 relative overflow-hidden min-h-[280px]">
-                  <div className="absolute top-6 left-0 right-0 text-center">
-                    <h2 className="text-3xl font-bold">{selectedClan.name}</h2>
-                  </div>
-
-                  <div className="flex items-center justify-between h-full pt-16 pb-12">
-                    <Avatar className="h-40 w-40 border-4 border-primary shadow-xl">
-                      <AvatarImage src={selectedClan.avatar_url || undefined} className="object-cover" />
-                      <AvatarFallback className="text-7xl">{selectedClan.emoji}</AvatarFallback>
-                    </Avatar>
-
-                    <div className="flex flex-col items-center gap-2">
+                <Card className="p-6">
+                  <div className="flex items-start gap-6">
+                    <div className="flex items-start gap-6 flex-1">
+                      <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
+                        <AvatarImage src={selectedClan.avatar_url || undefined} />
+                        <AvatarFallback className="text-5xl">{selectedClan.emoji}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 max-w-[50%]">
+                        <h2 className="text-3xl font-bold mb-2">{selectedClan.name}</h2>
+                        {selectedClan.description && (
+                          <p className="text-muted-foreground">{selectedClan.description}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center gap-2 min-w-[160px]">
                       {selectedClan.average_rank && selectedClan.average_rank_image ? (
                         <>
                           <img
@@ -788,12 +788,6 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                         </>
                       )}
                     </div>
-                  </div>
-
-                  <div className="absolute bottom-6 left-0 right-0 text-center px-8">
-                    {selectedClan.description && (
-                      <p className="text-muted-foreground text-sm italic">{selectedClan.description}</p>
-                    )}
                   </div>
                 </Card>
 
