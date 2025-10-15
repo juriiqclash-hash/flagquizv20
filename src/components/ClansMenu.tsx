@@ -524,20 +524,24 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                               )}
                             </div>
                           </div>
-                          <div className="flex flex-col items-center gap-2 min-w-[140px]">
+                          <div className="flex flex-col items-center gap-2 min-w-[120px]">
                             {clan.average_rank && clan.average_rank_image ? (
                               <>
                                 <img
                                   src={clan.average_rank_image}
                                   alt={clan.average_rank}
-                                  className="w-36 h-36 object-contain"
+                                  className="w-24 h-24 object-contain"
                                 />
-                                <p className="text-xl font-bold text-center">{clan.average_rank}</p>
+                                <p className="text-sm font-semibold text-center">{clan.average_rank}</p>
                               </>
                             ) : (
                               <>
-                                <Trophy className="w-36 h-36 text-muted-foreground/30" strokeWidth={1} />
-                                <p className="text-sm text-muted-foreground text-center">Nicht eingestuft</p>
+                                <img
+                                  src="https://www.iconsdb.com/icons/download/gray/trophy-128.png"
+                                  alt="Nicht eingestuft"
+                                  className="w-24 h-24 object-contain opacity-30"
+                                />
+                                <p className="text-xs text-muted-foreground text-center">Nicht eingestuft</p>
                               </>
                             )}
                           </div>
@@ -767,20 +771,24 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                         )}
                       </div>
                     </div>
-                    <div className="flex flex-col items-center gap-2 min-w-[140px]">
+                    <div className="flex flex-col items-center gap-2 min-w-[120px]">
                       {selectedClan.average_rank && selectedClan.average_rank_image ? (
                         <>
                           <img
                             src={selectedClan.average_rank_image}
                             alt={selectedClan.average_rank}
-                            className="w-36 h-36 object-contain"
+                            className="w-24 h-24 object-contain"
                           />
-                          <p className="text-xl font-bold text-center">{selectedClan.average_rank}</p>
+                          <p className="text-sm font-semibold text-center">{selectedClan.average_rank}</p>
                         </>
                       ) : (
                         <>
-                          <Trophy className="w-36 h-36 text-muted-foreground/30" strokeWidth={1} />
-                          <p className="text-sm text-muted-foreground text-center">Nicht eingestuft</p>
+                          <img
+                            src="https://www.iconsdb.com/icons/download/gray/trophy-128.png"
+                            alt="Nicht eingestuft"
+                            className="w-24 h-24 object-contain opacity-30"
+                          />
+                          <p className="text-xs text-muted-foreground text-center">Nicht eingestuft</p>
                         </>
                       )}
                     </div>
