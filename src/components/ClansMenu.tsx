@@ -481,16 +481,19 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                     <div key={clan.id} className="space-y-4">
                       <Card className="p-6">
                         <div className="flex items-start gap-6">
-                          <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
-                            <AvatarImage src={clan.avatar_url || undefined} />
-                            <AvatarFallback className="text-5xl">{clan.emoji}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <h2 className="text-3xl font-bold mb-2">{clan.name}</h2>
-                            {clan.description && (
-                              <p className="text-muted-foreground">{clan.description}</p>
-                            )}
+                          <div className="flex items-start gap-6 flex-1">
+                            <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
+                              <AvatarImage src={clan.avatar_url || undefined} />
+                              <AvatarFallback className="text-5xl">{clan.emoji}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1 max-w-[50%]">
+                              <h2 className="text-3xl font-bold mb-2">{clan.name}</h2>
+                              {clan.description && (
+                                <p className="text-muted-foreground">{clan.description}</p>
+                              )}
+                            </div>
                           </div>
+                          <div className="flex-1"></div>
                         </div>
                       </Card>
 
@@ -514,7 +517,10 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                               <div
                                 key={member.id}
                                 className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
-                                onClick={() => setSelectedUserId(member.user_id)}
+                                onClick={() => {
+                                  setSelectedUserId(member.user_id);
+                                  onOpenChange(false);
+                                }}
                               >
                                 <Avatar className="h-10 w-10">
                                   <AvatarImage src={member.profiles?.avatar_url || undefined} />
@@ -722,7 +728,10 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                       <div
                         key={member.id}
                         className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
-                        onClick={() => setSelectedUserId(member.user_id)}
+                        onClick={() => {
+                          setSelectedUserId(member.user_id);
+                          setDetailDialogOpen(false);
+                        }}
                       >
                         <Avatar className="h-10 w-10">
                           <AvatarImage src={member.profiles?.avatar_url || undefined} />
