@@ -695,84 +695,101 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
 
       {/* Clan Details Dialog */}
       <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           {selectedClan && (
             <>
               <DialogHeader>
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-16 w-16">
-                    <AvatarImage src={selectedClan.avatar_url || undefined} />
-                    <AvatarFallback className="text-3xl">{selectedClan.emoji}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <DialogTitle className="text-2xl">{selectedClan.name}</DialogTitle>
-                    <p className="text-sm text-muted-foreground">
-                      {selectedClan.member_count}/30 Mitglieder
-                    </p>
-                  </div>
-                </div>
+                <DialogTitle className="flex items-center gap-2">
+                  <Shield className="h-6 w-6" />
+                  Clan Details
+                </DialogTitle>
               </DialogHeader>
 
               <div className="space-y-6">
-                {selectedClan.description && (
-                  <div>
-                    <h3 className="font-semibold mb-2">Beschreibung</h3>
-                    <p className="text-sm text-muted-foreground">{selectedClan.description}</p>
-                  </div>
-                )}
-
-                <div>
-                  <h3 className="font-semibold mb-3">Mitglieder ({clanMembers.length})</h3>
-                  <div className="space-y-2">
-                    {clanMembers.map((member) => (
-                      <div
-                        key={member.id}
-                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
-                        onClick={() => {
-                          setSelectedUserId(member.user_id);
-                          setDetailDialogOpen(false);
-                        }}
-                      >
-                        <Avatar className="h-10 w-10">
-                          <AvatarImage src={member.profiles?.avatar_url || undefined} />
-                          <AvatarFallback>
-                            {member.profiles?.username?.[0]?.toUpperCase() || '?'}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <p className="font-medium">{member.profiles?.username || 'Unbekannt'}</p>
-                          <p className="text-xs text-muted-foreground">
-                            Beigetreten: {new Date(member.joined_at).toLocaleDateString('de-DE')}
-                          </p>
-                        </div>
-                        {member.role === 'owner' && (
-                          <Crown className="h-5 w-5 text-yellow-500" />
+                <Card className="p-6">
+                  <div className="flex items-start gap-6">
+                    <div className="flex items-start gap-6 flex-1">
+                      <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
+                        <AvatarImage src={selectedClan.avatar_url || undefined} />
+                        <AvatarFallback className="text-5xl">{selectedClan.emoji}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 max-w-[50%]">
+                        <h2 className="text-3xl font-bold mb-2">{selectedClan.name}</h2>
+                        {selectedClan.description && (
+                          <p className="text-muted-foreground">{selectedClan.description}</p>
                         )}
                       </div>
-                    ))}
+                    </div>
+                    <div className="flex-1"></div>
                   </div>
-                </div>
+                </Card>
 
-                <div className="flex gap-2 justify-end pt-4 border-t">
-                  {selectedClan.id.startsWith('starter-') ? (
-                    <p className="text-sm text-muted-foreground">
-                      Starter-Clans können über das Profil ausgewählt werden
-                    </p>
-                  ) : isMember(selectedClan.id) ? (
-                    <Button
-                      variant="destructive"
-                      onClick={() => handleLeaveClan(selectedClan.id)}
-                    >
-                      Clan verlassen
-                    </Button>
-                  ) : selectedClan.member_count < 30 ? (
-                    <Button onClick={() => handleJoinClan(selectedClan.id)}>
-                      Clan beitreten
-                    </Button>
-                  ) : (
-                    <Button disabled>Clan ist voll</Button>
-                  )}
-                </div>
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-semibold flex items-center gap-2 text-lg">
+                      <Users className="h-5 w-5" />
+                      Mitglieder
+                    </h3>
+                    <span className="text-sm text-muted-foreground">
+                      {selectedClan.member_count}/30
+                    </span>
+                  </div>
+                  <div className="space-y-2">
+                    {clanMembers.length === 0 ? (
+                      <div className="text-center py-4 text-muted-foreground">
+                        <Users className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                        <p>Noch keine Mitglieder</p>
+                      </div>
+                    ) : (
+                      clanMembers.map((member) => (
+                        <div
+                          key={member.id}
+                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
+                          onClick={() => {
+                            setSelectedUserId(member.user_id);
+                            setDetailDialogOpen(false);
+                          }}
+                        >
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={member.profiles?.avatar_url || undefined} />
+                            <AvatarFallback>
+                              {member.profiles?.username?.[0]?.toUpperCase() || '?'}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <p className="font-medium">{member.profiles?.username || 'Unbekannt'}</p>
+                            <p className="text-xs text-muted-foreground">
+                              Beigetreten: {new Date(member.joined_at).toLocaleDateString('de-DE')}
+                            </p>
+                          </div>
+                          {member.role === 'owner' && (
+                            <Crown className="h-5 w-5 text-yellow-500" />
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  <div className="flex justify-end pt-4 border-t mt-4">
+                    {selectedClan.id.startsWith('starter-') ? (
+                      <p className="text-sm text-muted-foreground">
+                        Starter-Clans können über das Profil ausgewählt werden
+                      </p>
+                    ) : isMember(selectedClan.id) ? (
+                      <Button
+                        variant="destructive"
+                        onClick={() => handleLeaveClan(selectedClan.id)}
+                      >
+                        Clan verlassen
+                      </Button>
+                    ) : selectedClan.member_count < 30 ? (
+                      <Button onClick={() => handleJoinClan(selectedClan.id)}>
+                        Clan beitreten
+                      </Button>
+                    ) : (
+                      <Button disabled>Clan ist voll</Button>
+                    )}
+                  </div>
+                </Card>
               </div>
             </>
           )}
