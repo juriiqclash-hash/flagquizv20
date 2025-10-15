@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { PublicProfileView } from './PublicProfileView';
+import { getRankFromLevel } from '@/lib/rankSystem';
 
 const STARTER_CLANS = [
   { name: 'Agharta', emoji: '🏯', description: 'Die geheime unterirdische Stadt, Sitz der Weisheit und des Lichts' },
@@ -50,6 +51,7 @@ interface ClanMember {
   profiles?: {
     username: string;
     avatar_url: string | null;
+    level?: number;
   };
 }
 
@@ -282,7 +284,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
       const userIds = (membersData as any[]).map((m: any) => m.user_id);
       const { data: profilesData } = await supabase
         .from('profiles')
-        .select('user_id, username, avatar_url')
+        .select('user_id, username, avatar_url, level')
         .in('user_id', userIds);
 
       const membersWithProfiles = (membersData as any[]).map((member: any) => {
@@ -322,7 +324,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
       const userIds = (membersData as any[]).map((m: any) => m.user_id);
       const { data: profilesData } = await supabase
         .from('profiles')
-        .select('user_id, username, avatar_url')
+        .select('user_id, username, avatar_url, level')
         .in('user_id', userIds);
 
       const membersWithProfiles = (membersData as any[]).map((member: any) => {
@@ -714,13 +716,32 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                         <AvatarFallback className="text-5xl">{selectedClan.emoji}</AvatarFallback>
                       </Avatar>
                       <div className="flex-1 max-w-[50%]">
-                        <h2 className="text-3xl font-bold mb-2">{selectedClan.name}</h2>
+                        <h2 className="text-3xl font-bold mb-4">{selectedClan.name}</h2>
                         {selectedClan.description && (
                           <p className="text-muted-foreground">{selectedClan.description}</p>
                         )}
                       </div>
                     </div>
-                    <div className="flex-1"></div>
+                    <div className="flex-1 flex justify-end">
+                      {(() => {
+                        const members = clanMembers.filter(m => m.clan_id === selectedClan.id);
+                        if (members.length === 0) return null;
+
+                        const totalLevel = members.reduce((sum, m) => sum + (m.profiles?.level || 1), 0);
+                        const avgLevel = Math.round(totalLevel / members.length);
+                        const rank = getRankFromLevel(avgLevel);
+
+                        return (
+                          <div className="flex flex-col items-center gap-2">
+                            <img src={rank.image} alt={rank.name} className="w-24 h-24 object-contain" />
+                            <div className="text-center">
+                              <p className="text-sm font-medium" style={{ color: rank.color }}>{rank.name}</p>
+                              <p className="text-xs text-muted-foreground">Ø Level {avgLevel}</p>
+                            </div>
+                          </div>
+                        );
+                      })()}
+                    </div>
                   </div>
                 </Card>
 
