@@ -513,11 +513,11 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                       <Card className="p-6">
                         <div className="flex items-start gap-6">
                           <div className="flex items-start gap-6 flex-1">
-                            <Avatar className="h-24 w-24 border-4 border-primary shadow-lg overflow-hidden">
-                              <AvatarImage src={clan.avatar_url || undefined} className="scale-[2] object-cover" />
-                              <AvatarFallback className="text-5xl">{clan.emoji}</AvatarFallback>
+                            <Avatar className="h-32 w-32 border-4 border-primary shadow-lg">
+                              <AvatarImage src={clan.avatar_url || undefined} className="object-cover w-full h-full" />
+                              <AvatarFallback className="text-6xl">{clan.emoji}</AvatarFallback>
                             </Avatar>
-                            <div className="flex-1 max-w-[50%]">
+                            <div className="flex-1">
                               <h2 className="text-3xl font-bold mb-2">{clan.name}</h2>
                               {clan.description && (
                                 <p className="text-muted-foreground">{clan.description}</p>
@@ -758,11 +758,11 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                 <Card className="p-6">
                   <div className="flex items-start gap-6">
                     <div className="flex items-start gap-6 flex-1">
-                      <Avatar className="h-24 w-24 border-4 border-primary shadow-lg overflow-hidden">
-                        <AvatarImage src={selectedClan.avatar_url || undefined} className="scale-[2] object-cover" />
-                        <AvatarFallback className="text-5xl">{selectedClan.emoji}</AvatarFallback>
+                      <Avatar className="h-32 w-32 border-4 border-primary shadow-lg">
+                        <AvatarImage src={selectedClan.avatar_url || undefined} className="object-cover w-full h-full" />
+                        <AvatarFallback className="text-6xl">{selectedClan.emoji}</AvatarFallback>
                       </Avatar>
-                      <div className="flex-1 max-w-[50%]">
+                      <div className="flex-1">
                         <h2 className="text-3xl font-bold mb-2">{selectedClan.name}</h2>
                         {selectedClan.description && (
                           <p className="text-muted-foreground">{selectedClan.description}</p>
