@@ -10,6 +10,7 @@ import { Shield, Plus, Search, Users, Crown, Loader2, Upload } from 'lucide-reac
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
+import { PublicProfileView } from './PublicProfileView';
 
 const STARTER_CLANS = [
   { name: 'Agharta', emoji: '🏯', description: 'Die geheime unterirdische Stadt, Sitz der Weisheit und des Lichts' },
@@ -70,12 +71,20 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
   const [clanAvatar, setClanAvatar] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<string>("all");
 
   useEffect(() => {
     if (open && user) {
       loadClans();
     }
   }, [open, user]);
+
+  useEffect(() => {
+    if (myClans.length > 0) {
+      setActiveTab("my");
+    }
+  }, [myClans]);
 
   const loadClans = async () => {
     if (!user) return;
@@ -448,7 +457,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
             </DialogTitle>
           </DialogHeader>
 
-          <Tabs defaultValue={myClans.length > 0 ? "my" : "all"} className="flex-1 flex flex-col overflow-hidden">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="my">Mein Clan</TabsTrigger>
               <TabsTrigger value="all">Alle Clans</TabsTrigger>
@@ -460,7 +469,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                   <Shield className="h-16 w-16 mx-auto mb-4 opacity-50" />
                   <p className="mb-4">Du bist noch in keinem Clan</p>
                   <Button
-                    onClick={() => document.querySelector('[value="all"]')?.dispatchEvent(new Event('click', { bubbles: true }))}
+                    onClick={() => setActiveTab("all")}
                     variant="outline"
                   >
                     Clan suchen
@@ -470,22 +479,24 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                 <div className="space-y-6">
                   {myClans.map((clan) => (
                     <div key={clan.id} className="space-y-4">
-                      <div className="flex items-start gap-6">
-                        <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
-                          <AvatarImage src={clan.avatar_url || undefined} />
-                          <AvatarFallback className="text-5xl">{clan.emoji}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <h2 className="text-3xl font-bold mb-2">{clan.name}</h2>
-                          {clan.description && (
-                            <p className="text-muted-foreground mb-4">{clan.description}</p>
-                          )}
+                      <Card className="p-6">
+                        <div className="flex items-start gap-6">
+                          <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
+                            <AvatarImage src={clan.avatar_url || undefined} />
+                            <AvatarFallback className="text-5xl">{clan.emoji}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <h2 className="text-3xl font-bold mb-2">{clan.name}</h2>
+                            {clan.description && (
+                              <p className="text-muted-foreground">{clan.description}</p>
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      </Card>
 
-                      <div className="border-t pt-4">
-                        <div className="flex items-center justify-between mb-3">
-                          <h3 className="font-semibold flex items-center gap-2">
+                      <Card className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="font-semibold flex items-center gap-2 text-lg">
                             <Users className="h-5 w-5" />
                             Mitglieder
                           </h3>
@@ -502,7 +513,8 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                             clanMembers.filter(m => m.clan_id === clan.id).map((member) => (
                               <div
                                 key={member.id}
-                                className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50"
+                                className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
+                                onClick={() => setSelectedUserId(member.user_id)}
                               >
                                 <Avatar className="h-10 w-10">
                                   <AvatarImage src={member.profiles?.avatar_url || undefined} />
@@ -523,16 +535,15 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                             ))
                           )}
                         </div>
-                      </div>
-
-                      <div className="flex justify-end pt-4 border-t">
-                        <Button
-                          variant="destructive"
-                          onClick={() => handleLeaveClan(clan.id)}
-                        >
-                          Clan verlassen
-                        </Button>
-                      </div>
+                        <div className="flex justify-end pt-4 border-t mt-4">
+                          <Button
+                            variant="destructive"
+                            onClick={() => handleLeaveClan(clan.id)}
+                          >
+                            Clan verlassen
+                          </Button>
+                        </div>
+                      </Card>
                     </div>
                   ))}
                 </div>
@@ -710,7 +721,8 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                     {clanMembers.map((member) => (
                       <div
                         key={member.id}
-                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/50"
+                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
+                        onClick={() => setSelectedUserId(member.user_id)}
                       >
                         <Avatar className="h-10 w-10">
                           <AvatarImage src={member.profiles?.avatar_url || undefined} />
@@ -757,6 +769,11 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
           )}
         </DialogContent>
       </Dialog>
+
+      <PublicProfileView
+        userId={selectedUserId}
+        onClose={() => setSelectedUserId(null)}
+      />
     </>
   );
 }
