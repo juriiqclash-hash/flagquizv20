@@ -384,6 +384,7 @@ export default function StartScreen({
                           quiz.id === 'official-language' ? 'text-cyan-500' :
                           quiz.id === 'world-knowledge' ? 'text-teal-500' :
                           quiz.id === 'combi-quiz' ? 'text-pink-500' :
+                          quiz.id === 'flag-archive' ? 'text-amber-500' :
                           quiz.id === 'multiplayer' ? 'text-purple-500' :
                           ''
                         }`}>
@@ -695,6 +696,25 @@ export default function StartScreen({
                 Wähle deine Kategorien und spiele endlos
               </p>
               <Button onClick={() => handleModeClick('combi-quiz')} className="w-full mt-auto">
+                <Play className="mr-2 h-4 w-4" />
+                {t.start}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Flaggen-Archiv */}
+          <Card className="group cursor-pointer hover:shadow-lg transition-shadow duration-200">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <BookMarked className="w-6 h-6 text-amber-500" />
+                Flaggen-Archiv
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
+                Durchsuche alle Flaggen von A-Z
+              </p>
+              <Button onClick={() => handleModeClick('flag-archive')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
