@@ -45,6 +45,7 @@ interface ClanMember {
   user_id: string;
   role: string;
   joined_at: string;
+  clan_id: string;
   profiles?: {
     username: string;
     avatar_url: string | null;
@@ -261,7 +262,8 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
         id,
         user_id,
         role,
-        joined_at
+        joined_at,
+        clan_id
       `)
       .eq('clan_id', clan.id)
       .order('joined_at', { ascending: true });
@@ -283,6 +285,49 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
       });
 
       setClanMembers(membersWithProfiles);
+    }
+  };
+
+  useEffect(() => {
+    if (myClans.length > 0) {
+      myClans.forEach(clan => {
+        loadClanMembers(clan.id);
+      });
+    }
+  }, [myClans]);
+
+  const loadClanMembers = async (clanId: string) => {
+    const { data: membersData, error } = await supabase
+      .from('clan_members' as any)
+      .select(`
+        id,
+        user_id,
+        role,
+        joined_at,
+        clan_id
+      `)
+      .eq('clan_id', clanId)
+      .order('joined_at', { ascending: true });
+
+    if (!error && membersData) {
+      const userIds = (membersData as any[]).map((m: any) => m.user_id);
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('user_id, username, avatar_url')
+        .in('user_id', userIds);
+
+      const membersWithProfiles = (membersData as any[]).map((member: any) => {
+        const profile = (profilesData as any[] || []).find((p: any) => p.user_id === member.user_id);
+        return {
+          ...member,
+          profiles: profile,
+        };
+      });
+
+      setClanMembers(prev => [
+        ...prev.filter(m => m.clan_id !== clanId),
+        ...membersWithProfiles
+      ]);
     }
   };
 
@@ -401,34 +446,115 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
               <Shield className="h-6 w-6" />
               Clans
             </DialogTitle>
-            <DialogDescription>
-              Erstelle deinen eigenen Clan oder trete einem bestehenden bei
-            </DialogDescription>
           </DialogHeader>
 
-          <div className="flex gap-2 mb-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Clan suchen..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <Button onClick={() => setCreateDialogOpen(true)}>
-              <Plus className="h-4 w-4 mr-2" />
-              Clan erstellen
-            </Button>
-          </div>
-
-          <Tabs defaultValue="all" className="flex-1 flex flex-col overflow-hidden">
+          <Tabs defaultValue={myClans.length > 0 ? "my" : "all"} className="flex-1 flex flex-col overflow-hidden">
             <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="my">Mein Clan</TabsTrigger>
               <TabsTrigger value="all">Alle Clans</TabsTrigger>
-              <TabsTrigger value="my">Meine Clans ({myClans.length})</TabsTrigger>
             </TabsList>
 
+            <TabsContent value="my" className="flex-1 overflow-y-auto mt-4">
+              {myClans.length === 0 ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  <Shield className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                  <p className="mb-4">Du bist noch in keinem Clan</p>
+                  <Button
+                    onClick={() => document.querySelector('[value="all"]')?.dispatchEvent(new Event('click', { bubbles: true }))}
+                    variant="outline"
+                  >
+                    Clan suchen
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {myClans.map((clan) => (
+                    <div key={clan.id} className="space-y-4">
+                      <div className="flex items-start gap-6">
+                        <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
+                          <AvatarImage src={clan.avatar_url || undefined} />
+                          <AvatarFallback className="text-5xl">{clan.emoji}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <h2 className="text-3xl font-bold mb-2">{clan.name}</h2>
+                          {clan.description && (
+                            <p className="text-muted-foreground mb-4">{clan.description}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="border-t pt-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <h3 className="font-semibold flex items-center gap-2">
+                            <Users className="h-5 w-5" />
+                            Mitglieder
+                          </h3>
+                          <span className="text-sm text-muted-foreground">
+                            {clan.member_count}/30
+                          </span>
+                        </div>
+                        <div className="space-y-2">
+                          {clanMembers.filter(m => m.clan_id === clan.id).length === 0 ? (
+                            <div className="text-center py-4 text-muted-foreground">
+                              <Loader2 className="h-6 w-6 animate-spin mx-auto" />
+                            </div>
+                          ) : (
+                            clanMembers.filter(m => m.clan_id === clan.id).map((member) => (
+                              <div
+                                key={member.id}
+                                className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50"
+                              >
+                                <Avatar className="h-10 w-10">
+                                  <AvatarImage src={member.profiles?.avatar_url || undefined} />
+                                  <AvatarFallback>
+                                    {member.profiles?.username?.[0]?.toUpperCase() || '?'}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div className="flex-1">
+                                  <p className="font-medium">{member.profiles?.username || 'Unbekannt'}</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    Beigetreten: {new Date(member.joined_at).toLocaleDateString('de-DE')}
+                                  </p>
+                                </div>
+                                {member.role === 'owner' && (
+                                  <Crown className="h-5 w-5 text-yellow-500" />
+                                )}
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex justify-end pt-4 border-t">
+                        <Button
+                          variant="destructive"
+                          onClick={() => handleLeaveClan(clan.id)}
+                        >
+                          Clan verlassen
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+
             <TabsContent value="all" className="flex-1 overflow-y-auto mt-4">
+              <div className="flex gap-2 mb-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Clan suchen..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                <Button onClick={() => setCreateDialogOpen(true)}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Erstellen
+                </Button>
+              </div>
               {loading ? (
                 <div className="flex justify-center items-center py-12">
                   <Loader2 className="h-8 w-8 animate-spin" />
@@ -467,48 +593,6 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
               )}
             </TabsContent>
 
-            <TabsContent value="my" className="flex-1 overflow-y-auto mt-4">
-              {myClans.length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground">
-                  <Shield className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                  <p>Du bist noch in keinem Clan</p>
-                  <Button
-                    onClick={() => setCreateDialogOpen(true)}
-                    className="mt-4"
-                    variant="outline"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Clan erstellen
-                  </Button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {myClans.map((clan) => (
-                    <Card
-                      key={clan.id}
-                      className="cursor-pointer hover:bg-accent/50 transition-colors"
-                      onClick={() => handleClanClick(clan)}
-                    >
-                      <CardContent className="p-4">
-                        <div className="flex items-start gap-3">
-                          <Avatar className="h-12 w-12">
-                            <AvatarImage src={clan.avatar_url || undefined} />
-                            <AvatarFallback>{clan.emoji}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold truncate">{clan.name}</h3>
-                            <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
-                              <Users className="h-4 w-4" />
-                              <span>{clan.member_count}/30 Mitglieder</span>
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </TabsContent>
           </Tabs>
         </DialogContent>
       </Dialog>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Plus, Flame, Clock, Trophy, X, Info } from 'lucide-react';
+import { Plus, Flame, Clock, Trophy, X, Info, Shield } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from './ui/button';
@@ -540,20 +540,25 @@ export const ProfileView = ({
         </div>}
 
       {editingSlot === 'clan' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[120]">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <div className="flex items-center justify-between mb-6">
               <h3 className="font-bold text-xl">Clan</h3>
-              <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
+              <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="text-center py-8">
-              <p className="text-lg text-gray-700 mb-6">
-                Du bist in keinem Clan. Joine einem über das Clan Menu.
-              </p>
-              <p className="text-sm text-gray-500">
-                Das Clanwappen wird dann in deinem Profil angezeigt.
-              </p>
+            <div className="text-center py-8 space-y-6">
+              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
+                <Shield className="w-10 h-10 text-blue-600" />
+              </div>
+              <div className="space-y-3">
+                <p className="text-lg font-semibold text-gray-800">
+                  Du bist in keinem Clan
+                </p>
+                <p className="text-sm text-gray-600 leading-relaxed px-4">
+                  Joine einem Clan über das Clan Menu. Das Clanwappen wird dann in deinem Profil angezeigt.
+                </p>
+              </div>
             </div>
           </div>
         </div>}
