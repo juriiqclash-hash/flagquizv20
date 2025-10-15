@@ -32,9 +32,9 @@ export default function ContinentSelector({ onSelectContinent, onBack }: Contine
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {continents.map((continent) => (
-            <Card 
+            <Card
               key={continent.name}
-              className="hover:shadow-lg transition-shadow cursor-pointer" 
+              className="hover:shadow-lg transition-all cursor-pointer border-2 border-blue-500/30 hover:border-blue-500/60 shadow-[0_0_15px_rgba(59,130,246,0.2)] hover:shadow-[0_0_25px_rgba(59,130,246,0.4)]"
               onClick={() => onSelectContinent(continent.name)}
             >
               <CardHeader className="text-center pb-3">
