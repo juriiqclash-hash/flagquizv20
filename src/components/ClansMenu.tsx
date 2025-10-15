@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { PublicProfileView } from './PublicProfileView';
+import { getRankFromLevel } from '@/lib/rankSystem';
 
 const STARTER_CLANS = [
   { name: 'Agharta', emoji: '🏯', description: 'Die geheime unterirdische Stadt, Sitz der Weisheit und des Lichts' },
@@ -39,6 +40,8 @@ interface Clan {
   created_by: string;
   created_at: string;
   member_count: number;
+  average_rank?: string;
+  average_rank_image?: string;
 }
 
 interface ClanMember {
@@ -51,6 +54,7 @@ interface ClanMember {
     username: string;
     avatar_url: string | null;
   };
+  level?: number;
 }
 
 export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
@@ -107,11 +111,38 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
             .select('*', { count: 'exact', head: true })
             .eq('clan_id', clan.id);
 
+          // Get member levels to calculate average rank
+          const { data: membersData } = await supabase
+            .from('clan_members' as any)
+            .select('user_id')
+            .eq('clan_id', clan.id);
+
+          let averageRank = '';
+          let averageRankImage = '';
+
+          if (membersData && membersData.length > 0) {
+            const userIds = membersData.map((m: any) => m.user_id);
+            const { data: statsData } = await supabase
+              .from('user_stats')
+              .select('level')
+              .in('user_id', userIds);
+
+            if (statsData && statsData.length > 0) {
+              const totalLevel = statsData.reduce((sum, stat) => sum + stat.level, 0);
+              const averageLevel = Math.round(totalLevel / statsData.length);
+              const rank = getRankFromLevel(averageLevel);
+              averageRank = rank.name;
+              averageRankImage = rank.image;
+            }
+          }
+
           return {
             ...clan,
             description: clan.description || null,
             avatar_url: clan.avatar_url || null,
             member_count: count || 0,
+            average_rank: averageRank,
+            average_rank_image: averageRankImage,
           };
         })
       );
@@ -493,7 +524,16 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                               )}
                             </div>
                           </div>
-                          <div className="flex-1"></div>
+                          {clan.average_rank && clan.average_rank_image && (
+                            <div className="flex flex-col items-center gap-2">
+                              <img
+                                src={clan.average_rank_image}
+                                alt={clan.average_rank}
+                                className="w-24 h-24 object-contain"
+                              />
+                              <p className="text-sm font-semibold text-center">{clan.average_rank}</p>
+                            </div>
+                          )}
                         </div>
                       </Card>
 
@@ -720,7 +760,16 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                         )}
                       </div>
                     </div>
-                    <div className="flex-1"></div>
+                    {selectedClan.average_rank && selectedClan.average_rank_image && (
+                      <div className="flex flex-col items-center gap-2">
+                        <img
+                          src={selectedClan.average_rank_image}
+                          alt={selectedClan.average_rank}
+                          className="w-24 h-24 object-contain"
+                        />
+                        <p className="text-sm font-semibold text-center">{selectedClan.average_rank}</p>
+                      </div>
+                    )}
                   </div>
                 </Card>
 
