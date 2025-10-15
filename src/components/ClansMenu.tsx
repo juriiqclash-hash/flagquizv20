@@ -119,7 +119,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
         is_starter: true,
       }));
 
-      setAllClans([...starterClansWithCounts, ...clansWithCounts]);
+      setAllClans([...clansWithCounts, ...starterClansWithCounts]);
 
       // Load user's clans
       const { data: memberData, error: memberError } = await supabase

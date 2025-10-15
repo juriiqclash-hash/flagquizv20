@@ -361,7 +361,7 @@ export const ProfileView = ({
                 if (profileData.clan) {
                   updateProfileField('clan', null);
                 } else {
-                  setShowClanCreator(true);
+                  setEditingSlot('clan');
                 }
               }} className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
                 {profileData.clan ? <>
@@ -544,6 +544,15 @@ export const ProfileView = ({
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-xl">{t.selectClanProfile}</h3>
               <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setShowClanCreator(true);
+                  }}
+                  className="p-2 hover:bg-blue-100 rounded-full transition-colors"
+                  title="Neuen Clan erstellen"
+                >
+                  <Plus className="w-5 h-5 text-blue-600" />
+                </button>
                 <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
                   <X className="w-5 h-5" />
                 </button>
