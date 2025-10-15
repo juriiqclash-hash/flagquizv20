@@ -3,6 +3,7 @@ import MainMenu from "@/components/MainMenu";
 import StartScreen from "@/components/StartScreen";
 import QuizGame from "@/components/QuizGame";
 import CombiQuiz from "@/components/CombiQuiz";
+import FlagArchive from "@/components/FlagArchive";
 import MultiplayerMenu from "@/components/MultiplayerMenu";
 import MultiplayerLobby from "@/components/MultiplayerLobby";
 import MultiplayerGame from "@/components/MultiplayerGame";
@@ -16,7 +17,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { DifficultyLevel } from "@/data/worldKnowledge";
 
 function IndexContent() {
-  const [currentView, setCurrentView] = useState<'main-menu' | 'start' | 'quiz' | 'combi-quiz' | 'daily-challenge' | 'multiplayer-menu' | 'multiplayer-lobby' | 'multiplayer-countdown' | 'multiplayer-game' | 'multiplayer-continent-game' | 'world-knowledge-difficulty' | 'world-knowledge-quiz' | 'admin'>('main-menu');
+  const [currentView, setCurrentView] = useState<'main-menu' | 'start' | 'quiz' | 'combi-quiz' | 'daily-challenge' | 'flag-archive' | 'multiplayer-menu' | 'multiplayer-lobby' | 'multiplayer-countdown' | 'multiplayer-game' | 'multiplayer-continent-game' | 'world-knowledge-difficulty' | 'world-knowledge-quiz' | 'admin'>('main-menu');
   const [gameMode, setGameMode] = useState<'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge'>('learn');
   const [selectedContinent, setSelectedContinent] = useState<string>();
   const [timeLimit, setTimeLimit] = useState<number>();
@@ -25,16 +26,20 @@ function IndexContent() {
   const [shouldOpenProfile, setShouldOpenProfile] = useState(false);
 
   const handleStartQuiz = (
-    mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge',
+    mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz' | 'flag-archive',
     continent?: string,
     timeLimitValue?: number
   ) => {
-    setGameMode(mode);
+    setGameMode(mode as any);
     setSelectedContinent(continent);
     setTimeLimit(timeLimitValue);
 
     if (mode === 'world-knowledge') {
       setCurrentView('world-knowledge-difficulty');
+    } else if (mode === 'combi-quiz') {
+      setCurrentView('combi-quiz');
+    } else if (mode === 'flag-archive') {
+      setCurrentView('flag-archive');
     } else {
       setCurrentView('quiz');
     }
@@ -175,6 +180,14 @@ function IndexContent() {
           onBackToStart={handleDailyChallengeComplete}
           isDailyChallenge
           maxQuestions={10}
+        />
+      ) : currentView === 'combi-quiz' ? (
+        <CombiQuiz
+          onBackToStart={handleBackToStart}
+        />
+      ) : currentView === 'flag-archive' ? (
+        <FlagArchive
+          onBackToStart={handleBackToStart}
         />
       ) : null}
     </>

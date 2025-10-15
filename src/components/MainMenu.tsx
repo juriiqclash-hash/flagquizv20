@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
-import { Play, Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu } from "lucide-react";
+import { Play, Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu, BookMarked } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -21,6 +21,7 @@ const QUIZ_MODE_ICONS: { [key: string]: React.ReactNode } = {
   'official-language': <LanguagesIcon className="w-5 h-5" />,
   'world-knowledge': <Globe className="w-5 h-5" />,
   'combi-quiz': <Layers className="w-5 h-5" />,
+  'flag-archive': <BookMarked className="w-5 h-5" />,
   'multiplayer': <Users className="w-5 h-5" />,
 };
 import ProfileButton from "@/components/ProfileButton";
@@ -79,6 +80,7 @@ const QUIZ_MODES: QuizResult[] = [
   { id: 'official-language', name: 'Amtssprachen', description: 'Erkenne die Amtssprache jedes Landes', icon: '🗣️' },
   { id: 'world-knowledge', name: 'Weltwissen Quiz', description: 'Teste dein Wissen über Weltfakten', icon: '🌏' },
   { id: 'combi-quiz', name: 'Combi-Quiz', description: 'Wähle deine Kategorien und spiele endlos', icon: '🎭' },
+  { id: 'flag-archive', name: 'Flaggen-Archiv', description: 'Durchsuche alle Flaggen von A-Z', icon: '📚' },
   { id: 'multiplayer', name: 'Multiplayer', description: 'Spiele gegen andere in Echtzeit', icon: '👥' },
 ];
 
@@ -529,6 +531,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                           quiz.id === 'official-language' ? 'text-cyan-500' :
                           quiz.id === 'world-knowledge' ? 'text-teal-500' :
                           quiz.id === 'combi-quiz' ? 'text-pink-500' :
+                          quiz.id === 'flag-archive' ? 'text-amber-500' :
                           quiz.id === 'multiplayer' ? 'text-purple-500' :
                           'text-white'
                         }`}>

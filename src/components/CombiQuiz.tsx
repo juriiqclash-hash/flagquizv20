@@ -45,13 +45,13 @@ export default function CombiQuiz({ onBackToStart, isDailyChallenge = false, max
     }
   }, [isDailyChallenge]);
   const [categories, setCategories] = useState<CategoryConfig[]>([
-    { id: 'flag', label: 'Flaggen', icon: <Globe className="w-4 h-4" />, enabled: true },
-    { id: 'capital-to-country', label: 'Hauptstadt → Land', icon: <MapPin className="w-4 h-4" />, enabled: true },
-    { id: 'country-to-capital', label: 'Land → Hauptstadt', icon: <MapPin className="w-4 h-4" />, enabled: true },
-    { id: 'highest-mountain', label: 'Höchster Berg', icon: <Mountain className="w-4 h-4" />, enabled: true },
-    { id: 'official-language', label: 'Amtssprache', icon: <Languages className="w-4 h-4" />, enabled: true },
-    { id: 'emoji', label: 'Emoji', icon: <Smile className="w-4 h-4" />, enabled: true },
-    { id: 'world-knowledge', label: 'Weltwissen', icon: <Globe className="w-4 h-4" />, enabled: true },
+    { id: 'flag', label: 'Flaggen', icon: <Globe className="w-4 h-4" />, enabled: false },
+    { id: 'capital-to-country', label: 'Hauptstadt → Land', icon: <MapPin className="w-4 h-4" />, enabled: false },
+    { id: 'country-to-capital', label: 'Land → Hauptstadt', icon: <MapPin className="w-4 h-4" />, enabled: false },
+    { id: 'highest-mountain', label: 'Höchster Berg', icon: <Mountain className="w-4 h-4" />, enabled: false },
+    { id: 'official-language', label: 'Amtssprache', icon: <Languages className="w-4 h-4" />, enabled: false },
+    { id: 'emoji', label: 'Emoji', icon: <Smile className="w-4 h-4" />, enabled: false },
+    { id: 'world-knowledge', label: 'Weltwissen', icon: <Globe className="w-4 h-4" />, enabled: false },
   ]);
 
   const [currentCategory, setCurrentCategory] = useState<QuestionCategory>('flag');

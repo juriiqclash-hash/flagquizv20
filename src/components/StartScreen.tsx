@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Clock, BookOpen, Target, MapPin, Map, Zap, Building, Globe, Smile, Trophy, Users, Play, Mountain, Languages, ArrowLeft, Home, Layers, Search } from "lucide-react";
+import { Clock, BookOpen, Target, MapPin, Map, Zap, Building, Globe, Smile, Trophy, Users, Play, Mountain, Languages, ArrowLeft, Home, Layers, Search, BookMarked } from "lucide-react";
 
 const QUIZ_MODE_ICONS: { [key: string]: React.ReactNode } = {
   'timed': <Clock className="w-5 h-5" />,
@@ -17,6 +17,7 @@ const QUIZ_MODE_ICONS: { [key: string]: React.ReactNode } = {
   'official-language': <Languages className="w-5 h-5" />,
   'world-knowledge': <Globe className="w-5 h-5" />,
   'combi-quiz': <Layers className="w-5 h-5" />,
+  'flag-archive': <BookMarked className="w-5 h-5" />,
   'multiplayer': <Users className="w-5 h-5" />,
 };
 import ContinentSelector from "./ContinentSelector";
@@ -34,7 +35,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import FlagQuizLogo from "@/components/FlagQuizLogo";
 interface StartScreenProps {
-  onStartQuiz: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz', continent?: string, timeLimit?: number) => void;
+  onStartQuiz: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz' | 'flag-archive', continent?: string, timeLimit?: number) => void;
   onStartMultiplayer: () => void;
   currentView: string;
   onOpenAdminPanel?: () => void;
@@ -76,6 +77,7 @@ const QUIZ_MODES: QuizResult[] = [
   { id: 'official-language', name: 'Amtssprachen', description: 'Erkenne die Amtssprache jedes Landes', icon: '🗣️' },
   { id: 'world-knowledge', name: 'Weltwissen Quiz', description: 'Teste dein Wissen über Weltfakten', icon: '🌏' },
   { id: 'combi-quiz', name: 'Combi-Quiz', description: 'Wähle deine Kategorien und spiele endlos', icon: '🎭' },
+  { id: 'flag-archive', name: 'Flaggen-Archiv', description: 'Durchsuche alle Flaggen von A-Z', icon: '📚' },
   { id: 'multiplayer', name: 'Multiplayer', description: 'Spiele gegen andere in Echtzeit', icon: '👥' },
 ];
 
