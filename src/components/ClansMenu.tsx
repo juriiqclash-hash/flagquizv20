@@ -513,8 +513,8 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                       <Card className="p-6">
                         <div className="flex items-start gap-6">
                           <div className="flex items-start gap-6 flex-1">
-                            <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
-                              <AvatarImage src={clan.avatar_url || undefined} className="scale-150" />
+                            <Avatar className="h-24 w-24 border-4 border-primary shadow-lg overflow-hidden">
+                              <AvatarImage src={clan.avatar_url || undefined} className="scale-[2] object-cover" />
                               <AvatarFallback className="text-5xl">{clan.emoji}</AvatarFallback>
                             </Avatar>
                             <div className="flex-1 max-w-[50%]">
@@ -536,8 +536,8 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                               </>
                             ) : (
                               <>
-                                <div className="relative w-40 h-40 opacity-30">
-                                  <TrophyIcon />
+                                <div className="relative w-40 h-40 opacity-30 flex items-center justify-center">
+                                  <Trophy className="w-32 h-32" />
                                 </div>
                                 <p className="text-xs text-muted-foreground text-center">Nicht eingestuft</p>
                               </>
@@ -758,8 +758,8 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                 <Card className="p-6">
                   <div className="flex items-start gap-6">
                     <div className="flex items-start gap-6 flex-1">
-                      <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
-                        <AvatarImage src={selectedClan.avatar_url || undefined} className="scale-150" />
+                      <Avatar className="h-24 w-24 border-4 border-primary shadow-lg overflow-hidden">
+                        <AvatarImage src={selectedClan.avatar_url || undefined} className="scale-[2] object-cover" />
                         <AvatarFallback className="text-5xl">{selectedClan.emoji}</AvatarFallback>
                       </Avatar>
                       <div className="flex-1 max-w-[50%]">
@@ -781,8 +781,8 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                         </>
                       ) : (
                         <>
-                          <div className="relative w-40 h-40 opacity-30">
-                            <TrophyIcon />
+                          <div className="relative w-40 h-40 opacity-30 flex items-center justify-center">
+                            <Trophy className="w-32 h-32" />
                           </div>
                           <p className="text-xs text-muted-foreground text-center">Nicht eingestuft</p>
                         </>
