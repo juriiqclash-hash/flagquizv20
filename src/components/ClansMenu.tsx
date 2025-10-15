@@ -11,6 +11,19 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 
+const STARTER_CLANS = [
+  { name: 'Agharta', emoji: '🏯', description: 'Die geheime unterirdische Stadt, Sitz der Weisheit und des Lichts' },
+  { name: 'Shambhala', emoji: '☀️', description: 'Das mystische Königreich des Friedens und der Erleuchtung' },
+  { name: 'Atlantis', emoji: '💎', description: 'Die versunkene Hochkultur der Antike, reich an Wissen und Macht' },
+  { name: 'Lemuria', emoji: '🌺', description: 'Das verlorene Paradies im Pazifik, Heimat einer spirituellen Zivilisation' },
+  { name: 'Mu', emoji: '🌀', description: 'Der vergessene Kontinent, Wiege uralter Mysterien' },
+  { name: 'Hyperborea', emoji: '🩵', description: 'Das nordische Paradies jenseits des Nordwinds' },
+  { name: 'Avalon', emoji: '🌸', description: 'Die magische Insel der Legenden, Ruhestätte König Artus' },
+  { name: 'Thule', emoji: '🧭', description: 'Das sagenhafte Land am Rande der bekannten Welt' },
+  { name: 'El Dorado', emoji: '🪙', description: 'Die goldene Stadt der Schätze und Legenden' },
+  { name: 'Agni Order', emoji: '🔥', description: 'Der Orden des heiligen Feuers und der Transformation' },
+];
+
 interface ClansMenuProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -93,7 +106,20 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
         })
       );
 
-      setAllClans(clansWithCounts);
+      // Add starter clans with 0 member count
+      const starterClansWithCounts = STARTER_CLANS.map(clan => ({
+        id: `starter-${clan.name}`,
+        name: clan.name,
+        emoji: clan.emoji,
+        description: clan.description,
+        avatar_url: null,
+        created_by: 'system',
+        created_at: new Date().toISOString(),
+        member_count: 0,
+        is_starter: true,
+      }));
+
+      setAllClans([...starterClansWithCounts, ...clansWithCounts]);
 
       // Load user's clans
       const { data: memberData, error: memberError } = await supabase
@@ -263,6 +289,15 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
   const handleJoinClan = async (clanId: string) => {
     if (!user) return;
 
+    // Don't allow joining starter clans
+    if (clanId.startsWith('starter-')) {
+      toast({
+        title: "Info",
+        description: "Dies ist ein Starter-Clan. Du kannst ihn nur über dein Profil auswählen.",
+      });
+      return;
+    }
+
     try {
       // Check if already member
       const { data: existing } = await supabase
@@ -419,9 +454,6 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                           </Avatar>
                           <div className="flex-1 min-w-0">
                             <h3 className="font-semibold truncate">{clan.name}</h3>
-                            <p className="text-sm text-muted-foreground line-clamp-2">
-                              {clan.description || 'Keine Beschreibung'}
-                            </p>
                             <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
                               <Users className="h-4 w-4" />
                               <span>{clan.member_count}/30 Mitglieder</span>
@@ -465,9 +497,6 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                           </Avatar>
                           <div className="flex-1 min-w-0">
                             <h3 className="font-semibold truncate">{clan.name}</h3>
-                            <p className="text-sm text-muted-foreground line-clamp-2">
-                              {clan.description || 'Keine Beschreibung'}
-                            </p>
                             <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
                               <Users className="h-4 w-4" />
                               <span>{clan.member_count}/30 Mitglieder</span>
@@ -620,7 +649,11 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                 </div>
 
                 <div className="flex gap-2 justify-end pt-4 border-t">
-                  {isMember(selectedClan.id) ? (
+                  {selectedClan.id.startsWith('starter-') ? (
+                    <p className="text-sm text-muted-foreground">
+                      Starter-Clans können über das Profil ausgewählt werden
+                    </p>
+                  ) : isMember(selectedClan.id) ? (
                     <Button
                       variant="destructive"
                       onClick={() => handleLeaveClan(selectedClan.id)}
