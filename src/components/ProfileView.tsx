@@ -42,37 +42,18 @@ interface Clan {
   createdBy?: string;
 }
 
-const DEFAULT_CLANS: Clan[] = [{
-  name: 'Agharta',
-  emoji: '🏯'
-}, {
-  name: 'Shambhala',
-  emoji: '☀️'
-}, {
-  name: 'Atlantis',
-  emoji: '💎'
-}, {
-  name: 'Lemuria',
-  emoji: '🌺'
-}, {
-  name: 'Mu',
-  emoji: '🌀'
-}, {
-  name: 'Hyperborea',
-  emoji: '🩵'
-}, {
-  name: 'Avalon',
-  emoji: '🌸'
-}, {
-  name: 'Thule',
-  emoji: '🧭'
-}, {
-  name: 'El Dorado',
-  emoji: '🪙'
-}, {
-  name: 'Agni Order',
-  emoji: '🔥'
-}];
+const DEFAULT_CLANS: Clan[] = [
+  { name: 'Agharta', emoji: '🏯' },
+  { name: 'Shambhala', emoji: '☀️' },
+  { name: 'Atlantis', emoji: '💎' },
+  { name: 'Lemuria', emoji: '🌺' },
+  { name: 'Mu', emoji: '🌀' },
+  { name: 'Hyperborea', emoji: '🩵' },
+  { name: 'Avalon', emoji: '🌸' },
+  { name: 'Thule', emoji: '🧭' },
+  { name: 'El Dorado', emoji: '🪙' },
+  { name: 'Agni Order', emoji: '🔥' }
+];
 const CONTINENTS = [{
   code: 'EU',
   emoji: '🌍'
@@ -144,10 +125,13 @@ export const ProfileView = ({
           custom: true,
           createdBy: clan.created_by
         }));
-        setAllClans([...DEFAULT_CLANS, ...clansWithMeta]);
+        setAllClans([...clansWithMeta, ...DEFAULT_CLANS]);
+      } else {
+        setAllClans([...DEFAULT_CLANS]);
       }
     } catch (error) {
       console.error('Error loading clans:', error);
+      setAllClans([...DEFAULT_CLANS]);
     }
   };
   const loadProfileData = async () => {
