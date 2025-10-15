@@ -224,7 +224,7 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto border-2 border-blue-500/30 shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Freunde</DialogTitle>
         </DialogHeader>
@@ -256,7 +256,7 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
                 friends.map((friend) => {
                   const friendProfile = friend.sender_id === user?.id ? friend.receiver : friend.sender;
                   return (
-                    <div key={friend.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-blue-500/20 hover:border-blue-500/40 transition-colors">
+                    <div key={friend.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                       <div className="flex items-center gap-3">
                         <Avatar>
                           <AvatarImage src={friendProfile?.avatar_url || undefined} />
@@ -287,7 +287,7 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
                 </div>
               ) : (
                 pendingRequests.map((request) => (
-                  <div key={request.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-green-500/20 hover:border-green-500/40 transition-colors">
+                  <div key={request.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarImage src={request.sender?.avatar_url || undefined} />
@@ -327,7 +327,7 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
                 </div>
               ) : (
                 sentRequests.map((request) => (
-                  <div key={request.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-yellow-500/20 hover:border-yellow-500/40 transition-colors">
+                  <div key={request.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarImage src={request.receiver?.avatar_url || undefined} />

@@ -449,7 +449,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col border-2 border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Shield className="h-6 w-6" />
@@ -466,22 +466,20 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
             <TabsContent value="my" className="flex-1 overflow-y-auto mt-4">
               {myClans.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">
-                  <div className="inline-block p-6 rounded-2xl border-2 border-purple-500/20 bg-purple-500/5">
-                    <Shield className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                    <p className="mb-4">Du bist noch in keinem Clan</p>
-                    <Button
-                      onClick={() => setActiveTab("all")}
-                      variant="outline"
-                    >
-                      Clan suchen
-                    </Button>
-                  </div>
+                  <Shield className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                  <p className="mb-4">Du bist noch in keinem Clan</p>
+                  <Button
+                    onClick={() => setActiveTab("all")}
+                    variant="outline"
+                  >
+                    Clan suchen
+                  </Button>
                 </div>
               ) : (
                 <div className="space-y-6">
                   {myClans.map((clan) => (
                     <div key={clan.id} className="space-y-4">
-                      <Card className="p-6 border-2 border-purple-500/30 shadow-lg">
+                      <Card className="p-6">
                         <div className="flex items-start gap-6">
                           <div className="flex items-start gap-6 flex-1">
                             <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
@@ -499,7 +497,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                         </div>
                       </Card>
 
-                      <Card className="p-6 border-2 border-purple-500/20">
+                      <Card className="p-6">
                         <div className="flex items-center justify-between mb-4">
                           <h3 className="font-semibold flex items-center gap-2 text-lg">
                             <Users className="h-5 w-5" />
@@ -588,7 +586,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                   {filteredClans.map((clan) => (
                     <Card
                       key={clan.id}
-                      className="cursor-pointer hover:bg-accent/50 transition-colors border border-purple-500/20 hover:border-purple-500/40"
+                      className="cursor-pointer hover:bg-accent/50 transition-colors"
                       onClick={() => handleClanClick(clan)}
                     >
                       <CardContent className="p-4">
@@ -618,7 +616,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
 
       {/* Create Clan Dialog */}
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-        <DialogContent className="max-w-md border-2 border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Neuen Clan erstellen</DialogTitle>
             <DialogDescription>
@@ -697,7 +695,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
 
       {/* Clan Details Dialog */}
       <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto border-2 border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           {selectedClan && (
             <>
               <DialogHeader>
@@ -708,7 +706,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
               </DialogHeader>
 
               <div className="space-y-6">
-                <Card className="p-6 border-2 border-purple-500/30 shadow-lg">
+                <Card className="p-6">
                   <div className="flex items-start gap-6">
                     <div className="flex items-start gap-6 flex-1">
                       <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
@@ -726,7 +724,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                   </div>
                 </Card>
 
-                <Card className="p-6 border-2 border-purple-500/20">
+                <Card className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold flex items-center gap-2 text-lg">
                       <Users className="h-5 w-5" />

@@ -40,9 +40,9 @@ const CapitalVariantSelector = ({ onSelectVariant, onBack }: CapitalVariantSelec
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {variants.map((variant) => (
-            <Card
+            <Card 
               key={variant.id}
-              className="cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg border-2 border-cyan-500/30 hover:border-cyan-500/60 shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:shadow-[0_0_25px_rgba(6,182,212,0.4)]"
+              className="cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg"
               onClick={() => onSelectVariant(variant.id)}
             >
               <CardHeader>
