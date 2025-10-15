@@ -513,9 +513,9 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                       <Card className="p-6">
                         <div className="flex items-start gap-6">
                           <div className="flex items-start gap-6 flex-1">
-                            <Avatar className="h-32 w-32 border-4 border-primary shadow-lg">
+                            <Avatar className="h-40 w-40 border-4 border-primary shadow-lg">
                               <AvatarImage src={clan.avatar_url || undefined} className="object-cover w-full h-full" />
-                              <AvatarFallback className="text-6xl">{clan.emoji}</AvatarFallback>
+                              <AvatarFallback className="text-7xl">{clan.emoji}</AvatarFallback>
                             </Avatar>
                             <div className="flex-1">
                               <h2 className="text-3xl font-bold mb-2">{clan.name}</h2>
@@ -524,20 +524,20 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                               )}
                             </div>
                           </div>
-                          <div className="flex flex-col items-center gap-2 min-w-[160px]">
+                          <div className="flex flex-col items-center gap-2 min-w-[120px]">
                             {clan.average_rank && clan.average_rank_image ? (
                               <>
                                 <img
                                   src={clan.average_rank_image}
                                   alt={clan.average_rank}
-                                  className="w-40 h-40 object-contain"
+                                  className="w-28 h-28 object-contain"
                                 />
                                 <p className="text-lg font-bold text-center">{clan.average_rank}</p>
                               </>
                             ) : (
                               <>
-                                <div className="relative w-40 h-40 opacity-30 flex items-center justify-center">
-                                  <Trophy className="w-32 h-32" />
+                                <div className="relative w-28 h-28 opacity-30 flex items-center justify-center">
+                                  <Trophy className="w-20 h-20" />
                                 </div>
                                 <p className="text-xs text-muted-foreground text-center">Nicht eingestuft</p>
                               </>
@@ -758,9 +758,9 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                 <Card className="p-6">
                   <div className="flex items-start gap-6">
                     <div className="flex items-start gap-6 flex-1">
-                      <Avatar className="h-32 w-32 border-4 border-primary shadow-lg">
+                      <Avatar className="h-40 w-40 border-4 border-primary shadow-lg">
                         <AvatarImage src={selectedClan.avatar_url || undefined} className="object-cover w-full h-full" />
-                        <AvatarFallback className="text-6xl">{selectedClan.emoji}</AvatarFallback>
+                        <AvatarFallback className="text-7xl">{selectedClan.emoji}</AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <h2 className="text-3xl font-bold mb-2">{selectedClan.name}</h2>
@@ -769,20 +769,20 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                         )}
                       </div>
                     </div>
-                    <div className="flex flex-col items-center gap-2 min-w-[160px]">
+                    <div className="flex flex-col items-center gap-2 min-w-[120px]">
                       {selectedClan.average_rank && selectedClan.average_rank_image ? (
                         <>
                           <img
                             src={selectedClan.average_rank_image}
                             alt={selectedClan.average_rank}
-                            className="w-40 h-40 object-contain"
+                            className="w-28 h-28 object-contain"
                           />
                           <p className="text-lg font-bold text-center">{selectedClan.average_rank}</p>
                         </>
                       ) : (
                         <>
-                          <div className="relative w-40 h-40 opacity-30 flex items-center justify-center">
-                            <Trophy className="w-32 h-32" />
+                          <div className="relative w-28 h-28 opacity-30 flex items-center justify-center">
+                            <Trophy className="w-20 h-20" />
                           </div>
                           <p className="text-xs text-muted-foreground text-center">Nicht eingestuft</p>
                         </>
