@@ -70,6 +70,7 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
   const [clanResults, setClanResults] = useState<ClanResult[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
 
   const handleNavigateHome = () => {
     setOpen(false);
@@ -106,6 +107,60 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
     setOpen(false);
     setSearchDialogOpen(true);
   };
+
+  // Load pending friend requests count
+  useEffect(() => {
+    const loadPendingRequests = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('friend_requests')
+        .select('id')
+        .eq('receiver_id', user.id)
+        .eq('status', 'pending');
+
+      if (!error && data) {
+        setPendingRequestsCount(data.length);
+      }
+    };
+
+    loadPendingRequests();
+
+    // Subscribe to changes
+    const setupSubscription = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const channel = supabase
+        .channel('friend_requests_count_hamburger')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'friend_requests',
+            filter: `receiver_id=eq.${user.id}`
+          },
+          () => {
+            loadPendingRequests();
+          }
+        )
+        .subscribe();
+
+      return channel;
+    };
+
+    const channelPromise = setupSubscription();
+
+    return () => {
+      channelPromise.then(channel => {
+        if (channel) {
+          supabase.removeChannel(channel);
+        }
+      });
+    };
+  }, []);
 
   useEffect(() => {
     const search = async () => {
@@ -196,8 +251,13 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon">
+          <Button variant="outline" size="icon" className="relative">
             <Menu className="h-5 w-5" />
+            {pendingRequestsCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
+                {pendingRequestsCount}
+              </span>
+            )}
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-[300px] sm:w-[400px]">
@@ -235,11 +295,16 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
 
             <Button
               variant="outline"
-              className="w-full justify-start text-lg h-14"
+              className="w-full justify-start text-lg h-14 relative"
               onClick={handleOpenFriends}
             >
               <Users className="h-5 w-5 mr-3" />
               Freunde
+              {pendingRequestsCount > 0 && (
+                <span className="absolute top-3 left-8 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
+                  {pendingRequestsCount}
+                </span>
+              )}
             </Button>
 
             <Button

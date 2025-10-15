@@ -94,6 +94,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showClanNotAvailable, setShowClanNotAvailable] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
   const searchRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const { stats } = useUserStats();
@@ -111,6 +112,46 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
     duelWins: stats.multiplayer_wins ?? 0,
     bestPosition: 0,
   }, userLevel) : null;
+
+  // Load pending friend requests count
+  useEffect(() => {
+    if (!user) return;
+
+    const loadPendingRequests = async () => {
+      const { data, error } = await supabase
+        .from('friend_requests')
+        .select('id')
+        .eq('receiver_id', user.id)
+        .eq('status', 'pending');
+
+      if (!error && data) {
+        setPendingRequestsCount(data.length);
+      }
+    };
+
+    loadPendingRequests();
+
+    // Subscribe to changes
+    const channel = supabase
+      .channel('friend_requests_count')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'friend_requests',
+          filter: `receiver_id=eq.${user.id}`
+        },
+        () => {
+          loadPendingRequests();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -308,7 +349,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
 
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12"
+                      className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12 relative"
                       onClick={() => {
                         setShowFriendsMenu(true);
                         setMobileMenuOpen(false);
@@ -316,6 +357,11 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                     >
                       <Users className="h-5 w-5 mr-3" />
                       Freunde
+                      {pendingRequestsCount > 0 && (
+                        <span className="absolute top-2 left-8 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
+                          {pendingRequestsCount}
+                        </span>
+                      )}
                     </Button>
 
                     <Button
@@ -387,10 +433,15 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-white hover:bg-white/20 rounded-lg"
+                  className="text-white hover:bg-white/20 rounded-lg relative"
                   onClick={() => setShowFriendsMenu(true)}
                 >
                   <Users className="h-5 w-5" />
+                  {pendingRequestsCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
+                      {pendingRequestsCount}
+                    </span>
+                  )}
                 </Button>
 
                 <Button
