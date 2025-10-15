@@ -540,60 +540,20 @@ export const ProfileView = ({
         </div>}
 
       {editingSlot === 'clan' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[120]">
-          <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-xl">{t.selectClanProfile}</h3>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    setShowClanCreator(true);
-                  }}
-                  className="p-2 hover:bg-blue-100 rounded-full transition-colors"
-                  title="Neuen Clan erstellen"
-                >
-                  <Plus className="w-5 h-5 text-blue-600" />
-                </button>
-                <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+              <h3 className="font-bold text-xl">Clan</h3>
+              <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full">
+                <X className="w-5 h-5" />
+              </button>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              {allClans.map(clan => <div key={clan.name} className="relative group">
-                  <button
-                    onClick={() => updateProfileField('clan', clan.name)}
-                    className="w-full flex items-center gap-3 p-4 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <span className="text-3xl">{clan.emoji}</span>
-                    <span className="font-medium text-lg">{clan.name}</span>
-                  </button>
-                  {clan.custom && clan.createdBy === user?.id && (
-                    <button
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        if (confirm(`Clan "${clan.name}" wirklich löschen?`)) {
-                          const { error } = await supabase
-                            .from('clans')
-                            .delete()
-                            .eq('id', clan.id);
-
-                          if (error) {
-                            console.error('Error deleting clan:', error);
-                          } else {
-                            if (profileData.clan === clan.name) {
-                              updateProfileField('clan', null);
-                            }
-                            loadClans();
-                          }
-                        }
-                      }}
-                      className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 hover:bg-red-600 transition-all"
-                      title="Clan löschen"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  )}
-                </div>)}
+            <div className="text-center py-8">
+              <p className="text-lg text-gray-700 mb-6">
+                Du bist in keinem Clan. Joine einem über das Clan Menu.
+              </p>
+              <p className="text-sm text-gray-500">
+                Das Clanwappen wird dann in deinem Profil angezeigt.
+              </p>
             </div>
           </div>
         </div>}
