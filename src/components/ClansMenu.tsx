@@ -487,13 +487,32 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                               <AvatarFallback className="text-5xl">{clan.emoji}</AvatarFallback>
                             </Avatar>
                             <div className="flex-1 max-w-[50%]">
-                              <h2 className="text-3xl font-bold mb-2">{clan.name}</h2>
+                              <h2 className="text-3xl font-bold mb-4">{clan.name}</h2>
                               {clan.description && (
                                 <p className="text-muted-foreground">{clan.description}</p>
                               )}
                             </div>
                           </div>
-                          <div className="flex-1"></div>
+                          <div className="flex-1 flex justify-end">
+                            {(() => {
+                              const members = clanMembers.filter(m => m.clan_id === clan.id);
+                              if (members.length === 0) return null;
+
+                              const totalLevel = members.reduce((sum, m) => sum + (m.profiles?.level || 1), 0);
+                              const avgLevel = Math.round(totalLevel / members.length);
+                              const rank = getRankFromLevel(avgLevel);
+
+                              return (
+                                <div className="flex flex-col items-center gap-2">
+                                  <img src={rank.image} alt={rank.name} className="w-24 h-24 object-contain" />
+                                  <div className="text-center">
+                                    <p className="text-sm font-medium" style={{ color: rank.color }}>{rank.name}</p>
+                                    <p className="text-xs text-muted-foreground">Ø Level {avgLevel}</p>
+                                  </div>
+                                </div>
+                              );
+                            })()}
+                          </div>
                         </div>
                       </Card>
 
