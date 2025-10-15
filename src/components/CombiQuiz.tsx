@@ -73,6 +73,12 @@ export default function CombiQuiz({ onBackToStart, isDailyChallenge = false, max
     );
   };
 
+  const toggleAllCategories = (enabled: boolean) => {
+    setCategories(prev =>
+      prev.map(cat => ({ ...cat, enabled }))
+    );
+  };
+
   const startQuiz = () => {
     const enabledCategories = categories.filter(cat => cat.enabled);
     if (enabledCategories.length === 0) {
@@ -358,7 +364,7 @@ export default function CombiQuiz({ onBackToStart, isDailyChallenge = false, max
                 Wähle die Kategorien aus, die im Quiz vorkommen sollen
               </p>
 
-              <div className="space-y-4 mb-8">
+              <div className="space-y-4 mb-6">
                 {categories.map((category) => (
                   <div
                     key={category.id}
@@ -375,6 +381,23 @@ export default function CombiQuiz({ onBackToStart, isDailyChallenge = false, max
                     </div>
                   </div>
                 ))}
+              </div>
+
+              <div className="flex gap-2 mb-8">
+                <Button
+                  onClick={() => toggleAllCategories(true)}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Alle auswählen
+                </Button>
+                <Button
+                  onClick={() => toggleAllCategories(false)}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Alle abwählen
+                </Button>
               </div>
 
               <Button onClick={startQuiz} size="lg" className="w-full">

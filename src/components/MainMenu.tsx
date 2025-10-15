@@ -42,7 +42,7 @@ interface MainMenuProps {
   onStart: () => void;
   onMultiplayerStart?: () => void;
   onDailyChallengeStart?: () => void;
-  onStartQuiz?: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz', continent?: string, timeLimit?: number) => void;
+  onStartQuiz?: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz' | 'flag-archive', continent?: string, timeLimit?: number) => void;
   onProfileOpen?: () => void;
 }
 
