@@ -32,6 +32,7 @@ import { useUserStats } from "@/hooks/useUserStats";
 import { supabase } from "@/integrations/supabase/client";
 import { PublicProfileView } from "@/components/PublicProfileView";
 import { FriendsMenu } from "@/components/FriendsMenu";
+import { ClansMenu } from "@/components/ClansMenu";
 
 import { calculateLevel } from "@/lib/xpSystem";
 import { calculateRank as calculateProfileRank } from "@/lib/profileRank";
@@ -92,7 +93,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [showFriendsMenu, setShowFriendsMenu] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
-  const [showClanNotAvailable, setShowClanNotAvailable] = useState(false);
+  const [showClansMenu, setShowClansMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -368,7 +369,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                       variant="ghost"
                       className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12"
                       onClick={() => {
-                        setShowClanNotAvailable(true);
+                        setShowClansMenu(true);
                         setMobileMenuOpen(false);
                       }}
                     >
@@ -448,7 +449,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                   variant="ghost"
                   size="icon"
                   className="text-white hover:bg-white/20 rounded-lg"
-                  onClick={() => setShowClanNotAvailable(true)}
+                  onClick={() => setShowClansMenu(true)}
                 >
                   <Shield className="h-5 w-5" />
                 </Button>
@@ -853,22 +854,9 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         </DialogContent>
       </Dialog>
 
-      <Dialog open={showClanNotAvailable} onOpenChange={setShowClanNotAvailable}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Clans</DialogTitle>
-          </DialogHeader>
-          <Card>
-            <CardContent className="py-12 text-center">
-              <Shield className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-xl font-semibold mb-2">Bald verfügbar!</h3>
-              <p className="text-muted-foreground">
-                Die Clan-Funktion wird in Kürze verfügbar sein. Hier kannst du bald einem Clan beitreten oder deinen eigenen erstellen.
-              </p>
-            </CardContent>
-          </Card>
-        </DialogContent>
-      </Dialog>
+      <FriendsMenu open={showFriendsMenu} onOpenChange={setShowFriendsMenu} />
+
+      <ClansMenu open={showClansMenu} onOpenChange={setShowClansMenu} />
     </div>
   );
 }

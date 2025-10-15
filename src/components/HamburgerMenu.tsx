@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import Leaderboard from '@/components/Leaderboard';
 import { Card, CardContent } from '@/components/ui/card';
 import { FriendsMenu } from '@/components/FriendsMenu';
+import { ClansMenu } from '@/components/ClansMenu';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
@@ -334,22 +335,10 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
         onOpenChange={setFriendsDialogOpen}
       />
 
-      <Dialog open={clansDialogOpen} onOpenChange={setClansDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Clans</DialogTitle>
-          </DialogHeader>
-          <Card>
-            <CardContent className="py-12 text-center">
-              <Shield className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-xl font-semibold mb-2">Bald verfügbar!</h3>
-              <p className="text-muted-foreground">
-                Die Clan-Funktion wird in Kürze verfügbar sein. Hier kannst du bald einem Clan beitreten oder deinen eigenen erstellen.
-              </p>
-            </CardContent>
-          </Card>
-        </DialogContent>
-      </Dialog>
+      <ClansMenu
+        open={clansDialogOpen}
+        onOpenChange={setClansDialogOpen}
+      />
 
       <Dialog open={searchDialogOpen} onOpenChange={setSearchDialogOpen}>
         <DialogContent className="max-w-xl max-h-[80vh]">
