@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, Plus, Search, Users, Crown, Loader2, Upload } from 'lucide-react';
+import { Shield, Plus, Search, Users, Crown, Loader2, Upload, Trophy } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
@@ -524,16 +524,23 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                               )}
                             </div>
                           </div>
-                          {clan.average_rank && clan.average_rank_image && (
-                            <div className="flex flex-col items-center gap-2">
-                              <img
-                                src={clan.average_rank_image}
-                                alt={clan.average_rank}
-                                className="w-24 h-24 object-contain"
-                              />
-                              <p className="text-sm font-semibold text-center">{clan.average_rank}</p>
-                            </div>
-                          )}
+                          <div className="flex flex-col items-center gap-2 min-w-[140px]">
+                            {clan.average_rank && clan.average_rank_image ? (
+                              <>
+                                <img
+                                  src={clan.average_rank_image}
+                                  alt={clan.average_rank}
+                                  className="w-36 h-36 object-contain"
+                                />
+                                <p className="text-xl font-bold text-center">{clan.average_rank}</p>
+                              </>
+                            ) : (
+                              <>
+                                <Trophy className="w-36 h-36 text-muted-foreground/30" strokeWidth={1} />
+                                <p className="text-sm text-muted-foreground text-center">Nicht eingestuft</p>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </Card>
 
@@ -760,16 +767,23 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                         )}
                       </div>
                     </div>
-                    {selectedClan.average_rank && selectedClan.average_rank_image && (
-                      <div className="flex flex-col items-center gap-2">
-                        <img
-                          src={selectedClan.average_rank_image}
-                          alt={selectedClan.average_rank}
-                          className="w-24 h-24 object-contain"
-                        />
-                        <p className="text-sm font-semibold text-center">{selectedClan.average_rank}</p>
-                      </div>
-                    )}
+                    <div className="flex flex-col items-center gap-2 min-w-[140px]">
+                      {selectedClan.average_rank && selectedClan.average_rank_image ? (
+                        <>
+                          <img
+                            src={selectedClan.average_rank_image}
+                            alt={selectedClan.average_rank}
+                            className="w-36 h-36 object-contain"
+                          />
+                          <p className="text-xl font-bold text-center">{selectedClan.average_rank}</p>
+                        </>
+                      ) : (
+                        <>
+                          <Trophy className="w-36 h-36 text-muted-foreground/30" strokeWidth={1} />
+                          <p className="text-sm text-muted-foreground text-center">Nicht eingestuft</p>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </Card>
 
