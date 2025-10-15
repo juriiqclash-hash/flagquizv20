@@ -78,14 +78,16 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
 
       // Get member counts for each clan
       const clansWithCounts = await Promise.all(
-        (clansData || []).map(async (clan) => {
+        (clansData || []).map(async (clan: any) => {
           const { count } = await supabase
-            .from('clan_members')
+            .from('clan_members' as any)
             .select('*', { count: 'exact', head: true })
             .eq('clan_id', clan.id);
 
           return {
             ...clan,
+            description: clan.description || null,
+            avatar_url: clan.avatar_url || null,
             member_count: count || 0,
           };
         })
@@ -95,13 +97,13 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
 
       // Load user's clans
       const { data: memberData, error: memberError } = await supabase
-        .from('clan_members')
+        .from('clan_members' as any)
         .select('clan_id')
         .eq('user_id', user.id);
 
       if (memberError) throw memberError;
 
-      const userClanIds = memberData?.map(m => m.clan_id) || [];
+      const userClanIds = (memberData as any)?.map((m: any) => m.clan_id) || [];
       const userClans = clansWithCounts.filter(c => userClanIds.includes(c.id));
       setMyClans(userClans);
     } catch (error) {
@@ -186,7 +188,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
 
       // Add creator as owner
       const { error: memberError } = await supabase
-        .from('clan_members')
+        .from('clan_members' as any)
         .insert({
           clan_id: newClan.id,
           user_id: user.id,
@@ -228,22 +230,33 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
 
     // Load clan members
     const { data: membersData, error } = await supabase
-      .from('clan_members')
+      .from('clan_members' as any)
       .select(`
         id,
         user_id,
         role,
-        joined_at,
-        profiles:user_id (
-          username,
-          avatar_url
-        )
+        joined_at
       `)
       .eq('clan_id', clan.id)
       .order('joined_at', { ascending: true });
 
     if (!error && membersData) {
-      setClanMembers(membersData as any);
+      // Fetch profiles for all members
+      const userIds = (membersData as any[]).map((m: any) => m.user_id);
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('user_id, username, avatar_url')
+        .in('user_id', userIds);
+
+      const membersWithProfiles = (membersData as any[]).map((member: any) => {
+        const profile = (profilesData as any[] || []).find((p: any) => p.user_id === member.user_id);
+        return {
+          ...member,
+          profiles: profile,
+        };
+      });
+
+      setClanMembers(membersWithProfiles);
     }
   };
 
@@ -253,11 +266,11 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
     try {
       // Check if already member
       const { data: existing } = await supabase
-        .from('clan_members')
+        .from('clan_members' as any)
         .select('id')
         .eq('clan_id', clanId)
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (existing) {
         toast({
@@ -270,7 +283,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
 
       // Check member limit
       const { count } = await supabase
-        .from('clan_members')
+        .from('clan_members' as any)
         .select('*', { count: 'exact', head: true })
         .eq('clan_id', clanId);
 
@@ -284,7 +297,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
       }
 
       const { error } = await supabase
-        .from('clan_members')
+        .from('clan_members' as any)
         .insert({
           clan_id: clanId,
           user_id: user.id,
@@ -314,7 +327,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
 
     try {
       const { error } = await supabase
-        .from('clan_members')
+        .from('clan_members' as any)
         .delete()
         .eq('clan_id', clanId)
         .eq('user_id', user.id);
