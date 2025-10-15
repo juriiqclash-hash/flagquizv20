@@ -6,71 +6,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, Plus, Search, Users, Crown, Loader2, Upload } from 'lucide-react';
+import { Shield, Plus, Search, Users, Crown, Loader2, Upload, Trophy } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { PublicProfileView } from './PublicProfileView';
 import { getRankFromLevel } from '@/lib/rankSystem';
-
-const TrophyIcon = () => (
-  <svg viewBox="0 0 64 64" className="w-full h-full">
-    <defs>
-      <linearGradient id="trophyGold" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" style={{ stopColor: '#FFD700', stopOpacity: 1 }} />
-        <stop offset="50%" style={{ stopColor: '#FFA500', stopOpacity: 1 }} />
-        <stop offset="100%" style={{ stopColor: '#FF8C00', stopOpacity: 1 }} />
-      </linearGradient>
-    </defs>
-    <path
-      d="M 20 12 L 20 20 C 20 22 18 24 15 24 C 12 24 10 22 10 20 L 10 12 L 20 12 Z"
-      fill="url(#trophyGold)"
-      stroke="#B8860B"
-      strokeWidth="1"
-    />
-    <path
-      d="M 44 12 L 44 20 C 44 22 46 24 49 24 C 52 24 54 22 54 20 L 54 12 L 44 12 Z"
-      fill="url(#trophyGold)"
-      stroke="#B8860B"
-      strokeWidth="1"
-    />
-    <rect
-      x="18"
-      y="10"
-      width="28"
-      height="20"
-      rx="2"
-      fill="url(#trophyGold)"
-      stroke="#B8860B"
-      strokeWidth="1.5"
-    />
-    <path
-      d="M 22 30 L 26 42 L 38 42 L 42 30 Z"
-      fill="url(#trophyGold)"
-      stroke="#B8860B"
-      strokeWidth="1.5"
-    />
-    <rect
-      x="24"
-      y="42"
-      width="16"
-      height="6"
-      rx="1"
-      fill="#8B4513"
-      stroke="#654321"
-      strokeWidth="1"
-    />
-    <ellipse
-      cx="32"
-      cy="48"
-      rx="10"
-      ry="3"
-      fill="#654321"
-      opacity="0.8"
-    />
-    <circle cx="32" cy="20" r="6" fill="#FFD700" opacity="0.3" />
-  </svg>
-);
 
 const STARTER_CLANS = [
   { name: 'Agharta', emoji: '🏯', description: 'Die geheime unterirdische Stadt, Sitz der Weisheit und des Lichts' },
@@ -569,40 +510,39 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                 <div className="space-y-6">
                   {myClans.map((clan) => (
                     <div key={clan.id} className="space-y-4">
-                      <Card className="p-6 bg-gradient-to-br from-background to-accent/20">
-                        <div className="relative">
-                          <div className="absolute top-0 left-0 right-0 text-center">
-                            <h2 className="text-3xl font-bold">{clan.name}</h2>
-                          </div>
-                          <div className="flex items-center justify-center gap-8 pt-12">
-                            <Avatar className="h-32 w-32 border-4 border-primary shadow-xl">
-                              <AvatarImage src={clan.avatar_url || undefined} className="object-cover" />
-                              <AvatarFallback className="text-6xl">{clan.emoji}</AvatarFallback>
+                      <Card className="p-6">
+                        <div className="flex items-start gap-6">
+                          <div className="flex items-start gap-6 flex-1">
+                            <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
+                              <AvatarImage src={clan.avatar_url || undefined} />
+                              <AvatarFallback className="text-5xl">{clan.emoji}</AvatarFallback>
                             </Avatar>
-                            <div className="flex flex-col items-center gap-3">
-                              {clan.average_rank && clan.average_rank_image ? (
-                                <>
-                                  <div className="relative w-32 h-32">
-                                    <TrophyIcon />
-                                  </div>
-                                  <div className="text-center">
-                                    <p className="text-lg font-bold">{clan.average_rank}</p>
-                                    <p className="text-sm text-muted-foreground">Durchschnittlicher Rang</p>
-                                  </div>
-                                </>
-                              ) : (
-                                <>
-                                  <div className="relative w-32 h-32 opacity-20">
-                                    <TrophyIcon />
-                                  </div>
-                                  <p className="text-sm text-muted-foreground text-center">Nicht eingestuft</p>
-                                </>
+                            <div className="flex-1 max-w-[50%]">
+                              <h2 className="text-3xl font-bold mb-2">{clan.name}</h2>
+                              {clan.description && (
+                                <p className="text-muted-foreground">{clan.description}</p>
                               )}
                             </div>
                           </div>
-                          <div className="absolute bottom-0 left-0 right-0 text-center pt-4">
-                            {clan.description && (
-                              <p className="text-muted-foreground text-sm italic">{clan.description}</p>
+                          <div className="flex flex-col items-center gap-2 min-w-[120px]">
+                            {clan.average_rank && clan.average_rank_image ? (
+                              <>
+                                <img
+                                  src={clan.average_rank_image}
+                                  alt={clan.average_rank}
+                                  className="w-24 h-24 object-contain"
+                                />
+                                <p className="text-sm font-semibold text-center">{clan.average_rank}</p>
+                              </>
+                            ) : (
+                              <>
+                                <img
+                                  src="https://www.iconsdb.com/icons/download/gray/trophy-128.png"
+                                  alt="Nicht eingestuft"
+                                  className="w-24 h-24 object-contain opacity-30"
+                                />
+                                <p className="text-xs text-muted-foreground text-center">Nicht eingestuft</p>
+                              </>
                             )}
                           </div>
                         </div>
@@ -817,40 +757,39 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
               </DialogHeader>
 
               <div className="space-y-6">
-                <Card className="p-6 bg-gradient-to-br from-background to-accent/20">
-                  <div className="relative">
-                    <div className="absolute top-0 left-0 right-0 text-center">
-                      <h2 className="text-3xl font-bold">{selectedClan.name}</h2>
-                    </div>
-                    <div className="flex items-center justify-center gap-8 pt-12">
-                      <Avatar className="h-32 w-32 border-4 border-primary shadow-xl">
-                        <AvatarImage src={selectedClan.avatar_url || undefined} className="object-cover" />
-                        <AvatarFallback className="text-6xl">{selectedClan.emoji}</AvatarFallback>
+                <Card className="p-6">
+                  <div className="flex items-start gap-6">
+                    <div className="flex items-start gap-6 flex-1">
+                      <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
+                        <AvatarImage src={selectedClan.avatar_url || undefined} />
+                        <AvatarFallback className="text-5xl">{selectedClan.emoji}</AvatarFallback>
                       </Avatar>
-                      <div className="flex flex-col items-center gap-3">
-                        {selectedClan.average_rank && selectedClan.average_rank_image ? (
-                          <>
-                            <div className="relative w-32 h-32">
-                              <TrophyIcon />
-                            </div>
-                            <div className="text-center">
-                              <p className="text-lg font-bold">{selectedClan.average_rank}</p>
-                              <p className="text-sm text-muted-foreground">Durchschnittlicher Rang</p>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="relative w-32 h-32 opacity-20">
-                              <TrophyIcon />
-                            </div>
-                            <p className="text-sm text-muted-foreground text-center">Nicht eingestuft</p>
-                          </>
+                      <div className="flex-1 max-w-[50%]">
+                        <h2 className="text-3xl font-bold mb-2">{selectedClan.name}</h2>
+                        {selectedClan.description && (
+                          <p className="text-muted-foreground">{selectedClan.description}</p>
                         )}
                       </div>
                     </div>
-                    <div className="absolute bottom-0 left-0 right-0 text-center pt-4">
-                      {selectedClan.description && (
-                        <p className="text-muted-foreground text-sm italic">{selectedClan.description}</p>
+                    <div className="flex flex-col items-center gap-2 min-w-[120px]">
+                      {selectedClan.average_rank && selectedClan.average_rank_image ? (
+                        <>
+                          <img
+                            src={selectedClan.average_rank_image}
+                            alt={selectedClan.average_rank}
+                            className="w-24 h-24 object-contain"
+                          />
+                          <p className="text-sm font-semibold text-center">{selectedClan.average_rank}</p>
+                        </>
+                      ) : (
+                        <>
+                          <img
+                            src="https://www.iconsdb.com/icons/download/gray/trophy-128.png"
+                            alt="Nicht eingestuft"
+                            className="w-24 h-24 object-contain opacity-30"
+                          />
+                          <p className="text-xs text-muted-foreground text-center">Nicht eingestuft</p>
+                        </>
                       )}
                     </div>
                   </div>
