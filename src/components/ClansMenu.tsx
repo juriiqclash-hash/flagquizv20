@@ -514,7 +514,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                         <div className="flex items-start gap-6">
                           <div className="flex items-start gap-6 flex-1">
                             <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
-                              <AvatarImage src={clan.avatar_url || undefined} />
+                              <AvatarImage src={clan.avatar_url || undefined} className="scale-150" />
                               <AvatarFallback className="text-5xl">{clan.emoji}</AvatarFallback>
                             </Avatar>
                             <div className="flex-1 max-w-[50%]">
@@ -759,7 +759,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                   <div className="flex items-start gap-6">
                     <div className="flex items-start gap-6 flex-1">
                       <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
-                        <AvatarImage src={selectedClan.avatar_url || undefined} />
+                        <AvatarImage src={selectedClan.avatar_url || undefined} className="scale-150" />
                         <AvatarFallback className="text-5xl">{selectedClan.emoji}</AvatarFallback>
                       </Avatar>
                       <div className="flex-1 max-w-[50%]">
