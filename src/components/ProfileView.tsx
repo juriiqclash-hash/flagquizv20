@@ -118,6 +118,7 @@ export const ProfileView = ({
   });
   const [profileData, setProfileData] = useState<ProfileData>({});
   const [editingSlot, setEditingSlot] = useState<'flag' | 'continent' | 'clan' | null>(null);
+  const [userClan, setUserClan] = useState<{ name: string; emoji: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [showRankInfo, setShowRankInfo] = useState(false);
   const [showClanCreator, setShowClanCreator] = useState(false);
@@ -242,6 +243,26 @@ export const ProfileView = ({
         duelWins,
         bestPosition
       });
+
+      // Load user's clan membership
+      const { data: clanMembership } = await supabase
+        .from('clan_members' as any)
+        .select('clan_id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (clanMembership && (clanMembership as any).clan_id) {
+        const { data: clanData } = await supabase
+          .from('clans')
+          .select('name, emoji')
+          .eq('id', (clanMembership as any).clan_id)
+          .single();
+
+        if (clanData) {
+          setUserClan(clanData as any);
+          setProfileData(prev => ({ ...prev, clan: (clanData as any).name }));
+        }
+      }
     } catch (error) {
       console.error('Error loading profile:', error);
     } finally {
@@ -357,22 +378,20 @@ export const ProfileView = ({
                 </button>
 
                 {/* Clan Slot */}
-                <button onClick={() => {
-                if (profileData.clan) {
-                  updateProfileField('clan', null);
-                } else {
-                  setEditingSlot('clan');
-                }
-              }} className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
-                {profileData.clan ? <>
+                <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center transition-all">
+                  {userClan ? (
+                    <>
                       <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
-                        {allClans.find(c => c.name === profileData.clan)?.emoji}
+                        {userClan.emoji}
                       </span>
                       <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
-                        {profileData.clan}
+                        {userClan.name}
                       </span>
-                    </> : <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />}
-                </button>
+                    </>
+                  ) : (
+                    <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -539,29 +558,6 @@ export const ProfileView = ({
           </div>
         </div>}
 
-      {editingSlot === 'clan' && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[120]">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="font-bold text-xl">Clan</h3>
-              <button onClick={() => setEditingSlot(null)} className="p-1 hover:bg-gray-100 rounded-full transition-colors">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="text-center py-8 space-y-6">
-              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
-                <Shield className="w-10 h-10 text-blue-600" />
-              </div>
-              <div className="space-y-3">
-                <p className="text-lg font-semibold text-gray-800">
-                  Du bist in keinem Clan
-                </p>
-                <p className="text-sm text-gray-600 leading-relaxed px-4">
-                  Joine einem Clan über das Clan Menu. Das Clanwappen wird dann in deinem Profil angezeigt.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>}
 
       {showClanCreator && (
         <ClanCreator

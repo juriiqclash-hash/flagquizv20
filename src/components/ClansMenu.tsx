@@ -77,6 +77,14 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>("all");
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingClan, setEditingClan] = useState<Clan | null>(null);
+  const [editClanName, setEditClanName] = useState('');
+  const [editClanEmoji, setEditClanEmoji] = useState('');
+  const [editClanDescription, setEditClanDescription] = useState('');
+  const [editClanAvatar, setEditClanAvatar] = useState<File | null>(null);
+  const [editAvatarPreview, setEditAvatarPreview] = useState<string | null>(null);
+  const editFileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (open && user) {
@@ -371,17 +379,137 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
     }
   };
 
-  const handleJoinClan = async (clanId: string) => {
-    if (!user) return;
+  const handleEditClan = (clan: Clan) => {
+    setEditingClan(clan);
+    setEditClanName(clan.name);
+    setEditClanEmoji(clan.emoji);
+    setEditClanDescription(clan.description || '');
+    setEditAvatarPreview(clan.avatar_url);
+    setEditDialogOpen(true);
+  };
 
-    // Don't allow joining starter clans
-    if (clanId.startsWith('starter-')) {
+  const handleEditFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "Fehler",
+          description: "Datei ist zu groß. Maximal 5MB erlaubt.",
+          variant: "destructive",
+        });
+        return;
+      }
+      setEditClanAvatar(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditAvatarPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    if (!user || !editingClan) return;
+    if (!editClanName.trim()) {
       toast({
-        title: "Info",
-        description: "Dies ist ein Starter-Clan. Du kannst ihn nur über dein Profil auswählen.",
+        title: "Fehler",
+        description: "Bitte gib einen Clan-Namen ein",
+        variant: "destructive",
       });
       return;
     }
+
+    setLoading(true);
+    try {
+      let avatarUrl = editingClan.avatar_url;
+
+      // Upload new avatar if selected
+      if (editClanAvatar) {
+        const fileExt = editClanAvatar.name.split('.').pop();
+        const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('clan-avatars')
+          .upload(fileName, editClanAvatar);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('clan-avatars')
+          .getPublicUrl(fileName);
+
+        avatarUrl = publicUrl;
+      }
+
+      // Update clan
+      const { error: updateError } = await supabase
+        .from('clans')
+        .update({
+          name: editClanName,
+          emoji: editClanEmoji,
+          description: editClanDescription || null,
+          avatar_url: avatarUrl,
+        })
+        .eq('id', editingClan.id);
+
+      if (updateError) throw updateError;
+
+      toast({
+        title: "Erfolg",
+        description: "Clan erfolgreich aktualisiert!",
+      });
+      setEditDialogOpen(false);
+      setEditingClan(null);
+      loadClans();
+    } catch (error) {
+      console.error('Error updating clan:', error);
+      toast({
+        title: "Fehler",
+        description: "Fehler beim Aktualisieren des Clans",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteClan = async (clanId: string) => {
+    if (!user) return;
+    
+    if (!confirm('Möchtest du diesen Clan wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from('clans')
+        .delete()
+        .eq('id', clanId)
+        .eq('created_by', user.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Erfolg",
+        description: "Clan erfolgreich gelöscht",
+      });
+      loadClans();
+      setDetailDialogOpen(false);
+    } catch (error) {
+      console.error('Error deleting clan:', error);
+      toast({
+        title: "Fehler",
+        description: "Fehler beim Löschen des Clans",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleJoinClan = async (clanId: string) => {
+    if (!user) return;
 
     try {
       // Check if already member
@@ -588,16 +716,33 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                                 )}
                               </div>
                             ))
-                          )}
-                        </div>
-                        <div className="flex justify-end pt-4 border-t mt-4">
+                        )}
+                      </div>
+                      <div className="flex justify-between pt-4 border-t mt-4">
+                        {clan.created_by === user?.id ? (
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              onClick={() => handleEditClan(clan)}
+                            >
+                              Bearbeiten
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              onClick={() => handleDeleteClan(clan.id)}
+                            >
+                              Löschen
+                            </Button>
+                          </div>
+                        ) : (
                           <Button
                             variant="destructive"
                             onClick={() => handleLeaveClan(clan.id)}
                           >
                             Clan verlassen
                           </Button>
-                        </div>
+                        )}
+                      </div>
                       </Card>
                     </div>
                   ))}
@@ -836,30 +981,124 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                       ))
                     )}
                   </div>
-                  <div className="flex justify-end pt-4 border-t mt-4">
-                    {selectedClan.id.startsWith('starter-') ? (
-                      <p className="text-sm text-muted-foreground">
-                        Starter-Clans können über das Profil ausgewählt werden
-                      </p>
-                    ) : isMember(selectedClan.id) ? (
-                      <Button
-                        variant="destructive"
-                        onClick={() => handleLeaveClan(selectedClan.id)}
-                      >
-                        Clan verlassen
-                      </Button>
-                    ) : selectedClan.member_count < 30 ? (
-                      <Button onClick={() => handleJoinClan(selectedClan.id)}>
-                        Clan beitreten
-                      </Button>
+                  <div className="flex justify-between pt-4 border-t mt-4">
+                    {selectedClan.created_by === user?.id ? (
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          onClick={() => handleEditClan(selectedClan)}
+                        >
+                          Bearbeiten
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          onClick={() => handleDeleteClan(selectedClan.id)}
+                        >
+                          Löschen
+                        </Button>
+                      </div>
                     ) : (
-                      <Button disabled>Clan ist voll</Button>
+                      <>
+                        {isMember(selectedClan.id) ? (
+                          <Button
+                            variant="destructive"
+                            onClick={() => handleLeaveClan(selectedClan.id)}
+                          >
+                            Clan verlassen
+                          </Button>
+                        ) : selectedClan.member_count < 30 ? (
+                          <Button onClick={() => handleJoinClan(selectedClan.id)}>
+                            Clan beitreten
+                          </Button>
+                        ) : (
+                          <Button disabled>Clan ist voll</Button>
+                        )}
+                      </>
                     )}
                   </div>
                 </Card>
               </div>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Clan Dialog */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Clan bearbeiten</DialogTitle>
+            <DialogDescription>
+              Passe Namen, Emoji, Beschreibung und Avatar an
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <Avatar className="h-20 w-20 cursor-pointer" onClick={() => editFileInputRef.current?.click()}>
+                  <AvatarImage src={editAvatarPreview || undefined} />
+                  <AvatarFallback className="text-3xl">{editClanEmoji}</AvatarFallback>
+                </Avatar>
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full"
+                  onClick={() => editFileInputRef.current?.click()}
+                >
+                  <Upload className="h-4 w-4" />
+                </Button>
+                <input
+                  ref={editFileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleEditFileSelect}
+                  className="hidden"
+                />
+              </div>
+              <div className="flex-1">
+                <label className="text-sm font-medium">Emoji</label>
+                <Input
+                  value={editClanEmoji}
+                  onChange={(e) => setEditClanEmoji(e.target.value)}
+                  maxLength={2}
+                  className="text-2xl text-center"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Clan Name *</label>
+              <Input
+                value={editClanName}
+                onChange={(e) => setEditClanName(e.target.value)}
+                placeholder="z.B. Die Unbesiegbaren"
+                maxLength={50}
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Beschreibung</label>
+              <Textarea
+                value={editClanDescription}
+                onChange={(e) => setEditClanDescription(e.target.value)}
+                placeholder="Beschreibe deinen Clan..."
+                maxLength={500}
+                rows={4}
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                {editClanDescription.length}/500
+              </p>
+            </div>
+
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
+                Abbrechen
+              </Button>
+              <Button onClick={handleSaveEdit} disabled={loading || !editClanName.trim()}>
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Speichern'}
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 

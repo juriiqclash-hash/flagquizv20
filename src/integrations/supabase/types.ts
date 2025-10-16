@@ -38,24 +38,100 @@ export type Database = {
         }
         Relationships: []
       }
+      clan_invitations: {
+        Row: {
+          clan_id: string
+          created_at: string
+          id: string
+          receiver_id: string
+          sender_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          clan_id: string
+          created_at?: string
+          id?: string
+          receiver_id: string
+          sender_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          clan_id?: string
+          created_at?: string
+          id?: string
+          receiver_id?: string
+          sender_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clan_invitations_clan_id_fkey"
+            columns: ["clan_id"]
+            isOneToOne: false
+            referencedRelation: "clans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clan_members: {
+        Row: {
+          clan_id: string
+          id: string
+          joined_at: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          clan_id: string
+          id?: string
+          joined_at?: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          clan_id?: string
+          id?: string
+          joined_at?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clan_members_clan_id_fkey"
+            columns: ["clan_id"]
+            isOneToOne: false
+            referencedRelation: "clans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clans: {
         Row: {
+          avatar_url: string | null
           created_at: string
           created_by: string
+          description: string | null
           emoji: string
           id: string
           name: string
         }
         Insert: {
+          avatar_url?: string | null
           created_at?: string
           created_by: string
+          description?: string | null
           emoji: string
           id?: string
           name: string
         }
         Update: {
+          avatar_url?: string | null
           created_at?: string
           created_by?: string
+          description?: string | null
           emoji?: string
           id?: string
           name?: string
@@ -166,6 +242,44 @@ export type Database = {
           winner_id?: string | null
         }
         Relationships: []
+      }
+      lobby_invitations: {
+        Row: {
+          created_at: string
+          id: string
+          lobby_id: string
+          receiver_id: string
+          sender_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lobby_id: string
+          receiver_id: string
+          sender_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lobby_id?: string
+          receiver_id?: string
+          sender_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lobby_invitations_lobby_id_fkey"
+            columns: ["lobby_id"]
+            isOneToOne: false
+            referencedRelation: "lobbies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       match_participants: {
         Row: {
