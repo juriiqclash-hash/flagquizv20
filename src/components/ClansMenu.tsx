@@ -6,12 +6,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, Plus, Search, Users, Crown, Loader2, Upload, Trophy } from 'lucide-react';
+import { Shield, Plus, Search, Users, Crown, Loader2, Upload, Trophy, UserPlus } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { PublicProfileView } from './PublicProfileView';
 import { getRankFromLevel } from '@/lib/rankSystem';
+import { FriendInviteDialog } from './FriendInviteDialog';
 
 const STARTER_CLANS = [
   { name: 'Agharta', emoji: '🏯', description: 'Die geheime unterirdische Stadt, Sitz der Weisheit und des Lichts' },
@@ -85,6 +86,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
   const [editClanAvatar, setEditClanAvatar] = useState<File | null>(null);
   const [editAvatarPreview, setEditAvatarPreview] = useState<string | null>(null);
   const editFileInputRef = useRef<HTMLInputElement>(null);
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
 
   useEffect(() => {
     if (open && user) {
@@ -982,6 +984,13 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                     )}
                   </div>
                   <div className="flex justify-between pt-4 border-t mt-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => setInviteDialogOpen(true)}
+                    >
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Freund einladen
+                    </Button>
                     {selectedClan.created_by === user?.id ? (
                       <div className="flex gap-2">
                         <Button
@@ -1101,6 +1110,13 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
           </div>
         </DialogContent>
       </Dialog>
+
+      <FriendInviteDialog 
+        open={inviteDialogOpen} 
+        onOpenChange={setInviteDialogOpen}
+        type="clan"
+        clanId={selectedClan?.id}
+      />
 
       <PublicProfileView
         userId={selectedUserId}

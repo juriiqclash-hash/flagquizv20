@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import SystemBanner from "./components/SystemBanner";
 import MaintenanceScreen from "./components/MaintenanceScreen";
 import ConsentDialog from "./components/ConsentDialog";
+import { InvitationBanner } from "./components/InvitationBanner";
 import { useAdmin } from "./hooks/useAdmin";
 
 const queryClient = new QueryClient();
@@ -95,6 +96,7 @@ const AppContent = () => {
     <LanguageProvider>
       <TooltipProvider>
         <SystemBanner />
+        <InvitationBanner />
         <Toaster />
         <Sonner />
         <ConsentDialog open={needsConsent} onConsent={handleConsent} />

@@ -3,11 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Users, Copy, Play, LogOut, Crown, User, Flag, UserX } from 'lucide-react';
+import { Users, Copy, Play, LogOut, Crown, User, Flag, UserX, UserPlus } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useMultiplayer } from '@/hooks/useMultiplayer';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
+import { FriendInviteDialog } from './FriendInviteDialog';
 interface MultiplayerLobbyProps {
   onStartGame: () => void;
   onBackToMenu: () => void;
@@ -38,6 +39,7 @@ export default function MultiplayerLobby({
   const [countdownTriggered, setCountdownTriggered] = useState(false);
   const [selectedGameMode, setSelectedGameMode] = useState<string>('flags');
   const [selectedContinent, setSelectedContinent] = useState<string>('');
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const isCreator = currentLobby?.owner_id === user?.id;
   const canStart = participants.length >= 2 && (selectedGameMode !== 'continents' || selectedContinent !== '');
 
@@ -230,9 +232,21 @@ export default function MultiplayerLobby({
                 <h3 className="text-2xl lg:text-3xl font-bold text-white">
                   {participants[1]?.username || 'Warten...'}
                 </h3>
-                <Badge variant={participants[1] ? 'default' : 'secondary'} className={`text-sm px-4 py-1 ${participants[1] ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-500'}`}>
-                  {participants[1] ? onlineUsers.includes(participants[1].user_id) ? '🟢 Online' : '🔴 Offline' : '⏳ Warten'}
-                </Badge>
+                {participants[1] ? (
+                  <Badge variant="default" className="text-sm px-4 py-1 bg-green-500 hover:bg-green-600 text-white">
+                    {onlineUsers.includes(participants[1].user_id) ? '🟢 Online' : '🔴 Offline'}
+                  </Badge>
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="text-sm"
+                    onClick={() => setInviteDialogOpen(true)}
+                  >
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Freund einladen
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -324,5 +338,12 @@ export default function MultiplayerLobby({
             </CardContent>
           </Card>}
       </div>
+
+      <FriendInviteDialog 
+        open={inviteDialogOpen} 
+        onOpenChange={setInviteDialogOpen}
+        type="lobby"
+        lobbyId={currentLobby?.id}
+      />
     </div>;
 }
