@@ -819,6 +819,9 @@ export const useMultiplayer = () => {
 
       if (error) throw error;
 
+      // Update local participants state immediately
+      setParticipants(prev => prev.filter(p => p.user_id !== userId));
+
       toast({
         title: 'Spieler entfernt',
         description: 'Der Spieler wurde aus der Lobby entfernt.',

@@ -162,6 +162,16 @@ export function FriendInviteDialog({ open, onOpenChange, type, lobbyId, clanId }
           description: 'Dein Freund wurde zur Lobby eingeladen'
         });
       } else if (type === 'clan' && clanId) {
+        // Prevent invitation if clanId is a starter clan (starts with 'starter-')
+        if (clanId.startsWith('starter-')) {
+          toast({
+            title: 'Fehler',
+            description: 'Starter-Clans können keine Einladungen versenden',
+            variant: 'destructive'
+          });
+          return;
+        }
+
         // Check if sender is actually a member of this clan
         const { data: membership } = await supabase
           .from('clan_members')

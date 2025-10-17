@@ -375,10 +375,11 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
         };
       });
 
-      setClanMembers(prev => [
-        ...prev.filter(m => m.clan_id !== clanId),
-        ...membersWithProfiles
-      ]);
+      // Replace members for this clan only
+      setClanMembers(prev => {
+        const otherClanMembers = prev.filter(m => m.clan_id !== clanId);
+        return [...otherClanMembers, ...membersWithProfiles];
+      });
     }
   };
 
@@ -654,7 +655,14 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
         description: "Rolle wurde erfolgreich geändert",
       });
       
-      loadClanMembers(clanId);
+      // Update local state immediately
+      setClanMembers(prev => prev.map(m => 
+        m.clan_id === clanId && m.user_id === userId 
+          ? { ...m, role: newRole as any }
+          : m
+      ));
+      
+      await loadClanMembers(clanId);
     } catch (error) {
       console.error('Error changing role:', error);
       toast({
