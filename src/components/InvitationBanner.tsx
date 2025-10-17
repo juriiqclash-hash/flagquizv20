@@ -5,7 +5,6 @@ import { X, Users, Shield } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
 
 interface Invitation {
   id: string;
@@ -19,7 +18,6 @@ interface Invitation {
 
 export function InvitationBanner() {
   const { user, loading } = useAuth();
-  const navigate = useNavigate();
   const [invitations, setInvitations] = useState<Invitation[]>([]);
 
   useEffect(() => {
