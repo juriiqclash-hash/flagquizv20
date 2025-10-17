@@ -811,11 +811,13 @@ export const useMultiplayer = () => {
     if (!currentLobby || !user || currentLobby.owner_id !== user.id) return;
 
     try {
-      await supabase
+      const { error } = await supabase
         .from('match_participants')
         .delete()
         .eq('lobby_id', currentLobby.id)
         .eq('user_id', userId);
+
+      if (error) throw error;
 
       toast({
         title: 'Spieler entfernt',

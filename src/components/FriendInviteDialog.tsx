@@ -162,6 +162,23 @@ export function FriendInviteDialog({ open, onOpenChange, type, lobbyId, clanId }
           description: 'Dein Freund wurde zur Lobby eingeladen'
         });
       } else if (type === 'clan' && clanId) {
+        // Check if sender is actually a member of this clan
+        const { data: membership } = await supabase
+          .from('clan_members')
+          .select('id')
+          .eq('clan_id', clanId)
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (!membership) {
+          toast({
+            title: 'Fehler',
+            description: 'Du musst Mitglied des Clans sein, um einzuladen',
+            variant: 'destructive'
+          });
+          return;
+        }
+
         const { error } = await supabase
           .from('clan_invitations')
           .insert({

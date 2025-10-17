@@ -13,6 +13,7 @@ import { toast } from '@/hooks/use-toast';
 import { PublicProfileView } from './PublicProfileView';
 import { getRankFromLevel } from '@/lib/rankSystem';
 import { FriendInviteDialog } from './FriendInviteDialog';
+import { ClanMemberContextMenu } from './ClanMemberContextMenu';
 
 const STARTER_CLANS = [
   { name: 'Agharta', emoji: '🏯', description: 'Die geheime unterirdische Stadt, Sitz der Weisheit und des Lichts' },
@@ -263,13 +264,13 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
 
       if (clanError) throw clanError;
 
-      // Add creator as owner
+      // Add creator as leader
       const { error: memberError } = await supabase
         .from('clan_members' as any)
         .insert({
           clan_id: newClan.id,
           user_id: user.id,
-          role: 'owner',
+          role: 'leader',
         });
 
       if (memberError) throw memberError;
@@ -551,7 +552,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
         .insert({
           clan_id: clanId,
           user_id: user.id,
-          role: 'member',
+          role: 'newbie',
         });
 
       if (error) throw error;
@@ -606,6 +607,63 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
   );
 
   const isMember = (clanId: string) => myClans.some(c => c.id === clanId);
+
+  const handleKickMember = async (clanId: string, userId: string) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('clan_members')
+        .delete()
+        .eq('clan_id', clanId)
+        .eq('user_id', userId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Erfolg",
+        description: "Mitglied wurde aus dem Clan entfernt",
+      });
+      
+      loadClanMembers(clanId);
+      loadClans();
+    } catch (error) {
+      console.error('Error kicking member:', error);
+      toast({
+        title: "Fehler",
+        description: "Fehler beim Entfernen des Mitglieds",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleChangeRole = async (clanId: string, userId: string, newRole: string) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('clan_members')
+        .update({ role: newRole as any })
+        .eq('clan_id', clanId)
+        .eq('user_id', userId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Erfolg",
+        description: "Rolle wurde erfolgreich geändert",
+      });
+      
+      loadClanMembers(clanId);
+    } catch (error) {
+      console.error('Error changing role:', error);
+      toast({
+        title: "Fehler",
+        description: "Fehler beim Ändern der Rolle",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <>
@@ -692,32 +750,61 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                               <Loader2 className="h-6 w-6 animate-spin mx-auto" />
                             </div>
                           ) : (
-                            clanMembers.filter(m => m.clan_id === clan.id).map((member) => (
-                              <div
-                                key={member.id}
-                                className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
-                                onClick={() => {
-                                  setSelectedUserId(member.user_id);
-                                  onOpenChange(false);
-                                }}
-                              >
-                                <Avatar className="h-10 w-10">
-                                  <AvatarImage src={member.profiles?.avatar_url || undefined} />
-                                  <AvatarFallback>
-                                    {member.profiles?.username?.[0]?.toUpperCase() || '?'}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <div className="flex-1">
-                                  <p className="font-medium">{member.profiles?.username || 'Unbekannt'}</p>
-                                  <p className="text-xs text-muted-foreground">
-                                    Beigetreten: {new Date(member.joined_at).toLocaleDateString('de-DE')}
-                                  </p>
-                                </div>
-                                {member.role === 'owner' && (
-                                  <Crown className="h-5 w-5 text-yellow-500" />
-                                )}
-                              </div>
-                            ))
+                            clanMembers.filter(m => m.clan_id === clan.id).map((member) => {
+                              const currentUserMembership = clanMembers.find(
+                                m => m.clan_id === clan.id && m.user_id === user?.id
+                              );
+                              const currentUserRole = currentUserMembership?.role || 'newbie';
+
+                              return (
+                                <ClanMemberContextMenu
+                                  key={member.id}
+                                  currentUserRole={currentUserRole}
+                                  memberRole={member.role}
+                                  isCurrentUser={member.user_id === user?.id}
+                                  onKick={async () => {
+                                    await handleKickMember(clan.id, member.user_id);
+                                  }}
+                                  onPromote={async (newRole) => {
+                                    await handleChangeRole(clan.id, member.user_id, newRole);
+                                  }}
+                                  onDemote={async (newRole) => {
+                                    await handleChangeRole(clan.id, member.user_id, newRole);
+                                  }}
+                                >
+                                  <div
+                                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
+                                    onClick={() => {
+                                      setSelectedUserId(member.user_id);
+                                      onOpenChange(false);
+                                    }}
+                                  >
+                                    <Avatar className="h-10 w-10">
+                                      <AvatarImage src={member.profiles?.avatar_url || undefined} />
+                                      <AvatarFallback>
+                                        {member.profiles?.username?.[0]?.toUpperCase() || '?'}
+                                      </AvatarFallback>
+                                    </Avatar>
+                                    <div className="flex-1">
+                                      <p className="font-medium">{member.profiles?.username || 'Unbekannt'}</p>
+                                      <p className="text-xs text-muted-foreground capitalize">
+                                        {member.role === 'leader' && '👑 Anführer'}
+                                        {member.role === 'vice_leader' && '⭐ Vize-Anführer'}
+                                        {member.role === 'elite_member' && '💎 Elite-Member'}
+                                        {member.role === 'moderator' && '🛡️ Moderator'}
+                                        {member.role === 'member' && '✅ Member'}
+                                        {member.role === 'newbie' && '🌱 Neuling'}
+                                        {' • '}
+                                        {new Date(member.joined_at).toLocaleDateString('de-DE')}
+                                      </p>
+                                    </div>
+                                    {member.role === 'leader' && (
+                                      <Crown className="h-5 w-5 text-yellow-500" />
+                                    )}
+                                  </div>
+                                </ClanMemberContextMenu>
+                              );
+                            })
                         )}
                       </div>
                       <div className="flex justify-between pt-4 border-t mt-4">

@@ -175,8 +175,8 @@ export function InvitationBanner() {
           description: `Du bist der Lobby ${invitation.lobby_code} beigetreten`
         });
 
-        // Reload page to show lobby
-        window.location.reload();
+        // Navigate to multiplayer page
+        window.location.hash = '#/multiplayer';
       } else if (invitation.type === 'clan') {
         // Update invitation status
         await supabase

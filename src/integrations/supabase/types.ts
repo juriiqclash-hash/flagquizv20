@@ -81,21 +81,21 @@ export type Database = {
           clan_id: string
           id: string
           joined_at: string
-          role: string
+          role: Database["public"]["Enums"]["clan_role"]
           user_id: string
         }
         Insert: {
           clan_id: string
           id?: string
           joined_at?: string
-          role?: string
+          role?: Database["public"]["Enums"]["clan_role"]
           user_id: string
         }
         Update: {
           clan_id?: string
           id?: string
           joined_at?: string
-          role?: string
+          role?: Database["public"]["Enums"]["clan_role"]
           user_id?: string
         }
         Relationships: [
@@ -581,6 +581,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      clan_role:
+        | "leader"
+        | "vice_leader"
+        | "elite_member"
+        | "moderator"
+        | "member"
+        | "newbie"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -709,6 +716,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      clan_role: [
+        "leader",
+        "vice_leader",
+        "elite_member",
+        "moderator",
+        "member",
+        "newbie",
+      ],
     },
   },
 } as const
