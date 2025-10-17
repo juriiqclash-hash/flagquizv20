@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -32,12 +33,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserStats } from "@/hooks/useUserStats";
 import { supabase } from "@/integrations/supabase/client";
 import { PublicProfileView } from "@/components/PublicProfileView";
-import { FriendsMenu } from "@/components/FriendsMenu";
-import { ClansMenu } from "@/components/ClansMenu";
 
 import { calculateLevel } from "@/lib/xpSystem";
 import { calculateRank as calculateProfileRank } from "@/lib/profileRank";
-import Leaderboard from "@/components/Leaderboard";
 interface MainMenuProps {
   onStart: () => void;
   onMultiplayerStart?: () => void;
@@ -85,6 +83,7 @@ const QUIZ_MODES: QuizResult[] = [
 ];
 
 export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallengeStart, onStartQuiz, onProfileOpen }: MainMenuProps) {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -93,9 +92,6 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
   const [clanResults, setClanResults] = useState<ClanResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-  const [showFriendsMenu, setShowFriendsMenu] = useState(false);
-  const [showLeaderboard, setShowLeaderboard] = useState(false);
-  const [showClansMenu, setShowClansMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -354,7 +350,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                       variant="ghost"
                       className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12 relative"
                       onClick={() => {
-                        setShowFriendsMenu(true);
+                        navigate('/friends');
                         setMobileMenuOpen(false);
                       }}
                     >
@@ -371,7 +367,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                       variant="ghost"
                       className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12"
                       onClick={() => {
-                        setShowClansMenu(true);
+                        navigate('/clans');
                         setMobileMenuOpen(false);
                       }}
                     >
@@ -383,7 +379,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                       variant="ghost"
                       className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12"
                       onClick={() => {
-                        setShowLeaderboard(true);
+                        navigate('/leaderboards');
                         setMobileMenuOpen(false);
                       }}
                     >
@@ -428,7 +424,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                   variant="ghost"
                   size="icon"
                   className="text-white hover:bg-white/20 rounded-lg"
-                  onClick={() => setShowLeaderboard(true)}
+                  onClick={() => navigate('/leaderboards')}
                 >
                   <Trophy className="h-5 w-5" />
                 </Button>
@@ -437,7 +433,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                   variant="ghost"
                   size="icon"
                   className="text-white hover:bg-white/20 rounded-lg relative"
-                  onClick={() => setShowFriendsMenu(true)}
+                  onClick={() => navigate('/friends')}
                 >
                   <Users className="h-5 w-5" />
                   {pendingRequestsCount > 0 && (
@@ -451,7 +447,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                   variant="ghost"
                   size="icon"
                   className="text-white hover:bg-white/20 rounded-lg"
-                  onClick={() => setShowClansMenu(true)}
+                  onClick={() => navigate('/clans')}
                 >
                   <Shield className="h-5 w-5" />
                 </Button>
@@ -839,27 +835,12 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         </div>
       )}
 
-      <FriendsMenu
-        open={showFriendsMenu}
-        onOpenChange={setShowFriendsMenu}
-      />
-
       {selectedUserId && (
         <PublicProfileView
           userId={selectedUserId}
           onClose={() => setSelectedUserId(null)}
         />
       )}
-
-      <Dialog open={showLeaderboard} onOpenChange={setShowLeaderboard}>
-        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
-          <Leaderboard />
-        </DialogContent>
-      </Dialog>
-
-      <FriendsMenu open={showFriendsMenu} onOpenChange={setShowFriendsMenu} />
-
-      <ClansMenu open={showClansMenu} onOpenChange={setShowClansMenu} />
     </div>
   );
 }
