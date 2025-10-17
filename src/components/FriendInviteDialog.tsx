@@ -28,6 +28,7 @@ export function FriendInviteDialog({ open, onOpenChange, type, lobbyId, clanId }
   const [friends, setFriends] = useState<Friend[]>([]);
   const [loading, setLoading] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
+  const [lastInviteTime, setLastInviteTime] = useState<number>(0);
 
   useEffect(() => {
     if (open && user) {
@@ -36,13 +37,36 @@ export function FriendInviteDialog({ open, onOpenChange, type, lobbyId, clanId }
     }
   }, [open, user]);
 
-  const subscribeToPresence = () => {
-    const channel = supabase.channel('online-users');
+  const subscribeToPresence = async () => {
+    if (!user) return;
+
+    // Get user's friends list to restrict presence to friends only
+    const { data: friendsList } = await supabase
+      .from('friend_requests')
+      .select('sender_id, receiver_id')
+      .eq('status', 'accepted')
+      .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`);
+
+    const friendIds = friendsList?.map(f => 
+      f.sender_id === user.id ? f.receiver_id : f.sender_id
+    ) || [];
+
+    // Create user-specific presence channel
+    const channel = supabase.channel(`presence:friends:${user.id}`, {
+      config: {
+        presence: {
+          key: user.id,
+        },
+      },
+    });
     
     channel
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
-        const onlineIds = Object.values(state).flat().map((presence: any) => presence.user_id);
+        const onlineIds = Object.values(state)
+          .flat()
+          .map((presence: any) => presence.user_id)
+          .filter(id => friendIds.includes(id)); // Only show friends
         setOnlineUsers(onlineIds);
       })
       .subscribe();
@@ -107,6 +131,18 @@ export function FriendInviteDialog({ open, onOpenChange, type, lobbyId, clanId }
 
   const sendInvitation = async (friendId: string) => {
     if (!user) return;
+
+    // Rate limiting - prevent invitation spam
+    const now = Date.now();
+    if (now - lastInviteTime < 5000) {
+      toast({
+        title: 'Bitte warten',
+        description: 'Du kannst nur alle 5 Sekunden Einladungen senden',
+        variant: 'destructive'
+      });
+      return;
+    }
+    setLastInviteTime(now);
 
     try {
       if (type === 'lobby' && lobbyId) {

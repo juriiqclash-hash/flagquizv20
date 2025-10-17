@@ -5,6 +5,18 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import FlagQuizLogo from '@/components/FlagQuizLogo';
+import { z } from 'zod';
+
+const signUpSchema = z.object({
+  email: z.string().email('Invalid email format').toLowerCase(),
+  password: z.string().min(8, 'Password must be at least 8 characters').max(100, 'Password too long'),
+  username: z.string().min(3, 'Username must be at least 3 characters').max(20, 'Username must be less than 20 characters').regex(/^[a-zA-Z0-9_-]+$/, 'Only alphanumeric characters, dash and underscore allowed')
+});
+
+const signInSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(1, 'Password required')
+});
 
 interface AuthFormProps {
   onSuccess: () => void;
@@ -23,47 +35,71 @@ const AuthForm = ({ onSuccess, mode = 'signin' }: AuthFormProps) => {
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    
+    try {
+      const validated = signInSchema.parse({ email, password });
+      setIsLoading(true);
 
-    const { error } = await signIn(email, password);
+      const { error } = await signIn(validated.email, validated.password);
 
-    if (error) {
-      toast({
-        title: 'Fehler beim Anmelden',
-        description: error.message,
-        variant: 'destructive',
-      });
-    } else {
-      toast({
-        title: 'Erfolgreich angemeldet!',
-      });
-      onSuccess();
+      if (error) {
+        toast({
+          title: 'Fehler beim Anmelden',
+          description: error.message,
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Erfolgreich angemeldet!',
+        });
+        onSuccess();
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast({
+          title: 'Validation Error',
+          description: error.errors[0].message,
+          variant: 'destructive'
+        });
+      }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    
+    try {
+      const validated = signUpSchema.parse({ email, password, username });
+      setIsLoading(true);
 
-    const { error } = await signUp(email, password, username);
+      const { error } = await signUp(validated.email, validated.password, validated.username);
 
-    if (error) {
-      toast({
-        title: 'Fehler bei der Registrierung',
-        description: error.message,
-        variant: 'destructive',
-      });
-    } else {
-      toast({
-        title: 'Registrierung erfolgreich!',
-        description: 'Bitte überprüfen Sie Ihre E-Mail zur Bestätigung.',
-      });
-      onSuccess();
+      if (error) {
+        toast({
+          title: 'Fehler bei der Registrierung',
+          description: error.message,
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Registrierung erfolgreich!',
+          description: 'Bitte überprüfen Sie Ihre E-Mail zur Bestätigung.',
+        });
+        onSuccess();
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast({
+          title: 'Validation Error',
+          description: error.errors[0].message,
+          variant: 'destructive'
+        });
+      }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   return (

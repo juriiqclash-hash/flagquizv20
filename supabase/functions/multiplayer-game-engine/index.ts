@@ -225,6 +225,33 @@ serve(async (req) => {
   }
 
   try {
+    // Verify JWT from Authorization header
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Missing authorization' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Create client with user's JWT to verify authentication
+    const supabaseAuth = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    // Verify user is authenticated
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+    if (authError || !user) {
+      console.error('Authentication error:', authError);
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Create service role client for privileged operations
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
@@ -233,7 +260,32 @@ serve(async (req) => {
 
     const { lobbyId, action, userId } = await req.json()
 
+    // Verify the user ID matches the authenticated user
+    if (userId !== user.id) {
+      console.error('User ID mismatch:', { provided: userId, authenticated: user.id });
+      return new Response(JSON.stringify({ error: 'User ID mismatch' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
     if (action === 'complete_game') {
+      // Verify user is actually a participant in this lobby
+      const { data: participant, error: participantError } = await supabaseClient
+        .from('match_participants')
+        .select('*')
+        .eq('lobby_id', lobbyId)
+        .eq('user_id', user.id)
+        .single();
+
+      if (participantError || !participant) {
+        console.error('User not in lobby:', participantError);
+        return new Response(JSON.stringify({ error: 'Not a participant in this lobby' }), {
+          status: 403,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+      
       console.log('🏁 Player completed game:', { lobbyId, userId })
       
       // Get lobby data
@@ -245,20 +297,6 @@ serve(async (req) => {
 
       if (!lobby || lobby.status !== 'started') {
         return new Response(JSON.stringify({ success: false, message: 'Lobby not active' }), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        })
-      }
-
-      // Check if this user actually has correct answers
-      const { data: participant } = await supabaseClient
-        .from('match_participants')
-        .select('*')
-        .eq('lobby_id', lobbyId)
-        .eq('user_id', userId)
-        .single()
-
-      if (!participant) {
-        return new Response(JSON.stringify({ success: false, message: 'Participant not found' }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         })
       }
