@@ -18,12 +18,12 @@ interface Invitation {
 }
 
 export function InvitationBanner() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [invitations, setInvitations] = useState<Invitation[]>([]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || loading) return;
 
     loadInvitations();
     
@@ -72,8 +72,7 @@ export function InvitationBanner() {
         .select(`
           id,
           lobby_id,
-          sender_id,
-          lobbies!inner(room_code)
+          sender_id
         `)
         .eq('receiver_id', user.id)
         .eq('status', 'pending');
@@ -105,7 +104,21 @@ export function InvitationBanner() {
         .select('user_id, username')
         .in('user_id', allSenderIds);
 
-      const profileMap = new Map(profiles?.map(p => [p.user_id, p.username]) || []);
+      const profileMap = new Map<string, string>(profiles?.map(p => [p.user_id, p.username]) || []);
+
+      // Get lobby codes
+      const lobbyIds = lobbyInvites?.map(inv => inv.lobby_id) || [];
+      const { data: lobbies } = lobbyIds.length > 0 ? await supabase
+        .from('matches')
+        .select('id, room_code')
+        .in('id', lobbyIds) : { data: [] };
+
+      const lobbyMap = new Map<string, string>();
+      lobbies?.forEach(l => {
+        if (l.id && l.room_code) {
+          lobbyMap.set(l.id, l.room_code);
+        }
+      });
 
       const formattedInvitations: Invitation[] = [
         ...(lobbyInvites?.map(inv => ({
@@ -113,7 +126,7 @@ export function InvitationBanner() {
           type: 'lobby' as const,
           sender_username: profileMap.get(inv.sender_id) || 'Unbekannt',
           lobby_id: inv.lobby_id,
-          lobby_code: (inv.lobbies as any)?.room_code
+          lobby_code: lobbyMap.get(inv.lobby_id) || ''
         })) || []),
         ...(clanInvites?.map(inv => ({
           id: inv.id,
