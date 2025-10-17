@@ -306,7 +306,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
     setSelectedClan(clan);
     setDetailDialogOpen(true);
 
-    // Load clan members
+    // Load ONLY this clan's members
     const { data: membersData, error } = await supabase
       .from('clan_members' as any)
       .select(`
@@ -335,7 +335,11 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
         };
       });
 
+      // Set ONLY these members, clearing previous
       setClanMembers(membersWithProfiles);
+    } else {
+      // Clear members if error or no data
+      setClanMembers([]);
     }
   };
 
@@ -655,14 +659,12 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
         description: "Rolle wurde erfolgreich geändert",
       });
       
-      // Update local state immediately
+      // Update local state immediately with correct role
       setClanMembers(prev => prev.map(m => 
         m.clan_id === clanId && m.user_id === userId 
-          ? { ...m, role: newRole as any }
+          ? { ...m, role: newRole }
           : m
       ));
-      
-      await loadClanMembers(clanId);
     } catch (error) {
       console.error('Error changing role:', error);
       toast({
@@ -1079,13 +1081,15 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                     )}
                   </div>
                   <div className="flex justify-between pt-4 border-t mt-4">
-                    <Button
-                      variant="outline"
-                      onClick={() => setInviteDialogOpen(true)}
-                    >
-                      <UserPlus className="h-4 w-4 mr-2" />
-                      Freund einladen
-                    </Button>
+                    {isMember(selectedClan.id) && (
+                      <Button
+                        variant="outline"
+                        onClick={() => setInviteDialogOpen(true)}
+                      >
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        Freund einladen
+                      </Button>
+                    )}
                     {selectedClan.created_by === user?.id ? (
                       <div className="flex gap-2">
                         <Button
