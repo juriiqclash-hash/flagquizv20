@@ -646,30 +646,34 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
     if (!user) return;
 
     try {
-      const { error } = await supabase
+      console.log('Updating role:', { clanId, userId, newRole });
+      
+      const { data, error } = await supabase
         .from('clan_members')
-        .update({ role: newRole as any })
+        .update({ role: newRole as 'leader' | 'vice_leader' | 'elite_member' | 'moderator' | 'member' | 'newbie' })
         .eq('clan_id', clanId)
-        .eq('user_id', userId);
+        .eq('user_id', userId)
+        .select();
 
-      if (error) throw error;
+      console.log('Update result:', { data, error });
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
 
       toast({
         title: "Erfolg",
         description: "Rolle wurde erfolgreich geändert",
       });
       
-      // Update local state immediately with correct role
-      setClanMembers(prev => prev.map(m => 
-        m.clan_id === clanId && m.user_id === userId 
-          ? { ...m, role: newRole }
-          : m
-      ));
-    } catch (error) {
+      // Reload members to ensure consistency
+      await loadClanMembers(clanId);
+    } catch (error: any) {
       console.error('Error changing role:', error);
       toast({
         title: "Fehler",
-        description: "Fehler beim Ändern der Rolle",
+        description: error.message || "Fehler beim Ändern der Rolle",
         variant: "destructive",
       });
     }

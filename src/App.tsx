@@ -9,6 +9,12 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import QuizPage from "./pages/QuizPage";
+import ClansPage from "./pages/ClansPage";
+import FriendsPage from "./pages/FriendsPage";
+import LeaderboardPage from "./pages/LeaderboardPage";
+import ProfilePage from "./pages/ProfilePage";
+import MultiplayerPage from "./pages/MultiplayerPage";
 import SystemBanner from "./components/SystemBanner";
 import MaintenanceScreen from "./components/MaintenanceScreen";
 import ConsentDialog from "./components/ConsentDialog";
@@ -103,6 +109,16 @@ const AppContent = () => {
           <InvitationBanner />
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/quiz/:quizname" element={<QuizPage />} />
+            <Route path="/clans" element={<ClansPage />} />
+            <Route path="/friends" element={<FriendsPage />} />
+            <Route path="/leaderboards" element={<LeaderboardPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/me" element={<ProfilePage />} />
+            <Route path="/profile/:username" element={<ProfilePage />} />
+            <Route path="/multiplayer" element={<MultiplayerPage />} />
+            <Route path="/multiplayer/:roomCode" element={<MultiplayerPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
