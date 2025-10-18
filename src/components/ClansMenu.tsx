@@ -32,6 +32,8 @@ const STARTER_CLANS = [
 interface ClansMenuProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  initialClanId?: string;
+  onClanIdProcessed?: () => void;
 }
 
 interface Clan {
@@ -60,7 +62,7 @@ interface ClanMember {
   level?: number;
 }
 
-export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
+export function ClansMenu({ open, onOpenChange, initialClanId, onClanIdProcessed }: ClansMenuProps) {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [allClans, setAllClans] = useState<Clan[]>([]);
@@ -102,6 +104,18 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
       setActiveTab("my");
     }
   }, [myClans]);
+
+  useEffect(() => {
+    if (initialClanId && allClans.length > 0) {
+      const clan = allClans.find(c => c.id === initialClanId);
+      if (clan) {
+        handleClanClick(clan);
+        if (onClanIdProcessed) {
+          onClanIdProcessed();
+        }
+      }
+    }
+  }, [initialClanId, allClans]);
 
   const loadClans = async () => {
     if (!user) return;
@@ -1241,6 +1255,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
         onClose={() => setSelectedUserId(null)}
         onNavigateToClan={(clanId) => {
           setSelectedUserId(null);
+          setDetailDialogOpen(false);
           const clan = allClans.find(c => c.id === clanId);
           if (clan) {
             handleClanClick(clan);

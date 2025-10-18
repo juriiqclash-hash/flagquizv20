@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -33,6 +34,7 @@ interface FriendRequest {
 export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [friends, setFriends] = useState<FriendRequest[]>([]);
   const [pendingRequests, setPendingRequests] = useState<FriendRequest[]>([]);
@@ -382,6 +384,11 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
       <PublicProfileView
         userId={selectedUserId}
         onClose={() => setSelectedUserId(null)}
+        onNavigateToClan={(clanId) => {
+          setSelectedUserId(null);
+          onOpenChange(false);
+          navigate(`/clans?clanId=${clanId}`);
+        }}
       />
     )}
   </>

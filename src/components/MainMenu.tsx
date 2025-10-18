@@ -840,6 +840,10 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         <PublicProfileView
           userId={selectedUserId}
           onClose={() => setSelectedUserId(null)}
+          onNavigateToClan={(clanId) => {
+            setSelectedUserId(null);
+            navigate(`/clans?clanId=${clanId}`);
+          }}
         />
       )}
     </div>
