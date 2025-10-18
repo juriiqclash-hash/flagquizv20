@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FriendsMenu } from '@/components/FriendsMenu';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import MainMenu from '@/components/MainMenu';
 
 export default function FriendsPage() {
   const navigate = useNavigate();
@@ -15,16 +14,18 @@ export default function FriendsPage() {
     setOpen(newOpen);
   };
 
+  useEffect(() => {
+    setOpen(true);
+  }, []);
+
   return (
-    <div
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
-      style={{
-        backgroundImage: `url("/F5BD60DF-0BF3-4DCD-B9C2-C433C2CB0628.png")`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <>
+      <MainMenu
+        onStart={() => navigate('/quiz')}
+        onMultiplayerStart={() => navigate('/multiplayer')}
+        onStartQuiz={() => {}}
+      />
       <FriendsMenu open={open} onOpenChange={handleOpenChange} />
-    </div>
+    </>
   );
 }

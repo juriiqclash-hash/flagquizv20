@@ -387,12 +387,12 @@ export const PublicProfileView = ({
   if (!userId) return null;
   return <>
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
+        className="fixed inset-0 z-[70] flex items-center justify-center p-4 overflow-y-auto"
         style={{
           background: 'linear-gradient(to bottom right, rgb(23, 37, 84), rgb(30, 58, 138), rgb(30, 64, 175))',
         }}
       >
-        <button onClick={onClose} className="fixed top-4 right-4 z-[60] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
+        <button onClick={onClose} className="fixed top-4 right-4 z-[80] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
         </button>
 
@@ -580,7 +580,7 @@ export const PublicProfileView = ({
         </div>
       </div>
 
-      {showRankInfo && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+      {showRankInfo && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[75]">
           <div className="bg-white rounded-2xl p-6 max-w-4xl w-full mx-4">
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-bold text-2xl">Rank Übersicht</h3>
@@ -725,7 +725,7 @@ const ClanDetailModal = ({ clanId, onClose }: ClanDetailModalProps) => {
   if (!clan) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60] p-4">
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[75] p-4">
       <div className="bg-white rounded-2xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h3 className="font-bold text-2xl flex items-center gap-2">
