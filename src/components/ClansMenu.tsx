@@ -1241,10 +1241,8 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
         onClose={() => setSelectedUserId(null)}
         onNavigateToClan={(clanId) => {
           setSelectedUserId(null);
-          const clan = allClans.find(c => c.id === clanId);
-          if (clan) {
-            handleClanClick(clan);
-          }
+          setDetailDialogOpen(false);
+          setActiveTab("my");
         }}
       />
 
