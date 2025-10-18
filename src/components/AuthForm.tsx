@@ -21,9 +21,10 @@ const signInSchema = z.object({
 interface AuthFormProps {
   onSuccess: () => void;
   mode?: 'signin' | 'signup';
+  message?: string;
 }
 
-const AuthForm = ({ onSuccess, mode = 'signin' }: AuthFormProps) => {
+const AuthForm = ({ onSuccess, mode = 'signin', message }: AuthFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentMode, setCurrentMode] = useState<'signin' | 'signup'>(mode);
   const { signIn, signUp } = useAuth();
@@ -106,9 +107,14 @@ const AuthForm = ({ onSuccess, mode = 'signin' }: AuthFormProps) => {
     <div className="w-full space-y-6">
       <div className="text-center space-y-4">
         <FlagQuizLogo size="md" variant="light" className="mb-2" />
+        {message && (
+          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 mb-2">
+            <p className="text-sm text-blue-400 font-medium">{message}</p>
+          </div>
+        )}
         <p className="text-sm text-muted-foreground">
-          {currentMode === 'signin' 
-            ? 'Melde dich an, um fortzufahren' 
+          {currentMode === 'signin'
+            ? 'Melde dich an, um fortzufahren'
             : 'Erstelle ein neues Konto'}
         </p>
       </div>

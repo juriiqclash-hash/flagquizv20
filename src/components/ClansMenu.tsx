@@ -14,6 +14,7 @@ import { PublicProfileView } from './PublicProfileView';
 import { getRankFromLevel } from '@/lib/rankSystem';
 import { FriendInviteDialog } from './FriendInviteDialog';
 import { ClanMemberContextMenu } from './ClanMemberContextMenu';
+import AuthForm from './AuthForm';
 
 const STARTER_CLANS = [
   { name: 'Agharta', emoji: '🏯', description: 'Die geheime unterirdische Stadt, Sitz der Weisheit und des Lichts' },
@@ -88,6 +89,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
   const [editAvatarPreview, setEditAvatarPreview] = useState<string | null>(null);
   const editFileInputRef = useRef<HTMLInputElement>(null);
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   useEffect(() => {
     if (open && user) {
@@ -861,7 +863,13 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                     className="pl-10"
                   />
                 </div>
-                <Button onClick={() => setCreateDialogOpen(true)}>
+                <Button onClick={() => {
+                  if (!user) {
+                    setShowAuthDialog(true);
+                  } else {
+                    setCreateDialogOpen(true);
+                  }
+                }}>
                   <Plus className="h-4 w-4 mr-2" />
                   Erstellen
                 </Button>
@@ -1224,6 +1232,20 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
         userId={selectedUserId}
         onClose={() => setSelectedUserId(null)}
       />
+
+      {/* Auth Dialog */}
+      <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
+        <DialogContent className="max-w-md">
+          <AuthForm
+            onSuccess={() => {
+              setShowAuthDialog(false);
+              loadClans();
+            }}
+            mode="signin"
+            message="Um einen Clan zu erstellen, logge dich bitte ein"
+          />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
