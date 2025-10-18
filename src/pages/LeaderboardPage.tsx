@@ -7,18 +7,15 @@ export default function LeaderboardPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 p-4">
-      <div className="max-w-7xl mx-auto">
-        <Button
-          variant="ghost"
-          onClick={() => navigate('/')}
-          className="mb-4 text-white hover:bg-white/10"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Zurück zum Hauptmenü
-        </Button>
-        <Leaderboard />
-      </div>
+    <div
+      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+      style={{
+        backgroundImage: `url("/F5BD60DF-0BF3-4DCD-B9C2-C433C2CB0628.png")`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <Leaderboard />
     </div>
   );
 }
