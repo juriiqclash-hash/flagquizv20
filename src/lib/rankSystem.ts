@@ -1,10 +1,10 @@
-const bronzeImg = '/placeholder.svg';
-const silverImg = '/placeholder.svg';
-const goldImg = '/placeholder.svg';
-const platinumImg = '/placeholder.svg';
-const diamondImg = '/placeholder.svg';
-const mastersImg = '/placeholder.svg';
-const legendsImg = '/placeholder.svg';
+import bronzeImg from '@/assets/bronze.webp';
+import silverImg from '@/assets/silber.webp';
+import goldImg from '@/assets/gold.webp';
+import platinumImg from '@/assets/plartinum.webp';
+import diamondImg from '@/assets/diamant.webp';
+import mastersImg from '@/assets/masters.webp';
+import legendsImg from '@/assets/legends.webp';
 
 export interface Rank {
   name: string;
