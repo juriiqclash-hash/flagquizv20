@@ -550,9 +550,9 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                         <button
                           key={clan.id}
                           onClick={() => {
-                            navigate('/clans');
                             setSearchExpanded(false);
                             setSearchQuery('');
+                            navigate('/clans');
                           }}
                           className="w-full flex items-center gap-3 p-3 hover:bg-white/20 rounded-lg transition-colors"
                         >
