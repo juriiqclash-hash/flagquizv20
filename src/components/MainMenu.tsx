@@ -550,6 +550,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
                         <button
                           key={clan.id}
                           onClick={() => {
+                            navigate('/clans');
                             setSearchExpanded(false);
                             setSearchQuery('');
                           }}

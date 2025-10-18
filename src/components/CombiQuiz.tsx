@@ -38,21 +38,21 @@ interface CategoryConfig {
 export default function CombiQuiz({ onBackToStart, isDailyChallenge = false, maxQuestions }: CombiQuizProps) {
   const [showCategorySelection, setShowCategorySelection] = useState(!isDailyChallenge);
   const [showCompletionScreen, setShowCompletionScreen] = useState(false);
+  const [categories, setCategories] = useState<CategoryConfig[]>([
+    { id: 'flag', label: 'Flaggen', icon: <Globe className="w-4 h-4" />, enabled: isDailyChallenge },
+    { id: 'capital-to-country', label: 'Hauptstadt → Land', icon: <MapPin className="w-4 h-4" />, enabled: isDailyChallenge },
+    { id: 'country-to-capital', label: 'Land → Hauptstadt', icon: <MapPin className="w-4 h-4" />, enabled: isDailyChallenge },
+    { id: 'highest-mountain', label: 'Höchster Berg', icon: <Mountain className="w-4 h-4" />, enabled: isDailyChallenge },
+    { id: 'official-language', label: 'Amtssprache', icon: <Languages className="w-4 h-4" />, enabled: isDailyChallenge },
+    { id: 'emoji', label: 'Emoji', icon: <Smile className="w-4 h-4" />, enabled: isDailyChallenge },
+    { id: 'world-knowledge', label: 'Weltwissen', icon: <Globe className="w-4 h-4" />, enabled: isDailyChallenge },
+  ]);
 
   useEffect(() => {
-    if (isDailyChallenge && categories.some(cat => cat.enabled)) {
+    if (isDailyChallenge) {
       generateNextQuestion();
     }
   }, [isDailyChallenge]);
-  const [categories, setCategories] = useState<CategoryConfig[]>([
-    { id: 'flag', label: 'Flaggen', icon: <Globe className="w-4 h-4" />, enabled: false },
-    { id: 'capital-to-country', label: 'Hauptstadt → Land', icon: <MapPin className="w-4 h-4" />, enabled: false },
-    { id: 'country-to-capital', label: 'Land → Hauptstadt', icon: <MapPin className="w-4 h-4" />, enabled: false },
-    { id: 'highest-mountain', label: 'Höchster Berg', icon: <Mountain className="w-4 h-4" />, enabled: false },
-    { id: 'official-language', label: 'Amtssprache', icon: <Languages className="w-4 h-4" />, enabled: false },
-    { id: 'emoji', label: 'Emoji', icon: <Smile className="w-4 h-4" />, enabled: false },
-    { id: 'world-knowledge', label: 'Weltwissen', icon: <Globe className="w-4 h-4" />, enabled: false },
-  ]);
 
   const [currentCategory, setCurrentCategory] = useState<QuestionCategory>('flag');
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);

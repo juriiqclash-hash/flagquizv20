@@ -821,6 +821,16 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                         )}
                       </div>
                       <div className="flex justify-between pt-4 border-t mt-4">
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setSelectedClan(clan);
+                            setInviteDialogOpen(true);
+                          }}
+                        >
+                          <UserPlus className="h-4 w-4 mr-2" />
+                          Freunde einladen
+                        </Button>
                         {clan.created_by === user?.id ? (
                           <div className="flex gap-2">
                             <Button
