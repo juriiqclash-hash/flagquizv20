@@ -16,6 +16,7 @@ const getFlagEmoji = (countryCode: string): string => {
 interface PublicProfileViewProps {
   userId: string | null;
   onClose: () => void;
+  onNavigateToClan?: (clanId: string) => void;
 }
 interface LeaderboardStats {
   bestStreak: number;
@@ -87,7 +88,8 @@ const CONTINENTS = [{
 }];
 export const PublicProfileView = ({
   userId,
-  onClose
+  onClose,
+  onNavigateToClan
 }: PublicProfileViewProps) => {
   const {
     language
@@ -491,7 +493,14 @@ export const PublicProfileView = ({
                         <UserMinus className="w-4 h-4 mr-2" />
                         Freund entfernen
                       </Button>}
-                    {userClanId && <Button onClick={() => setShowClanView(true)} className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
+                    {userClanId && <Button onClick={() => {
+                        if (onNavigateToClan) {
+                          onNavigateToClan(userClanId);
+                          onClose();
+                        } else {
+                          setShowClanView(true);
+                        }
+                      }} className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
                         <Users className="w-4 h-4 mr-2" />
                         Clan anschauen
                       </Button>}
