@@ -1250,18 +1250,22 @@ export function ClansMenu({ open, onOpenChange, initialClanId, onClanIdProcessed
         clanId={selectedClan?.id}
       />
 
-      <PublicProfileView
-        userId={selectedUserId}
-        onClose={() => setSelectedUserId(null)}
-        onNavigateToClan={(clanId) => {
-          setSelectedUserId(null);
-          setDetailDialogOpen(false);
-          const clan = allClans.find(c => c.id === clanId);
-          if (clan) {
-            handleClanClick(clan);
-          }
-        }}
-      />
+      {selectedUserId && (
+        <PublicProfileView
+          userId={selectedUserId}
+          onClose={() => setSelectedUserId(null)}
+          onNavigateToClan={(clanId) => {
+            const clan = allClans.find(c => c.id === clanId);
+            if (clan) {
+              setSelectedUserId(null);
+              setDetailDialogOpen(false);
+              setTimeout(() => {
+                handleClanClick(clan);
+              }, 100);
+            }
+          }}
+        />
+      )}
 
       {/* Auth Dialog */}
       <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
