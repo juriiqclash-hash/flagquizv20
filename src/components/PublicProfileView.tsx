@@ -476,20 +476,20 @@ export const PublicProfileView = ({
                     </div>}
                 </div>
 
-                {currentUser && currentUser.id !== userId && <div className="flex gap-2 justify-center md:justify-start flex-wrap">
-                    {friendshipStatus === 'none' && <Button onClick={sendFriendRequest} className="bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
+                {currentUser && currentUser.id !== userId && <div className="flex gap-2 justify-center md:justify-start flex-wrap relative z-10 pointer-events-auto">
+                    {friendshipStatus === 'none' && <Button onClick={sendFriendRequest} className="bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
                         <UserPlus className="w-4 h-4 mr-2" />
                         Freund hinzufügen
                       </Button>}
-                    {friendshipStatus === 'pending_sent' && <Button onClick={cancelFriendRequest} className="bg-gradient-to-b from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
+                    {friendshipStatus === 'pending_sent' && <Button onClick={cancelFriendRequest} className="bg-gradient-to-b from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
                         <Clock className="w-4 h-4 mr-2" />
                         Anfrage gesendet
                       </Button>}
-                    {friendshipStatus === 'pending_received' && <Button onClick={acceptFriendRequest} className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
+                    {friendshipStatus === 'pending_received' && <Button onClick={acceptFriendRequest} className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
                         <Check className="w-4 h-4 mr-2" />
                         Anfrage annehmen
                       </Button>}
-                    {friendshipStatus === 'friends' && <Button onClick={removeFriend} className="bg-gradient-to-b from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
+                    {friendshipStatus === 'friends' && <Button onClick={removeFriend} className="bg-gradient-to-b from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
                         <UserMinus className="w-4 h-4 mr-2" />
                         Freund entfernen
                       </Button>}
@@ -500,7 +500,7 @@ export const PublicProfileView = ({
                         } else {
                           setShowClanView(true);
                         }
-                      }} className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
+                      }} className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
                         <Users className="w-4 h-4 mr-2" />
                         Clan anschauen
                       </Button>}
