@@ -109,6 +109,7 @@ export const PublicProfileView = ({
   const [showRankInfo, setShowRankInfo] = useState(false);
   const [allClans, setAllClans] = useState<Clan[]>([...DEFAULT_CLANS]);
   const [userClanId, setUserClanId] = useState<string | null>(null);
+  const [showClanView, setShowClanView] = useState(false);
   const [friendshipStatus, setFriendshipStatus] = useState<'none' | 'pending_sent' | 'pending_received' | 'friends'>('none');
   const [friendRequestId, setFriendRequestId] = useState<string | null>(null);
   const {
@@ -490,6 +491,10 @@ export const PublicProfileView = ({
                         <UserMinus className="w-4 h-4 mr-2" />
                         Freund entfernen
                       </Button>}
+                    {userClanId && <Button onClick={() => setShowClanView(true)} className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
+                        <Users className="w-4 h-4 mr-2" />
+                        Clan anschauen
+                      </Button>}
                   </div>}
               </div>
             </div>
@@ -623,5 +628,169 @@ export const PublicProfileView = ({
           </div>
         </div>}
 
+      {showClanView && userClanId && <ClanDetailModal 
+        clanId={userClanId} 
+        onClose={() => setShowClanView(false)} 
+      />}
     </>;
+};
+
+// Clan Detail Modal Component
+interface ClanDetailModalProps {
+  clanId: string;
+  onClose: () => void;
+}
+
+interface ClanData {
+  id: string;
+  name: string;
+  emoji: string;
+  description: string | null;
+  avatar_url: string | null;
+  created_by: string;
+  member_count: number;
+}
+
+interface ClanMemberData {
+  id: string;
+  user_id: string;
+  role: string;
+  joined_at: string;
+  profiles?: {
+    username: string;
+    avatar_url: string | null;
+  };
+}
+
+const ClanDetailModal = ({ clanId, onClose }: ClanDetailModalProps) => {
+  const [clan, setClan] = useState<ClanData | null>(null);
+  const [members, setMembers] = useState<ClanMemberData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadClanData();
+  }, [clanId]);
+
+  const loadClanData = async () => {
+    try {
+      // Load clan info
+      const { data: clanData } = await supabase
+        .from('clans')
+        .select('*')
+        .eq('id', clanId)
+        .single();
+
+      if (clanData) {
+        // Count members
+        const { count } = await supabase
+          .from('clan_members')
+          .select('*', { count: 'exact', head: true })
+          .eq('clan_id', clanId);
+
+        setClan({
+          ...clanData,
+          member_count: count || 0
+        });
+
+        // Load members
+        const { data: membersData } = await supabase
+          .from('clan_members')
+          .select('id, user_id, role, joined_at')
+          .eq('clan_id', clanId)
+          .order('joined_at', { ascending: true });
+
+        if (membersData) {
+          // Load profiles separately
+          const userIds = membersData.map(m => m.user_id);
+          const { data: profiles } = await supabase
+            .from('profiles')
+            .select('user_id, username, avatar_url')
+            .in('user_id', userIds);
+
+          const membersWithProfiles = membersData.map(member => ({
+            ...member,
+            profiles: profiles?.find(p => p.user_id === member.user_id)
+          }));
+
+          setMembers(membersWithProfiles as ClanMemberData[]);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading clan:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!clan) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60] p-4">
+      <div className="bg-white rounded-2xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="font-bold text-2xl flex items-center gap-2">
+            <Users className="w-6 h-6" />
+            Clan Details
+          </h3>
+          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-full">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          <>
+            <div className="flex items-start gap-6 mb-6 p-6 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl">
+              <Avatar className="h-24 w-24 border-4 border-white shadow-lg">
+                <AvatarImage src={clan.avatar_url || undefined} />
+                <AvatarFallback className="text-5xl">{clan.emoji}</AvatarFallback>
+              </Avatar>
+              <div className="flex-1">
+                <h2 className="text-3xl font-bold mb-2">{clan.name}</h2>
+                {clan.description && (
+                  <p className="text-gray-600 mb-2">{clan.description}</p>
+                )}
+                <p className="text-sm text-gray-500">
+                  {clan.member_count} / 30 Mitglieder
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h4 className="font-semibold text-lg mb-3">Mitglieder</h4>
+              {members.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <Users className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                  <p>Noch keine Mitglieder</p>
+                </div>
+              ) : (
+                members.map((member) => (
+                  <div
+                    key={member.id}
+                    className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+                  >
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={member.profiles?.avatar_url || undefined} />
+                      <AvatarFallback>
+                        {member.profiles?.username?.[0]?.toUpperCase() || '?'}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <p className="font-medium">{member.profiles?.username || 'Unbekannt'}</p>
+                      <p className="text-xs text-gray-500">
+                        {member.role} • Beigetreten: {new Date(member.joined_at).toLocaleDateString('de-DE')}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
 };
