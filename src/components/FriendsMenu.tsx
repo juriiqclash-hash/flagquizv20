@@ -7,6 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { UserCheck, UserX, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { PublicProfileView } from './PublicProfileView';
 
 interface FriendsMenuProps {
   open: boolean;
@@ -36,6 +37,7 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
   const [friends, setFriends] = useState<FriendRequest[]>([]);
   const [pendingRequests, setPendingRequests] = useState<FriendRequest[]>([]);
   const [sentRequests, setSentRequests] = useState<FriendRequest[]>([]);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   useEffect(() => {
     if (open && user) {
@@ -223,7 +225,8 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Freunde</DialogTitle>
@@ -255,9 +258,13 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
               ) : (
                 friends.map((friend) => {
                   const friendProfile = friend.sender_id === user?.id ? friend.receiver : friend.sender;
+                  const friendId = friend.sender_id === user?.id ? friend.receiver_id : friend.sender_id;
                   return (
                     <div key={friend.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                      <div className="flex items-center gap-3">
+                      <div 
+                        className="flex items-center gap-3 cursor-pointer flex-1"
+                        onClick={() => setSelectedUserId(friendId)}
+                      >
                         <Avatar>
                           <AvatarImage src={friendProfile?.avatar_url || undefined} />
                           <AvatarFallback>
@@ -269,7 +276,10 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => removeFriend(friend.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeFriend(friend.id);
+                        }}
                       >
                         <UserX className="w-4 h-4 mr-2" />
                         Entfernen
@@ -288,7 +298,10 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
               ) : (
                 pendingRequests.map((request) => (
                   <div key={request.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                    <div className="flex items-center gap-3">
+                    <div 
+                      className="flex items-center gap-3 cursor-pointer flex-1"
+                      onClick={() => setSelectedUserId(request.sender_id)}
+                    >
                       <Avatar>
                         <AvatarImage src={request.sender?.avatar_url || undefined} />
                         <AvatarFallback>
@@ -301,7 +314,10 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
                       <Button
                         variant="default"
                         size="sm"
-                        onClick={() => acceptRequest(request.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          acceptRequest(request.id);
+                        }}
                       >
                         <UserCheck className="w-4 h-4 mr-2" />
                         Annehmen
@@ -309,7 +325,10 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => rejectRequest(request.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          rejectRequest(request.id);
+                        }}
                       >
                         <UserX className="w-4 h-4 mr-2" />
                         Ablehnen
@@ -328,7 +347,10 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
               ) : (
                 sentRequests.map((request) => (
                   <div key={request.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                    <div className="flex items-center gap-3">
+                    <div 
+                      className="flex items-center gap-3 cursor-pointer flex-1"
+                      onClick={() => setSelectedUserId(request.receiver_id)}
+                    >
                       <Avatar>
                         <AvatarImage src={request.receiver?.avatar_url || undefined} />
                         <AvatarFallback>
@@ -340,7 +362,10 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => cancelRequest(request.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        cancelRequest(request.id);
+                      }}
                     >
                       Zurückziehen
                     </Button>
@@ -352,5 +377,13 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
         )}
       </DialogContent>
     </Dialog>
+
+    {selectedUserId && (
+      <PublicProfileView
+        userId={selectedUserId}
+        onClose={() => setSelectedUserId(null)}
+      />
+    )}
+  </>
   );
 };

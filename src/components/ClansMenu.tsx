@@ -646,8 +646,6 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
     if (!user) return;
 
     try {
-      console.log('Updating role:', { clanId, userId, newRole });
-      
       const { data, error } = await supabase
         .from('clan_members')
         .update({ role: newRole as 'leader' | 'vice_leader' | 'elite_member' | 'moderator' | 'member' | 'newbie' })
@@ -655,20 +653,19 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
         .eq('user_id', userId)
         .select();
 
-      console.log('Update result:', { data, error });
+      if (error) throw error;
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
+      // Update local state immediately
+      setClanMembers(prev => prev.map(member => 
+        member.user_id === userId 
+          ? { ...member, role: newRole }
+          : member
+      ));
 
       toast({
         title: "Erfolg",
         description: "Rolle wurde erfolgreich geändert",
       });
-      
-      // Reload members to ensure consistency
-      await loadClanMembers(clanId);
     } catch (error: any) {
       console.error('Error changing role:', error);
       toast({
@@ -1085,7 +1082,7 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                     )}
                   </div>
                   <div className="flex justify-between pt-4 border-t mt-4">
-                    {isMember(selectedClan.id) && (
+                    {isMember(selectedClan.id) ? (
                       <Button
                         variant="outline"
                         onClick={() => setInviteDialogOpen(true)}
@@ -1093,6 +1090,8 @@ export function ClansMenu({ open, onOpenChange }: ClansMenuProps) {
                         <UserPlus className="h-4 w-4 mr-2" />
                         Freund einladen
                       </Button>
+                    ) : (
+                      <div></div>
                     )}
                     {selectedClan.created_by === user?.id ? (
                       <div className="flex gap-2">

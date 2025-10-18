@@ -107,8 +107,8 @@ export const PublicProfileView = ({
   const [profileData, setProfileData] = useState<ProfileData>({});
   const [loading, setLoading] = useState(true);
   const [showRankInfo, setShowRankInfo] = useState(false);
-  const [showClanView, setShowClanView] = useState(false);
   const [allClans, setAllClans] = useState<Clan[]>([...DEFAULT_CLANS]);
+  const [userClanId, setUserClanId] = useState<string | null>(null);
   const [friendshipStatus, setFriendshipStatus] = useState<'none' | 'pending_sent' | 'pending_received' | 'friends'>('none');
   const [friendRequestId, setFriendRequestId] = useState<string | null>(null);
   const {
@@ -128,11 +128,24 @@ export const PublicProfileView = ({
     try {
       const {
         data: customClans
-      } = await supabase.from('clans').select('name, emoji').order('created_at', {
+      } = await supabase.from('clans').select('id, name, emoji').order('created_at', {
         ascending: false
       });
       if (customClans) {
         setAllClans([...DEFAULT_CLANS, ...customClans]);
+      }
+      
+      // Load user's clan membership
+      if (userId) {
+        const { data: membership } = await supabase
+          .from('clan_members')
+          .select('clan_id')
+          .eq('user_id', userId)
+          .maybeSingle();
+        
+        if (membership) {
+          setUserClanId(membership.clan_id);
+        }
       }
     } catch (error) {
       console.error('Error loading clans:', error);
@@ -477,10 +490,6 @@ export const PublicProfileView = ({
                         <UserMinus className="w-4 h-4 mr-2" />
                         Freund entfernen
                       </Button>}
-                    <Button onClick={() => setShowClanView(true)} className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
-                      <Users className="w-4 h-4 mr-2" />
-                      Clan anschauen
-                    </Button>
                   </div>}
               </div>
             </div>
@@ -614,23 +623,5 @@ export const PublicProfileView = ({
           </div>
         </div>}
 
-      {showClanView && <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="font-bold text-2xl">Clan System</h3>
-              <button onClick={() => setShowClanView(false)} className="p-1 hover:bg-gray-100 rounded-full">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-8 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl text-center">
-              <Users className="w-16 h-16 mx-auto mb-4 text-purple-500" />
-              <h4 className="text-xl font-bold text-gray-800 mb-2">Clans kommen bald!</h4>
-              <p className="text-gray-600">
-                Das Clan-System befindet sich derzeit in der Entwicklung. Bald kannst du hier die Clan-Details sehen.
-              </p>
-            </div>
-          </div>
-        </div>}
     </>;
 };
