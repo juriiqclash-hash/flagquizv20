@@ -19,6 +19,10 @@ import MultiplayerPage from "./pages/MultiplayerPage";
 import DailyChallengePage from "./pages/DailyChallengePage";
 import SettingsPage from "./pages/SettingsPage";
 import LoginPage from "./pages/LoginPage";
+import FlagArchivePage from "./pages/FlagArchivePage";
+import CombiQuizPage from "./pages/CombiQuizPage";
+import WorldKnowledgePage from "./pages/WorldKnowledgePage";
+import AdminPage from "./pages/AdminPage";
 import SystemBanner from "./components/SystemBanner";
 import MaintenanceScreen from "./components/MaintenanceScreen";
 import ConsentDialog from "./components/ConsentDialog";
@@ -118,6 +122,9 @@ const AppContent = () => {
             <Route path="/clans" element={<ClansPage />} />
             <Route path="/leaderboards" element={<LeaderboardPage />} />
             <Route path="/quizmenu" element={<QuizMenuPage />} />
+            <Route path="/quizmenu/flag-archive" element={<FlagArchivePage />} />
+            <Route path="/quizmenu/combi-quiz" element={<CombiQuizPage />} />
+            <Route path="/quizmenu/world-knowledge" element={<WorldKnowledgePage />} />
             <Route path="/quizmenu/:quizname" element={<QuizPage />} />
             <Route path="/dailychallenge" element={<DailyChallengePage />} />
             <Route path="/einstellungen" element={<SettingsPage />} />
@@ -126,6 +133,7 @@ const AppContent = () => {
             <Route path="/profile/:username" element={<ProfilePage />} />
             <Route path="/multiplayer" element={<MultiplayerPage />} />
             <Route path="/multiplayer/:roomCode" element={<MultiplayerPage />} />
+            <Route path="/admin" element={<AdminPage />} />
             {/* Legacy routes for backwards compatibility */}
             <Route path="/quiz" element={<QuizPage />} />
             <Route path="/quiz/:quizname" element={<QuizPage />} />
