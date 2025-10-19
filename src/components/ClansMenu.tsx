@@ -1092,10 +1092,8 @@ export function ClansMenu({ open, onOpenChange, initialClanId, onClanIdProcessed
                           key={member.id}
                           className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
                           onClick={() => {
+                            setSelectedUserId(member.user_id);
                             onOpenChange(false);
-                            setTimeout(() => {
-                              setSelectedUserId(member.user_id);
-                            }, 100);
                           }}
                         >
                           <Avatar className="h-10 w-10">
