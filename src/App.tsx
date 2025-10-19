@@ -10,11 +10,15 @@ import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import QuizPage from "./pages/QuizPage";
+import QuizMenuPage from "./pages/QuizMenuPage";
 import ClansPage from "./pages/ClansPage";
 import FriendsPage from "./pages/FriendsPage";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import MultiplayerPage from "./pages/MultiplayerPage";
+import DailyChallengePage from "./pages/DailyChallengePage";
+import SettingsPage from "./pages/SettingsPage";
+import LoginPage from "./pages/LoginPage";
 import SystemBanner from "./components/SystemBanner";
 import MaintenanceScreen from "./components/MaintenanceScreen";
 import ConsentDialog from "./components/ConsentDialog";
@@ -109,16 +113,22 @@ const AppContent = () => {
           <InvitationBanner />
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/quiz" element={<QuizPage />} />
-            <Route path="/quiz/:quizname" element={<QuizPage />} />
-            <Route path="/clans" element={<ClansPage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/friends" element={<FriendsPage />} />
+            <Route path="/clans" element={<ClansPage />} />
             <Route path="/leaderboards" element={<LeaderboardPage />} />
+            <Route path="/quizmenu" element={<QuizMenuPage />} />
+            <Route path="/quizmenu/:quizname" element={<QuizPage />} />
+            <Route path="/dailychallenge" element={<DailyChallengePage />} />
+            <Route path="/einstellungen" element={<SettingsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/me" element={<ProfilePage />} />
             <Route path="/profile/:username" element={<ProfilePage />} />
             <Route path="/multiplayer" element={<MultiplayerPage />} />
             <Route path="/multiplayer/:roomCode" element={<MultiplayerPage />} />
+            {/* Legacy routes for backwards compatibility */}
+            <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/quiz/:quizname" element={<QuizPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
