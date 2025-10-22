@@ -1,10 +1,10 @@
 import bronzeBadge from '@/assets/bronze.webp';
-import silverBadge from '@/assets/silber.webp';
-import goldBadge from '@/assets/gold.webp';
-import platinumBadge from '@/assets/plartinum.webp';
-import diamondBadge from '@/assets/diamant.webp';
+import silverBadge from '@/assets/silber copy.webp';
+import goldBadge from '@/assets/gold copy.webp';
+import platinumBadge from '@/assets/plartinum copy.webp';
+import diamondBadge from '@/assets/diamant copy.webp';
 import legendsBadge from '@/assets/legends.webp';
-import mastersBadge from '@/assets/masters.webp';
+import mastersBadge from '@/assets/masters copy.webp';
 
 export type RankTier = {
   name: string;

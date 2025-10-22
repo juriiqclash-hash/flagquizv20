@@ -1,61 +1,29 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import MultiplayerMenu from '@/components/MultiplayerMenu';
-import MultiplayerLobby from '@/components/MultiplayerLobby';
-import MultiplayerGame from '@/components/MultiplayerGame';
-import MultiplayerContinentGame from '@/components/MultiplayerContinentGame';
-import MultiplayerCountdown from '@/components/MultiplayerCountdown';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 export default function MultiplayerPage() {
   const navigate = useNavigate();
-  const [currentView, setCurrentView] = useState<'menu' | 'lobby' | 'countdown' | 'game' | 'continent-game'>('menu');
-  const [multiplayerGameMode, setMultiplayerGameMode] = useState<string>('flags');
+  const { roomCode } = useParams<{ roomCode: string }>();
 
-  if (currentView === 'menu') {
-    return (
-      <MultiplayerMenu
-        onMatchJoined={() => setCurrentView('lobby')}
-        onBackToMain={() => navigate('/quizmenu')}
-      />
-    );
-  }
-
-  if (currentView === 'lobby') {
-    return (
-      <MultiplayerLobby
-        onStartGame={() => setCurrentView(multiplayerGameMode === 'continents' ? 'continent-game' : 'game')}
-        onBackToMenu={() => setCurrentView('menu')}
-        onStartCountdown={() => setCurrentView('countdown')}
-        onGameModeChange={setMultiplayerGameMode}
-      />
-    );
-  }
-
-  if (currentView === 'countdown') {
-    return (
-      <MultiplayerCountdown
-        onCountdownEnd={() => setCurrentView(multiplayerGameMode === 'continents' ? 'continent-game' : 'game')}
-      />
-    );
-  }
-
-  if (currentView === 'game') {
-    return (
-      <MultiplayerGame
-        onBackToLobby={() => setCurrentView('lobby')}
-        onBackToMenu={() => navigate('/quizmenu')}
-      />
-    );
-  }
-
-  if (currentView === 'continent-game') {
-    return (
-      <MultiplayerContinentGame
-        onBackToLobby={() => setCurrentView('lobby')}
-        onBackToMenu={() => navigate('/quizmenu')}
-      />
-    );
-  }
-
-  return null;
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 p-4 flex items-center justify-center">
+      <div className="max-w-7xl mx-auto text-center">
+        <Button
+          variant="ghost"
+          onClick={() => navigate('/')}
+          className="mb-8 text-white hover:bg-white/10"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Zurück zum Hauptmenü
+        </Button>
+        <h1 className="text-4xl font-bold text-white mb-4">Multiplayer</h1>
+        {roomCode ? (
+          <p className="text-white/80">Raum: {roomCode}</p>
+        ) : (
+          <p className="text-white/80">Starte ein Multiplayer-Spiel im Hauptmenü</p>
+        )}
+      </div>
+    </div>
+  );
 }

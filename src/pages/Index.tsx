@@ -1,29 +1,203 @@
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
 import MainMenu from "@/components/MainMenu";
+import StartScreen from "@/components/StartScreen";
+import QuizGame from "@/components/QuizGame";
+import CombiQuiz from "@/components/CombiQuiz";
+import FlagArchive from "@/components/FlagArchive";
+import MultiplayerMenu from "@/components/MultiplayerMenu";
+import MultiplayerLobby from "@/components/MultiplayerLobby";
+import MultiplayerGame from "@/components/MultiplayerGame";
+import MultiplayerContinentGame from "@/components/MultiplayerContinentGame";
+import MultiplayerCountdown from "@/components/MultiplayerCountdown";
+import ProfileButton from "@/components/ProfileButton";
+import DifficultySelector from "@/components/DifficultySelector";
+import WorldKnowledgeQuiz from "@/components/WorldKnowledgeQuiz";
+import AdminPanel from "@/components/AdminPanel";
 import { AuthProvider } from "@/hooks/useAuth";
+import { DifficultyLevel } from "@/data/worldKnowledge";
 
-export default function Index() {
-  const navigate = useNavigate();
+function IndexContent() {
+  const [currentView, setCurrentView] = useState<'main-menu' | 'start' | 'quiz' | 'combi-quiz' | 'daily-challenge' | 'flag-archive' | 'multiplayer-menu' | 'multiplayer-lobby' | 'multiplayer-countdown' | 'multiplayer-game' | 'multiplayer-continent-game' | 'world-knowledge-difficulty' | 'world-knowledge-quiz' | 'admin'>('main-menu');
+  const [gameMode, setGameMode] = useState<'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge'>('learn');
+  const [selectedContinent, setSelectedContinent] = useState<string>();
+  const [timeLimit, setTimeLimit] = useState<number>();
+  const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('easy');
+  const [multiplayerGameMode, setMultiplayerGameMode] = useState<string>('flags');
+  const [shouldOpenProfile, setShouldOpenProfile] = useState(false);
+
+  const handleStartQuiz = (
+    mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz' | 'flag-archive',
+    continent?: string,
+    timeLimitValue?: number
+  ) => {
+    setGameMode(mode as any);
+    setSelectedContinent(continent);
+    setTimeLimit(timeLimitValue);
+
+    if (mode === 'world-knowledge') {
+      setCurrentView('world-knowledge-difficulty');
+    } else if (mode === 'combi-quiz') {
+      setCurrentView('combi-quiz');
+    } else if (mode === 'flag-archive') {
+      setCurrentView('flag-archive');
+    } else {
+      setCurrentView('quiz');
+    }
+  };
+
+  const handleStartMultiplayer = () => {
+    setCurrentView('multiplayer-menu');
+  };
+
+  const handleMultiplayerMatchJoined = () => {
+    setCurrentView('multiplayer-lobby');
+  };
+
+  const handleMultiplayerCountdown = () => {
+    setCurrentView('multiplayer-countdown');
+  };
+
+  const handleMultiplayerGameStart = () => {
+    // Check game mode from lobby to decide which game component to show
+    setCurrentView(multiplayerGameMode === 'continents' ? 'multiplayer-continent-game' : 'multiplayer-game');
+  };
+
+  const handleMainMenuStart = () => {
+    setCurrentView('start');
+  };
+
+  const handleBackToStart = () => {
+    setCurrentView('start');
+  };
+
+  const handleBackToMainMenu = () => {
+    setCurrentView('main-menu');
+  };
+
+  const handleBackToMultiplayerMenu = () => {
+    setCurrentView('multiplayer-menu');
+  };
+
+  const handleBackToMultiplayerLobby = () => {
+    setCurrentView('multiplayer-lobby');
+  };
+
+  const handleSelectDifficulty = (difficulty: DifficultyLevel) => {
+    setSelectedDifficulty(difficulty);
+    setCurrentView('world-knowledge-quiz');
+  };
+
+  const handleBackToWorldKnowledgeDifficulty = () => {
+    setCurrentView('world-knowledge-difficulty');
+  };
+
+  const handleOpenAdminPanel = () => {
+    setCurrentView('admin');
+  };
+
+  const handleBackFromAdmin = () => {
+    setCurrentView('start');
+  };
+
+  const handleDailyChallengeStart = () => {
+    setCurrentView('daily-challenge');
+  };
+
+  const handleDailyChallengeComplete = () => {
+    setCurrentView('main-menu');
+  };
+
+  const handleProfileOpenFromMainMenu = () => {
+    setShouldOpenProfile(true);
+    setCurrentView('start');
+  };
 
   return (
+    <>
+      {currentView === 'main-menu' ? (
+        <MainMenu
+          onStart={handleMainMenuStart}
+          onMultiplayerStart={handleStartMultiplayer}
+          onDailyChallengeStart={handleDailyChallengeStart}
+          onStartQuiz={handleStartQuiz}
+          onProfileOpen={handleProfileOpenFromMainMenu}
+        />
+      ) : currentView === 'start' ? (
+        <StartScreen
+          onStartQuiz={handleStartQuiz}
+          onStartMultiplayer={handleStartMultiplayer}
+          currentView={currentView}
+          onOpenAdminPanel={handleOpenAdminPanel}
+          onBackToMainMenu={handleBackToMainMenu}
+          shouldOpenProfile={shouldOpenProfile}
+          onProfileOpened={() => setShouldOpenProfile(false)}
+        />
+      ) : currentView === 'admin' ? (
+        <AdminPanel onBack={handleBackFromAdmin} />
+      ) : currentView === 'quiz' ? (
+        <QuizGame 
+          mode={gameMode} 
+          onBackToStart={handleBackToStart}
+          continent={selectedContinent}
+          timeLimit={timeLimit}
+        />
+      ) : currentView === 'multiplayer-menu' ? (
+        <MultiplayerMenu 
+          onMatchJoined={handleMultiplayerMatchJoined}
+          onBackToMain={handleBackToStart}
+        />
+      ) : currentView === 'multiplayer-lobby' ? (
+        <MultiplayerLobby 
+          onStartGame={handleMultiplayerGameStart}
+          onBackToMenu={handleBackToMultiplayerMenu}
+          onStartCountdown={handleMultiplayerCountdown}
+          onGameModeChange={setMultiplayerGameMode}
+        />
+      ) : currentView === 'multiplayer-countdown' ? (
+        <MultiplayerCountdown onCountdownEnd={handleMultiplayerGameStart} />
+      ) : currentView === 'multiplayer-game' ? (
+        <MultiplayerGame 
+          onBackToLobby={handleBackToMultiplayerLobby}
+          onBackToMenu={handleBackToStart}
+        />
+      ) : currentView === 'multiplayer-continent-game' ? (
+        <MultiplayerContinentGame 
+          onBackToLobby={handleBackToMultiplayerLobby}
+          onBackToMenu={handleBackToStart}
+        />
+      ) : currentView === 'world-knowledge-difficulty' ? (
+        <DifficultySelector
+          onSelectDifficulty={handleSelectDifficulty}
+          onBack={handleBackToStart}
+        />
+      ) : currentView === 'world-knowledge-quiz' ? (
+        <WorldKnowledgeQuiz
+          difficulty={selectedDifficulty}
+          onBack={handleBackToWorldKnowledgeDifficulty}
+        />
+      ) : currentView === 'daily-challenge' ? (
+        <CombiQuiz
+          onBackToStart={handleDailyChallengeComplete}
+          isDailyChallenge
+          maxQuestions={10}
+        />
+      ) : currentView === 'combi-quiz' ? (
+        <CombiQuiz
+          onBackToStart={handleBackToStart}
+        />
+      ) : currentView === 'flag-archive' ? (
+        <FlagArchive
+          onBackToStart={handleBackToStart}
+        />
+      ) : null}
+    </>
+  );
+}
+
+export default function Index() {
+  return (
     <AuthProvider>
-      <MainMenu
-        onStart={() => navigate('/quizmenu')}
-        onMultiplayerStart={() => navigate('/multiplayer')}
-        onDailyChallengeStart={() => navigate('/quizmenu/combi-quiz?daily=true')}
-        onStartQuiz={(mode) => {
-          if (mode === 'combi-quiz') {
-            navigate('/quizmenu/combi-quiz');
-          } else if (mode === 'flag-archive') {
-            navigate('/quizmenu/flag-archive');
-          } else if (mode === 'world-knowledge') {
-            navigate('/quizmenu/world-knowledge');
-          } else {
-            navigate(`/quizmenu/${mode}`);
-          }
-        }}
-        onProfileOpen={() => navigate('/profile/me')}
-      />
+      <IndexContent />
     </AuthProvider>
   );
 }
