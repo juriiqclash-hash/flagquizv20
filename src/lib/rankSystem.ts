@@ -1,9 +1,9 @@
 import bronzeImg from '@/assets/bronze.webp';
-import silverImg from '@/assets/silber copy.webp';
-import goldImg from '@/assets/gold copy.webp';
-import platinumImg from '@/assets/plartinum copy.webp';
-import diamondImg from '@/assets/diamant copy.webp';
-import mastersImg from '@/assets/masters copy.webp';
+import silverImg from '@/assets/silber.webp';
+import goldImg from '@/assets/gold.webp';
+import platinumImg from '@/assets/plartinum.webp';
+import diamondImg from '@/assets/diamant.webp';
+import mastersImg from '@/assets/masters.webp';
 import legendsImg from '@/assets/legends.webp';
 
 export interface Rank {
