@@ -9,7 +9,6 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const { username } = useParams<{ username: string }>();
   const { user } = useAuth();
-  const [open, setOpen] = useState(true);
   const [viewedUserId, setViewedUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +20,6 @@ export default function ProfilePage() {
     if (!newOpen) {
       navigate('/');
     }
-    setOpen(newOpen);
   };
 
   // Redirect /profile to /profile/me
@@ -65,7 +63,7 @@ export default function ProfilePage() {
 
   // If viewing /profile/me
   if (username === 'me') {
-    return <ProfileView open={open} onOpenChange={handleOpenChange} />;
+    return <ProfileView open={true} onOpenChange={handleOpenChange} />;
   }
 
   // If viewing another user's profile by username
