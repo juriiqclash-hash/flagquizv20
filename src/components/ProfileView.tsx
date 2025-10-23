@@ -123,8 +123,10 @@ export const ProfileView = ({
   const [showRankInfo, setShowRankInfo] = useState(false);
   const [showClanCreator, setShowClanCreator] = useState(false);
   const [allClans, setAllClans] = useState<Clan[]>([...DEFAULT_CLANS]);
+
   useEffect(() => {
     if (open && user) {
+      setLoading(true);
       loadProfileData();
       loadClans();
     }
@@ -297,7 +299,20 @@ export const ProfileView = ({
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
+
   if (!open) return null;
+
+  if (loading || !user) {
+    return (
+      <div className="fixed inset-0 z-[100] bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-white text-lg">Lade Profil...</p>
+        </div>
+      </div>
+    );
+  }
+
   return <>
       <div className="fixed inset-0 z-[100] bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex items-center justify-center p-4">
         {/* Close Button */}
