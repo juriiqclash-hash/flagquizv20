@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -63,6 +64,7 @@ interface ClanMember {
 }
 
 export function ClansMenu({ open, onOpenChange, initialClanId, onClanIdProcessed }: ClansMenuProps) {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [allClans, setAllClans] = useState<Clan[]>([]);
@@ -802,10 +804,9 @@ export function ClansMenu({ open, onOpenChange, initialClanId, onClanIdProcessed
                                   <div
                                     className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
                                     onClick={() => {
-                                      onOpenChange(false);
-                                      setTimeout(() => {
-                                        setSelectedUserId(member.user_id);
-                                      }, 100);
+                                      if (member.profiles?.username) {
+                                        navigate(`/profile/${member.profiles.username}`);
+                                      }
                                     }}
                                   >
                                     <Avatar className="h-10 w-10">
