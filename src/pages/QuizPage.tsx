@@ -3,20 +3,20 @@ import QuizGame from '@/components/QuizGame';
 
 export default function QuizPage() {
   const navigate = useNavigate();
-  const { mode } = useParams<{ mode: string }>();
+  const { quizname } = useParams<{ quizname: string }>();
   const [searchParams] = useSearchParams();
 
   const continent = searchParams.get('continent') || undefined;
   const timeLimit = searchParams.get('time') ? parseInt(searchParams.get('time')!) : undefined;
 
-  if (!mode) {
+  if (!quizname) {
     navigate('/quizmenu');
     return null;
   }
 
   return (
     <QuizGame
-      mode={mode as any}
+      mode={quizname as any}
       onBackToStart={() => navigate('/quizmenu')}
       continent={continent}
       timeLimit={timeLimit}
