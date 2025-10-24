@@ -75,8 +75,8 @@ export default function PremiumPage() {
         'Exklusive Discord-Rolle',
         'Doppelte XP und Rang-Boost',
       ],
-      icon: <Star className="w-10 h-10 text-amber-500" />,
-      color: 'from-amber-500 to-amber-600',
+      icon: <Star className="w-10 h-10 text-purple-500" />,
+      color: 'from-purple-500 to-purple-600',
     },
   ];
 
