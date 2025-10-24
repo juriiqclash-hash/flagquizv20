@@ -228,7 +228,7 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
 
   return (
     <>
-      <Dialog open={open} onOpenChange={onOpenChange}>
+      <Dialog open={open && !selectedUserId} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Freunde</DialogTitle>
