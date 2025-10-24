@@ -592,7 +592,7 @@ export default function MainMenu({
               <p className="text-white text-lg font-bold">
                 Premium freischalten
               </p>
-              <Button onClick={() => navigate('/premium')} className="bg-gradient-to-b from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg flex-shrink-0">
+              <Button onClick={() => navigate('/premium')} className="bg-gradient-to-b from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg flex-shrink-0">
                 <span className="text-lg">GO</span>
               </Button>
             </div>
@@ -683,7 +683,7 @@ export default function MainMenu({
                   <p className="text-white text-sm font-bold">
                     Premium freischalten
                   </p>
-                  <Button onClick={() => navigate('/premium')} className="bg-gradient-to-b from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white font-bold px-6 py-2 rounded-full transition-all duration-300 shadow-lg flex-shrink-0">
+                  <Button onClick={() => navigate('/premium')} className="bg-gradient-to-b from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold px-6 py-2 rounded-full transition-all duration-300 shadow-lg flex-shrink-0">
                     <span className="text-sm">GO</span>
                   </Button>
                 </div>
