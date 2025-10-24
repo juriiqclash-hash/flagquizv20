@@ -251,7 +251,7 @@ export default function PremiumPage() {
                   <Button
                     onClick={() => handleSubscribe(plan.id as 'premium' | 'ultimate')}
                     disabled={loading !== null}
-                    className="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium text-base py-5"
+                    className={`w-full bg-gradient-to-r ${plan.color} hover:opacity-90 text-white font-bold text-lg py-6`}
                   >
                     {loading === plan.id ? (
                       <span className="flex items-center gap-2">
