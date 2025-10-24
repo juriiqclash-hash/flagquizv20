@@ -305,7 +305,7 @@ export default function MainMenu({
     }}>
 
         <div className="text-center">
-          <Loader2 className="w-16 h-16 text-white animate-spin mx-auto mb-4" />
+          <div className="w-16 h-16 mx-auto mb-4 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
           <p className="text-2xl text-white font-semibold">{t.loading}</p>
         </div>
       </div>;
