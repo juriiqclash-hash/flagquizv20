@@ -589,12 +589,12 @@ export default function MainMenu({
           {/* Premium Card */}
           <div className="bg-gradient-to-br from-amber-900/40 to-yellow-900/40 rounded-2xl p-5 border border-amber-500/30">
             <div className="flex flex-col items-center gap-2">
-              <Button className="bg-gradient-to-b from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
-                <Crown className="w-5 h-5 mr-2" />
-                <span className="text-lg">Premium freischalten</span>
-              </Button>
-              <p className="text-white text-sm font-semibold text-center">
-                {t.premiumBenefits || 'Werbefrei, exklusive Quiz & mehr!'}
+              <p className="text-white text-base font-semibold text-center">
+                <Crown className="w-5 h-5 inline-block mr-2" />
+                Premium freischalten
+              </p>
+              <p className="text-white/80 text-sm text-center">
+                Mehr Quiz-Funktionen, Extras & Design-Anpassungen
               </p>
             </div>
           </div>
@@ -681,12 +681,12 @@ export default function MainMenu({
               </h3>
               <div className="bg-gradient-to-br from-amber-900/40 to-yellow-900/40 rounded-2xl p-4 border border-amber-500/30">
                 <div className="flex flex-col items-center gap-2">
-                  <Button className="bg-gradient-to-b from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white font-bold px-6 py-2 rounded-full transition-all duration-300 shadow-lg">
-                    <Crown className="w-4 h-4 mr-2" />
-                    <span className="text-sm">Premium freischalten</span>
-                  </Button>
                   <p className="text-white text-sm font-semibold text-center">
-                    {t.premiumBenefits || 'Werbefrei, exklusive Quiz & mehr!'}
+                    <Crown className="w-4 h-4 inline-block mr-1" />
+                    Premium freischalten
+                  </p>
+                  <p className="text-white/80 text-xs text-center">
+                    Mehr Quiz-Funktionen, Extras & Design-Anpassungen
                   </p>
                 </div>
               </div>
