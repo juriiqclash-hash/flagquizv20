@@ -89,8 +89,8 @@ export default function PremiumPage() {
 
     try {
       const priceId = billingCycle === 'monthly'
-        ? (plan === 'premium' ? 'price_premium_monthly' : 'price_ultimate_monthly')
-        : (plan === 'premium' ? 'price_premium_yearly' : 'price_ultimate_yearly');
+        ? (plan === 'premium' ? 'price_1SLrHPEgHdKvS0zO8QKasnnZ' : 'price_1SLrIOEgHdKvS0zOXc8g0xvR')
+        : (plan === 'premium' ? 'price_1SLrKnEgHdKvS0zOzzDlmFkI' : 'price_1SLrL8EgHdKvS0zOFy0VgBSD');
 
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout-session`, {
         method: 'POST',
