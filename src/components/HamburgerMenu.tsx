@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Home, Trophy, Users, Shield, Loader2, Search } from 'lucide-react';
+import { Menu, Home, Trophy, Users, Shield, Loader2, Search, Settings, Info } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Leaderboard from '@/components/Leaderboard';
 import { Card, CardContent } from '@/components/ui/card';
 import { FriendsMenu } from '@/components/FriendsMenu';
 import { ClansMenu } from '@/components/ClansMenu';
+import AppSettings from '@/components/AppSettings';
+import InfoDialog from '@/components/InfoDialog';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
@@ -64,6 +66,8 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [friendsDialogOpen, setFriendsDialogOpen] = useState(false);
   const [clansDialogOpen, setClansDialogOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
   const [isLoadingQuiz, setIsLoadingQuiz] = useState(false);
   const [searchDialogOpen, setSearchDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -102,6 +106,16 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
   const handleOpenClans = () => {
     setOpen(false);
     setClansDialogOpen(true);
+  };
+
+  const handleOpenSettings = () => {
+    setOpen(false);
+    setSettingsOpen(true);
+  };
+
+  const handleOpenInfo = () => {
+    setOpen(false);
+    setInfoOpen(true);
   };
 
   const handleOpenSearch = () => {
@@ -317,6 +331,24 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
               Clans
             </Button>
 
+            <Button
+              variant="outline"
+              className="w-full justify-start text-lg h-14"
+              onClick={handleOpenSettings}
+            >
+              <Settings className="h-5 w-5 mr-3" />
+              Einstellungen
+            </Button>
+
+            <Button
+              variant="outline"
+              className="w-full justify-start text-lg h-14"
+              onClick={handleOpenInfo}
+            >
+              <Info className="h-5 w-5 mr-3" />
+              Info
+            </Button>
+
           </div>
         </SheetContent>
       </Sheet>
@@ -338,6 +370,16 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
       <ClansMenu
         open={clansDialogOpen}
         onOpenChange={setClansDialogOpen}
+      />
+
+      <AppSettings
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+      />
+
+      <InfoDialog
+        open={infoOpen}
+        onOpenChange={setInfoOpen}
       />
 
       <Dialog open={searchDialogOpen} onOpenChange={setSearchDialogOpen}>
