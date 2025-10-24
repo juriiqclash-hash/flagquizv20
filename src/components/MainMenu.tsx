@@ -550,7 +550,7 @@ export default function MainMenu({
             <div className="flex-1 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl py-6 px-8 border border-white/10 relative overflow-hidden flex flex-col items-center justify-center gap-2">
               <img src="/trophy-3d-icon-illustration-png copy.webp" alt="Trophy" className="w-20 h-20 object-contain drop-shadow-2xl -mt-4" />
               <h4 className="text-white text-xl font-bold italic -mt-2">{t.multiplayer.toUpperCase()}</h4>
-              <Button onClick={handleMultiplayer} className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-12 py-3 rounded-full transition-all duration-300 shadow-lg -mt-1 border-2 border-green-700 hover:shadow-[0_0_30px_rgba(34,197,94,0.6)]">
+              <Button onClick={handleMultiplayer} className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-12 py-3 rounded-full transition-all duration-300 shadow-lg -mt-1 border-2 border-green-700">
                 <span className="text-lg">PLAY</span>
               </Button>
             </div>
@@ -573,7 +573,7 @@ export default function MainMenu({
                 <h4 className="text-white text-lg font-bold whitespace-nowrap">The Daily Challenge</h4>
               </div>
             </div>
-            <Button onClick={handleDailyChallenge} className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg flex-shrink-0 border-2 border-purple-700 hover:shadow-[0_0_30px_rgba(168,85,247,0.6)]">
+            <Button onClick={handleDailyChallenge} className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg flex-shrink-0 border-2 border-purple-700">
               <span className="text-lg">PLAY</span>
             </Button>
           </div>
@@ -592,7 +592,7 @@ export default function MainMenu({
               <p className="text-white text-lg font-bold">
                 Premium freischalten
               </p>
-              <Button onClick={() => navigate('/premium')} className="bg-gradient-to-b from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg flex-shrink-0 border-2 border-yellow-700 hover:shadow-[0_0_30px_rgba(234,179,8,0.6)]">
+              <Button onClick={() => navigate('/premium')} className="bg-gradient-to-b from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg flex-shrink-0 border-2 border-yellow-700">
                 <span className="text-lg">GO</span>
               </Button>
             </div>
@@ -623,7 +623,7 @@ export default function MainMenu({
       {isMobile ? <div className="relative z-10 flex flex-col items-center justify-start w-full px-4 pt-20 pb-8 overflow-y-auto max-h-[calc(100vh-64px)]">
           <FlagQuizLogo size="xl" variant="dark" className="mb-8 drop-shadow-2xl" />
 
-          <Button onClick={handleStart} size="lg" className="bg-blue-600 hover:bg-blue-700 text-white text-xl py-6 px-12 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 mb-12 border-2 border-blue-800 hover:shadow-[0_0_30px_rgba(37,99,235,0.6)]">
+          <Button onClick={handleStart} size="lg" className="bg-blue-600 hover:bg-blue-700 text-white text-xl py-6 px-12 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 mb-12 border-2 border-blue-800">
             <Play className="mr-3 h-6 w-6" />
             {t.start}
           </Button>
@@ -651,7 +651,7 @@ export default function MainMenu({
               <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl py-5 px-6 border border-white/10 flex flex-col items-center justify-center gap-2">
                 <img src="/trophy-3d-icon-illustration-png copy.webp" alt="Trophy" className="w-16 h-16 object-contain drop-shadow-2xl" />
                 <h4 className="text-white text-lg font-bold italic">{t.multiplayer.toUpperCase()}</h4>
-                <Button onClick={handleMultiplayer} className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-10 py-2 rounded-full transition-all duration-300 shadow-lg border-2 border-green-700 hover:shadow-[0_0_20px_rgba(34,197,94,0.6)]">
+                <Button onClick={handleMultiplayer} className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold px-10 py-2 rounded-full transition-all duration-300 shadow-lg border-2 border-green-700">
                   <span className="text-base">PLAY</span>
                 </Button>
               </div>
@@ -667,7 +667,7 @@ export default function MainMenu({
                     <h4 className="text-white text-sm font-bold">Daily Challenge</h4>
                   </div>
                 </div>
-                <Button onClick={handleDailyChallenge} className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-6 py-2 rounded-full transition-all duration-300 shadow-lg border-2 border-purple-700 hover:shadow-[0_0_20px_rgba(168,85,247,0.6)]">
+                <Button onClick={handleDailyChallenge} className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold px-6 py-2 rounded-full transition-all duration-300 shadow-lg border-2 border-purple-700">
                   <span className="text-sm">PLAY</span>
                 </Button>
               </div>
@@ -683,7 +683,7 @@ export default function MainMenu({
                   <p className="text-white text-sm font-bold">
                     Premium freischalten
                   </p>
-                  <Button onClick={() => navigate('/premium')} className="bg-gradient-to-b from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold px-6 py-2 rounded-full transition-all duration-300 shadow-lg flex-shrink-0 border-2 border-yellow-700 hover:shadow-[0_0_20px_rgba(234,179,8,0.6)]">
+                  <Button onClick={() => navigate('/premium')} className="bg-gradient-to-b from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold px-6 py-2 rounded-full transition-all duration-300 shadow-lg flex-shrink-0 border-2 border-yellow-700">
                     <span className="text-sm">GO</span>
                   </Button>
                 </div>
@@ -708,7 +708,7 @@ export default function MainMenu({
           </div>
         </div> : <div className="relative z-10 text-center max-w-2xl mx-auto mt-16">
           <FlagQuizLogo size="xl" variant="dark" className="mb-20 drop-shadow-2xl scale-90 md:scale-125" />
-          <Button onClick={handleStart} size="lg" className="bg-blue-600 hover:bg-blue-700 text-white text-2xl py-8 px-16 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 scale-90 border-2 border-blue-800 hover:shadow-[0_0_30px_rgba(37,99,235,0.6)]">
+          <Button onClick={handleStart} size="lg" className="bg-blue-600 hover:bg-blue-700 text-white text-2xl py-8 px-16 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 scale-90 border-2 border-blue-800">
             <Play className="mr-3 h-8 w-8" />
             {t.start}
           </Button>
