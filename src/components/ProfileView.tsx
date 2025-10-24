@@ -417,7 +417,7 @@ export const ProfileView = ({
                       <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
                         {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
                       </span>
-                      <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                      <span className="text-[10px] md:text-xs text-gray-400 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.continent}
                       </span>
                     </> : <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-200" />}
@@ -430,7 +430,7 @@ export const ProfileView = ({
                       <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
                         {userClan.emoji}
                       </span>
-                      <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                      <span className="text-[10px] md:text-xs text-gray-400 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {userClan.name}
                       </span>
                     </>
