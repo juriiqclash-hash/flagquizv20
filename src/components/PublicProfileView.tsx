@@ -10,10 +10,7 @@ import { calculateRank, calculateRankScore, RANK_TIERS } from '@/lib/profileRank
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
-const getFlagEmoji = (countryCode: string): string => {
-  const codePoints = countryCode.toUpperCase().split('').map(char => 127397 + char.charCodeAt(0));
-  return String.fromCodePoint(...codePoints);
-};
+import { getFlagEmoji } from '@/lib/flagUtils';
 interface PublicProfileViewProps {
   userId: string | null;
   onClose: () => void;
@@ -188,8 +185,7 @@ export const PublicProfileView = ({
     }
   };
 
-  const sendFriendRequest = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const sendFriendRequest = async () => {
     if (!currentUser || !userId) return;
 
     try {
@@ -218,8 +214,7 @@ export const PublicProfileView = ({
     }
   };
 
-  const acceptFriendRequest = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const acceptFriendRequest = async () => {
     if (!friendRequestId) return;
 
     try {
@@ -245,8 +240,7 @@ export const PublicProfileView = ({
     }
   };
 
-  const removeFriend = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const removeFriend = async () => {
     if (!friendRequestId) return;
 
     try {
@@ -271,8 +265,7 @@ export const PublicProfileView = ({
     }
   };
 
-  const cancelFriendRequest = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const cancelFriendRequest = async () => {
     if (!friendRequestId) return;
 
     try {
@@ -336,9 +329,30 @@ export const PublicProfileView = ({
       const bestStreak = streakData?.score || 0;
       const bestTimeMode = timedData?.score || 0;
       const duelWins = userStats?.multiplayer_wins || 0;
+      
+      // Efficient rank calculation - single query for all leaderboard data
       const {
         data: allPlayers
       } = await supabase.from('user_stats').select('user_id, xp, level, multiplayer_wins');
+      
+      const { data: allLeaderboardData } = await supabase
+        .from('leaderboards')
+        .select('user_id, game_mode, score')
+        .in('game_mode', ['streak', 'timed']);
+
+      // Build maps for quick lookup
+      const streakMap = new Map<string, number>();
+      const timedMap = new Map<string, number>();
+      allLeaderboardData?.forEach(entry => {
+        if (entry.game_mode === 'streak') {
+          const current = streakMap.get(entry.user_id) || 0;
+          streakMap.set(entry.user_id, Math.max(current, entry.score));
+        } else if (entry.game_mode === 'timed') {
+          const current = timedMap.get(entry.user_id) || 9999;
+          timedMap.set(entry.user_id, Math.min(current, entry.score));
+        }
+      });
+
       let bestPosition = 1;
       const currentScore = calculateRankScore({
         bestStreak,
@@ -346,22 +360,14 @@ export const PublicProfileView = ({
         duelWins,
         bestPosition: 0
       }, level);
+
       if (allPlayers) {
         for (const player of allPlayers) {
           if (player.user_id === userId) continue;
-          const {
-            data: playerStreak
-          } = await supabase.from('leaderboards').select('score').eq('user_id', player.user_id).eq('game_mode', 'streak').order('score', {
-            ascending: false
-          }).limit(1).maybeSingle();
-          const {
-            data: playerTime
-          } = await supabase.from('leaderboards').select('score').eq('user_id', player.user_id).eq('game_mode', 'timed').order('score', {
-            ascending: true
-          }).limit(1).maybeSingle();
+
           const playerStats = {
-            bestStreak: playerStreak?.score || 0,
-            bestTimeMode: playerTime?.score || 0,
+            bestStreak: streakMap.get(player.user_id) || 0,
+            bestTimeMode: timedMap.get(player.user_id) || 0,
             duelWins: player.multiplayer_wins || 0,
             bestPosition: 0
           };

@@ -186,7 +186,7 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
         const { data: profiles } = await supabase
           .from('profiles')
           .select('user_id, username, avatar_url')
-          .ilike('username', `${searchQuery}%`)
+          .ilike('username', `%${searchQuery}%`)
           .limit(20);
 
         if (profiles) {

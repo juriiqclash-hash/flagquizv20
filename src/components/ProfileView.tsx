@@ -11,14 +11,7 @@ import { ClanCreator } from './ClanCreator';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTranslation } from '@/data/translations';
 import { calculateRank, calculateRankScore, RANK_TIERS } from '@/lib/profileRank';
-
-const getFlagEmoji = (countryCode: string): string => {
-  const codePoints = countryCode
-    .toUpperCase()
-    .split('')
-    .map(char => 127397 + char.charCodeAt(0));
-  return String.fromCodePoint(...codePoints);
-};
+import { getFlagEmoji } from '@/lib/flagUtils';
 interface ProfileViewProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -127,8 +120,8 @@ export const ProfileView = ({
   useEffect(() => {
     if (open && user) {
       setLoading(true);
-      loadProfileData();
-      loadClans();
+      Promise.all([loadProfileData(), loadClans()])
+        .finally(() => setLoading(false));
     }
   }, [open, user]);
 
@@ -201,10 +194,29 @@ export const ProfileView = ({
       const bestTimeMode = timedData?.score || 0;
       const duelWins = userStats?.multiplayer_wins || 0;
 
-      // Calculate best position by comparing with all players
+      // Calculate best position efficiently - single query for all leaderboard data
       const {
         data: allPlayers
       } = await supabase.from('user_stats').select('user_id, xp, level, multiplayer_wins');
+      
+      const { data: allLeaderboardData } = await supabase
+        .from('leaderboards')
+        .select('user_id, game_mode, score')
+        .in('game_mode', ['streak', 'timed']);
+
+      // Build maps for quick lookup
+      const streakMap = new Map<string, number>();
+      const timedMap = new Map<string, number>();
+      allLeaderboardData?.forEach(entry => {
+        if (entry.game_mode === 'streak') {
+          const current = streakMap.get(entry.user_id) || 0;
+          streakMap.set(entry.user_id, Math.max(current, entry.score));
+        } else if (entry.game_mode === 'timed') {
+          const current = timedMap.get(entry.user_id) || 9999;
+          timedMap.set(entry.user_id, Math.min(current, entry.score));
+        }
+      });
+
       let bestPosition = 1;
       const currentScore = calculateRankScore({
         bestStreak,
@@ -212,24 +224,14 @@ export const ProfileView = ({
         duelWins,
         bestPosition: 0
       }, level);
+
       if (allPlayers) {
         for (const player of allPlayers) {
           if (player.user_id === user.id) continue;
 
-          // Get player's streak and time scores
-          const {
-            data: playerStreak
-          } = await supabase.from('leaderboards').select('score').eq('user_id', player.user_id).eq('game_mode', 'streak').order('score', {
-            ascending: false
-          }).limit(1).maybeSingle();
-          const {
-            data: playerTime
-          } = await supabase.from('leaderboards').select('score').eq('user_id', player.user_id).eq('game_mode', 'timed').order('score', {
-            ascending: true
-          }).limit(1).maybeSingle();
           const playerStats = {
-            bestStreak: playerStreak?.score || 0,
-            bestTimeMode: playerTime?.score || 0,
+            bestStreak: streakMap.get(player.user_id) || 0,
+            bestTimeMode: timedMap.get(player.user_id) || 0,
             duelWins: player.multiplayer_wins || 0,
             bestPosition: 0
           };
@@ -267,8 +269,6 @@ export const ProfileView = ({
       }
     } catch (error) {
       console.error('Error loading profile:', error);
-    } finally {
-      setLoading(false);
     }
   };
   const updateProfileField = async (field: keyof ProfileData, value: string | null) => {

@@ -22,12 +22,12 @@ export default function ProfilePage() {
     }
   };
 
-  // Redirect /profile to /profile/me
+  // Redirect /profile to /profile/me - only once on mount
   useEffect(() => {
     if (!username) {
       navigate('/profile/me', { replace: true });
     }
-  }, [username, navigate]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load user ID from username
   useEffect(() => {
