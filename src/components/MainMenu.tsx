@@ -589,10 +589,7 @@ export default function MainMenu({
           {/* Premium Card */}
           <div className="bg-gradient-to-br from-amber-900/40 to-yellow-900/40 rounded-2xl p-5 border border-amber-500/30">
             <div className="flex flex-col items-center gap-2">
-              <p className="text-white text-base font-semibold text-center">
-                <Crown className="w-5 h-5 inline-block mr-2" />
-                Premium freischalten
-              </p>
+              
               <p className="text-white/80 text-sm text-center">
                 Mehr Quiz-Funktionen, Extras & Design-Anpassungen
               </p>
