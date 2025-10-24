@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
-import { Play, Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu, BookMarked } from "lucide-react";
+import { Play, Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu, BookMarked, Crown } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -678,15 +678,23 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
           </div>
         </div>
 
-        {/* Daily Streak Panel */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border-2 border-white/30">
-          <h3 className="text-white text-xl font-bold mb-4">{t.dailyStreak}</h3>
+        {/* Premium Upgrade Panel */}
+        <div
+          className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border-2 border-amber-500/50 transition-all duration-300 hover:bg-white/15 cursor-pointer"
+          onClick={() => navigate('/premium')}
+        >
+          <h3 className="text-white text-xl font-bold mb-4 flex items-center gap-2">
+            <Crown className="w-6 h-6 text-amber-400" />
+            {t.upgradeToPremium || 'Upgrade zu Premium'}
+          </h3>
 
-          {/* Streak Card */}
-          <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 rounded-2xl p-5 border border-orange-500/30">
-            <div className="flex items-center justify-center gap-3">
-              <span className="text-4xl">🔥</span>
-              <p className="text-white text-lg font-bold">{t.youAreOnStreak.replace('{count}', String(stats?.daily_streak || 0))}</p>
+          {/* Premium Card */}
+          <div className="bg-gradient-to-br from-amber-900/40 to-yellow-900/40 rounded-2xl p-5 border border-amber-500/30">
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-4xl">👑</span>
+              <p className="text-white text-sm font-semibold text-center">
+                {t.premiumBenefits || 'Werbefrei, exklusive Quiz & mehr!'}
+              </p>
             </div>
           </div>
         </div>
@@ -787,12 +795,20 @@ export default function MainMenu({ onStart, onMultiplayerStart, onDailyChallenge
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 border-2 border-white/30">
-              <h3 className="text-white text-lg font-bold mb-3">{t.dailyStreak}</h3>
-              <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 rounded-2xl p-4 border border-orange-500/30">
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-3xl">🔥</span>
-                  <p className="text-white text-base font-bold">{t.youAreOnStreak.replace('{count}', String(stats?.daily_streak || 0))}</p>
+            <div
+              className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 border-2 border-amber-500/50 transition-all duration-300 active:bg-white/15 cursor-pointer"
+              onClick={() => navigate('/premium')}
+            >
+              <h3 className="text-white text-lg font-bold mb-3 flex items-center gap-2">
+                <Crown className="w-5 h-5 text-amber-400" />
+                {t.upgradeToPremium || 'Upgrade zu Premium'}
+              </h3>
+              <div className="bg-gradient-to-br from-amber-900/40 to-yellow-900/40 rounded-2xl p-4 border border-amber-500/30">
+                <div className="flex flex-col items-center gap-2">
+                  <span className="text-3xl">👑</span>
+                  <p className="text-white text-sm font-semibold text-center">
+                    {t.premiumBenefits || 'Werbefrei, exklusive Quiz & mehr!'}
+                  </p>
                 </div>
               </div>
             </div>

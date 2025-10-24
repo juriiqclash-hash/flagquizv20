@@ -23,6 +23,7 @@ import FlagArchivePage from "./pages/FlagArchivePage";
 import CombiQuizPage from "./pages/CombiQuizPage";
 import WorldKnowledgePage from "./pages/WorldKnowledgePage";
 import AdminPage from "./pages/AdminPage";
+import PremiumPage from "./pages/PremiumPage";
 import SystemBanner from "./components/SystemBanner";
 import MaintenanceScreen from "./components/MaintenanceScreen";
 import ConsentDialog from "./components/ConsentDialog";
@@ -134,6 +135,7 @@ const AppContent = () => {
             <Route path="/multiplayer" element={<MultiplayerPage />} />
             <Route path="/multiplayer/:roomCode" element={<MultiplayerPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/premium" element={<PremiumPage />} />
             {/* Legacy routes for backwards compatibility */}
             <Route path="/quiz" element={<QuizPage />} />
             <Route path="/quiz/:quizname" element={<QuizPage />} />

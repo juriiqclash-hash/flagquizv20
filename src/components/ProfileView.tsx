@@ -12,6 +12,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTranslation } from '@/data/translations';
 import { calculateRank, calculateRankScore, RANK_TIERS } from '@/lib/profileRank';
 import { getFlagEmoji } from '@/lib/flagUtils';
+import { SubscriptionManager } from './SubscriptionManager';
 interface ProfileViewProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -412,6 +413,11 @@ export const ProfileView = ({
           </div>
           </div>
 
+
+          {/* Subscription Manager */}
+          <div className="mb-4">
+            <SubscriptionManager />
+          </div>
 
           {/* Player Stats Header */}
           <h2 className="text-[10px] md:text-sm font-bold text-gray-300 uppercase tracking-[0.2em] md:tracking-[0.25em] mb-2 md:mb-3 text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
