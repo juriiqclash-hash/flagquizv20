@@ -580,22 +580,21 @@ export default function MainMenu({
         </div>
 
         {/* Premium Upgrade Panel */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border-2 border-white/30 transition-all duration-300 hover:bg-white/15 cursor-pointer" onClick={() => navigate('/premium')}>
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border-2 border-white/30 transition-all duration-300 hover:bg-white/15">
           <h3 className="text-white text-xl font-bold mb-4 flex items-center gap-2">
             <Crown className="w-6 h-6 text-amber-400" />
-            {t.upgradeToPremium || 'Upgrade zu Premium'}
+            Upgrade your Plan
           </h3>
 
           {/* Premium Card */}
           <div className="bg-gradient-to-br from-amber-900/40 to-yellow-900/40 rounded-2xl p-5 border border-amber-500/30">
-            <div className="flex flex-col items-center gap-2">
-              <p className="text-white text-base font-semibold text-center">
-                <Crown className="w-5 h-5 inline-block mr-2" />
+            <div className="flex items-center justify-between">
+              <p className="text-white text-lg font-bold">
                 Premium freischalten
               </p>
-              <p className="text-white/80 text-sm text-center">
-                Mehr Quiz-Funktionen, Extras & Design-Anpassungen
-              </p>
+              <Button onClick={() => navigate('/premium')} className="bg-gradient-to-b from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white font-bold px-10 py-3 rounded-full transition-all duration-300 shadow-lg flex-shrink-0">
+                <span className="text-lg">GO</span>
+              </Button>
             </div>
           </div>
         </div>
@@ -674,20 +673,19 @@ export default function MainMenu({
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 border-2 border-white/30 transition-all duration-300 active:bg-white/15 cursor-pointer" onClick={() => navigate('/premium')}>
-              <h3 className="text-white text-lg font-bold mb-3 flex items-center gap-2">
+            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 border-2 border-white/30 transition-all duration-300 active:bg-white/15">
+              <h3 className="text-white text-base font-bold mb-3 flex items-center gap-2">
                 <Crown className="w-5 h-5 text-amber-400" />
-                {t.upgradeToPremium || 'Upgrade zu Premium'}
+                Upgrade your Plan
               </h3>
               <div className="bg-gradient-to-br from-amber-900/40 to-yellow-900/40 rounded-2xl p-4 border border-amber-500/30">
-                <div className="flex flex-col items-center gap-2">
-                  <p className="text-white text-sm font-semibold text-center">
-                    <Crown className="w-4 h-4 inline-block mr-1" />
+                <div className="flex items-center justify-between">
+                  <p className="text-white text-sm font-bold">
                     Premium freischalten
                   </p>
-                  <p className="text-white/80 text-xs text-center">
-                    Mehr Quiz-Funktionen, Extras & Design-Anpassungen
-                  </p>
+                  <Button onClick={() => navigate('/premium')} className="bg-gradient-to-b from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white font-bold px-6 py-2 rounded-full transition-all duration-300 shadow-lg flex-shrink-0">
+                    <span className="text-sm">GO</span>
+                  </Button>
                 </div>
               </div>
             </div>
