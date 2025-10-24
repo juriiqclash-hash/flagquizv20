@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
-import { Play, Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu, BookMarked, Crown } from "lucide-react";
+import { Play, Loader as Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu, BookMarked, Crown } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 const QUIZ_MODE_ICONS: {
