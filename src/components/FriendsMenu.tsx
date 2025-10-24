@@ -9,6 +9,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { UserCheck, UserX, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { PublicProfileView } from './PublicProfileView';
+import { useSubscription } from '@/hooks/useSubscription';
+import { PLAN_LIMITS } from '@/lib/planLimits';
 
 interface FriendsMenuProps {
   open: boolean;
@@ -34,6 +36,7 @@ interface FriendRequest {
 export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { subscription } = useSubscription();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [friends, setFriends] = useState<FriendRequest[]>([]);
@@ -134,7 +137,22 @@ export const FriendsMenu = ({ open, onOpenChange }: FriendsMenuProps) => {
   };
 
   const acceptRequest = async (requestId: string) => {
+    if (!user || !subscription) return;
+
     try {
+      // Check friend limit
+      const plan = subscription.plan || 'free';
+      const limits = PLAN_LIMITS[plan];
+
+      if (friends.length >= limits.maxFriends) {
+        toast({
+          title: 'Limit erreicht',
+          description: `Du hast dein Freundeslisten-Limit von ${limits.maxFriends} erreicht. Upgrade auf Premium für unbegrenzte Freunde.`,
+          variant: 'destructive'
+        });
+        return;
+      }
+
       const { error } = await supabase
         .from('friend_requests')
         .update({ status: 'accepted' })

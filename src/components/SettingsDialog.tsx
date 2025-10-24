@@ -8,6 +8,8 @@ import { Mail, Edit3, Lock, Trash2, Upload } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useSubscription } from '@/hooks/useSubscription';
+import { checkUsernameChangeLimit, incrementUsernameChange } from '@/lib/planLimits';
 interface SettingsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -16,6 +18,7 @@ interface SettingsDialogProps {
 const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { subscription } = useSubscription();
   const [isLoading, setIsLoading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [currentUsername, setCurrentUsername] = useState<string>('');
@@ -132,6 +135,21 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
       return;
     }
 
+    if (!user || !subscription) return;
+
+    // Check limits
+    const plan = subscription.plan || 'free';
+    const limitCheck = await checkUsernameChangeLimit(user.id, plan);
+
+    if (!limitCheck.allowed) {
+      toast({
+        title: 'Limit erreicht',
+        description: limitCheck.message,
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
       const { error } = await supabase
@@ -140,6 +158,9 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
         .eq('user_id', user?.id);
 
       if (error) throw error;
+
+      // Increment counter
+      await incrementUsernameChange(user.id);
 
       setCurrentUsername(newUsername.trim());
       toast({

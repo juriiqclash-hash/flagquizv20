@@ -13,6 +13,9 @@ import { useTranslation } from '@/data/translations';
 import { calculateRank, calculateRankScore, RANK_TIERS } from '@/lib/profileRank';
 import { getFlagEmoji } from '@/lib/flagUtils';
 import { SubscriptionManager } from './SubscriptionManager';
+import { useSubscription } from '@/hooks/useSubscription';
+import { checkCountryChangeLimit, incrementCountryChange } from '@/lib/planLimits';
+import { toast } from 'sonner';
 interface ProfileViewProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -117,6 +120,7 @@ export const ProfileView = ({
   const [showRankInfo, setShowRankInfo] = useState(false);
   const [showClanCreator, setShowClanCreator] = useState(false);
   const [allClans, setAllClans] = useState<Clan[]>([...DEFAULT_CLANS]);
+  const { subscription } = useSubscription();
 
   useEffect(() => {
     if (open && user) {
@@ -275,6 +279,19 @@ export const ProfileView = ({
   const updateProfileField = async (field: keyof ProfileData, value: string | null) => {
     if (!user) return;
     try {
+      // Check limits for country changes (flag field)
+      if (field === 'flag' && value && subscription) {
+        const plan = subscription.plan || 'free';
+        const limitCheck = await checkCountryChangeLimit(user.id, plan);
+
+        if (!limitCheck.allowed) {
+          toast.error('Limit erreicht', {
+            description: limitCheck.message,
+          });
+          return;
+        }
+      }
+
       const newData = {
         ...profileData,
         [field]: value || undefined
@@ -286,6 +303,12 @@ export const ProfileView = ({
       await supabase.from('profiles').update({
         [updateField]: value
       }).eq('user_id', user.id);
+
+      // Increment counter for country changes
+      if (field === 'flag' && value) {
+        await incrementCountryChange(user.id);
+      }
+
       setEditingSlot(null);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -338,9 +361,16 @@ export const ProfileView = ({
 
             {/* Right Side: Username, Level Bar, and Customization Slots - Centered on mobile */}
             <div className="flex-1 flex flex-col items-center md:items-start w-full">
-              <h1 className="text-4xl md:text-7xl font-bold text-white mb-1 md:mb-3 leading-none text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
-                {username}
-              </h1>
+              <div className="flex items-center gap-2 mb-1 md:mb-3">
+                <h1 className="text-4xl md:text-7xl font-bold text-white leading-none text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                  {username}
+                </h1>
+                {profileData.flag && (
+                  <span className="text-3xl md:text-5xl" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
+                    {getFlagEmoji(profileData.flag)}
+                  </span>
+                )}
+              </div>
               <p className="text-xl md:text-2xl text-gray-300 mb-2 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>{t.level} {level}</p>
 
 

@@ -428,11 +428,18 @@ export const PublicProfileView = ({
               </div>
 
               <div className="flex-1 flex flex-col items-center md:items-start w-full">
-                <h1 className="text-4xl md:text-7xl font-bold text-white mb-1 md:mb-3 leading-none text-center md:text-left" style={{
-                fontFamily: '"VAG Rounded", sans-serif'
-              }}>
-                  {username}
-                </h1>
+                <div className="flex items-center gap-2 mb-1 md:mb-3">
+                  <h1 className="text-4xl md:text-7xl font-bold text-white leading-none text-center md:text-left" style={{
+                  fontFamily: '"VAG Rounded", sans-serif'
+                }}>
+                    {username}
+                  </h1>
+                  {profileData.flag && (
+                    <span className="text-3xl md:text-5xl" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
+                      {getFlagEmoji(profileData.flag)}
+                    </span>
+                  )}
+                </div>
                 <p className="text-xl md:text-2xl text-gray-300 mb-2 font-medium text-center md:text-left" style={{
                 fontFamily: '"VAG Rounded", sans-serif'
               }}>

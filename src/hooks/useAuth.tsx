@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { saveAccount, clearOldAccounts } from '@/lib/accountManager';
 
 interface AuthContextType {
   user: User | null;
@@ -33,19 +34,49 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
-        
-        // Only show consent dialog for new signups
-        if (event === 'SIGNED_IN' && session?.user) {
-          const userConsent = localStorage.getItem(`flagquiz_consent_${session.user.id}`);
-          
-          // Check if this is a new user (no consent stored yet)
-          if (!userConsent) {
-            setNeedsConsent(true);
+        (async () => {
+          setSession(session);
+          setUser(session?.user ?? null);
+          setLoading(false);
+
+          // Only show consent dialog for new signups
+          if (event === 'SIGNED_IN' && session?.user) {
+            const userConsent = localStorage.getItem(`flagquiz_consent_${session.user.id}`);
+
+            // Check if this is a new user (no consent stored yet)
+            if (!userConsent) {
+              setNeedsConsent(true);
+            }
+
+            // Save account and check subscription
+            try {
+              const { data: profile } = await supabase
+                .from('profiles')
+                .select('username')
+                .eq('user_id', session.user.id)
+                .single();
+
+              const { data: subscriptionData } = await supabase
+                .from('subscriptions')
+                .select('plan')
+                .eq('user_id', session.user.id)
+                .single();
+
+              const isPremium = subscriptionData?.plan === 'premium' || subscriptionData?.plan === 'ultimate';
+              const username = profile?.username || session.user.email?.split('@')[0] || 'User';
+
+              const result = saveAccount(session.user.id, session.user.email || '', username, isPremium);
+
+              if (!result.success && result.message) {
+                console.warn(result.message);
+              }
+
+              clearOldAccounts(isPremium);
+            } catch (error) {
+              console.error('Error saving account:', error);
+            }
           }
-        }
+        })();
       }
     );
 
