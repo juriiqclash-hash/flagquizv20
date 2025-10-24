@@ -401,7 +401,7 @@ export const ProfileView = ({
                       </span>
                     </>
                   ) : (
-                    <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />
+                    <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-200" />
                   )}
                 </button>
 
@@ -420,7 +420,7 @@ export const ProfileView = ({
                       <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.continent}
                       </span>
-                    </> : <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />}
+                    </> : <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-200" />}
                 </button>
 
                 {/* Clan Slot */}
@@ -435,7 +435,7 @@ export const ProfileView = ({
                       </span>
                     </>
                   ) : (
-                    <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-300" />
+                    <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-200" />
                   )}
                 </div>
               </div>

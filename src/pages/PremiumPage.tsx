@@ -39,8 +39,8 @@ export default function PremiumPage() {
         'Multiplayer',
         'Clans',
         'Freunde',
-        'Account-Änderungen limitiert',
-        'Limitierte Freundesliste',
+        '✕ Account-Änderungen limitiert',
+        '✕ Limitierte Freundesliste',
       ],
       icon: <Zap className="w-10 h-10 text-blue-500" />,
       color: 'from-blue-500 to-blue-600',
@@ -234,12 +234,20 @@ export default function PremiumPage() {
 
               <CardContent>
                 <ul className="space-y-3">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-gray-700">{feature}</span>
-                    </li>
-                  ))}
+                  {plan.features.map((feature, index) => {
+                    const isLimited = feature.startsWith('✕ ');
+                    const displayText = isLimited ? feature.slice(2) : feature;
+                    return (
+                      <li key={index} className="flex items-start gap-2">
+                        {isLimited ? (
+                          <X className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                        ) : (
+                          <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                        )}
+                        <span className="text-sm text-gray-700">{displayText}</span>
+                      </li>
+                    );
+                  })}
                 </ul>
               </CardContent>
 
