@@ -396,7 +396,7 @@ export const ProfileView = ({
                       <span className="text-3xl md:text-5xl mb-0.5 md:mb-1" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
                         {getFlagEmoji(profileData.flag)}
                       </span>
-                      <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                      <span className="text-[10px] md:text-xs text-gray-400 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.flag}
                       </span>
                     </>
