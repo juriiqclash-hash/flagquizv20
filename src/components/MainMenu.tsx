@@ -580,7 +580,7 @@ export default function MainMenu({
         </div>
 
         {/* Premium Upgrade Panel */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border-2 border-amber-500/50 transition-all duration-300 hover:bg-white/15 cursor-pointer" onClick={() => navigate('/premium')}>
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-5 border-2 border-white/30 transition-all duration-300 hover:bg-white/15 cursor-pointer" onClick={() => navigate('/premium')}>
           <h3 className="text-white text-xl font-bold mb-4 flex items-center gap-2">
             <Crown className="w-6 h-6 text-amber-400" />
             {t.upgradeToPremium || 'Upgrade zu Premium'}
@@ -589,7 +589,10 @@ export default function MainMenu({
           {/* Premium Card */}
           <div className="bg-gradient-to-br from-amber-900/40 to-yellow-900/40 rounded-2xl p-5 border border-amber-500/30">
             <div className="flex flex-col items-center gap-2">
-              
+              <Button className="bg-gradient-to-b from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg">
+                <Crown className="w-5 h-5 mr-2" />
+                <span className="text-lg">Premium freischalten</span>
+              </Button>
               <p className="text-white text-sm font-semibold text-center">
                 {t.premiumBenefits || 'Werbefrei, exklusive Quiz & mehr!'}
               </p>
@@ -671,14 +674,17 @@ export default function MainMenu({
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 border-2 border-amber-500/50 transition-all duration-300 active:bg-white/15 cursor-pointer" onClick={() => navigate('/premium')}>
+            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 border-2 border-white/30 transition-all duration-300 active:bg-white/15 cursor-pointer" onClick={() => navigate('/premium')}>
               <h3 className="text-white text-lg font-bold mb-3 flex items-center gap-2">
                 <Crown className="w-5 h-5 text-amber-400" />
                 {t.upgradeToPremium || 'Upgrade zu Premium'}
               </h3>
               <div className="bg-gradient-to-br from-amber-900/40 to-yellow-900/40 rounded-2xl p-4 border border-amber-500/30">
                 <div className="flex flex-col items-center gap-2">
-                  <span className="text-3xl">👑</span>
+                  <Button className="bg-gradient-to-b from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white font-bold px-6 py-2 rounded-full transition-all duration-300 shadow-lg">
+                    <Crown className="w-4 h-4 mr-2" />
+                    <span className="text-sm">Premium freischalten</span>
+                  </Button>
                   <p className="text-white text-sm font-semibold text-center">
                     {t.premiumBenefits || 'Werbefrei, exklusive Quiz & mehr!'}
                   </p>
