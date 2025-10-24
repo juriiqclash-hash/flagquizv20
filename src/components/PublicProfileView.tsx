@@ -401,12 +401,12 @@ export const PublicProfileView = ({
   if (!userId) return null;
   return <>
       <div
-        className="fixed inset-0 z-[200] flex items-center justify-center p-4 overflow-y-auto"
+        className="fixed inset-0 z-[300] flex items-center justify-center p-4 overflow-y-auto"
         style={{
           background: 'linear-gradient(to bottom right, rgb(23, 37, 84), rgb(30, 58, 138), rgb(30, 64, 175))',
         }}
       >
-        <button onClick={onClose} className="fixed top-4 right-4 z-[210] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
+        <button onClick={onClose} className="fixed top-4 right-4 z-[310] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
         </button>
 
