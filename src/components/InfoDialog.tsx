@@ -21,15 +21,13 @@ const InfoDialog = ({ open, onOpenChange }: InfoDialogProps) => {
         </DialogHeader>
 
         <Tabs defaultValue="about" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
-            <TabsTrigger value="about">Über uns</TabsTrigger>
-            <TabsTrigger value="contact">Kontakt</TabsTrigger>
-            <TabsTrigger value="legal">Impressum</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6">
+            <TabsTrigger value="about">Über flagquiz.ch</TabsTrigger>
             <TabsTrigger value="privacy">Datenschutz</TabsTrigger>
-            <TabsTrigger value="terms">AGB</TabsTrigger>
-            <TabsTrigger value="career">Karriere</TabsTrigger>
-            <TabsTrigger value="press">Presse</TabsTrigger>
-            <TabsTrigger value="faq">FAQ</TabsTrigger>
+            <TabsTrigger value="legal">Impressum</TabsTrigger>
+            <TabsTrigger value="faq">FAQ / Hilfe</TabsTrigger>
+            <TabsTrigger value="howto">Wie funktioniert das Quiz?</TabsTrigger>
+            <TabsTrigger value="contact">Kontakt</TabsTrigger>
           </TabsList>
 
           <TabsContent value="about" className="space-y-4 mt-4">
@@ -94,9 +92,9 @@ const InfoDialog = ({ open, onOpenChange }: InfoDialogProps) => {
                 <div className="flex items-start gap-3">
                   <Mail className="h-5 w-5 mt-1 text-primary flex-shrink-0" />
                   <div className="flex-1">
-                    <h3 className="font-semibold text-lg mb-3">Kontakt & Support</h3>
+                    <h3 className="font-semibold text-lg mb-3">Kontakt</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                      Hast du Fragen, Feedback oder technische Probleme? Wir helfen dir gerne weiter!
+                      Hast du Fragen, Feedback oder technische Probleme? Kontaktiere uns!
                     </p>
 
                     <div className="space-y-3 text-sm">
@@ -118,23 +116,25 @@ const InfoDialog = ({ open, onOpenChange }: InfoDialogProps) => {
                 <div className="flex items-start gap-3">
                   <Globe className="h-5 w-5 mt-1 text-primary flex-shrink-0" />
                   <div className="flex-1">
-                    <h3 className="font-semibold text-lg mb-3">Social Media</h3>
+                    <h3 className="font-semibold text-lg mb-3">Folge uns</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                      Folge uns auf Social Media für Updates, Tipps und Community-Events!
+                      Folge uns auf Social Media für Updates und Community-Events!
                     </p>
 
                     <div className="flex gap-4">
-                      <a href="#" className="flex items-center gap-2 text-sm text-primary hover:underline">
-                        <Twitter className="h-4 w-4" />
-                        Twitter
-                      </a>
                       <a href="#" className="flex items-center gap-2 text-sm text-primary hover:underline">
                         <Instagram className="h-4 w-4" />
                         Instagram
                       </a>
                       <a href="#" className="flex items-center gap-2 text-sm text-primary hover:underline">
-                        <Facebook className="h-4 w-4" />
-                        Facebook
+                        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12.525.02l1.62 4.985H19.5l-4.266 3.1 1.631 5.015-4.34-3.152-4.341 3.153 1.632-5.015L5.55 5.005h5.355L12.525.019z"/>
+                        </svg>
+                        TikTok
+                      </a>
+                      <a href="#" className="flex items-center gap-2 text-sm text-primary hover:underline">
+                        <Twitter className="h-4 w-4" />
+                        X
                       </a>
                     </div>
                   </div>
@@ -216,116 +216,37 @@ const InfoDialog = ({ open, onOpenChange }: InfoDialogProps) => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="terms" className="space-y-4 mt-4">
+          <TabsContent value="howto" className="space-y-4 mt-4">
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-start gap-3">
-                  <FileText className="h-5 w-5 mt-1 text-primary flex-shrink-0" />
+                  <HelpCircle className="h-5 w-5 mt-1 text-primary flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-lg mb-3">Allgemeine Geschäftsbedingungen (AGB)</h3>
+                    <h3 className="font-semibold text-lg mb-3">Wie funktioniert das Quiz?</h3>
                     <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
                       <div>
-                        <p className="font-semibold text-foreground mb-1">1. Geltungsbereich</p>
-                        <p>Diese AGB gelten für die Nutzung der FlagQuiz-Plattform. Mit der Registrierung akzeptierst du diese Bedingungen.</p>
+                        <p className="font-semibold text-foreground mb-1">1. Spielmodus auswählen</p>
+                        <p>Wähle aus verschiedenen Modi: Flaggen, Hauptstädte, Weltwissen, Combi-Quiz oder Multiplayer.</p>
                       </div>
 
                       <div>
-                        <p className="font-semibold text-foreground mb-1">2. Nutzerkonto</p>
-                        <p>Du bist verpflichtet, deine Zugangsdaten geheim zu halten und uns unverzüglich zu informieren, wenn du Kenntnis von einem Missbrauch deines Kontos erhältst.</p>
+                        <p className="font-semibold text-foreground mb-1">2. Einstellungen anpassen</p>
+                        <p>Wähle Schwierigkeitsgrad, Zeitlimit und weitere Optionen nach deinen Wünschen.</p>
                       </div>
 
                       <div>
-                        <p className="font-semibold text-foreground mb-1">3. Nutzungsregeln</p>
-                        <p>Die Nutzung der Plattform erfolgt auf eigene Verantwortung. Verboten sind: Cheating, Belästigung anderer Nutzer, Spam und jede Form von missbräuchlicher Nutzung.</p>
+                        <p className="font-semibold text-foreground mb-1">3. Quiz starten</p>
+                        <p>Beantworte die Fragen so schnell und korrekt wie möglich. Je schneller du antwortest, desto mehr Punkte erhältst du.</p>
                       </div>
 
                       <div>
-                        <p className="font-semibold text-foreground mb-1">4. Haftung</p>
-                        <p>Wir haften nur für Vorsatz und grobe Fahrlässigkeit. Die Nutzung erfolgt auf eigenes Risiko.</p>
+                        <p className="font-semibold text-foreground mb-1">4. XP sammeln</p>
+                        <p>Für jedes Quiz erhältst du XP (Erfahrungspunkte), mit denen du dein Level erhöhst und in den Rängen aufsteigst.</p>
                       </div>
 
                       <div>
-                        <p className="font-semibold text-foreground mb-1">5. Änderungen der AGB</p>
-                        <p>Wir behalten uns vor, diese AGB jederzeit zu ändern. Änderungen werden dir per E-Mail mitgeteilt.</p>
-                      </div>
-
-                      <div>
-                        <p className="font-semibold text-foreground mb-1">6. Kündigung</p>
-                        <p>Du kannst dein Konto jederzeit in den Einstellungen löschen. Wir behalten uns vor, Konten bei Verstößen gegen diese AGB zu sperren.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="career" className="space-y-4 mt-4">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-3">
-                  <Briefcase className="h-5 w-5 mt-1 text-primary flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-lg mb-3">Karriere bei FlagQuiz</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                      Wir sind immer auf der Suche nach talentierten und motivierten Menschen, die unsere Mission teilen!
-                    </p>
-
-                    <div className="space-y-3 text-sm">
-                      <div>
-                        <p className="font-semibold text-foreground mb-1">Offene Stellen</p>
-                        <p className="text-muted-foreground">Aktuell haben wir keine offenen Stellen, aber wir freuen uns über Initiativbewerbungen!</p>
-                      </div>
-
-                      <div>
-                        <p className="font-semibold text-foreground mb-1">Bewerbung</p>
-                        <p className="text-muted-foreground">Sende deine Bewerbung an: flagquiz.support@gmail.com</p>
-                      </div>
-
-                      <div>
-                        <p className="font-semibold text-foreground mb-1">Unsere Kultur</p>
-                        <p className="text-muted-foreground">
-                          Bei FlagQuiz arbeiten wir remote, flexibel und auf Augenhöhe. Wir schätzen Innovation, Kreativität und den Mut, neue Wege zu gehen.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="press" className="space-y-4 mt-4">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-3">
-                  <Newspaper className="h-5 w-5 mt-1 text-primary flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-lg mb-3">Presse & Medien</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                      Medienvertreter finden hier alle relevanten Informationen und Materialien.
-                    </p>
-
-                    <div className="space-y-3 text-sm">
-                      <div>
-                        <p className="font-semibold text-foreground mb-1">Pressekontakt</p>
-                        <p className="text-muted-foreground">E-Mail: flagquiz.support@gmail.com</p>
-                      </div>
-
-                      <div>
-                        <p className="font-semibold text-foreground mb-1">Über FlagQuiz</p>
-                        <p className="text-muted-foreground">
-                          FlagQuiz ist eine interaktive Quiz-Plattform mit Fokus auf Geographie, Flaggen und Weltwissen. Mit verschiedenen Spielmodi, Multiplayer-Funktionen und einer aktiven Community bietet die Plattform eine moderne Möglichkeit, geografisches Wissen zu erweitern.
-                        </p>
-                      </div>
-
-                      <div>
-                        <p className="font-semibold text-foreground mb-1">Fakten</p>
-                        <ul className="text-muted-foreground space-y-1 list-disc list-inside">
-                          <li>Gegründet: 2025</li>
-                          <li>Gründer: ijuriqu</li>
-                          <li>Version: 1.0.0</li>
-                        </ul>
+                        <p className="font-semibold text-foreground mb-1">5. Rang aufsteigen</p>
+                        <p>Mit steigendem XP erreichst du höhere Ränge: Bronze, Silber, Gold, Platin, Diamant, Master und Legend.</p>
                       </div>
                     </div>
                   </div>
