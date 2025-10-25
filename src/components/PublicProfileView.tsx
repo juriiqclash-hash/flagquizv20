@@ -435,9 +435,15 @@ export const PublicProfileView = ({
                     {username}
                   </h1>
                   {profileData.flag && (
-                    <span className="text-3xl md:text-5xl" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
-                      {getFlagEmoji(profileData.flag)}
-                    </span>
+                    <img
+                      src={`https://flagcdn.com/w80/${profileData.flag.toLowerCase()}.png`}
+                      alt={profileData.flag}
+                      className="w-10 h-8 md:w-16 md:h-12 object-cover rounded shadow-md"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                      }}
+                    />
                   )}
                 </div>
                 <p className="text-xl md:text-2xl text-gray-300 mb-2 font-medium text-center md:text-left" style={{
