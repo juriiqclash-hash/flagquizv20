@@ -326,12 +326,23 @@ export const ProfileView = ({
 
   if (!open) return null;
 
-  if (loading || !user) {
+  if (loading) {
     return (
       <div className="fixed inset-0 z-[100] bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex items-center justify-center p-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
           <p className="text-white text-lg">Lade Profil...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="fixed inset-0 z-[100] bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex items-center justify-center p-4">
+        <div className="text-center">
+          <p className="text-white text-lg mb-4">Du musst angemeldet sein, um dein Profil zu sehen.</p>
+          <Button onClick={() => onOpenChange(false)}>Zurück</Button>
         </div>
       </div>
     );
