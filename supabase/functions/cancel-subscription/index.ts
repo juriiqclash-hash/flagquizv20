@@ -1,11 +1,21 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "npm:@supabase/supabase-js@2.39.0";
+import Stripe from "https://esm.sh/stripe@17.7.0";
+import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
+
+const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
+  apiVersion: "2025-08-27.basil",
+});
+
+const supabase = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+);
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
@@ -18,44 +28,32 @@ Deno.serve(async (req: Request) => {
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: "No authorization header" }),
-        {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
+      return new Response(JSON.stringify({ error: "Missing authorization header" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      {
-        global: {
-          headers: { Authorization: authHeader },
-        },
-      }
-    );
-
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      return new Response(
-        JSON.stringify({ error: "Unauthorized" }),
-        {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
+    const token = authHeader.replace("Bearer ", "");
+    const { data: userData, error: userError } = await supabase.auth.getUser(token);
+    
+    if (userError || !userData.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    const { data: subscription } = await supabase
-      .from("subscriptions")
-      .select("stripe_subscription_id")
-      .eq("user_id", user.id)
+    const user = userData.user;
+
+    // Get user's subscription
+    const { data: subscription, error: subError } = await supabase
+      .from('subscriptions')
+      .select('*')
+      .eq('user_id', user.id)
       .single();
 
-    if (!subscription?.stripe_subscription_id) {
+    if (subError || !subscription || !subscription.stripe_subscription_id) {
       return new Response(
         JSON.stringify({ error: "No active subscription found" }),
         {
@@ -65,27 +63,19 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const stripe = await import("npm:stripe@14.10.0").then(m => new m.default(
-      Deno.env.get("STRIPE_SECRET_KEY")!,
-      { apiVersion: "2023-10-16" }
-    ));
-
+    // Cancel the subscription at period end
     await stripe.subscriptions.update(subscription.stripe_subscription_id, {
       cancel_at_period_end: true,
     });
 
-    const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
-
-    await supabaseAdmin
-      .from("subscriptions")
+    // Update our database
+    await supabase
+      .from('subscriptions')
       .update({
         cancel_at_period_end: true,
         updated_at: new Date().toISOString(),
       })
-      .eq("user_id", user.id);
+      .eq('user_id', user.id);
 
     return new Response(
       JSON.stringify({ success: true }),
