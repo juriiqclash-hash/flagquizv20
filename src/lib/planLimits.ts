@@ -24,7 +24,7 @@ export const PLAN_LIMITS: Record<'free' | 'premium' | 'ultimate', PlanLimits> = 
     countryChangesPerMonth: Infinity,
     usernameChangesPerMonth: Infinity,
     canCustomizeProfile: true,
-    maxClanSize: Infinity,
+    maxClanSize: 75,
   },
   ultimate: {
     maxSavedAccounts: Infinity,

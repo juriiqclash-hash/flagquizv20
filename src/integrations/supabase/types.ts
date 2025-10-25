@@ -382,48 +382,114 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          background_color: string | null
           ban_reason: string | null
           banned: boolean | null
           banned_at: string | null
           banned_by: string | null
+          country_changes_this_month: number | null
           created_at: string
           id: string
+          last_country_change: string | null
+          last_username_change: string | null
+          profile_border_style: string | null
           selected_clan: string | null
           selected_continent: string | null
           selected_flag: string | null
           updated_at: string
           user_id: string
           username: string
+          username_changes_this_month: number | null
+          username_color: string | null
         }
         Insert: {
           avatar_url?: string | null
+          background_color?: string | null
           ban_reason?: string | null
           banned?: boolean | null
           banned_at?: string | null
           banned_by?: string | null
+          country_changes_this_month?: number | null
           created_at?: string
           id?: string
+          last_country_change?: string | null
+          last_username_change?: string | null
+          profile_border_style?: string | null
           selected_clan?: string | null
           selected_continent?: string | null
           selected_flag?: string | null
           updated_at?: string
           user_id: string
           username: string
+          username_changes_this_month?: number | null
+          username_color?: string | null
         }
         Update: {
           avatar_url?: string | null
+          background_color?: string | null
           ban_reason?: string | null
           banned?: boolean | null
           banned_at?: string | null
           banned_by?: string | null
+          country_changes_this_month?: number | null
           created_at?: string
           id?: string
+          last_country_change?: string | null
+          last_username_change?: string | null
+          profile_border_style?: string | null
           selected_clan?: string | null
           selected_continent?: string | null
           selected_flag?: string | null
           updated_at?: string
           user_id?: string
           username?: string
+          username_changes_this_month?: number | null
+          username_color?: string | null
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean | null
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          plan: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_price_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_price_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_price_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -526,14 +592,8 @@ export type Database = {
         Args: { p_user_id: string; p_xp_gained: number }
         Returns: undefined
       }
-      calculate_level: {
-        Args: { xp_amount: number }
-        Returns: number
-      }
-      generate_room_code: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      calculate_level: { Args: { xp_amount: number }; Returns: number }
+      generate_room_code: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -549,10 +609,7 @@ export type Database = {
         Args: { p_streak: number; p_user_id: string }
         Returns: undefined
       }
-      update_daily_streak: {
-        Args: { p_user_id: string }
-        Returns: undefined
-      }
+      update_daily_streak: { Args: { p_user_id: string }; Returns: undefined }
       update_time_mode_score: {
         Args: { p_score: number; p_user_id: string }
         Returns: undefined
@@ -566,14 +623,8 @@ export type Database = {
         }
         Returns: boolean
       }
-      user_is_in_lobby: {
-        Args: { lobby_id_param: string }
-        Returns: boolean
-      }
-      user_is_in_match: {
-        Args: { match_id_param: string }
-        Returns: boolean
-      }
+      user_is_in_lobby: { Args: { lobby_id_param: string }; Returns: boolean }
+      user_is_in_match: { Args: { match_id_param: string }; Returns: boolean }
       user_is_match_participant: {
         Args: { match_id_param: string }
         Returns: boolean

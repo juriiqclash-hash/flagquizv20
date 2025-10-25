@@ -40,11 +40,11 @@ export const SubscriptionManager = () => {
   const getPlanName = (plan: string) => {
     switch (plan) {
       case 'premium':
-        return t.premiumPlan || 'FlagMaster';
+        return 'FlagMaster';
       case 'ultimate':
-        return t.ultimatePlan || 'World Genius';
+        return 'World Genius';
       default:
-        return t.freePlan || 'Free';
+        return 'Free';
     }
   };
 
@@ -63,14 +63,14 @@ export const SubscriptionManager = () => {
     setCanceling(true);
     try {
       await cancelSubscription();
-      toast.success(t.subscriptionCanceled || 'Abo gekündigt', {
-        description: t.subscriptionCanceledDesc || 'Dein Abo wurde zum Ende der Laufzeit gekündigt.',
+      toast.success('Abo gekündigt', {
+        description: 'Dein Abo wurde zum Ende der Laufzeit gekündigt.',
       });
       setShowCancelDialog(false);
     } catch (error) {
       console.error('Error canceling subscription:', error);
-      toast.error(t.error || 'Fehler', {
-        description: t.cancelError || 'Das Abo konnte nicht gekündigt werden.',
+      toast.error('Fehler', {
+        description: 'Das Abo konnte nicht gekündigt werden.',
       });
     } finally {
       setCanceling(false);
@@ -99,8 +99,8 @@ export const SubscriptionManager = () => {
               <CardTitle className="text-2xl text-white">{getPlanName(subscription.plan)}</CardTitle>
               <CardDescription className="text-white/80">
                 {subscription.plan === 'free'
-                  ? (t.freePlanActive || 'Kostenloser Plan')
-                  : (t.premiumActive || 'Premium aktiv')}
+                  ? 'Kostenloser Plan'
+                  : 'Premium aktiv'}
               </CardDescription>
             </div>
           </div>
@@ -110,18 +110,18 @@ export const SubscriptionManager = () => {
           {subscription.plan !== 'free' && (
             <div className="space-y-2 bg-white/10 backdrop-blur-sm rounded-lg p-4">
               <div className="flex justify-between text-sm">
-                <span className="text-white/80">{t.status || 'Status'}:</span>
+                <span className="text-white/80">Status:</span>
                 <span className="font-semibold">
                   {subscription.status === 'active'
-                    ? (t.active || 'Aktiv')
+                    ? 'Aktiv'
                     : subscription.status === 'canceled'
-                    ? (t.canceled || 'Gekündigt')
-                    : (t.expired || 'Abgelaufen')}
+                    ? 'Gekündigt'
+                    : 'Abgelaufen'}
                 </span>
               </div>
               {subscription.current_period_end && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-white/80">{t.renewsOn || 'Verlängert am'}:</span>
+                  <span className="text-white/80">Verlängert am:</span>
                   <span className="font-semibold">
                     {new Date(subscription.current_period_end).toLocaleDateString('de-DE')}
                   </span>
@@ -130,7 +130,7 @@ export const SubscriptionManager = () => {
               {subscription.cancel_at_period_end && (
                 <div className="flex items-center gap-2 text-sm text-yellow-200 mt-2 p-2 bg-yellow-900/30 rounded">
                   <AlertTriangle className="w-4 h-4" />
-                  <span>{t.canceledAtPeriodEnd || 'Wird zum Ende der Laufzeit gekündigt'}</span>
+                  <span>Wird zum Ende der Laufzeit gekündigt</span>
                 </div>
               )}
             </div>
@@ -143,7 +143,7 @@ export const SubscriptionManager = () => {
               onClick={() => navigate('/premium')}
               className="w-full bg-white text-blue-900 hover:bg-white/90"
             >
-              {t.upgradeToPremium || 'Upgrade zu Premium'}
+              Upgrade zu Premium
             </Button>
           ) : (
             <>
@@ -152,7 +152,7 @@ export const SubscriptionManager = () => {
                   onClick={() => navigate('/premium')}
                   className="w-full bg-white text-purple-900 hover:bg-white/90"
                 >
-                  {t.upgradeToUltimate || 'Upgrade zu Ultimate'}
+                  Upgrade zu Ultimate
                 </Button>
               )}
               {!subscription.cancel_at_period_end && (
@@ -161,7 +161,7 @@ export const SubscriptionManager = () => {
                   variant="outline"
                   className="w-full bg-white/10 text-white border-white/30 hover:bg-white/20"
                 >
-                  {t.cancelSubscription || 'Abo kündigen'}
+                  Abo kündigen
                 </Button>
               )}
             </>
@@ -172,21 +172,21 @@ export const SubscriptionManager = () => {
       <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
         <AlertDialogContent className="bg-white">
           <AlertDialogHeader>
-            <AlertDialogTitle>{t.cancelSubscription || 'Abo kündigen'}</AlertDialogTitle>
+            <AlertDialogTitle>Abo kündigen</AlertDialogTitle>
             <AlertDialogDescription>
-              {t.cancelSubscriptionConfirm || 'Bist du sicher, dass du dein Abo kündigen möchtest? Du hast noch bis zum Ende der aktuellen Laufzeit Zugriff auf alle Premium-Features.'}
+              Bist du sicher, dass du dein Abo kündigen möchtest? Du hast noch bis zum Ende der aktuellen Laufzeit Zugriff auf alle Premium-Features.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={canceling}>
-              {t.cancel || 'Abbrechen'}
+              Abbrechen
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleCancelSubscription}
               disabled={canceling}
               className="bg-red-600 hover:bg-red-700"
             >
-              {canceling ? (t.loading || 'Lädt...') : (t.confirm || 'Bestätigen')}
+              {canceling ? 'Lädt...' : 'Bestätigen'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

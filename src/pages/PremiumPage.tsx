@@ -82,8 +82,8 @@ export default function PremiumPage() {
 
   const handleSubscribe = async (plan: 'premium' | 'ultimate') => {
     if (!user) {
-      toast.error(t.error || 'Error', {
-        description: t.loginRequired || 'Bitte melde dich an, um fortzufahren.',
+      toast.error('Error', {
+        description: 'Bitte melde dich an, um fortzufahren.',
       });
       navigate('/login');
       return;
@@ -117,8 +117,8 @@ export default function PremiumPage() {
       window.location.href = url;
     } catch (error) {
       console.error('Error creating checkout session:', error);
-      toast.error(t.error || 'Error', {
-        description: t.subscriptionError || 'Beim Erstellen der Checkout-Session ist ein Fehler aufgetreten.',
+      toast.error('Error', {
+        description: 'Beim Erstellen der Checkout-Session ist ein Fehler aufgetreten.',
       });
     } finally {
       setLoading(null);
@@ -148,10 +148,10 @@ export default function PremiumPage() {
 
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-            {t.upgradeToPremium || 'Upgrade zu Premium'}
+            Upgrade zu Premium
           </h1>
           <p className="text-xl text-white/80 max-w-2xl mx-auto">
-            {t.premiumSubtitle || 'Wähle den perfekten Plan für dein Flaggen-Quiz Erlebnis'}
+            Wähle den perfekten Plan für dein Flaggen-Quiz Erlebnis
           </p>
         </div>
 
@@ -165,7 +165,7 @@ export default function PremiumPage() {
                   : 'text-white hover:bg-white/10'
               }`}
             >
-              {t.monthly || 'Monatlich'}
+              Monatlich
             </button>
             <button
               onClick={() => setBillingCycle('yearly')}
@@ -175,9 +175,9 @@ export default function PremiumPage() {
                   : 'text-white hover:bg-white/10'
               }`}
             >
-              {t.yearly || 'Jährlich'}
+              Jährlich
               <span className="ml-2 text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">
-                {t.savePercent || 'Spare'} 50%
+                Spare 50%
               </span>
             </button>
           </div>
@@ -193,7 +193,7 @@ export default function PremiumPage() {
             >
               {plan.popular && (
                 <div className={`absolute top-0 left-0 right-0 bg-gradient-to-r ${plan.color} text-white text-center py-1 text-sm font-bold`}>
-                  {t.mostPopular || 'Am Beliebtesten'}
+                  Am Beliebtesten
                 </div>
               )}
 
@@ -212,7 +212,7 @@ export default function PremiumPage() {
                 <div className="mt-4">
                   {plan.id === 'free' ? (
                     <div className="text-4xl font-bold text-gray-900">
-                      {t.free || 'Kostenlos'}
+                      Kostenlos
                     </div>
                   ) : (
                     <>
@@ -224,8 +224,8 @@ export default function PremiumPage() {
                       </div>
                       <div className="text-sm text-gray-500 mt-1">
                         {billingCycle === 'monthly'
-                          ? (t.perMonth || '/ Monat')
-                          : (t.perYear || '/ Jahr')}
+                          ? '/ Monat'
+                          : '/ Jahr'}
                       </div>
                     </>
                   )}
@@ -257,7 +257,7 @@ export default function PremiumPage() {
                     className="w-full bg-gray-300 hover:bg-gray-400 text-gray-700"
                     disabled
                   >
-                    {t.currentPlan || 'Aktueller Plan'}
+                    Aktueller Plan
                   </Button>
                 ) : (
                   <Button
@@ -268,10 +268,10 @@ export default function PremiumPage() {
                     {loading === plan.id ? (
                       <span className="flex items-center gap-2">
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
-                        {t.loading || 'Lädt...'}
+                        Lädt...
                       </span>
                     ) : (
-                      t.buyNow || 'Jetzt kaufen'
+                      'Jetzt kaufen'
                     )}
                   </Button>
                 )}
@@ -282,7 +282,7 @@ export default function PremiumPage() {
 
         <div className="mt-12 text-center">
           <p className="text-white/70 text-sm">
-            {t.securePayment || 'Sichere Zahlung mit Stripe. Unterstützt Kreditkarte, Apple Pay und Google Pay.'}
+            Sichere Zahlung mit Stripe. Unterstützt Kreditkarte, Apple Pay und Google Pay.
           </p>
         </div>
       </div>
