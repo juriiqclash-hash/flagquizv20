@@ -129,8 +129,6 @@ const AppContent = () => {
             <Route path="/quizmenu/:quizname" element={<QuizPage />} />
             <Route path="/dailychallenge" element={<DailyChallengePage />} />
             <Route path="/einstellungen" element={<SettingsPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/profile/me" element={<ProfilePage />} />
             <Route path="/profile/:username" element={<ProfilePage />} />
             <Route path="/multiplayer" element={<MultiplayerPage />} />
             <Route path="/multiplayer/:roomCode" element={<MultiplayerPage />} />

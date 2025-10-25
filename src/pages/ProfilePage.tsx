@@ -8,7 +8,6 @@ import { supabase } from '@/integrations/supabase/client';
 export default function ProfilePage() {
   const navigate = useNavigate();
   const { username } = useParams<{ username: string }>();
-  const { user } = useAuth();
   const [viewedUserId, setViewedUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -16,23 +15,10 @@ export default function ProfilePage() {
     navigate('/');
   };
 
-  const handleOpenChange = (newOpen: boolean) => {
-    if (!newOpen) {
-      navigate('/');
-    }
-  };
-
-  // Redirect /profile to /profile/me - only once on mount
-  useEffect(() => {
-    if (!username) {
-      navigate('/profile/me', { replace: true });
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   // Load user ID from username
   useEffect(() => {
     const loadUserByUsername = async () => {
-      if (!username || username === 'me') {
+      if (!username) {
         setLoading(false);
         return;
       }
@@ -61,12 +47,7 @@ export default function ProfilePage() {
     loadUserByUsername();
   }, [username]);
 
-  // If viewing /profile/me
-  if (username === 'me') {
-    return <ProfileView open={true} onOpenChange={handleOpenChange} />;
-  }
-
-  // If viewing another user's profile by username
+  // Viewing another user's profile by username
   if (username) {
     if (loading) {
       return (
