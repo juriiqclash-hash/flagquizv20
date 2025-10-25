@@ -366,9 +366,15 @@ export const ProfileView = ({
                   {username}
                 </h1>
                 {profileData.flag && (
-                  <span className="text-3xl md:text-5xl" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
-                    {getFlagEmoji(profileData.flag)}
-                  </span>
+                  <img
+                    src={`https://flagcdn.com/w80/${profileData.flag.toLowerCase()}.png`}
+                    alt={profileData.flag}
+                    className="w-10 h-8 md:w-16 md:h-12 object-cover rounded shadow-md"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                    }}
+                  />
                 )}
               </div>
               <p className="text-xl md:text-2xl text-gray-300 mb-2 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>{t.level} {level}</p>
@@ -393,9 +399,11 @@ export const ProfileView = ({
               }} className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
                   {profileData.flag ? (
                     <>
-                      <span className="text-3xl md:text-5xl mb-0.5 md:mb-1" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>
-                        {getFlagEmoji(profileData.flag)}
-                      </span>
+                      <img
+                        src={`https://flagcdn.com/w80/${profileData.flag.toLowerCase()}.png`}
+                        alt={profileData.flag}
+                        className="w-12 h-9 md:w-16 md:h-12 object-cover rounded mb-0.5 md:mb-1"
+                      />
                       <span className="text-[10px] md:text-xs text-gray-300 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.flag}
                       </span>
@@ -414,9 +422,11 @@ export const ProfileView = ({
                 }
               }} className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
                   {profileData.continent ? <>
-                      <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
-                        {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
-                      </span>
+                      <img
+                        src={`https://cdn.jsdelivr.net/npm/twemoji@latest/assets/svg/${CONTINENTS.find(c => c.code === profileData.continent)?.emoji.codePointAt(0)?.toString(16)}.svg`}
+                        alt={profileData.continent}
+                        className="w-8 h-8 md:w-12 md:h-12 mb-0.5 md:mb-1"
+                      />
                       <span className="text-[10px] md:text-xs text-gray-300 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.continent}
                       </span>
@@ -427,9 +437,11 @@ export const ProfileView = ({
                 <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center transition-all">
                   {userClan ? (
                     <>
-                      <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
-                        {userClan.emoji}
-                      </span>
+                      <img
+                        src={`https://cdn.jsdelivr.net/npm/twemoji@latest/assets/svg/${userClan.emoji.codePointAt(0)?.toString(16)}.svg`}
+                        alt={userClan.name}
+                        className="w-8 h-8 md:w-12 md:h-12 mb-0.5 md:mb-1"
+                      />
                       <span className="text-[10px] md:text-xs text-gray-300 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {userClan.name}
                       </span>
@@ -585,7 +597,11 @@ export const ProfileView = ({
         }} />
             <div className="grid grid-cols-6 gap-3">
               {ALL_COUNTRIES.map(country => <button key={country.code} onClick={() => updateProfileField('flag', country.code)} className="flex flex-col items-center justify-center p-3 hover:bg-gray-100 rounded-lg transition-all hover:scale-105">
-                  <span className="text-5xl mb-2" style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>{getFlagEmoji(country.code)}</span>
+                  <img
+                    src={`https://flagcdn.com/w80/${country.code.toLowerCase()}.png`}
+                    alt={country.code}
+                    className="w-16 h-12 object-cover rounded mb-2"
+                  />
                   <span className="text-xs text-gray-600 font-medium">{country.code}</span>
                 </button>)}
             </div>
@@ -602,7 +618,11 @@ export const ProfileView = ({
             </div>
             <div className="space-y-2">
               {CONTINENTS.map(continent => <button key={continent.code} onClick={() => updateProfileField('continent', continent.code)} className="w-full flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors">
-                  <span className="text-2xl">{continent.emoji}</span>
+                  <img
+                    src={`https://cdn.jsdelivr.net/npm/twemoji@latest/assets/svg/${continent.emoji.codePointAt(0)?.toString(16)}.svg`}
+                    alt={continent.code}
+                    className="w-8 h-8"
+                  />
                   <span className="font-medium">{continent.code}</span>
                 </button>)}
             </div>
