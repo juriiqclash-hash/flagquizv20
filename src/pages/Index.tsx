@@ -22,6 +22,7 @@ export default function Index() {
             navigate(`/quizmenu/${mode}`);
           }
         }}
+        onProfileOpen={() => navigate('/profile/me')}
       />
     </AuthProvider>
   );
