@@ -422,11 +422,9 @@ export const ProfileView = ({
                 }
               }} className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center hover:shadow-xl transition-all hover:scale-105">
                   {profileData.continent ? <>
-                      <img
-                        src={`https://cdn.jsdelivr.net/npm/twemoji@latest/assets/svg/${CONTINENTS.find(c => c.code === profileData.continent)?.emoji.codePointAt(0)?.toString(16)}.svg`}
-                        alt={profileData.continent}
-                        className="w-8 h-8 md:w-12 md:h-12 mb-0.5 md:mb-1"
-                      />
+                      <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
+                        {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
+                      </span>
                       <span className="text-[10px] md:text-xs text-gray-300 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.continent}
                       </span>
@@ -437,11 +435,9 @@ export const ProfileView = ({
                 <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center transition-all">
                   {userClan ? (
                     <>
-                      <img
-                        src={`https://cdn.jsdelivr.net/npm/twemoji@latest/assets/svg/${userClan.emoji.codePointAt(0)?.toString(16)}.svg`}
-                        alt={userClan.name}
-                        className="w-8 h-8 md:w-12 md:h-12 mb-0.5 md:mb-1"
-                      />
+                      <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
+                        {userClan.emoji}
+                      </span>
                       <span className="text-[10px] md:text-xs text-gray-300 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {userClan.name}
                       </span>
@@ -618,11 +614,7 @@ export const ProfileView = ({
             </div>
             <div className="space-y-2">
               {CONTINENTS.map(continent => <button key={continent.code} onClick={() => updateProfileField('continent', continent.code)} className="w-full flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors">
-                  <img
-                    src={`https://cdn.jsdelivr.net/npm/twemoji@latest/assets/svg/${continent.emoji.codePointAt(0)?.toString(16)}.svg`}
-                    alt={continent.code}
-                    className="w-8 h-8"
-                  />
+                  <span className="text-2xl">{continent.emoji}</span>
                   <span className="font-medium">{continent.code}</span>
                 </button>)}
             </div>
