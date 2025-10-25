@@ -144,9 +144,32 @@ export const PublicProfileView = ({
           .select('clan_id')
           .eq('user_id', userId)
           .maybeSingle();
-        
+
         if (membership) {
           setUserClanId(membership.clan_id);
+
+          // Load the actual clan data
+          const { data: clanData } = await supabase
+            .from('clans')
+            .select('name, emoji')
+            .eq('id', membership.clan_id)
+            .maybeSingle();
+
+          if (clanData) {
+            setProfileData(prev => ({
+              ...prev,
+              clan: clanData.name
+            }));
+
+            // Also add to allClans if not already there
+            setAllClans(prev => {
+              const exists = prev.some(c => c.name === clanData.name);
+              if (!exists) {
+                return [...prev, clanData];
+              }
+              return prev;
+            });
+          }
         }
       }
     } catch (error) {
