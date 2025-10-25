@@ -454,12 +454,12 @@ export const PublicProfileView = ({
 
                 <div className="flex gap-2 md:gap-3 justify-center md:justify-start mb-3">
                   {profileData.flag ? <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
-                      <span className="text-3xl md:text-5xl mb-0.5 md:mb-1" style={{
-                    fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif'
-                  }}>
-                        {getFlagEmoji(profileData.flag)}
-                      </span>
-                      <span className="text-[10px] md:text-xs text-gray-600 font-semibold" style={{
+                      <img
+                        src={`https://flagcdn.com/w80/${profileData.flag.toLowerCase()}.png`}
+                        alt={profileData.flag}
+                        className="w-12 h-9 md:w-16 md:h-12 object-cover rounded mb-0.5 md:mb-1"
+                      />
+                      <span className="text-[10px] md:text-xs text-gray-300 font-semibold" style={{
                     fontFamily: '"VAG Rounded", sans-serif'
                   }}>
                         {profileData.flag}
