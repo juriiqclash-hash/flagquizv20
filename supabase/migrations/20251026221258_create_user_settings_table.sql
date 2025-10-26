@@ -16,6 +16,10 @@
       - `statistics_public` (boolean) - Whether statistics are publicly visible
       - `analytics_enabled` (boolean) - Whether usage data collection is enabled
       - `fps_display_enabled` (boolean) - Whether FPS display is enabled
+      - `font_family` (text) - User's preferred font family
+      - `performance_mode` (text) - Performance mode (bad, performance, high, ultra)
+      - `high_contrast_mode` (boolean) - High contrast mode for better readability
+      - `network_stats_enabled` (boolean) - Display network statistics (ping, latency)
       - `created_at` (timestamptz)
       - `updated_at` (timestamptz)
 
@@ -45,6 +49,10 @@ CREATE TABLE IF NOT EXISTS user_settings (
   statistics_public boolean DEFAULT true,
   analytics_enabled boolean DEFAULT true,
   fps_display_enabled boolean DEFAULT false,
+  font_family text DEFAULT 'default',
+  performance_mode text DEFAULT 'high' CHECK (performance_mode IN ('bad', 'performance', 'high', 'ultra')),
+  high_contrast_mode boolean DEFAULT false,
+  network_stats_enabled boolean DEFAULT false,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );

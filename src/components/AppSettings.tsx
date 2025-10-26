@@ -6,7 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock, Loader2 } from 'lucide-react';
+import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock, Loader2, Zap, Monitor, Contrast, Wifi } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -55,6 +55,12 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   const [statisticsPublic, setStatisticsPublic] = useState(true);
   const [analyticsEnabled, setAnalyticsEnabled] = useState(true);
   const [fpsDisplayEnabled, setFpsDisplayEnabled] = useState(false);
+  const [fontFamily, setFontFamily] = useState('default');
+  const [performanceMode, setPerformanceMode] = useState('high');
+  const [highContrastMode, setHighContrastMode] = useState(false);
+  const [networkStatsEnabled, setNetworkStatsEnabled] = useState(false);
+  const [ping, setPing] = useState(0);
+  const [latency, setLatency] = useState(0);
   const [adminPassword, setAdminPassword] = useState('');
   const [showAdminPassword, setShowAdminPassword] = useState(false);
   const [isConnectingToServer, setIsConnectingToServer] = useState(false);
@@ -101,11 +107,19 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     const savedStatisticsPublic = localStorage.getItem('statisticsPublic');
     const savedAnalyticsEnabled = localStorage.getItem('analyticsEnabled');
     const savedFpsDisplay = localStorage.getItem('fpsDisplayEnabled');
+    const savedFontFamily = localStorage.getItem('fontFamily');
+    const savedPerformanceMode = localStorage.getItem('performanceMode');
+    const savedHighContrast = localStorage.getItem('highContrastMode');
+    const savedNetworkStats = localStorage.getItem('networkStatsEnabled');
 
     if (savedProfileVisibility) setProfileVisibility(savedProfileVisibility);
     if (savedStatisticsPublic) setStatisticsPublic(savedStatisticsPublic === 'true');
     if (savedAnalyticsEnabled) setAnalyticsEnabled(savedAnalyticsEnabled === 'true');
     if (savedFpsDisplay) setFpsDisplayEnabled(savedFpsDisplay === 'true');
+    if (savedFontFamily) setFontFamily(savedFontFamily);
+    if (savedPerformanceMode) setPerformanceMode(savedPerformanceMode);
+    if (savedHighContrast) setHighContrastMode(savedHighContrast === 'true');
+    if (savedNetworkStats) setNetworkStatsEnabled(savedNetworkStats === 'true');
 
     if (user) {
       const { data, error } = await supabase
@@ -126,6 +140,10 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
         setStatisticsPublic(data.statistics_public ?? true);
         setAnalyticsEnabled(data.analytics_enabled ?? true);
         setFpsDisplayEnabled(data.fps_display_enabled ?? false);
+        setFontFamily(data.font_family || 'default');
+        setPerformanceMode(data.performance_mode || 'high');
+        setHighContrastMode(data.high_contrast_mode ?? false);
+        setNetworkStatsEnabled(data.network_stats_enabled ?? false);
       }
     }
   };
@@ -248,6 +266,36 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   }, [fpsDisplayEnabled]);
 
   useEffect(() => {
+    document.documentElement.style.fontFamily = fontFamily === 'default' ? '' : fontFamily;
+    localStorage.setItem('fontFamily', fontFamily);
+    saveToDatabase({ font_family: fontFamily });
+  }, [fontFamily]);
+
+  useEffect(() => {
+    applyPerformanceMode(performanceMode);
+    localStorage.setItem('performanceMode', performanceMode);
+    saveToDatabase({ performance_mode: performanceMode });
+  }, [performanceMode]);
+
+  useEffect(() => {
+    if (highContrastMode) {
+      document.documentElement.classList.add('high-contrast');
+    } else {
+      document.documentElement.classList.remove('high-contrast');
+    }
+    localStorage.setItem('highContrastMode', highContrastMode.toString());
+    saveToDatabase({ high_contrast_mode: highContrastMode });
+  }, [highContrastMode]);
+
+  useEffect(() => {
+    localStorage.setItem('networkStatsEnabled', networkStatsEnabled.toString());
+    saveToDatabase({ network_stats_enabled: networkStatsEnabled });
+    if (networkStatsEnabled) {
+      measureNetworkStats();
+    }
+  }, [networkStatsEnabled]);
+
+  useEffect(() => {
     const handleFullscreenChange = () => {
       setFullscreenMode(!!document.fullscreenElement);
     };
@@ -255,6 +303,58 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
+
+  const applyPerformanceMode = (mode: string) => {
+    const root = document.documentElement;
+    root.classList.remove('perf-bad', 'perf-performance', 'perf-high', 'perf-ultra');
+
+    switch(mode) {
+      case 'bad':
+        root.classList.add('perf-bad');
+        setAnimationsEnabled(false);
+        setImageQuality('low');
+        setBlurEnabled(false);
+        break;
+      case 'performance':
+        root.classList.add('perf-performance');
+        setAnimationsEnabled(false);
+        setImageQuality('medium');
+        setBlurIntensity(5);
+        break;
+      case 'high':
+        root.classList.add('perf-high');
+        setAnimationsEnabled(true);
+        setImageQuality('high');
+        setBlurIntensity(10);
+        break;
+      case 'ultra':
+        root.classList.add('perf-ultra');
+        setAnimationsEnabled(true);
+        setImageQuality('ultra');
+        setBlurIntensity(15);
+        break;
+    }
+  };
+
+  const measureNetworkStats = async () => {
+    const measurePing = async () => {
+      const start = performance.now();
+      try {
+        await fetch(window.location.origin, { method: 'HEAD', cache: 'no-cache' });
+        const end = performance.now();
+        const pingValue = Math.round(end - start);
+        setPing(pingValue);
+        setLatency(pingValue);
+      } catch (error) {
+        setPing(0);
+        setLatency(0);
+      }
+    };
+
+    measurePing();
+    const interval = setInterval(measurePing, 5000);
+    return () => clearInterval(interval);
+  };
 
   const calculateCacheSize = () => {
     let totalSize = 0;
@@ -748,7 +848,99 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                     />
                   </div>
                 </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="network-stats" className="text-sm font-medium">
+                        Netzwerkstatistiken
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        Zeigt Ping und Latenz an
+                      </p>
+                    </div>
+                    <Switch
+                      id="network-stats"
+                      checked={networkStatsEnabled}
+                      onCheckedChange={setNetworkStatsEnabled}
+                    />
+                  </div>
+                  {networkStatsEnabled && (
+                    <div className="pl-6 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <Wifi className="h-3 w-3" />
+                        <span>Ping: {ping}ms | Latenz: {latency}ms</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-3">
+              <Label className="flex items-center gap-2 text-base">
+                <Type className="h-5 w-5" />
+                Schriftart
+              </Label>
+              <Select value={fontFamily} onValueChange={setFontFamily}>
+                <SelectTrigger id="font-family">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="default">Standard (System)</SelectItem>
+                  <SelectItem value="'Arial', sans-serif">Arial</SelectItem>
+                  <SelectItem value="'Helvetica', sans-serif">Helvetica</SelectItem>
+                  <SelectItem value="'Verdana', sans-serif">Verdana</SelectItem>
+                  <SelectItem value="'Georgia', serif">Georgia</SelectItem>
+                  <SelectItem value="'Times New Roman', serif">Times New Roman</SelectItem>
+                  <SelectItem value="'Courier New', monospace">Courier New</SelectItem>
+                  <SelectItem value="'Comic Sans MS', cursive">Comic Sans MS</SelectItem>
+                  <SelectItem value="'Inter', sans-serif">Inter</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-3">
+              <Label htmlFor="performance-mode" className="flex items-center gap-2 text-base">
+                <Zap className="h-5 w-5" />
+                Leistungsmodus
+              </Label>
+              <Select value={performanceMode} onValueChange={setPerformanceMode}>
+                <SelectTrigger id="performance-mode">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="bad">Bad (Minimale Grafik)</SelectItem>
+                  <SelectItem value="performance">Performance (Reduzierte Effekte)</SelectItem>
+                  <SelectItem value="high">High (Empfohlen)</SelectItem>
+                  <SelectItem value="ultra">Ultra (Maximale Qualität)</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Passt Animationen, Bildqualität und Effekte automatisch an
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Label htmlFor="high-contrast" className="flex items-center gap-2 text-base">
+                <Contrast className="h-5 w-5" />
+                High-Contrast Modus
+              </Label>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">
+                  {highContrastMode ? 'Aktiviert' : 'Deaktiviert'}
+                </span>
+                <Switch
+                  id="high-contrast"
+                  checked={highContrastMode}
+                  onCheckedChange={setHighContrastMode}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Erhöht den Kontrast für bessere Lesbarkeit
+              </p>
             </div>
 
             <Separator />

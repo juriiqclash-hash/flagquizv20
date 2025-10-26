@@ -40,23 +40,31 @@ const AppContent = () => {
   const [maintenanceMessage, setMaintenanceMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [fpsEnabled, setFpsEnabled] = useState(false);
+  const [networkStatsEnabled, setNetworkStatsEnabled] = useState(false);
 
   useEffect(() => {
     const savedFpsDisplay = localStorage.getItem('fpsDisplayEnabled');
+    const savedNetworkStats = localStorage.getItem('networkStatsEnabled');
     setFpsEnabled(savedFpsDisplay === 'true');
+    setNetworkStatsEnabled(savedNetworkStats === 'true');
 
-    const checkFpsDisplay = () => {
-      const current = localStorage.getItem('fpsDisplayEnabled');
-      setFpsEnabled(current === 'true');
+    const checkDisplaySettings = () => {
+      const currentFps = localStorage.getItem('fpsDisplayEnabled');
+      const currentNetwork = localStorage.getItem('networkStatsEnabled');
+      setFpsEnabled(currentFps === 'true');
+      setNetworkStatsEnabled(currentNetwork === 'true');
     };
 
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'fpsDisplayEnabled') {
         setFpsEnabled(e.newValue === 'true');
       }
+      if (e.key === 'networkStatsEnabled') {
+        setNetworkStatsEnabled(e.newValue === 'true');
+      }
     };
 
-    const interval = setInterval(checkFpsDisplay, 1000);
+    const interval = setInterval(checkDisplaySettings, 1000);
     window.addEventListener('storage', handleStorageChange);
 
     return () => {
@@ -139,7 +147,7 @@ const AppContent = () => {
         <SystemBanner />
         <Toaster />
         <Sonner />
-        <FPSDisplay enabled={fpsEnabled} />
+        <FPSDisplay enabled={fpsEnabled} showNetworkStats={networkStatsEnabled} />
         <ConsentDialog open={needsConsent} onConsent={handleConsent} />
         <BrowserRouter>
           <InvitationBanner />
