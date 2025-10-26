@@ -42,6 +42,8 @@
 
     --radius: 0.5rem;
 
+    --blur-enabled: blur(10px);
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -112,4 +114,11 @@
 .no-animations * {
   animation: none !important;
   transition: none !important;
+}
+
+.backdrop-blur-sm,
+.backdrop-blur-md,
+.backdrop-blur {
+  backdrop-filter: var(--blur-enabled) !important;
+  -webkit-backdrop-filter: var(--blur-enabled) !important;
 }
