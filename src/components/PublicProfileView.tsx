@@ -481,7 +481,7 @@ export const PublicProfileView = ({
                 }} />
                 </div>
 
-                <div className="flex gap-2 md:gap-3 justify-center md:justify-start items-start">
+                <div className="flex gap-2 md:gap-3 justify-center md:justify-start">
                   {profileData.flag ? <div className="w-20 h-20 md:w-28 md:h-28 bg-white/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg flex flex-col items-center justify-center">
                       <img
                         src={`https://flagcdn.com/w80/${profileData.flag.toLowerCase()}.png`}
@@ -523,26 +523,26 @@ export const PublicProfileView = ({
                       <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-200" />
                     </div>}
 
-                  {currentUser && currentUser.id !== userId && <div className="flex flex-col gap-2 ml-2 md:ml-3">
-                    {friendshipStatus === 'none' && <Button onClick={sendFriendRequest} size="sm" className="bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
-                        <UserPlus className="w-4 h-4 mr-1" />
-                        Freund hinzufügen
+                  {currentUser && currentUser.id !== userId && <div className="flex gap-2 ml-0 md:ml-3">
+                    {friendshipStatus === 'none' && <Button onClick={sendFriendRequest} size="sm" className="bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer whitespace-nowrap h-10 px-3 text-xs">
+                        <UserPlus className="w-3 h-3 mr-1" />
+                        Freund
                       </Button>}
-                    {friendshipStatus === 'pending_sent' && <Button onClick={cancelFriendRequest} size="sm" className="bg-gradient-to-b from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
-                        <Clock className="w-4 h-4 mr-1" />
-                        Anfrage gesendet
+                    {friendshipStatus === 'pending_sent' && <Button onClick={cancelFriendRequest} size="sm" className="bg-gradient-to-b from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer whitespace-nowrap h-10 px-3 text-xs">
+                        <Clock className="w-3 h-3 mr-1" />
+                        Gesendet
                       </Button>}
-                    {friendshipStatus === 'pending_received' && <Button onClick={acceptFriendRequest} size="sm" className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
-                        <Check className="w-4 h-4 mr-1" />
-                        Anfrage annehmen
+                    {friendshipStatus === 'pending_received' && <Button onClick={acceptFriendRequest} size="sm" className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer whitespace-nowrap h-10 px-3 text-xs">
+                        <Check className="w-3 h-3 mr-1" />
+                        Annehmen
                       </Button>}
-                    {friendshipStatus === 'friends' && <Button onClick={removeFriend} size="sm" className="bg-gradient-to-b from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
-                        <UserMinus className="w-4 h-4 mr-1" />
-                        Freund entfernen
+                    {friendshipStatus === 'friends' && <Button onClick={removeFriend} size="sm" className="bg-gradient-to-b from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer whitespace-nowrap h-10 px-3 text-xs">
+                        <UserMinus className="w-3 h-3 mr-1" />
+                        Entfernen
                       </Button>}
-                    {userClanId && <Button onClick={() => navigate(`/clans?id=${userClanId}`)} size="sm" className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
-                        <Users className="w-4 h-4 mr-1" />
-                        Clan anschauen
+                    {userClanId && <Button onClick={() => navigate(`/clans?id=${userClanId}`)} size="sm" className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer whitespace-nowrap h-10 px-3 text-xs">
+                        <Users className="w-3 h-3 mr-1" />
+                        Clan
                       </Button>}
                   </div>}
                 </div>
