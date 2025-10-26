@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Plus, Flame, Clock, Trophy, X, Info, Shield, Paintbrush } from 'lucide-react';
+import { Plus, Flame, Clock, Trophy, X, Info, Shield, Paintbrush, Eye } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from './ui/button';
@@ -17,6 +17,8 @@ import { useSubscription } from '@/hooks/useSubscription';
 import { checkCountryChangeLimit, incrementCountryChange } from '@/lib/planLimits';
 import { toast } from 'sonner';
 import { ProfileCustomization } from './ProfileCustomization';
+import { PublicProfileView } from './PublicProfileView';
+
 interface ProfileViewProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -126,6 +128,7 @@ export const ProfileView = ({
   const [backgroundColor, setBackgroundColor] = useState<string>('');
   const [borderStyle, setBorderStyle] = useState<string>('solid');
   const { subscription } = useSubscription();
+  const [showPublicProfile, setShowPublicProfile] = useState(false);
 
   useEffect(() => {
     if (open && user) {
@@ -358,15 +361,24 @@ export const ProfileView = ({
   }
 
   return <>
-      <div 
+      <div
         className="fixed inset-0 z-[100] flex items-center justify-center p-4"
         style={{
-          background: backgroundColor || 'linear-gradient(to bottom right, rgb(23 37 84), rgb(30 58 138), rgb(29 78 216))',
+          background: backgroundColor || 'linear-gradient(to bottom right, rgb(23, 37, 84), rgb(30, 58, 138), rgb(30, 64, 175))',
         }}
       >
         {/* Close Button */}
         <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-[110] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
+        </button>
+
+        {/* View Public Profile Button */}
+        <button
+          onClick={() => setShowPublicProfile(true)}
+          className="fixed top-4 left-4 z-[110] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors"
+          title="Öffentliches Profil ansehen"
+        >
+          <Eye className="w-5 h-5 text-gray-600" />
         </button>
 
         <div className="w-full max-w-7xl flex flex-col h-full max-h-screen pb-8">
@@ -679,6 +691,13 @@ export const ProfileView = ({
           currentBorderStyle={borderStyle}
           onClose={() => setShowCustomization(false)}
           onUpdate={() => loadProfileData()}
+        />
+      )}
+
+      {showPublicProfile && user && (
+        <PublicProfileView
+          userId={user.id}
+          onClose={() => setShowPublicProfile(false)}
         />
       )}
     </>;
