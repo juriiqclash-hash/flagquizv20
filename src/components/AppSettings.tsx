@@ -6,7 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock } from 'lucide-react';
+import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -57,6 +57,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   const [fpsDisplayEnabled, setFpsDisplayEnabled] = useState(false);
   const [adminPassword, setAdminPassword] = useState('');
   const [showAdminPassword, setShowAdminPassword] = useState(false);
+  const [isConnectingToServer, setIsConnectingToServer] = useState(false);
 
   const navigate = useNavigate();
 
@@ -211,6 +212,17 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   }, [blurIntensity]);
 
   useEffect(() => {
+    const previousRegion = localStorage.getItem('serverRegion');
+    if (previousRegion && previousRegion !== serverRegion) {
+      setIsConnectingToServer(true);
+      setTimeout(() => {
+        setIsConnectingToServer(false);
+        toast({
+          title: '✓ Verbunden',
+          description: `Sie sind mit dem Server "${SERVER_REGIONS.find(r => r.value === serverRegion)?.label}" verbunden`,
+        });
+      }, 1000);
+    }
     localStorage.setItem('serverRegion', serverRegion);
     saveToDatabase({ server_region: serverRegion });
   }, [serverRegion]);
@@ -424,9 +436,16 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                 <Globe className="h-5 w-5" />
                 Server-Region
               </Label>
-              <Select value={serverRegion} onValueChange={setServerRegion}>
+              <Select value={serverRegion} onValueChange={setServerRegion} disabled={isConnectingToServer}>
                 <SelectTrigger id="server-region">
-                  <SelectValue />
+                  {isConnectingToServer ? (
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Verbinde...</span>
+                    </div>
+                  ) : (
+                    <SelectValue />
+                  )}
                 </SelectTrigger>
                 <SelectContent>
                   {SERVER_REGIONS.map((region) => (
@@ -571,7 +590,12 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                 <Switch
                   id="notifications"
                   checked={notificationsEnabled}
-                  onCheckedChange={handleNotificationsToggle}
+                  onCheckedChange={(checked) => {
+                    setNotificationsEnabled(checked);
+                    if (checked) {
+                      handleNotificationsToggle(true);
+                    }
+                  }}
                   disabled={notificationPermission === 'denied'}
                 />
               </div>
@@ -771,23 +795,21 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
               </Label>
               <div className="space-y-2">
                 <div className="flex gap-2">
-                  <div className="relative flex-1">
-                    <Input
-                      type={showAdminPassword ? 'text' : 'password'}
-                      placeholder="Admin-Passwort eingeben"
-                      value={adminPassword}
-                      onChange={(e) => setAdminPassword(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleAdminAccess()}
-                    />
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="absolute right-0 top-0 h-full px-3"
-                      onClick={() => setShowAdminPassword(!showAdminPassword)}
-                    >
-                      {showAdminPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                  </div>
+                  <Input
+                    type={showAdminPassword ? 'text' : 'password'}
+                    placeholder="Admin-Passwort eingeben"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAdminAccess()}
+                  />
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    type="button"
+                    onClick={() => setShowAdminPassword(!showAdminPassword)}
+                  >
+                    {showAdminPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
                   <Button onClick={handleAdminAccess} disabled={!adminPassword}>
                     Zugriff
                   </Button>
