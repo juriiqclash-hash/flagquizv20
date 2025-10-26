@@ -12,6 +12,10 @@
       - `fullscreen_mode` (boolean) - Fullscreen mode preference
       - `blur_enabled` (boolean) - Background blur enabled
       - `blur_intensity` (integer) - Blur intensity in pixels (0-20)
+      - `profile_visibility` (text) - Profile visibility ('public' or 'private')
+      - `statistics_public` (boolean) - Whether statistics are publicly visible
+      - `analytics_enabled` (boolean) - Whether usage data collection is enabled
+      - `fps_display_enabled` (boolean) - Whether FPS display is enabled
       - `created_at` (timestamptz)
       - `updated_at` (timestamptz)
 
@@ -37,6 +41,10 @@ CREATE TABLE IF NOT EXISTS user_settings (
   fullscreen_mode boolean DEFAULT false,
   blur_enabled boolean DEFAULT true,
   blur_intensity integer DEFAULT 10,
+  profile_visibility text DEFAULT 'public' CHECK (profile_visibility IN ('public', 'private')),
+  statistics_public boolean DEFAULT true,
+  analytics_enabled boolean DEFAULT true,
+  fps_display_enabled boolean DEFAULT false,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );

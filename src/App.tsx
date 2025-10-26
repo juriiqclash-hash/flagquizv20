@@ -29,6 +29,7 @@ import MaintenanceScreen from "./components/MaintenanceScreen";
 import ConsentDialog from "./components/ConsentDialog";
 import { InvitationBanner } from "./components/InvitationBanner";
 import { useAdmin } from "./hooks/useAdmin";
+import FPSDisplay from "./components/FPSDisplay";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,31 @@ const AppContent = () => {
   const [maintenanceMode, setMaintenanceMode] = useState(false);
   const [maintenanceMessage, setMaintenanceMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  const [fpsEnabled, setFpsEnabled] = useState(false);
+
+  useEffect(() => {
+    const savedFpsDisplay = localStorage.getItem('fpsDisplayEnabled');
+    setFpsEnabled(savedFpsDisplay === 'true');
+
+    const checkFpsDisplay = () => {
+      const current = localStorage.getItem('fpsDisplayEnabled');
+      setFpsEnabled(current === 'true');
+    };
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'fpsDisplayEnabled') {
+        setFpsEnabled(e.newValue === 'true');
+      }
+    };
+
+    const interval = setInterval(checkFpsDisplay, 1000);
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   const handleConsent = (accepted: boolean) => {
     if (user) {
@@ -113,6 +139,7 @@ const AppContent = () => {
         <SystemBanner />
         <Toaster />
         <Sonner />
+        <FPSDisplay enabled={fpsEnabled} />
         <ConsentDialog open={needsConsent} onConsent={handleConsent} />
         <BrowserRouter>
           <InvitationBanner />

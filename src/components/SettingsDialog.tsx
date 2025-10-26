@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Mail, Edit3, Lock, Trash2, Upload } from 'lucide-react';
+import { Mail, Edit3, Lock, Trash2, Upload, UserX } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -28,6 +28,7 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showDeactivateConfirm, setShowDeactivateConfirm] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -210,6 +211,38 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
     }
   };
 
+  const handleDeactivateAccount = async () => {
+    setIsLoading(true);
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          is_deactivated: true,
+          deactivated_at: new Date().toISOString()
+        })
+        .eq('user_id', user?.id);
+
+      if (error) throw error;
+
+      await supabase.auth.signOut();
+
+      toast({
+        title: 'Konto deaktiviert',
+        description: 'Dein Konto wurde deaktiviert. Du kannst es jederzeit wieder aktivieren.',
+      });
+      onOpenChange(false);
+    } catch (error: any) {
+      toast({
+        title: 'Fehler',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+      setShowDeactivateConfirm(false);
+    }
+  };
+
   const handleDeleteAccount = async () => {
     setIsLoading(true);
     try {
@@ -327,8 +360,42 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
             </div>
           </div>
 
-          {/* Delete Account */}
-          <div className="pt-4 border-t border-border">
+          {/* Deactivate Account */}
+          <div className="pt-4 border-t border-border space-y-3">
+            {!showDeactivateConfirm ? (
+              <Button
+                variant="outline"
+                className="w-full text-orange-500 hover:bg-orange-500 hover:text-white"
+                onClick={() => setShowDeactivateConfirm(true)}
+              >
+                <UserX className="mr-2 h-4 w-4" />
+                Konto deaktivieren
+              </Button>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  Dein Konto wird temporär deaktiviert. Du kannst dich jederzeit wieder anmelden, um es zu reaktivieren.
+                </p>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowDeactivateConfirm(false)}
+                    className="flex-1"
+                  >
+                    Abbrechen
+                  </Button>
+                  <Button
+                    className="flex-1 bg-orange-500 hover:bg-orange-600"
+                    onClick={handleDeactivateAccount}
+                    disabled={isLoading}
+                  >
+                    Deaktivieren
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Delete Account */}
             {!showDeleteConfirm ? (
               <Button
                 variant="outline"

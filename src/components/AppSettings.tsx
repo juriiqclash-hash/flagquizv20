@@ -6,7 +6,9 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check } from 'lucide-react';
+import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -49,6 +51,15 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   const [copiedId, setCopiedId] = useState(false);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
 
+  const [profileVisibility, setProfileVisibility] = useState('public');
+  const [statisticsPublic, setStatisticsPublic] = useState(true);
+  const [analyticsEnabled, setAnalyticsEnabled] = useState(true);
+  const [fpsDisplayEnabled, setFpsDisplayEnabled] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
+  const [showAdminPassword, setShowAdminPassword] = useState(false);
+
+  const navigate = useNavigate();
+
   const appVersion = '0.0.0';
   const buildNumber = Date.now().toString().slice(-8);
 
@@ -85,6 +96,16 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     if (savedBlurIntensity) setBlurIntensity(Number(savedBlurIntensity));
     if (savedServerRegion) setServerRegion(savedServerRegion);
 
+    const savedProfileVisibility = localStorage.getItem('profileVisibility');
+    const savedStatisticsPublic = localStorage.getItem('statisticsPublic');
+    const savedAnalyticsEnabled = localStorage.getItem('analyticsEnabled');
+    const savedFpsDisplay = localStorage.getItem('fpsDisplayEnabled');
+
+    if (savedProfileVisibility) setProfileVisibility(savedProfileVisibility);
+    if (savedStatisticsPublic) setStatisticsPublic(savedStatisticsPublic === 'true');
+    if (savedAnalyticsEnabled) setAnalyticsEnabled(savedAnalyticsEnabled === 'true');
+    if (savedFpsDisplay) setFpsDisplayEnabled(savedFpsDisplay === 'true');
+
     if (user) {
       const { data, error } = await supabase
         .from('user_settings')
@@ -100,6 +121,10 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
         setFullscreenMode(data.fullscreen_mode ?? false);
         setBlurEnabled(data.blur_enabled ?? true);
         setBlurIntensity(data.blur_intensity ?? 10);
+        setProfileVisibility(data.profile_visibility || 'public');
+        setStatisticsPublic(data.statistics_public ?? true);
+        setAnalyticsEnabled(data.analytics_enabled ?? true);
+        setFpsDisplayEnabled(data.fps_display_enabled ?? false);
       }
     }
   };
@@ -190,6 +215,35 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     saveToDatabase({ server_region: serverRegion });
   }, [serverRegion]);
 
+  useEffect(() => {
+    localStorage.setItem('profileVisibility', profileVisibility);
+    saveToDatabase({ profile_visibility: profileVisibility });
+  }, [profileVisibility]);
+
+  useEffect(() => {
+    localStorage.setItem('statisticsPublic', statisticsPublic.toString());
+    saveToDatabase({ statistics_public: statisticsPublic });
+  }, [statisticsPublic]);
+
+  useEffect(() => {
+    localStorage.setItem('analyticsEnabled', analyticsEnabled.toString());
+    saveToDatabase({ analytics_enabled: analyticsEnabled });
+  }, [analyticsEnabled]);
+
+  useEffect(() => {
+    localStorage.setItem('fpsDisplayEnabled', fpsDisplayEnabled.toString());
+    saveToDatabase({ fps_display_enabled: fpsDisplayEnabled });
+  }, [fpsDisplayEnabled]);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setFullscreenMode(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
   const calculateCacheSize = () => {
     let totalSize = 0;
     for (let key in localStorage) {
@@ -256,39 +310,91 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     }
   };
 
-  const handleRequestNotifications = async () => {
+  const handleNotificationsToggle = async (checked: boolean) => {
+    if (!checked) {
+      setNotificationsEnabled(false);
+      return;
+    }
+
     if ('Notification' in window) {
-      const permission = await Notification.requestPermission();
-      setNotificationPermission(permission);
-      if (permission === 'granted') {
+      if (Notification.permission === 'granted') {
         setNotificationsEnabled(true);
-        new Notification('Benachrichtigungen aktiviert!', {
-          body: 'Sie erhalten jetzt Benachrichtigungen von FlagQuiz.',
-          icon: '/flagquiz-logo.png'
-        });
         toast({
           title: 'Benachrichtigungen aktiviert',
           description: 'Sie erhalten jetzt Benachrichtigungen.',
+        });
+      } else if (Notification.permission !== 'denied') {
+        const permission = await Notification.requestPermission();
+        setNotificationPermission(permission);
+        if (permission === 'granted') {
+          setNotificationsEnabled(true);
+          new Notification('Benachrichtigungen aktiviert!', {
+            body: 'Sie erhalten jetzt Benachrichtigungen von FlagQuiz.',
+            icon: '/flagquiz-logo.png'
+          });
+          toast({
+            title: 'Benachrichtigungen aktiviert',
+            description: 'Sie erhalten jetzt Benachrichtigungen.',
+          });
+        } else {
+          toast({
+            title: 'Berechtigung verweigert',
+            description: 'Benachrichtigungen wurden blockiert.',
+            variant: 'destructive',
+          });
+        }
+      } else {
+        toast({
+          title: 'Blockiert',
+          description: 'Benachrichtigungen sind in den Browser-Einstellungen blockiert.',
+          variant: 'destructive',
         });
       }
     }
   };
 
-  const handleToggleFullscreen = () => {
-    if (!document.fullscreenElement) {
+  const handleFullscreenToggle = (checked: boolean) => {
+    if (checked && !document.fullscreenElement) {
       document.documentElement.requestFullscreen().then(() => {
         setFullscreenMode(true);
-      }).catch((err) => {
+      }).catch(() => {
+        setFullscreenMode(false);
         toast({
           title: 'Fehler',
           description: 'Vollbildmodus konnte nicht aktiviert werden.',
           variant: 'destructive',
         });
       });
-    } else {
+    } else if (!checked && document.fullscreenElement) {
       document.exitFullscreen().then(() => {
         setFullscreenMode(false);
+      }).catch(() => {
+        toast({
+          title: 'Fehler',
+          description: 'Vollbildmodus konnte nicht deaktiviert werden.',
+          variant: 'destructive',
+        });
       });
+    }
+  };
+
+  const handleAdminAccess = () => {
+    if (adminPassword === 'ihatejuice67') {
+      sessionStorage.setItem('adminAccess', 'true');
+      sessionStorage.setItem('adminAccessTime', Date.now().toString());
+      toast({
+        title: 'Zugriff gewährt',
+        description: 'Sie werden zum Admin-Panel weitergeleitet.',
+      });
+      navigate('/admin');
+      setAdminPassword('');
+    } else {
+      toast({
+        title: 'Zugriff verweigert',
+        description: 'Falsches Passwort.',
+        variant: 'destructive',
+      });
+      setAdminPassword('');
     }
   };
 
@@ -460,14 +566,20 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
               </Label>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
-                  {notificationPermission === 'granted' ? 'Erlaubt' : notificationPermission === 'denied' ? 'Blockiert' : 'Nicht aktiviert'}
+                  {notificationsEnabled ? 'Aktiviert' : 'Deaktiviert'}
                 </span>
-                {notificationPermission !== 'granted' && (
-                  <Button size="sm" onClick={handleRequestNotifications}>
-                    Aktivieren
-                  </Button>
-                )}
+                <Switch
+                  id="notifications"
+                  checked={notificationsEnabled}
+                  onCheckedChange={handleNotificationsToggle}
+                  disabled={notificationPermission === 'denied'}
+                />
               </div>
+              {notificationPermission === 'denied' && (
+                <p className="text-xs text-destructive">
+                  Benachrichtigungen sind in Ihrem Browser blockiert.
+                </p>
+              )}
             </div>
 
             <div className="space-y-3">
@@ -479,9 +591,11 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                 <span className="text-sm text-muted-foreground">
                   {fullscreenMode ? 'Aktiviert' : 'Deaktiviert'}
                 </span>
-                <Button size="sm" onClick={handleToggleFullscreen}>
-                  {fullscreenMode ? 'Deaktivieren' : 'Aktivieren'}
-                </Button>
+                <Switch
+                  id="fullscreen"
+                  checked={fullscreenMode}
+                  onCheckedChange={handleFullscreenToggle}
+                />
               </div>
               <p className="text-xs text-muted-foreground">
                 Drücke F11 oder Esc zum Beenden
@@ -523,6 +637,100 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
 
             <div className="space-y-3">
               <Label className="flex items-center gap-2 text-base">
+                <Shield className="h-5 w-5" />
+                Datenschutz
+              </Label>
+
+              <div className="space-y-4 pl-6">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="profile-visibility" className="text-sm font-medium">
+                        Profilsichtbarkeit
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        {profileVisibility === 'public' ? 'Jeder kann Ihr Profil sehen' : 'Nur Sie können Ihr Profil sehen'}
+                      </p>
+                    </div>
+                    <Switch
+                      id="profile-visibility"
+                      checked={profileVisibility === 'public'}
+                      onCheckedChange={(checked) => setProfileVisibility(checked ? 'public' : 'private')}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="statistics-public" className="text-sm font-medium">
+                        Statistiken öffentlich
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        Andere können Ihre Spielstatistiken sehen
+                      </p>
+                    </div>
+                    <Switch
+                      id="statistics-public"
+                      checked={statisticsPublic}
+                      onCheckedChange={setStatisticsPublic}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="analytics" className="text-sm font-medium">
+                        Nutzungsdaten sammeln
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        Hilft uns die App zu verbessern
+                      </p>
+                    </div>
+                    <Switch
+                      id="analytics"
+                      checked={analyticsEnabled}
+                      onCheckedChange={setAnalyticsEnabled}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-3">
+              <Label className="flex items-center gap-2 text-base">
+                <Activity className="h-5 w-5" />
+                Entwickler-Optionen
+              </Label>
+
+              <div className="space-y-4 pl-6">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="fps-display" className="text-sm font-medium">
+                        FPS-Anzeige
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        Zeigt Frames pro Sekunde in der Ecke an
+                      </p>
+                    </div>
+                    <Switch
+                      id="fps-display"
+                      checked={fpsDisplayEnabled}
+                      onCheckedChange={setFpsDisplayEnabled}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-3">
+              <Label className="flex items-center gap-2 text-base">
                 <Trash2 className="h-5 w-5" />
                 Cache-Verwaltung
               </Label>
@@ -552,6 +760,42 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
               >
                 Alle Einstellungen zurücksetzen
               </Button>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-3">
+              <Label className="flex items-center gap-2 text-base">
+                <Lock className="h-5 w-5" />
+                Admin-Bereich
+              </Label>
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Input
+                      type={showAdminPassword ? 'text' : 'password'}
+                      placeholder="Admin-Passwort eingeben"
+                      value={adminPassword}
+                      onChange={(e) => setAdminPassword(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleAdminAccess()}
+                    />
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="absolute right-0 top-0 h-full px-3"
+                      onClick={() => setShowAdminPassword(!showAdminPassword)}
+                    >
+                      {showAdminPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                  <Button onClick={handleAdminAccess} disabled={!adminPassword}>
+                    Zugriff
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Nur für autorisierte Administratoren
+                </p>
+              </div>
             </div>
 
             <Separator />
