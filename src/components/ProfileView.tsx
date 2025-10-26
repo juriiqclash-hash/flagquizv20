@@ -358,10 +358,10 @@ export const ProfileView = ({
   }
 
   return <>
-      <div 
+      <div
         className="fixed inset-0 z-[100] flex items-center justify-center p-4"
         style={{
-          background: backgroundColor || 'linear-gradient(to bottom right, rgb(23 37 84), rgb(30 58 138), rgb(29 78 216))',
+          background: backgroundColor || 'linear-gradient(to bottom right, rgb(23, 37, 84), rgb(30, 58, 138), rgb(30, 64, 175))',
         }}
       >
         {/* Close Button */}

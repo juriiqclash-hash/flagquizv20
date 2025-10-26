@@ -433,8 +433,8 @@ export const PublicProfileView = ({
           <X className="w-5 h-5 text-gray-600" />
         </button>
 
-        <div className="w-full max-w-7xl flex flex-col py-16 md:py-8">
-          <div className="flex-1 flex items-center mb-3 md:mb-4 md:pl-2">
+        <div className="w-full max-w-7xl flex flex-col h-full max-h-screen pb-8">
+          <div className="flex-1 flex items-end mb-3 md:mb-4 md:pl-2">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full">
               <div className="flex flex-col items-center">
                 <Avatar className="h-40 w-40 md:h-64 md:w-64 ring-4 md:ring-8 ring-white shadow-2xl">
@@ -443,11 +443,7 @@ export const PublicProfileView = ({
                     {username.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <p className="text-sm md:text-base text-gray-300 mt-3 font-medium text-center" style={{
-                fontFamily: '"VAG Rounded", sans-serif'
-              }}>
-                  Joined {accountCreated}
-                </p>
+                <p className="text-sm text-gray-300 mt-3 font-medium hidden md:block" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Joined {accountCreated}</p>
               </div>
 
               <div className="flex-1 flex flex-col items-center md:items-start w-full">
@@ -523,29 +519,34 @@ export const PublicProfileView = ({
                       <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-200" />
                     </div>}
 
-                  {currentUser && currentUser.id !== userId && <div className="flex flex-col gap-2 ml-2 md:ml-3">
-                    {friendshipStatus === 'none' && <Button onClick={sendFriendRequest} size="sm" className="bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
-                        <UserPlus className="w-4 h-4 mr-1" />
-                        Freund hinzufügen
-                      </Button>}
-                    {friendshipStatus === 'pending_sent' && <Button onClick={cancelFriendRequest} size="sm" className="bg-gradient-to-b from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
-                        <Clock className="w-4 h-4 mr-1" />
-                        Anfrage gesendet
-                      </Button>}
-                    {friendshipStatus === 'pending_received' && <Button onClick={acceptFriendRequest} size="sm" className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
-                        <Check className="w-4 h-4 mr-1" />
-                        Anfrage annehmen
-                      </Button>}
-                    {friendshipStatus === 'friends' && <Button onClick={removeFriend} size="sm" className="bg-gradient-to-b from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
-                        <UserMinus className="w-4 h-4 mr-1" />
-                        Freund entfernen
-                      </Button>}
-                    {userClanId && <Button onClick={() => navigate(`/clans?id=${userClanId}`)} size="sm" className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
-                        <Users className="w-4 h-4 mr-1" />
-                        Clan anschauen
-                      </Button>}
-                  </div>}
                 </div>
+
+                {currentUser && currentUser.id !== userId && (
+                  <div className="flex gap-2 mt-3 justify-center md:justify-start flex-wrap">
+                    <div className="flex gap-2">
+                      {friendshipStatus === 'none' && <Button onClick={sendFriendRequest} size="sm" className="bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
+                          <UserPlus className="w-4 h-4 mr-1" />
+                          Freund hinzufügen
+                        </Button>}
+                      {friendshipStatus === 'pending_sent' && <Button onClick={cancelFriendRequest} size="sm" className="bg-gradient-to-b from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
+                          <Clock className="w-4 h-4 mr-1" />
+                          Anfrage gesendet
+                        </Button>}
+                      {friendshipStatus === 'pending_received' && <Button onClick={acceptFriendRequest} size="sm" className="bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
+                          <Check className="w-4 h-4 mr-1" />
+                          Anfrage annehmen
+                        </Button>}
+                      {friendshipStatus === 'friends' && <Button onClick={removeFriend} size="sm" className="bg-gradient-to-b from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
+                          <UserMinus className="w-4 h-4 mr-1" />
+                          Freund entfernen
+                        </Button>}
+                      {userClanId && <Button onClick={() => navigate(`/clans?id=${userClanId}`)} size="sm" className="bg-gradient-to-b from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg pointer-events-auto cursor-pointer">
+                          <Users className="w-4 h-4 mr-1" />
+                          Clan anschauen
+                        </Button>}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
