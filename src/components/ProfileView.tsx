@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Plus, Flame, Clock, Trophy, X, Info, Shield } from 'lucide-react';
+import { Plus, Flame, Clock, Trophy, X, Info, Shield, Paintbrush } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from './ui/button';
@@ -16,6 +16,7 @@ import { SubscriptionManager } from './SubscriptionManager';
 import { useSubscription } from '@/hooks/useSubscription';
 import { checkCountryChangeLimit, incrementCountryChange } from '@/lib/planLimits';
 import { toast } from 'sonner';
+import { ProfileCustomization } from './ProfileCustomization';
 interface ProfileViewProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -119,7 +120,11 @@ export const ProfileView = ({
   const [loading, setLoading] = useState(true);
   const [showRankInfo, setShowRankInfo] = useState(false);
   const [showClanCreator, setShowClanCreator] = useState(false);
+  const [showCustomization, setShowCustomization] = useState(false);
   const [allClans, setAllClans] = useState<Clan[]>([...DEFAULT_CLANS]);
+  const [usernameColor, setUsernameColor] = useState<string>('#FFFFFF');
+  const [backgroundColor, setBackgroundColor] = useState<string>('');
+  const [borderStyle, setBorderStyle] = useState<string>('solid');
   const { subscription } = useSubscription();
 
   useEffect(() => {
@@ -157,7 +162,7 @@ export const ProfileView = ({
       // Load profile
       const {
         data: profile
-      } = await supabase.from('profiles').select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan').eq('user_id', user.id).single();
+      } = await supabase.from('profiles').select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan, username_color, background_color, profile_border_style').eq('user_id', user.id).single();
       if (profile) {
         setUsername(profile.username || user.email?.split('@')[0] || 'User');
         setAvatarUrl(profile.avatar_url || '');
@@ -167,7 +172,11 @@ export const ProfileView = ({
           year: '2-digit'
         }));
 
-        // Load customization data from Supabase
+        // Load customization data
+        setUsernameColor(profile.username_color || '#FFFFFF');
+        setBackgroundColor(profile.background_color || '');
+        setBorderStyle(profile.profile_border_style || 'solid');
+
         setProfileData({
           flag: profile.selected_flag || undefined,
           continent: profile.selected_continent || undefined,
@@ -349,7 +358,12 @@ export const ProfileView = ({
   }
 
   return <>
-      <div className="fixed inset-0 z-[100] bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex items-center justify-center p-4">
+      <div 
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+        style={{
+          background: backgroundColor || 'linear-gradient(to bottom right, rgb(23 37 84), rgb(30 58 138), rgb(29 78 216))',
+        }}
+      >
         {/* Close Button */}
         <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-[110] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
@@ -373,7 +387,14 @@ export const ProfileView = ({
             {/* Right Side: Username, Level Bar, and Customization Slots - Centered on mobile */}
             <div className="flex-1 flex flex-col items-center md:items-start w-full">
               <div className="flex items-center gap-2 mb-1 md:mb-3">
-                <h1 className="text-4xl md:text-7xl font-bold text-white leading-none text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+                <h1 
+                  className="text-4xl md:text-7xl font-bold leading-none text-center md:text-left" 
+                  style={{ 
+                    fontFamily: '"VAG Rounded", sans-serif',
+                    color: usernameColor,
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                  }}
+                >
                   {username}
                 </h1>
                 {profileData.flag && (
@@ -457,6 +478,19 @@ export const ProfileView = ({
                     <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-200" />
                   )}
                 </div>
+
+                {/* Customization Button (Premium/Ultimate only) */}
+                {subscription && (subscription.plan === 'premium' || subscription.plan === 'ultimate') && (
+                  <Button
+                    onClick={() => setShowCustomization(true)}
+                    variant="outline"
+                    size="sm"
+                    className="mt-3 bg-white/20 backdrop-blur-sm text-white border-white/40 hover:bg-white/30"
+                  >
+                    <Paintbrush className="w-4 h-4 mr-2" />
+                    Profil anpassen
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -634,6 +668,17 @@ export const ProfileView = ({
             loadClans(); // Reload clans list
             updateProfileField('clan', clan.name); // Auto-select the new clan
           }}
+        />
+      )}
+
+      {showCustomization && (
+        <ProfileCustomization
+          userId={user.id}
+          currentUsernameColor={usernameColor}
+          currentBackgroundColor={backgroundColor}
+          currentBorderStyle={borderStyle}
+          onClose={() => setShowCustomization(false)}
+          onUpdate={() => loadProfileData()}
         />
       )}
     </>;

@@ -5,6 +5,8 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { X, Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useSubscription } from '@/hooks/useSubscription';
+import { PLAN_LIMITS } from '@/lib/planLimits';
 
 interface ClanCreatorProps {
   onClose: () => void;
@@ -13,6 +15,7 @@ interface ClanCreatorProps {
 
 export const ClanCreator = ({ onClose, onClanCreated }: ClanCreatorProps) => {
   const { toast } = useToast();
+  const { subscription } = useSubscription();
   const [clanName, setClanName] = useState('');
   const [clanEmoji, setClanEmoji] = useState('');
   const [loading, setLoading] = useState(false);
@@ -32,12 +35,25 @@ export const ClanCreator = ({ onClose, onClanCreated }: ClanCreatorProps) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
+      // Check clan size limit based on plan
+      const plan = subscription?.plan || 'free';
+      const maxClanSize = PLAN_LIMITS[plan].maxClanSize;
+      
+      if (maxClanSize !== Infinity) {
+        toast({
+          title: 'Clan-Größen-Limit',
+          description: `Mit dem ${plan}-Plan kannst du Clans mit maximal ${maxClanSize} Mitgliedern erstellen. Upgrade für größere Clans!`,
+          variant: 'destructive'
+        });
+      }
+
       const { data, error } = await supabase
         .from('clans')
         .insert({
           name: clanName.trim(),
           emoji: clanEmoji.trim(),
-          created_by: user.id
+          created_by: user.id,
+          max_members: maxClanSize === Infinity ? 999999 : maxClanSize
         })
         .select()
         .single();

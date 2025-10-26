@@ -155,3 +155,10 @@ export const getXPProgress = (totalXP: number): {
     progressPercentage: Math.min(100, Math.max(0, progressPercentage))
   };
 };
+
+/**
+ * Apply XP boost for Ultimate users (2x XP)
+ */
+export const applyXPBoost = (xp: number, plan: 'free' | 'premium' | 'ultimate'): number => {
+  return plan === 'ultimate' ? xp * 2 : xp;
+};

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, Crown, Star, Zap, X, ArrowLeft } from 'lucide-react';
@@ -27,6 +27,26 @@ export default function PremiumPage() {
   const { user } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const success = searchParams.get('success');
+    const canceled = searchParams.get('canceled');
+    
+    if (success === 'true') {
+      toast.success('Zahlung erfolgreich!', {
+        description: 'Dein Premium-Plan wird in Kürze aktiviert. Bitte warte einen Moment.',
+      });
+      // Remove params from URL
+      window.history.replaceState({}, '', '/premium');
+    } else if (canceled === 'true') {
+      toast.error('Zahlung abgebrochen', {
+        description: 'Du hast die Zahlung abgebrochen.',
+      });
+      // Remove params from URL
+      window.history.replaceState({}, '', '/premium');
+    }
+  }, [searchParams]);
 
   const plans: PricingPlan[] = [
     {
@@ -96,10 +116,12 @@ export default function PremiumPage() {
         ? (plan === 'premium' ? 'price_1SLrHPEgHdKvS0zO8QKasnnZ' : 'price_1SLrIOEgHdKvS0zOXc8g0xvR')
         : (plan === 'premium' ? 'price_1SLrKnEgHdKvS0zOzzDlmFkI' : 'price_1SLrL8EgHdKvS0zOFy0VgBSD');
 
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout-session`, {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      const response = await fetch(`https://oqvbxhirnhdxaezkddtj.supabase.co/functions/v1/create-checkout-session`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${session?.access_token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
