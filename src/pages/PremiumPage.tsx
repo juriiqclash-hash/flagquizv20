@@ -118,29 +118,38 @@ export default function PremiumPage() {
 
       const { data: { session } } = await supabase.auth.getSession();
       
-      const response = await fetch(`https://oqvbxhirnhdxaezkddtj.supabase.co/functions/v1/create-checkout-session`, {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stripe-checkout`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${session?.access_token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          priceId,
-          userId: user.id,
-          plan,
+          price_id: priceId,
+          success_url: `${window.location.origin}/premium?success=true`,
+          cancel_url: `${window.location.origin}/premium?canceled=true`,
+          mode: 'subscription',
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create checkout session');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Checkout error:', errorData);
+        throw new Error(errorData.error || 'Failed to create checkout session');
       }
 
       const { url } = await response.json();
+
+      if (!url) {
+        throw new Error('No checkout URL received');
+      }
+
       window.location.href = url;
     } catch (error) {
       console.error('Error creating checkout session:', error);
-      toast.error('Error', {
-        description: 'Beim Erstellen der Checkout-Session ist ein Fehler aufgetreten.',
+      const message = error instanceof Error ? error.message : 'Unbekannter Fehler';
+      toast.error('Fehler beim Checkout', {
+        description: message,
       });
     } finally {
       setLoading(null);
