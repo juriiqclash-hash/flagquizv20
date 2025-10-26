@@ -266,7 +266,12 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   }, [fpsDisplayEnabled]);
 
   useEffect(() => {
-    document.documentElement.style.fontFamily = fontFamily === 'default' ? '' : fontFamily;
+    if (fontFamily === 'default') {
+      document.documentElement.style.fontFamily = '';
+    } else {
+      document.documentElement.style.fontFamily = fontFamily;
+      document.body.style.fontFamily = fontFamily;
+    }
     localStorage.setItem('fontFamily', fontFamily);
     saveToDatabase({ font_family: fontFamily });
   }, [fontFamily]);
@@ -311,27 +316,15 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     switch(mode) {
       case 'bad':
         root.classList.add('perf-bad');
-        setAnimationsEnabled(false);
-        setImageQuality('low');
-        setBlurEnabled(false);
         break;
       case 'performance':
         root.classList.add('perf-performance');
-        setAnimationsEnabled(false);
-        setImageQuality('medium');
-        setBlurIntensity(5);
         break;
       case 'high':
         root.classList.add('perf-high');
-        setAnimationsEnabled(true);
-        setImageQuality('high');
-        setBlurIntensity(10);
         break;
       case 'ultra':
         root.classList.add('perf-ultra');
-        setAnimationsEnabled(true);
-        setImageQuality('ultra');
-        setBlurIntensity(15);
         break;
     }
   };
@@ -939,7 +932,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                Erhöht den Kontrast für bessere Lesbarkeit
+                Gelb-Schwarz Farbschema mit hohem Kontrast
               </p>
             </div>
 
