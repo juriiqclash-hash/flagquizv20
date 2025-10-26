@@ -108,3 +108,8 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
   }
 }
+
+.no-animations * {
+  animation: none !important;
+  transition: none !important;
+}
