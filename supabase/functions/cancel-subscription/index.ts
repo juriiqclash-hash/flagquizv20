@@ -1,4 +1,4 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+
 import Stripe from "https://esm.sh/stripe@17.7.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -83,10 +83,11 @@ Deno.serve(async (req: Request) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );
-  } catch (error) {
-    console.error("Error canceling subscription:", error);
+  } catch (err) {
+    console.error("Error canceling subscription:", err);
+    const message = err instanceof Error ? err.message : "Internal server error";
     return new Response(
-      JSON.stringify({ error: error.message || "Internal server error" }),
+      JSON.stringify({ error: message }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

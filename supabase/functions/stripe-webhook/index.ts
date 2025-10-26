@@ -1,4 +1,4 @@
-import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
+
 import Stripe from 'https://esm.sh/stripe@17.7.0';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
       return new Response(`Webhook signature verification failed: ${error.message}`, { status: 400 });
     }
 
-    EdgeRuntime.waitUntil(handleEvent(event));
+    await handleEvent(event);
 
     return Response.json({ received: true });
   } catch (error: any) {

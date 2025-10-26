@@ -1,6 +1,6 @@
-import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
-import Stripe from 'npm:stripe@17.7.0';
-import { createClient } from 'npm:@supabase/supabase-js@2.49.1';
+
+import Stripe from 'https://esm.sh/stripe@17.7.0';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const supabase = createClient(Deno.env.get('SUPABASE_URL') ?? '', Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '');
 const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY')!;
