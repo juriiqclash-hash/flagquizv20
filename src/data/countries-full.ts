@@ -5,6 +5,7 @@ export const ALL_COUNTRIES = [
   { code: 'AD', name: 'Andorra', flag: '🇦🇩' },
   { code: 'AO', name: 'Angola', flag: '🇦🇴' },
   { code: 'AG', name: 'Antigua and Barbuda', flag: '🇦🇬' },
+  { code: 'AQ', name: 'Antarctica', flag: '🇦🇶' },
   { code: 'AR', name: 'Argentina', flag: '🇦🇷' },
   { code: 'AM', name: 'Armenia', flag: '🇦🇲' },
   { code: 'AU', name: 'Australia', flag: '🇦🇺' },
