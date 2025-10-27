@@ -124,45 +124,35 @@
 }
 
 .high-contrast {
-  --background: 0 0% 0%;
-  --foreground: 60 100% 100%;
-  --card: 0 0% 0%;
-  --card-foreground: 60 100% 100%;
-  --popover: 0 0% 0%;
-  --popover-foreground: 60 100% 100%;
-  --primary: 60 100% 50%;
-  --primary-foreground: 0 0% 0%;
-  --secondary: 60 100% 50%;
-  --secondary-foreground: 0 0% 0%;
-  --muted: 0 0% 20%;
-  --muted-foreground: 60 100% 90%;
-  --accent: 60 100% 50%;
-  --accent-foreground: 0 0% 0%;
-  --destructive: 0 100% 60%;
-  --destructive-foreground: 0 0% 0%;
-  --success: 120 100% 50%;
-  --success-foreground: 0 0% 0%;
-  --border: 60 100% 50%;
-  --input: 0 0% 10%;
-  --ring: 60 100% 50%;
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 0%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 0%;
+  --primary: 221 83% 53%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 20%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 0% 90%;
+  --muted-foreground: 0 0% 10%;
+  --accent: 221 83% 53%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 100% 40%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 0%;
+  --input: 0 0% 100%;
+  --ring: 221 83% 53%;
 }
 
 .high-contrast * {
-  border-width: 3px !important;
-  font-weight: 700 !important;
+  border-width: 2px;
+  font-weight: 500;
 }
 
 .high-contrast button,
 .high-contrast a {
-  font-weight: 800 !important;
-  border: 3px solid hsl(60 100% 50%) !important;
-}
-
-.high-contrast .bg-white\/10,
-.high-contrast .bg-white\/20,
-.high-contrast .bg-black\/80 {
-  background-color: hsl(0 0% 0%) !important;
-  border: 3px solid hsl(60 100% 50%) !important;
+  font-weight: 600;
 }
 
 .perf-bad * {
@@ -170,7 +160,6 @@
   transition: none !important;
   box-shadow: none !important;
   text-shadow: none !important;
-  transform: none !important;
 }
 
 .perf-bad .backdrop-blur-sm,
@@ -180,25 +169,9 @@
   -webkit-backdrop-filter: none !important;
 }
 
-.perf-bad img {
-  image-rendering: pixelated;
-}
-
 .perf-performance * {
-  animation-duration: 0.15s !important;
-  transition-duration: 0.15s !important;
-}
-
-.perf-performance .backdrop-blur-sm,
-.perf-performance .backdrop-blur-md,
-.perf-performance .backdrop-blur {
-  backdrop-filter: blur(3px) !important;
-  -webkit-backdrop-filter: blur(3px) !important;
-}
-
-.perf-high * {
-  animation-duration: 0.3s !important;
-  transition-duration: 0.3s !important;
+  animation-duration: 0.1s !important;
+  transition-duration: 0.1s !important;
 }
 
 .perf-ultra {
@@ -208,12 +181,4 @@
 
 .perf-ultra * {
   will-change: transform, opacity;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.perf-ultra .backdrop-blur-sm,
-.perf-ultra .backdrop-blur-md,
-.perf-ultra .backdrop-blur {
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
 }
