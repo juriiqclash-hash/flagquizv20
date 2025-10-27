@@ -439,7 +439,7 @@ export const PublicProfileView = ({
                   </AvatarFallback>
                 </Avatar>
                 <p className="text-sm md:text-base text-gray-300 mt-3 font-medium text-center" style={{
-                fontFamily: '"Varela Round", sans-serif'
+                fontFamily: '"VAG Rounded", sans-serif'
               }}>
                   Joined {accountCreated}
                 </p>
@@ -448,7 +448,7 @@ export const PublicProfileView = ({
               <div className="flex-1 flex flex-col items-center md:items-start w-full">
                 <div className="flex items-center gap-2 mb-1 md:mb-3">
                   <h1 className="text-4xl md:text-7xl font-bold text-white leading-none text-center md:text-left" style={{
-                  fontFamily: '"Varela Round", sans-serif'
+                  fontFamily: '"VAG Rounded", sans-serif'
                 }}>
                     {username}
                   </h1>
@@ -465,7 +465,7 @@ export const PublicProfileView = ({
                   )}
                 </div>
                 <p className="text-xl md:text-2xl text-gray-300 mb-2 font-medium text-center md:text-left" style={{
-                fontFamily: '"Varela Round", sans-serif'
+                fontFamily: '"VAG Rounded", sans-serif'
               }}>
                   {t.level} {level}
                 </p>
@@ -484,7 +484,7 @@ export const PublicProfileView = ({
                         className="w-12 h-9 md:w-16 md:h-12 object-cover rounded mb-0.5 md:mb-1"
                       />
                       <span className="text-[10px] md:text-xs text-gray-300 font-semibold" style={{
-                    fontFamily: '"Varela Round", sans-serif'
+                    fontFamily: '"VAG Rounded", sans-serif'
                   }}>
                         {profileData.flag}
                       </span>

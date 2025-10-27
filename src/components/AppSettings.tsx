@@ -140,8 +140,8 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
         setStatisticsPublic(data.statistics_public ?? true);
         setAnalyticsEnabled(data.analytics_enabled ?? true);
         setFpsDisplayEnabled(data.fps_display_enabled ?? false);
-        setFontFamily(String(data.font_family || 'default'));
-        setPerformanceMode(String(data.performance_mode || 'high'));
+        setFontFamily(data.font_family || 'default');
+        setPerformanceMode(data.performance_mode || 'high');
         setHighContrastMode(data.high_contrast_mode ?? false);
         setNetworkStatsEnabled(data.network_stats_enabled ?? false);
       }

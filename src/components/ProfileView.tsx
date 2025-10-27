@@ -382,7 +382,7 @@ export const ProfileView = ({
                   {username.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <p className="text-sm text-gray-300 mt-3 font-medium hidden md:block" style={{ fontFamily: '"Varela Round", sans-serif' }}>Joined {accountCreated}</p>
+              <p className="text-sm text-gray-300 mt-3 font-medium hidden md:block" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>Joined {accountCreated}</p>
             </div>
 
             {/* Right Side: Username, Level Bar, and Customization Slots - Centered on mobile */}
@@ -391,7 +391,7 @@ export const ProfileView = ({
                 <h1 
                   className="text-4xl md:text-7xl font-bold leading-none text-center md:text-left" 
                   style={{ 
-                    fontFamily: '"Varela Round", sans-serif',
+                    fontFamily: '"VAG Rounded", sans-serif',
                     color: usernameColor,
                     textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
                   }}
@@ -410,7 +410,7 @@ export const ProfileView = ({
                   />
                 )}
               </div>
-              <p className="text-xl md:text-2xl text-gray-300 mb-2 font-medium text-center md:text-left" style={{ fontFamily: '"Varela Round", sans-serif' }}>{t.level} {level}</p>
+              <p className="text-xl md:text-2xl text-gray-300 mb-2 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>{t.level} {level}</p>
 
 
               {/* XP Progress Bar */}
@@ -437,7 +437,7 @@ export const ProfileView = ({
                         alt={profileData.flag}
                         className="w-12 h-9 md:w-16 md:h-12 object-cover rounded mb-0.5 md:mb-1"
                       />
-                      <span className="text-[10px] md:text-xs text-gray-300 font-semibold" style={{ fontFamily: '"Varela Round", sans-serif' }}>
+                      <span className="text-[10px] md:text-xs text-gray-300 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.flag}
                       </span>
                     </>
@@ -458,7 +458,7 @@ export const ProfileView = ({
                       <span className="text-2xl md:text-4xl mb-0.5 md:mb-1">
                         {CONTINENTS.find(c => c.code === profileData.continent)?.emoji}
                       </span>
-                      <span className="text-[10px] md:text-xs text-gray-300 font-semibold" style={{ fontFamily: '"Varela Round", sans-serif' }}>
+                      <span className="text-[10px] md:text-xs text-gray-300 font-semibold" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
                         {profileData.continent}
                       </span>
                     </> : <Plus className="w-6 md:w-8 h-6 md:h-8 text-gray-200" />}
