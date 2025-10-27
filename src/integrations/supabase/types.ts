@@ -390,6 +390,7 @@ export type Database = {
           country_changes_this_month: number | null
           created_at: string
           id: string
+          is_deactivated: boolean | null
           last_country_change: string | null
           last_username_change: string | null
           profile_border_style: string | null
@@ -412,6 +413,7 @@ export type Database = {
           country_changes_this_month?: number | null
           created_at?: string
           id?: string
+          is_deactivated?: boolean | null
           last_country_change?: string | null
           last_username_change?: string | null
           profile_border_style?: string | null
@@ -434,6 +436,7 @@ export type Database = {
           country_changes_this_month?: number | null
           created_at?: string
           id?: string
+          is_deactivated?: boolean | null
           last_country_change?: string | null
           last_username_change?: string | null
           profile_border_style?: string | null
@@ -445,6 +448,54 @@ export type Database = {
           username?: string
           username_changes_this_month?: number | null
           username_color?: string | null
+        }
+        Relationships: []
+      }
+      stripe_user_subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean | null
+          created_at: string
+          current_period_end: number | null
+          current_period_start: number | null
+          customer_id: string
+          id: string
+          payment_method_brand: string | null
+          payment_method_last4: string | null
+          price_id: string | null
+          subscription_id: string | null
+          subscription_status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string
+          current_period_end?: number | null
+          current_period_start?: number | null
+          customer_id: string
+          id?: string
+          payment_method_brand?: string | null
+          payment_method_last4?: string | null
+          price_id?: string | null
+          subscription_id?: string | null
+          subscription_status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string
+          current_period_end?: number | null
+          current_period_start?: number | null
+          customer_id?: string
+          id?: string
+          payment_method_brand?: string | null
+          payment_method_last4?: string | null
+          price_id?: string | null
+          subscription_id?: string | null
+          subscription_status?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -534,6 +585,72 @@ export type Database = {
           created_at?: string | null
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_settings: {
+        Row: {
+          analytics_enabled: boolean | null
+          animations_enabled: boolean | null
+          blur_enabled: boolean | null
+          blur_intensity: number | null
+          created_at: string
+          font_family: string | null
+          fps_display_enabled: boolean | null
+          fullscreen_mode: boolean | null
+          high_contrast_mode: boolean | null
+          id: string
+          image_quality: string | null
+          network_stats_enabled: boolean | null
+          notifications_enabled: boolean | null
+          performance_mode: boolean | null
+          profile_visibility: string | null
+          server_region: string | null
+          statistics_public: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          analytics_enabled?: boolean | null
+          animations_enabled?: boolean | null
+          blur_enabled?: boolean | null
+          blur_intensity?: number | null
+          created_at?: string
+          font_family?: string | null
+          fps_display_enabled?: boolean | null
+          fullscreen_mode?: boolean | null
+          high_contrast_mode?: boolean | null
+          id?: string
+          image_quality?: string | null
+          network_stats_enabled?: boolean | null
+          notifications_enabled?: boolean | null
+          performance_mode?: boolean | null
+          profile_visibility?: string | null
+          server_region?: string | null
+          statistics_public?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          analytics_enabled?: boolean | null
+          animations_enabled?: boolean | null
+          blur_enabled?: boolean | null
+          blur_intensity?: number | null
+          created_at?: string
+          font_family?: string | null
+          fps_display_enabled?: boolean | null
+          fullscreen_mode?: boolean | null
+          high_contrast_mode?: boolean | null
+          id?: string
+          image_quality?: string | null
+          network_stats_enabled?: boolean | null
+          notifications_enabled?: boolean | null
+          performance_mode?: boolean | null
+          profile_visibility?: string | null
+          server_region?: string | null
+          statistics_public?: boolean | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
