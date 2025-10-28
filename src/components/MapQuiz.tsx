@@ -4,7 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Flag, Building, Languages, Mountain, Info } from "lucide-react";
+import { ArrowLeft, Flag, Building, Languages, Mountain } from "lucide-react";
 import { ALL_COUNTRIES } from "@/data/countries-full";
 import { capitals } from "@/data/capitals";
 import { countryMountains } from "@/data/mountains";
@@ -344,8 +344,11 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
           );
           const acceptedCodes = allCountriesWithLanguage.map(l => l.code);
 
+          const countryCount = allCountriesWithLanguage.length;
+          const additionalInfo = countryCount > 1 ? ` (wird noch in ${countryCount - 1} weiteren Ländern gesprochen)` : '';
+
           question = `Wo hat ${language.primaryLanguage} seinen Ursprung?`;
-          answer = `${language.primaryLanguage}`;
+          answer = `${language.primaryLanguage}${additionalInfo}`;
 
           if (languageOrigin) {
             const originCoords = countryCoordinates[languageOrigin.originCountryCode];
@@ -445,30 +448,6 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
               <ArrowLeft className="h-6 w-6" />
             </Button>
             <h1 className="text-3xl font-bold">Karten Quiz</h1>
-          </div>
-
-          <div className="mb-8">
-            <Card className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800">
-              <CardContent className="pt-6">
-                <div className="flex gap-3">
-                  <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-                  <div className="space-y-2 text-sm text-blue-900 dark:text-blue-100">
-                    <p className="font-semibold">So funktioniert das Karten Quiz:</p>
-                    <ul className="list-disc list-inside space-y-1 ml-2">
-                      <li>Wähle eine Kategorie aus</li>
-                      <li>Du bekommst eine Frage zu einem Land, einer Hauptstadt, Sprache oder Berg</li>
-                      <li>Klicke auf die interaktive Weltkarte, wo du denkst, dass es liegt</li>
-                      <li>Du kannst zoomen und die Karte verschieben</li>
-                      <li>Je näher dein Klick am richtigen Ort ist, desto mehr Punkte bekommst du</li>
-                      <li>Bei Hauptstädten: Klicke die Stadt an, nicht das Land</li>
-                      <li>Bei Sprachen: Klicke das Ursprungsland an (z.B. Englisch → England)</li>
-                      <li>Bei Bergen: Je präziser auf dem Berg, desto höher die Punkte</li>
-                      <li>Das Quiz läuft unendlich - spiele so lange du willst!</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
