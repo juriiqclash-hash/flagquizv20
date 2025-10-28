@@ -214,7 +214,7 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
   const handleDeactivateAccount = async () => {
     setIsLoading(true);
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('profiles')
         .update({
           is_deactivated: true,

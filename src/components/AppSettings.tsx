@@ -400,7 +400,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     localStorage.clear();
 
     if (user) {
-      supabase
+      (supabase as any)
         .from('user_settings')
         .delete()
         .eq('user_id', user.id)

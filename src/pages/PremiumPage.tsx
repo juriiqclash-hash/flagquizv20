@@ -116,30 +116,21 @@ export default function PremiumPage() {
         ? (plan === 'premium' ? 'price_1SLrHPEgHdKvS0zO8QKasnnZ' : 'price_1SLrIOEgHdKvS0zOXc8g0xvR')
         : (plan === 'premium' ? 'price_1SLrKnEgHdKvS0zOzzDlmFkI' : 'price_1SLrL8EgHdKvS0zOFy0VgBSD');
 
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stripe-checkout`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${session?.access_token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('stripe-checkout', {
+        body: {
           price_id: priceId,
           success_url: `${window.location.origin}/premium?success=true`,
           cancel_url: `${window.location.origin}/premium?canceled=true`,
           mode: 'subscription',
-        }),
+        },
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Checkout error:', errorData);
-        throw new Error(errorData.error || 'Failed to create checkout session');
+      if (error) {
+        console.error('Checkout error:', error);
+        throw new Error((error as any).message || 'Failed to create checkout session');
       }
 
-      const { url } = await response.json();
-
+      const url = (data as any)?.url;
       if (!url) {
         throw new Error('No checkout URL received');
       }
