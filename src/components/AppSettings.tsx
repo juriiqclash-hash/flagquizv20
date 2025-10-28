@@ -122,7 +122,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     if (savedNetworkStats) setNetworkStatsEnabled(savedNetworkStats === 'true');
 
     if (user) {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('user_settings')
         .select('*')
         .eq('user_id', user.id)
@@ -151,7 +151,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   const saveToDatabase = async (settings: any) => {
     if (!user) return;
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('user_settings')
       .upsert({
         user_id: user.id,
