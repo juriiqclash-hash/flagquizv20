@@ -1351,8 +1351,8 @@ export default function SettingsPage() {
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        <div className="w-64 border-r border-slate-800 bg-slate-900/30 p-4 flex flex-col justify-end">
-          <nav className="space-y-1">
+        <div className="w-64 border-r border-slate-800 bg-slate-900/30 overflow-y-auto">
+          <nav className="space-y-1 p-4">
             {CATEGORIES.map((category) => {
               const Icon = category.icon;
               return (

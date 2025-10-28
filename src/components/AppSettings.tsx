@@ -6,7 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock, Loader2, Zap, Monitor, Contrast, Wifi, Save, Gauge, Languages, Music, Vibrate, Database, X } from 'lucide-react';
+import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock, Loader2, Zap, Monitor, Contrast, Wifi, Save, Gauge, Languages, Music, Vibrate, Database } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -1306,19 +1306,8 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
             </div>
 
             {/* Right Content Area */}
-            <div className="flex-1 flex flex-col">
-              <div className="flex items-center justify-between p-6 border-b">
-                <div />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onOpenChange(false)}
-                >
-                  <X className="h-5 w-5" />
-                </Button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 flex flex-col overflow-y-auto">
+              <div className="p-6">
                 <div className="max-w-3xl">
                   {renderContent()}
                 </div>
