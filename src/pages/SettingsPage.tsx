@@ -637,8 +637,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Allgemeine Einstellungen</h2>
-              <p className="text-muted-foreground">Grundlegende Einstellungen für die Anwendung</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Allgemeine Einstellungen</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Grundlegende Einstellungen für die Anwendung</p>
             </div>
 
             <div className="space-y-6">
@@ -796,8 +796,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Grafikeinstellungen</h2>
-              <p className="text-muted-foreground">Visuelle Einstellungen und Effekte</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Grafikeinstellungen</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Visuelle Einstellungen und Effekte</p>
             </div>
 
             <div className="space-y-6">
@@ -1001,8 +1001,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Benachrichtigungen</h2>
-              <p className="text-muted-foreground">Verwaltung von Push-Benachrichtigungen</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Benachrichtigungen</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Verwaltung von Push-Benachrichtigungen</p>
             </div>
 
             <div className="space-y-6">
@@ -1156,8 +1156,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Datenschutz</h2>
-              <p className="text-muted-foreground">Ihre Privatsphäre und Sichtbarkeit</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Datenschutz</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Ihre Privatsphäre und Sichtbarkeit</p>
             </div>
 
             <div className="space-y-6">
@@ -1226,8 +1226,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Entwickler-Optionen</h2>
-              <p className="text-muted-foreground">Erweiterte Optionen für Entwickler und Debugging</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Entwickler-Optionen</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Erweiterte Optionen für Entwickler und Debugging</p>
             </div>
 
             <div className="space-y-6">
@@ -1276,8 +1276,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Leistung</h2>
-              <p className="text-muted-foreground">Optimierung der Performance</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Leistung</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Optimierung der Performance</p>
             </div>
 
             <div className="space-y-6">
@@ -1309,8 +1309,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Audio & Haptik</h2>
-              <p className="text-muted-foreground">Sound und Vibration</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Audio & Haptik</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Sound und Vibration</p>
             </div>
 
             <div className="space-y-6">
@@ -1415,8 +1415,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Sprache</h2>
-              <p className="text-muted-foreground">Spracheinstellungen</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Sprache</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Spracheinstellungen</p>
             </div>
 
             <div className="space-y-6">
@@ -1450,8 +1450,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Datenverbrauch</h2>
-              <p className="text-muted-foreground">Verwaltung des Datenverbrauchs</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Datenverbrauch</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Verwaltung des Datenverbrauchs</p>
             </div>
 
             <div className="space-y-6">
@@ -1482,8 +1482,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Cache-Verwaltung</h2>
-              <p className="text-muted-foreground">Verwaltung von zwischengespeicherten Daten</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Cache-Verwaltung</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Verwaltung von zwischengespeicherten Daten</p>
             </div>
 
             <div className="space-y-6">
@@ -1529,8 +1529,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Admin-Bereich</h2>
-              <p className="text-muted-foreground">Zugang zum Administrator-Panel</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Admin-Bereich</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Zugang zum Administrator-Panel</p>
             </div>
 
             <div className="space-y-6">
@@ -1573,8 +1573,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">System-Informationen</h2>
-              <p className="text-muted-foreground">Informationen über die Anwendung</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">System-Informationen</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Informationen über die Anwendung</p>
             </div>
 
             <div className="space-y-6">
@@ -1618,8 +1618,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Spielmechanik</h2>
-              <p className="text-muted-foreground">Passe das Spielverhalten an deine Bedürfnisse an</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Spielmechanik</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Passe das Spielverhalten an deine Bedürfnisse an</p>
             </div>
 
             <div className="space-y-6">
@@ -1732,8 +1732,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Personalisierung</h2>
-              <p className="text-muted-foreground">Passe das Aussehen der App an</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Personalisierung</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Passe das Aussehen der App an</p>
             </div>
 
             <div className="space-y-6">
@@ -1816,8 +1816,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Steuerung</h2>
-              <p className="text-muted-foreground">Tastatur, Maus und Touch-Einstellungen</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Steuerung</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Tastatur, Maus und Touch-Einstellungen</p>
             </div>
 
             <div className="space-y-6">
@@ -1885,8 +1885,8 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Import/Export</h2>
-              <p className="text-muted-foreground">Einstellungen sichern und wiederherstellen</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Import/Export</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Einstellungen sichern und wiederherstellen</p>
             </div>
 
             <div className="space-y-6">
@@ -2001,40 +2001,40 @@ export default function SettingsPage() {
 
   return (
     <div className="h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col">
-      <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm px-3 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Button
             variant="ghost"
             onClick={() => navigate('/')}
             className="text-white hover:bg-white/10"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Zurück
+            <ArrowLeft className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Zurück</span>
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-white">Einstellungen</h1>
-            <p className="text-sm text-slate-400">Passen Sie Ihre Präferenzen an</p>
+            <h1 className="text-lg sm:text-2xl font-bold text-white">Einstellungen</h1>
+            <p className="text-xs sm:text-sm text-slate-400 hidden sm:block">Passen Sie Ihre Präferenzen an</p>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 flex overflow-hidden">
-        <div className="w-64 border-r border-slate-800 bg-slate-900/30 overflow-y-auto">
-          <nav className="space-y-1 p-4">
+      <div className="flex-1 flex overflow-hidden flex-col md:flex-row">
+        <div className="md:w-64 border-b md:border-b-0 md:border-r border-slate-800 bg-slate-900/30 overflow-x-auto md:overflow-y-auto">
+          <nav className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-1 p-2 md:p-4">
             {CATEGORIES.map((category) => {
               const Icon = category.icon;
               return (
                 <button
                   key={category.id}
                   onClick={() => setActiveCategory(category.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${
+                  className={`flex-shrink-0 flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-left transition-all whitespace-nowrap ${
                     activeCategory === category.id
                       ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
                       : 'text-slate-300 hover:bg-slate-800/50 hover:text-white'
                   }`}
                 >
-                  <Icon className="h-5 w-5" />
-                  <span className="font-medium">{category.label}</span>
+                  <Icon className="h-4 w-4 md:h-5 md:w-5 flex-shrink-0" />
+                  <span className="text-sm md:text-base font-medium">{category.label}</span>
                 </button>
               );
             })}
@@ -2042,7 +2042,7 @@ export default function SettingsPage() {
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          <div className="max-w-4xl mx-auto p-8">
+          <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
             {renderCategoryContent()}
           </div>
         </div>
