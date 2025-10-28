@@ -152,61 +152,72 @@ async function syncCustomerFromStripe(customerId: string) {
       customer: customerId,
       limit: 1,
       status: 'all',
-      expand: ['data.items.data.price'],
+      expand: ['data.default_payment_method'],
     });
-
-    // Determine subscription plan based on status
-    let plan = 'free';
-    let status = 'active';
-    let subscriptionData: any = {};
 
     if (subscriptions.data.length > 0) {
       const subscription = subscriptions.data[0];
+      const priceId = subscription.items.data[0].price.id;
       
-      // Determine plan based on metadata or price
-      const metadata = subscription.metadata;
-      if (metadata.plan) {
-        plan = metadata.plan;
-      } else {
-        // Try to determine from price ID
-        const priceId = subscription.items.data[0].price.id;
-        if (priceId.includes('premium') || priceId === 'price_1SLrHPEgHdKvS0zO8QKasnnZ' || priceId === 'price_1SLrKnEgHdKvS0zOzzDlmFkI') {
-          plan = 'premium';
-        } else if (priceId.includes('ultimate') || priceId === 'price_1SLrIOEgHdKvS0zOXc8g0xvR' || priceId === 'price_1SLrL8EgHdKvS0zOFy0VgBSD') {
-          plan = 'ultimate';
+      // Get payment method details
+      let paymentMethodBrand = null;
+      let paymentMethodLast4 = null;
+      
+      if (subscription.default_payment_method && typeof subscription.default_payment_method === 'object') {
+        const pm = subscription.default_payment_method as Stripe.PaymentMethod;
+        if (pm.card) {
+          paymentMethodBrand = pm.card.brand;
+          paymentMethodLast4 = pm.card.last4;
         }
       }
 
-      status = subscription.status === 'active' ? 'active' : subscription.status === 'canceled' ? 'canceled' : 'expired';
-      
-      subscriptionData = {
-        stripe_customer_id: customerId,
-        stripe_subscription_id: subscription.id,
-        stripe_price_id: subscription.items.data[0].price.id,
-        current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-        current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-        cancel_at_period_end: subscription.cancel_at_period_end,
-      };
-    }
+      // Upsert into stripe_user_subscriptions table
+      const { error: subError } = await supabase
+        .from('stripe_user_subscriptions')
+        .upsert({
+          user_id: user.id,
+          customer_id: customerId,
+          subscription_id: subscription.id,
+          subscription_status: subscription.status,
+          price_id: priceId,
+          current_period_start: subscription.current_period_start,
+          current_period_end: subscription.current_period_end,
+          cancel_at_period_end: subscription.cancel_at_period_end,
+          payment_method_brand: paymentMethodBrand,
+          payment_method_last4: paymentMethodLast4,
+        }, {
+          onConflict: 'user_id',
+        });
 
-    // Upsert subscription in our database
-    const { error: subError } = await supabase
-      .from('subscriptions')
-      .upsert({
-        user_id: user.id,
-        plan,
-        status,
-        ...subscriptionData,
-        updated_at: new Date().toISOString(),
-      }, {
-        onConflict: 'user_id',
-      });
+      if (subError) {
+        console.error('Error syncing subscription:', subError);
+        throw new Error('Failed to sync subscription in database');
+      }
+      console.info(`Successfully synced subscription for customer: ${customerId}, user: ${user.id}, price: ${priceId}, status: ${subscription.status}`);
+    } else {
+      // No active subscription - set user back to free
+      const { error: subError } = await supabase
+        .from('stripe_user_subscriptions')
+        .upsert({
+          user_id: user.id,
+          customer_id: customerId,
+          subscription_id: null,
+          subscription_status: null,
+          price_id: null,
+          current_period_start: null,
+          current_period_end: null,
+          cancel_at_period_end: false,
+          payment_method_brand: null,
+          payment_method_last4: null,
+        }, {
+          onConflict: 'user_id',
+        });
 
-    if (subError) {
-      console.error('Error syncing subscription:', subError);
-      throw new Error('Failed to sync subscription in database');
+      if (subError) {
+        console.error('Error clearing subscription:', subError);
+      }
+      console.info(`No active subscription for customer: ${customerId}, user: ${user.id} - set to free`);
     }
-    console.info(`Successfully synced subscription for customer: ${customerId}, user: ${user.id}, plan: ${plan}`);
   } catch (error) {
     console.error(`Failed to sync subscription for customer ${customerId}:`, error);
     throw error;
