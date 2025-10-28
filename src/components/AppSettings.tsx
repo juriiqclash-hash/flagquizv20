@@ -1306,8 +1306,8 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
             </div>
 
             {/* Right Content Area */}
-            <div className="flex-1 flex flex-col overflow-y-auto">
-              <div className="p-6">
+            <div className="flex-1 overflow-y-auto">
+              <div className="p-6 pb-12">
                 <div className="max-w-3xl">
                   {renderContent()}
                 </div>
