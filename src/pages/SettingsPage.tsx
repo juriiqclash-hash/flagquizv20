@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Settings, Image, Bell, Shield, Activity, Zap, Music, Languages, Database, Trash2, Lock, Info, Gamepad2, Palette, Download, Timer, Keyboard } from 'lucide-react';
+import { ArrowLeft, Settings, Image, Bell, Shield, Activity, Zap, Music, Languages, Database, Trash2, Lock, Info, Gamepad2, Palette, Download, Timer, Keyboard, Menu, X } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -47,6 +47,7 @@ export default function SettingsPage() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [activeCategory, setActiveCategory] = useState('general');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [fontSize, setFontSize] = useState(16);
   const [darkMode, setDarkMode] = useState(false);
@@ -2018,23 +2019,51 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className="flex-1 flex overflow-hidden flex-col md:flex-row">
-        <div className="md:w-64 border-b md:border-b-0 md:border-r border-slate-800 bg-slate-900/30 overflow-x-auto md:overflow-y-auto">
-          <nav className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-1 p-2 md:p-4">
+      <div className="flex-1 flex overflow-hidden flex-col md:flex-row relative">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-lg"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </Button>
+
+        <div className={`
+          fixed md:static inset-0 z-40 md:z-auto
+          md:w-64 border-slate-800 bg-slate-900/95 md:bg-slate-900/30 backdrop-blur-lg md:backdrop-blur-none
+          md:border-r overflow-y-auto
+          transition-transform duration-300 ease-in-out
+          ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        `}>
+          <div className="md:hidden flex items-center justify-between p-4 border-b border-slate-800">
+            <h2 className="text-lg font-bold text-white">Kategorien</h2>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <X className="h-5 w-5 text-white" />
+            </Button>
+          </div>
+          <nav className="flex flex-col space-y-1 p-4">
             {CATEGORIES.map((category) => {
               const Icon = category.icon;
               return (
                 <button
                   key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={`flex-shrink-0 flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-left transition-all whitespace-nowrap ${
+                  onClick={() => {
+                    setActiveCategory(category.id);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${
                     activeCategory === category.id
                       ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
                       : 'text-slate-300 hover:bg-slate-800/50 hover:text-white'
                   }`}
                 >
-                  <Icon className="h-4 w-4 md:h-5 md:w-5 flex-shrink-0" />
-                  <span className="text-sm md:text-base font-medium">{category.label}</span>
+                  <Icon className="h-5 w-5 flex-shrink-0" />
+                  <span className="font-medium">{category.label}</span>
                 </button>
               );
             })}
