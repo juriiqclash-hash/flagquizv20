@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
-import { Play, Loader as Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu, BookMarked, Crown } from "lucide-react";
+import { Play, Loader as Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu, BookMarked, Crown, Settings, Info } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 const QUIZ_MODE_ICONS: {
@@ -36,6 +36,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { PublicProfileView } from "@/components/PublicProfileView";
 import { calculateLevel } from "@/lib/xpSystem";
 import { calculateRank as calculateProfileRank } from "@/lib/profileRank";
+import SettingsDialog from "@/components/SettingsDialog";
+import InfoDialog from "@/components/InfoDialog";
 interface MainMenuProps {
   onStart: () => void;
   onMultiplayerStart?: () => void;
@@ -146,6 +148,8 @@ export default function MainMenu({
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const {
     user
@@ -416,6 +420,14 @@ export default function MainMenu({
 
                 <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => navigate('/clans')}>
                   <Shield className="h-5 w-5" />
+                </Button>
+
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => setSettingsOpen(true)}>
+                  <Settings className="h-5 w-5" />
+                </Button>
+
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => setInfoOpen(true)}>
+                  <Info className="h-5 w-5" />
                 </Button>
               </>}
           </div>
@@ -718,5 +730,8 @@ export default function MainMenu({
       setSelectedUserId(null);
       navigate(`/clans?clanId=${clanId}`);
     }} />}
+
+      <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
+      <InfoDialog open={infoOpen} onOpenChange={setInfoOpen} />
     </div>;
 }

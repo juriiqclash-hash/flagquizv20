@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Mail, Edit3, Lock, Trash2, Upload, UserX } from 'lucide-react';
+import { Mail, Edit3, Lock, Trash2, Upload, UserX, User, Shield, Bell, Palette, X } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -15,6 +14,8 @@ interface SettingsDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
+type SettingsCategory = 'account' | 'privacy' | 'appearance' | 'notifications';
+
 const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -22,7 +23,8 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [currentUsername, setCurrentUsername] = useState<string>('');
-  
+  const [activeCategory, setActiveCategory] = useState<SettingsCategory>('account');
+
   // Form states
   const [newEmail, setNewEmail] = useState('');
   const [newUsername, setNewUsername] = useState('');
@@ -265,16 +267,65 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
     }
   };
 
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl">Einstellungen</DialogTitle>
-        </DialogHeader>
+  const categories = [
+    { id: 'account' as SettingsCategory, label: 'Account', icon: User },
+    { id: 'privacy' as SettingsCategory, label: 'Datenschutz', icon: Shield },
+    { id: 'appearance' as SettingsCategory, label: 'Darstellung', icon: Palette },
+    { id: 'notifications' as SettingsCategory, label: 'Benachrichtigungen', icon: Bell },
+  ];
 
-        <div className="space-y-6">
-          {/* Avatar Upload */}
-          <div className="flex flex-col items-center space-y-4">
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
+      <div className="fixed inset-0 flex items-center justify-center p-4">
+        <div className="bg-background w-full h-full max-w-7xl max-h-[90vh] rounded-lg shadow-2xl flex overflow-hidden">
+          {/* Left Sidebar - Categories */}
+          <div className="w-64 bg-muted/30 border-r border-border p-6 space-y-2">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold">Einstellungen</h2>
+            </div>
+            {categories.map((category) => {
+              const Icon = category.icon;
+              return (
+                <button
+                  key={category.id}
+                  onClick={() => setActiveCategory(category.id)}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                    activeCategory === category.id
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span className="font-medium">{category.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Right Content Area */}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-border">
+              <h3 className="text-xl font-semibold">
+                {categories.find((c) => c.id === activeCategory)?.label}
+              </h3>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => onOpenChange(false)}
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {activeCategory === 'account' && (
+                <div className="space-y-6 max-w-2xl">
+                  {/* Avatar Upload */}
+                  <div className="flex flex-col items-center space-y-4 pb-6 border-b border-border">
             <Avatar className="h-24 w-24">
               <AvatarImage src={avatarUrl || undefined} />
               <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
@@ -285,23 +336,23 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
               <p className="font-semibold text-lg">{currentUsername || user?.email?.split('@')[0]}</p>
             </div>
 
-            <Label htmlFor="avatar-upload" className="cursor-pointer">
-              <div className="flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-accent transition-colors">
-                <Upload className="h-4 w-4" />
-                <span>Profilbild ändern</span>
-              </div>
-              <Input
-                id="avatar-upload"
-                type="file"
-                accept="image/*"
-                onChange={handleAvatarUpload}
-                className="hidden"
-              />
-            </Label>
-          </div>
+                    <Label htmlFor="avatar-upload" className="cursor-pointer">
+                      <div className="flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-accent transition-colors">
+                        <Upload className="h-4 w-4" />
+                        <span>Profilbild ändern</span>
+                      </div>
+                      <Input
+                        id="avatar-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleAvatarUpload}
+                        className="hidden"
+                      />
+                    </Label>
+                  </div>
 
-          {/* Email Change */}
-          <div className="space-y-2">
+                  {/* Email Change */}
+                  <div className="space-y-2">
             <Label htmlFor="new-email" className="flex items-center gap-2">
               <Mail className="h-4 w-4" />
               E-Mail ändern
@@ -314,14 +365,14 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
                 onChange={(e) => setNewEmail(e.target.value)}
                 placeholder={user?.email || ''}
               />
-              <Button onClick={handleChangeEmail} disabled={isLoading || !newEmail}>
-                Ändern
-              </Button>
-            </div>
-          </div>
+                      <Button onClick={handleChangeEmail} disabled={isLoading || !newEmail}>
+                        Ändern
+                      </Button>
+                    </div>
+                  </div>
 
-          {/* Username Change */}
-          <div className="space-y-2">
+                  {/* Username Change */}
+                  <div className="space-y-2">
             <Label htmlFor="new-username" className="flex items-center gap-2">
               <Edit3 className="h-4 w-4" />
               Benutzername ändern
@@ -334,14 +385,14 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
                 onChange={(e) => setNewUsername(e.target.value)}
                 placeholder="Neuer Benutzername"
               />
-              <Button onClick={handleChangeUsername} disabled={isLoading || !newUsername}>
-                Ändern
-              </Button>
-            </div>
-          </div>
+                      <Button onClick={handleChangeUsername} disabled={isLoading || !newUsername}>
+                        Ändern
+                      </Button>
+                    </div>
+                  </div>
 
-          {/* Password Change */}
-          <div className="space-y-2">
+                  {/* Password Change */}
+                  <div className="space-y-2">
             <Label htmlFor="new-password" className="flex items-center gap-2">
               <Lock className="h-4 w-4" />
               Passwort ändern
@@ -354,14 +405,14 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Neues Passwort"
               />
-              <Button onClick={handleChangePassword} disabled={isLoading || !newPassword}>
-                Ändern
-              </Button>
-            </div>
-          </div>
+                      <Button onClick={handleChangePassword} disabled={isLoading || !newPassword}>
+                        Ändern
+                      </Button>
+                    </div>
+                  </div>
 
-          {/* Deactivate Account */}
-          <div className="pt-4 border-t border-border space-y-3">
+                  {/* Deactivate Account */}
+                  <div className="pt-6 border-t border-border space-y-3">
             {!showDeactivateConfirm ? (
               <Button
                 variant="outline"
@@ -395,8 +446,8 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
               </div>
             )}
 
-            {/* Delete Account */}
-            {!showDeleteConfirm ? (
+                    {/* Delete Account */}
+                    {!showDeleteConfirm ? (
               <Button
                 variant="outline"
                 className="w-full text-destructive hover:bg-destructive hover:text-destructive-foreground"
@@ -426,13 +477,59 @@ const SettingsDialog = ({ open, onOpenChange }: SettingsDialogProps) => {
                   >
                     Löschen
                   </Button>
+                    </div>
+                  </div>
+                )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+
+              {activeCategory === 'privacy' && (
+                <div className="space-y-6 max-w-2xl">
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-semibold mb-2">Datenschutzeinstellungen</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Verwalte deine Datenschutzeinstellungen und lege fest, wer dein Profil sehen kann.
+                    </p>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Weitere Datenschutzoptionen werden in Kürze verfügbar sein.
+                  </div>
+                </div>
+              )}
+
+              {activeCategory === 'appearance' && (
+                <div className="space-y-6 max-w-2xl">
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-semibold mb-2">Darstellungseinstellungen</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Passe das Erscheinungsbild der App an deine Vorlieben an.
+                    </p>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Theme-Einstellungen werden in Kürze verfügbar sein.
+                  </div>
+                </div>
+              )}
+
+              {activeCategory === 'notifications' && (
+                <div className="space-y-6 max-w-2xl">
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-semibold mb-2">Benachrichtigungseinstellungen</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Verwalte, welche Benachrichtigungen du erhalten möchtest.
+                    </p>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Benachrichtigungseinstellungen werden in Kürze verfügbar sein.
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
 
