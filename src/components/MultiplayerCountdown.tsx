@@ -89,21 +89,9 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex flex-col items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-600/20 via-transparent to-transparent" />
 
-      <div className="w-full max-w-7xl relative z-10 flex flex-col items-center justify-center">
-        <div className="text-center space-y-2 mb-8">
-          <h2 className="text-4xl lg:text-5xl font-black text-white tracking-wider drop-shadow-[0_0_30px_rgba(255,255,255,0.5)]">
-            GET READY!
-          </h2>
-          <div className="relative inline-block">
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 blur-3xl opacity-60 animate-pulse" />
-            <div className="relative text-8xl lg:text-9xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
-              {count}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-center gap-16 lg:gap-32 w-full">
-          <div className="flex flex-col items-center gap-6 transform hover:scale-105 transition-transform duration-300">
+      <div className="w-full max-w-7xl relative z-10 flex flex-col items-center justify-start pt-12">
+        <div className="flex items-start justify-center gap-16 lg:gap-32 w-full mb-12">
+          <div className="flex flex-col items-center gap-4 transform hover:scale-105 transition-transform duration-300">
               <div className="relative group">
                 <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur-xl opacity-75 group-hover:opacity-100 animate-pulse" />
                 <Avatar className="relative w-48 h-48 lg:w-56 lg:h-56 ring-8 ring-blue-400/50 shadow-[0_0_50px_rgba(59,130,246,0.6)]">
@@ -113,27 +101,27 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
                   </AvatarFallback>
                 </Avatar>
               </div>
-              <div className="text-center space-y-3">
-                <h3 className="text-3xl lg:text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+              <div className="text-center space-y-2">
+                <h3 className="text-2xl lg:text-3xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
                   {player1?.username || 'Spieler 1'}
                 </h3>
                 {player1Stats && (
-                  <div className="flex flex-col items-center gap-3">
+                  <div className="flex flex-col items-center gap-2">
                     <div className="relative">
                       <div className="absolute inset-0 blur-md opacity-60">
                         <img
                           src={player1Stats.rankBadge}
                           alt={player1Stats.rankName}
-                          className="w-20 h-20 lg:w-24 lg:h-24 object-contain"
+                          className="w-16 h-16 lg:w-20 lg:h-20 object-contain"
                         />
                       </div>
                       <img
                         src={player1Stats.rankBadge}
                         alt={player1Stats.rankName}
-                        className="relative w-20 h-20 lg:w-24 lg:h-24 object-contain drop-shadow-2xl"
+                        className="relative w-16 h-16 lg:w-20 lg:h-20 object-contain drop-shadow-2xl"
                       />
                     </div>
-                    <div className={`px-6 py-2 rounded-full bg-gradient-to-r ${player1Stats.rankGradient} text-white font-bold text-lg shadow-lg`}>
+                    <div className={`px-4 py-1.5 rounded-full bg-gradient-to-r ${player1Stats.rankGradient} text-white font-bold text-base shadow-lg`}>
                       {player1Stats.rankName}
                     </div>
                   </div>
@@ -141,16 +129,16 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
               </div>
             </div>
 
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center justify-center">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-red-500 to-orange-600 blur-3xl opacity-40 animate-pulse" />
-                <span className="relative text-7xl lg:text-9xl font-black bg-gradient-to-r from-yellow-400 via-red-500 to-orange-600 bg-clip-text text-transparent drop-shadow-2xl">
+                <span className="relative text-6xl lg:text-7xl font-black bg-gradient-to-r from-yellow-400 via-red-500 to-orange-600 bg-clip-text text-transparent drop-shadow-2xl">
                   VS
                 </span>
               </div>
             </div>
 
-            <div className="flex flex-col items-center gap-6 transform hover:scale-105 transition-transform duration-300">
+            <div className="flex flex-col items-center gap-4 transform hover:scale-105 transition-transform duration-300">
               <div className="relative group">
                 <div className="absolute -inset-2 bg-gradient-to-r from-red-400 to-orange-400 rounded-full blur-xl opacity-75 group-hover:opacity-100 animate-pulse" />
                 <Avatar className="relative w-48 h-48 lg:w-56 lg:h-56 ring-8 ring-red-400/50 shadow-[0_0_50px_rgba(239,68,68,0.6)]">
@@ -160,31 +148,43 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
                   </AvatarFallback>
                 </Avatar>
               </div>
-              <div className="text-center space-y-3">
-                <h3 className="text-3xl lg:text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+              <div className="text-center space-y-2">
+                <h3 className="text-2xl lg:text-3xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
                   {player2?.username || 'Spieler 2'}
                 </h3>
                 {player2Stats && (
-                  <div className="flex flex-col items-center gap-3">
+                  <div className="flex flex-col items-center gap-2">
                     <div className="relative">
                       <div className="absolute inset-0 blur-md opacity-60">
                         <img
                           src={player2Stats.rankBadge}
                           alt={player2Stats.rankName}
-                          className="w-20 h-20 lg:w-24 lg:h-24 object-contain"
+                          className="w-16 h-16 lg:w-20 lg:h-20 object-contain"
                         />
                       </div>
                       <img
                         src={player2Stats.rankBadge}
                         alt={player2Stats.rankName}
-                        className="relative w-20 h-20 lg:w-24 lg:h-24 object-contain drop-shadow-2xl"
+                        className="relative w-16 h-16 lg:w-20 lg:h-20 object-contain drop-shadow-2xl"
                       />
                     </div>
-                    <div className={`px-6 py-2 rounded-full bg-gradient-to-r ${player2Stats.rankGradient} text-white font-bold text-lg shadow-lg`}>
+                    <div className={`px-4 py-1.5 rounded-full bg-gradient-to-r ${player2Stats.rankGradient} text-white font-bold text-base shadow-lg`}>
                       {player2Stats.rankName}
                     </div>
                   </div>
                 )}
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center space-y-2 mt-8">
+          <h2 className="text-4xl lg:text-5xl font-black text-white tracking-wider drop-shadow-[0_0_30px_rgba(255,255,255,0.5)]">
+            GET READY!
+          </h2>
+          <div className="relative inline-block">
+            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 blur-3xl opacity-60 animate-pulse" />
+            <div className="relative text-8xl lg:text-9xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
+              {count}
             </div>
           </div>
         </div>
