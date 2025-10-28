@@ -11,7 +11,6 @@ import { countryMountains } from "@/data/mountains";
 import { countryLanguages } from "@/data/languages";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
-import QuizHomeButton from "./QuizHomeButton";
 
 interface MapQuizProps {
   onBack: () => void;
@@ -25,6 +24,7 @@ interface QuizQuestion {
   answer: string;
   lat: number;
   lng: number;
+  acceptedCountryCodes?: string[];
 }
 
 const countryCoordinates: Record<string, { lat: number; lng: number }> = {
@@ -333,8 +333,23 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
       case 'languages': {
         const language = countryLanguages.find(l => l.code === randomCountry.code);
         if (language) {
+          const allCountriesWithLanguage = countryLanguages.filter(
+            l => l.primaryLanguage === language.primaryLanguage
+          );
+          const acceptedCodes = allCountriesWithLanguage.map(l => l.code);
+          const countryNames = allCountriesWithLanguage.map(l => l.country).join(', ');
+
           question = `In welchem Land ist ${language.primaryLanguage} die Amtssprache?`;
-          answer = randomCountry.name;
+          answer = `${language.primaryLanguage} (${allCountriesWithLanguage.length} Länder)`;
+
+          return {
+            countryCode: randomCountry.code,
+            question,
+            answer,
+            lat: coords.lat,
+            lng: coords.lng,
+            acceptedCountryCodes: acceptedCodes
+          };
         } else {
           return generateQuestion(category);
         }
@@ -376,7 +391,31 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
 
     setUserGuess({ lat, lng });
 
-    const dist = getDistance(lat, lng, currentQuestion.lat, currentQuestion.lng);
+    let targetLat = currentQuestion.lat;
+    let targetLng = currentQuestion.lng;
+
+    if (selectedCategory === 'languages' && currentQuestion.acceptedCountryCodes) {
+      let closestCountry = null;
+      let closestDistance = Infinity;
+
+      for (const code of currentQuestion.acceptedCountryCodes) {
+        const coords = countryCoordinates[code];
+        if (coords) {
+          const dist = getDistance(lat, lng, coords.lat, coords.lng);
+          if (dist < closestDistance) {
+            closestDistance = dist;
+            closestCountry = { code, coords };
+          }
+        }
+      }
+
+      if (closestCountry) {
+        targetLat = closestCountry.coords.lat;
+        targetLng = closestCountry.coords.lng;
+      }
+    }
+
+    const dist = getDistance(lat, lng, targetLat, targetLng);
     const isMountain = selectedCategory === 'mountains';
     const earnedScore = getScoreFromDistance(dist, isMountain);
 
@@ -415,8 +454,6 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
             </Button>
             <h1 className="text-3xl font-bold">Karten Quiz</h1>
           </div>
-
-          <QuizHomeButton />
 
           <div className="mb-8">
             <Card className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800">
@@ -514,8 +551,6 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
               </p>
             </div>
           </div>
-
-          <QuizHomeButton />
         </div>
 
         {currentQuestion && (

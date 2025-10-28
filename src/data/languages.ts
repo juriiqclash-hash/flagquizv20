@@ -193,7 +193,6 @@ export const countryLanguages: CountryLanguage[] = [
   { country: "Brasilien", code: "BR", officialLanguages: ["Portugiesisch"], primaryLanguage: "Portugiesisch" },
   { country: "Chile", code: "CL", officialLanguages: ["Spanisch"], primaryLanguage: "Spanisch" },
   { country: "Ecuador", code: "EC", officialLanguages: ["Spanisch"], primaryLanguage: "Spanisch" },
-  { country: "Französisch-Guayana", code: "GF", officialLanguages: ["Französisch"], primaryLanguage: "Französisch" },
   { country: "Guyana", code: "GY", officialLanguages: ["Englisch"], primaryLanguage: "Englisch" },
   { country: "Kolumbien", code: "CO", officialLanguages: ["Spanisch"], primaryLanguage: "Spanisch" },
   { country: "Paraguay", code: "PY", officialLanguages: ["Spanisch", "Guaraní"], primaryLanguage: "Spanisch" },
