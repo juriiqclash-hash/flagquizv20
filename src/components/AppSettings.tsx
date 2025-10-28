@@ -6,7 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock, Loader2, Zap, Monitor, Contrast, Wifi } from 'lucide-react';
+import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock, Loader2, Zap, Monitor, Contrast, Wifi, Save, Gauge, Languages, Music, Vibrate, Database } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -64,6 +64,12 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   const [adminPassword, setAdminPassword] = useState('');
   const [showAdminPassword, setShowAdminPassword] = useState(false);
   const [isConnectingToServer, setIsConnectingToServer] = useState(false);
+  const [autoSaveEnabled, setAutoSaveEnabled] = useState(true);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const [language, setLanguage] = useState('de');
+  const [soundEffectsEnabled, setSoundEffectsEnabled] = useState(true);
+  const [hapticFeedback, setHapticFeedback] = useState(true);
+  const [dataUsageMode, setDataUsageMode] = useState('normal');
 
   const navigate = useNavigate();
 
@@ -111,6 +117,12 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     const savedPerformanceMode = localStorage.getItem('performanceMode');
     const savedHighContrast = localStorage.getItem('highContrastMode');
     const savedNetworkStats = localStorage.getItem('networkStatsEnabled');
+    const savedAutoSave = localStorage.getItem('autoSaveEnabled');
+    const savedReducedMotion = localStorage.getItem('reducedMotion');
+    const savedLanguage = localStorage.getItem('language');
+    const savedSoundEffects = localStorage.getItem('soundEffectsEnabled');
+    const savedHapticFeedback = localStorage.getItem('hapticFeedback');
+    const savedDataUsageMode = localStorage.getItem('dataUsageMode');
 
     if (savedProfileVisibility) setProfileVisibility(savedProfileVisibility);
     if (savedStatisticsPublic) setStatisticsPublic(savedStatisticsPublic === 'true');
@@ -120,6 +132,12 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     if (savedPerformanceMode) setPerformanceMode(savedPerformanceMode);
     if (savedHighContrast) setHighContrastMode(savedHighContrast === 'true');
     if (savedNetworkStats) setNetworkStatsEnabled(savedNetworkStats === 'true');
+    if (savedAutoSave) setAutoSaveEnabled(savedAutoSave === 'true');
+    if (savedReducedMotion) setReducedMotion(savedReducedMotion === 'true');
+    if (savedLanguage) setLanguage(savedLanguage);
+    if (savedSoundEffects) setSoundEffectsEnabled(savedSoundEffects === 'true');
+    if (savedHapticFeedback) setHapticFeedback(savedHapticFeedback === 'true');
+    if (savedDataUsageMode) setDataUsageMode(savedDataUsageMode);
 
     if (user) {
       const { data, error } = await (supabase as any)
@@ -294,6 +312,40 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
       measureNetworkStats();
     }
   }, [networkStatsEnabled]);
+
+  useEffect(() => {
+    localStorage.setItem('autoSaveEnabled', autoSaveEnabled.toString());
+  }, [autoSaveEnabled]);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      document.documentElement.classList.add('no-animations');
+      setAnimationsEnabled(false);
+    }
+    localStorage.setItem('reducedMotion', reducedMotion.toString());
+  }, [reducedMotion]);
+
+  useEffect(() => {
+    localStorage.setItem('language', language);
+  }, [language]);
+
+  useEffect(() => {
+    localStorage.setItem('soundEffectsEnabled', soundEffectsEnabled.toString());
+  }, [soundEffectsEnabled]);
+
+  useEffect(() => {
+    localStorage.setItem('hapticFeedback', hapticFeedback.toString());
+  }, [hapticFeedback]);
+
+  useEffect(() => {
+    localStorage.setItem('dataUsageMode', dataUsageMode);
+    if (dataUsageMode === 'low') {
+      setImageQuality('low');
+      setAnimationsEnabled(false);
+    } else if (dataUsageMode === 'normal') {
+      setImageQuality('high');
+    }
+  }, [dataUsageMode]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -685,7 +737,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
               </Label>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
-                  {notificationsEnabled ? 'Aktiviert' : 'Deaktiviert'}
+                  {notificationsEnabled ? 'ON' : 'OFF'}
                 </span>
                 <Switch
                   id="notifications"
@@ -856,7 +908,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                         Netzwerkstatistiken
                       </Label>
                       <p className="text-xs text-muted-foreground">
-                        Zeigt Ping und Latenz an
+                        Zeigt Ping und Latenz wie FPS an
                       </p>
                     </div>
                     <Switch
@@ -865,42 +917,12 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                       onCheckedChange={setNetworkStatsEnabled}
                     />
                   </div>
-                  {networkStatsEnabled && (
-                    <div className="pl-6 text-xs text-muted-foreground">
-                      <div className="flex items-center gap-2">
-                        <Wifi className="h-3 w-3" />
-                        <span>Ping: {ping}ms | Latenz: {latency}ms</span>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
 
             <Separator />
 
-            <div className="space-y-3">
-              <Label className="flex items-center gap-2 text-base">
-                <Type className="h-5 w-5" />
-                Schriftart
-              </Label>
-              <Select value={fontFamily} onValueChange={setFontFamily}>
-                <SelectTrigger id="font-family">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="default">Standard (System)</SelectItem>
-                  <SelectItem value="'Arial', sans-serif">Arial</SelectItem>
-                  <SelectItem value="'Helvetica', sans-serif">Helvetica</SelectItem>
-                  <SelectItem value="'Verdana', sans-serif">Verdana</SelectItem>
-                  <SelectItem value="'Georgia', serif">Georgia</SelectItem>
-                  <SelectItem value="'Times New Roman', serif">Times New Roman</SelectItem>
-                  <SelectItem value="'Courier New', monospace">Courier New</SelectItem>
-                  <SelectItem value="'Comic Sans MS', cursive">Comic Sans MS</SelectItem>
-                  <SelectItem value="'Inter', sans-serif">Inter</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
 
             <div className="space-y-3">
               <Label htmlFor="performance-mode" className="flex items-center gap-2 text-base">
@@ -930,7 +952,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
               </Label>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
-                  {highContrastMode ? 'Aktiviert' : 'Deaktiviert'}
+                  {highContrastMode ? 'ON' : 'OFF'}
                 </span>
                 <Switch
                   id="high-contrast"
@@ -939,7 +961,139 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                Erhöht den Kontrast für bessere Lesbarkeit
+                Erhöhter Kontrast und Sättigung für bessere Lesbarkeit
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Label htmlFor="reduced-motion" className="flex items-center gap-2 text-base">
+                <Gauge className="h-5 w-5" />
+                Bewegungen reduzieren
+              </Label>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">
+                  {reducedMotion ? 'ON' : 'OFF'}
+                </span>
+                <Switch
+                  id="reduced-motion"
+                  checked={reducedMotion}
+                  onCheckedChange={setReducedMotion}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Deaktiviert Animationen für Personen mit Bewegungsempfindlichkeit
+              </p>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-3">
+              <Label className="flex items-center gap-2 text-base">
+                <Music className="h-5 w-5" />
+                Audio & Haptik
+              </Label>
+
+              <div className="space-y-4 pl-6">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="sound-effects" className="text-sm font-medium">
+                        Soundeffekte
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        Aktiviert Soundeffekte in der App
+                      </p>
+                    </div>
+                    <Switch
+                      id="sound-effects"
+                      checked={soundEffectsEnabled}
+                      onCheckedChange={setSoundEffectsEnabled}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="haptic-feedback" className="text-sm font-medium">
+                        Haptisches Feedback
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        Vibrationen bei Interaktionen (Mobilgeräte)
+                      </p>
+                    </div>
+                    <Switch
+                      id="haptic-feedback"
+                      checked={hapticFeedback}
+                      onCheckedChange={setHapticFeedback}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-3">
+              <Label htmlFor="language" className="flex items-center gap-2 text-base">
+                <Languages className="h-5 w-5" />
+                Sprache
+              </Label>
+              <Select value={language} onValueChange={setLanguage}>
+                <SelectTrigger id="language">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="de">Deutsch</SelectItem>
+                  <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="es">Español</SelectItem>
+                  <SelectItem value="fr">Français</SelectItem>
+                  <SelectItem value="it">Italiano</SelectItem>
+                  <SelectItem value="pt">Português</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                App-Sprache ändern (erfordert Neuladen)
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Label htmlFor="data-usage" className="flex items-center gap-2 text-base">
+                <Database className="h-5 w-5" />
+                Datenverbrauch
+              </Label>
+              <Select value={dataUsageMode} onValueChange={setDataUsageMode}>
+                <SelectTrigger id="data-usage">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low">Niedrig (Daten sparen)</SelectItem>
+                  <SelectItem value="normal">Normal (Empfohlen)</SelectItem>
+                  <SelectItem value="high">Hoch (Beste Qualität)</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Steuert Bildqualität und Datenübertragung
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Label htmlFor="auto-save" className="flex items-center gap-2 text-base">
+                <Save className="h-5 w-5" />
+                Automatisches Speichern
+              </Label>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">
+                  {autoSaveEnabled ? 'ON' : 'OFF'}
+                </span>
+                <Switch
+                  id="auto-save"
+                  checked={autoSaveEnabled}
+                  onCheckedChange={setAutoSaveEnabled}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Speichert Fortschritt automatisch während des Spiels
               </p>
             </div>
 

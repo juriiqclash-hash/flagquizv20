@@ -106,19 +106,20 @@ const FPSDisplay = ({ enabled, showNetworkStats = false }: FPSDisplayProps) => {
           </span>
         </div>
         {showNetworkStats && (
-          <div className="flex items-center gap-2 border-t border-white/20 pt-1">
-            <Wifi className="h-3 w-3 text-white" />
-            <div className="flex items-center gap-3 text-xs">
-              <div className="flex items-center gap-1">
-                <span className="text-white/70">Ping:</span>
-                <span className={`font-bold ${getPingColor()}`}>{ping}ms</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-white/70">Latenz:</span>
-                <span className={`font-bold ${getPingColor()}`}>{latency}ms</span>
-              </div>
+          <>
+            <div className="flex items-center gap-2 border-t border-white/20 pt-1">
+              <span className="text-white text-xs font-medium">Ping:</span>
+              <span className={`text-sm font-bold ${getPingColor()}`}>
+                {ping}ms
+              </span>
             </div>
-          </div>
+            <div className="flex items-center gap-2">
+              <span className="text-white text-xs font-medium">Latenz:</span>
+              <span className={`text-sm font-bold ${getPingColor()}`}>
+                {latency}ms
+              </span>
+            </div>
+          </>
         )}
       </div>
     </div>

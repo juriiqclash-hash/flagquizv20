@@ -1,11 +1,3 @@
-import bronzeBadge from '@/assets/bronze.webp';
-import silverBadge from '@/assets/silber copy copy.webp';
-import goldBadge from '@/assets/gold copy copy.webp';
-import platinumBadge from '@/assets/plartinum copy copy.webp';
-import diamondBadge from '@/assets/diamant copy copy.webp';
-import legendsBadge from '@/assets/legends.webp';
-import mastersBadge from '@/assets/masters copy copy.webp';
-
 export type RankTier = {
   name: string;
   badge: string;
@@ -19,64 +11,64 @@ export type RankTier = {
 export const RANK_TIERS: RankTier[] = [
   {
     name: 'Legends',
-    badge: legendsBadge,
+    badge: '/placeholder.svg',
     gradient: 'from-purple-600 via-purple-500 to-pink-500',
     minStreak: 1000,
-    minTimeSeconds: 480, // <8 minutes
+    minTimeSeconds: 480,
     minDuelWins: 500,
     minLevel: 7,
   },
   {
     name: 'Masters',
-    badge: mastersBadge,
+    badge: '/placeholder.svg',
     gradient: 'from-blue-600 via-blue-500 to-purple-500',
     minStreak: 100,
-    minTimeSeconds: 480, // 8-9 minutes
+    minTimeSeconds: 480,
     minDuelWins: 500,
     minLevel: 6,
   },
   {
     name: 'Diamond',
-    badge: diamondBadge,
+    badge: '/placeholder.svg',
     gradient: 'from-cyan-400 via-blue-400 to-cyan-300',
     minStreak: 60,
-    minTimeSeconds: 480, // 8-10 minutes
+    minTimeSeconds: 480,
     minDuelWins: 400,
     minLevel: 5,
   },
   {
     name: 'Platinum',
-    badge: platinumBadge,
+    badge: '/placeholder.svg',
     gradient: 'from-slate-400 via-slate-300 to-slate-200',
     minStreak: 30,
-    minTimeSeconds: 600, // 10-12 minutes
+    minTimeSeconds: 600,
     minDuelWins: 300,
     minLevel: 4,
   },
   {
     name: 'Gold',
-    badge: goldBadge,
+    badge: '/placeholder.svg',
     gradient: 'from-yellow-600 via-yellow-500 to-yellow-400',
     minStreak: 15,
-    minTimeSeconds: 720, // 12-15 minutes
+    minTimeSeconds: 720,
     minDuelWins: 150,
     minLevel: 3,
   },
   {
     name: 'Silver',
-    badge: silverBadge,
+    badge: '/placeholder.svg',
     gradient: 'from-gray-400 via-gray-300 to-gray-400',
     minStreak: 5,
-    minTimeSeconds: 900, // 15-20 minutes
+    minTimeSeconds: 900,
     minDuelWins: 50,
     minLevel: 2,
   },
   {
     name: 'Bronze',
-    badge: bronzeBadge,
+    badge: '/placeholder.svg',
     gradient: 'from-orange-600 via-orange-500 to-orange-400',
     minStreak: 0,
-    minTimeSeconds: 1200, // >20 minutes
+    minTimeSeconds: 1200,
     minDuelWins: 0,
     minLevel: 1,
   },
