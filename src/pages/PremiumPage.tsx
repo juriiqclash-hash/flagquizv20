@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check, Crown, Star, Zap, X, ArrowLeft } from 'lucide-react';
+import { Check, Crown, Star, Zap, X, ArrowLeft, Info } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTranslation } from '@/data/translations';
 import { useAuth } from '@/hooks/useAuth';
@@ -167,6 +167,15 @@ export default function PremiumPage() {
         >
           <ArrowLeft className="h-6 w-6" />
         </Button>
+
+        {/* Info Banner */}
+        <div className="mb-8 bg-blue-500/20 border-2 border-blue-400/50 backdrop-blur-sm rounded-lg p-4 flex items-start gap-3">
+          <Info className="h-5 w-5 text-blue-300 flex-shrink-0 mt-0.5" />
+          <p className="text-white/90 text-sm">
+            <strong className="text-white">Hinweis:</strong> Einige Premium-Features befinden sich noch in der Entwicklung und werden in Kürze verfügbar sein. 
+            Alle gekauften Pläne werden automatisch freigeschaltet, sobald die Features live gehen.
+          </p>
+        </div>
 
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
