@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { useState, useEffect, useRef } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { ArrowLeft, Flag, Building, Languages, Mountain, Info } from "lucide-rea
 import { ALL_COUNTRIES } from "@/data/countries-full";
 import { capitals } from "@/data/capitals";
 import { countryMountains } from "@/data/mountains";
+import { countryLanguages } from "@/data/languages";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
 import QuizHomeButton from "./QuizHomeButton";
@@ -301,6 +302,8 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
   const [totalScore, setTotalScore] = useState(0);
   const [questionCount, setQuestionCount] = useState(0);
   const [distance, setDistance] = useState<number | null>(null);
+  const [mapKey, setMapKey] = useState(0);
+  const questionCardRef = useRef<HTMLDivElement>(null);
 
   const generateQuestion = (category: QuizCategory): QuizQuestion | null => {
     const randomCountry = ALL_COUNTRIES[Math.floor(Math.random() * ALL_COUNTRIES.length)];
@@ -327,9 +330,16 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
         }
         break;
       }
-      case 'languages':
-        question = `Wo liegt ${randomCountry.name}?`;
+      case 'languages': {
+        const language = countryLanguages.find(l => l.code === randomCountry.code);
+        if (language) {
+          question = `In welchem Land ist ${language.primaryLanguage} die Amtssprache?`;
+          answer = randomCountry.name;
+        } else {
+          return generateQuestion(category);
+        }
         break;
+      }
       case 'mountains': {
         const mountain = countryMountains.find(m => m.code === randomCountry.code);
         if (mountain && mountain.coordinates) {
@@ -386,6 +396,13 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
     setDistance(null);
     setScore(0);
     setQuestionCount(prev => prev + 1);
+    setMapKey(prev => prev + 1);
+
+    setTimeout(() => {
+      if (questionCardRef.current) {
+        questionCardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
   };
 
   if (!selectedCategory) {
@@ -502,7 +519,7 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
         </div>
 
         {currentQuestion && (
-          <Card className="mb-4">
+          <Card ref={questionCardRef} className="mb-4">
             <CardContent className="pt-6">
               <div className="text-center">
                 <h2 className="text-2xl font-bold mb-2">{currentQuestion.question}</h2>
@@ -533,6 +550,7 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
           <CardContent className="p-0">
             <div className="h-[600px] w-full rounded-lg overflow-hidden">
               <MapContainer
+                key={mapKey}
                 center={[20, 0]}
                 zoom={2}
                 minZoom={2}
