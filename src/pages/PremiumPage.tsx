@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check, Crown, Star, Zap, X, ArrowLeft, Info } from 'lucide-react';
+import { Check, Crown, Star, Zap, X, ArrowLeft, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTranslation } from '@/data/translations';
 import { useAuth } from '@/hooks/useAuth';
@@ -28,6 +28,7 @@ export default function PremiumPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [searchParams] = useSearchParams();
+  const [showBanner, setShowBanner] = useState(true);
 
   useEffect(() => {
     const success = searchParams.get('success');
@@ -158,6 +159,29 @@ export default function PremiumPage() {
     >
       <div className="absolute inset-0 bg-gradient-to-br from-blue-950/90 via-blue-800/90 to-blue-900/90" />
 
+      {/* Warning Banner - Top Stripe */}
+      {showBanner && (
+        <div className="relative z-20 bg-red-600 border-b-2 border-red-700">
+          <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 flex-1">
+              <AlertTriangle className="h-5 w-5 text-white flex-shrink-0" />
+              <p className="text-white text-sm font-medium">
+                <strong>Hinweis:</strong> Einige Premium-Features befinden sich noch in der Entwicklung und werden in Kürze verfügbar sein.
+                Alle gekauften Pläne werden automatisch freigeschaltet, sobald die Features live gehen.
+              </p>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowBanner(false)}
+              className="text-white hover:bg-red-700/50 flex-shrink-0 h-8 w-8"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+      )}
+
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-7xl">
         <Button
           variant="ghost"
@@ -167,15 +191,6 @@ export default function PremiumPage() {
         >
           <ArrowLeft className="h-6 w-6" />
         </Button>
-
-        {/* Info Banner */}
-        <div className="mb-8 bg-blue-500/20 border-2 border-blue-400/50 backdrop-blur-sm rounded-lg p-4 flex items-start gap-3">
-          <Info className="h-5 w-5 text-blue-300 flex-shrink-0 mt-0.5" />
-          <p className="text-white/90 text-sm">
-            <strong className="text-white">Hinweis:</strong> Einige Premium-Features befinden sich noch in der Entwicklung und werden in Kürze verfügbar sein. 
-            Alle gekauften Pläne werden automatisch freigeschaltet, sobald die Features live gehen.
-          </p>
-        </div>
 
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
