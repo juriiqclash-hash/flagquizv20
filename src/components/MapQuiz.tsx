@@ -1,7 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, MapPin, Flag, Building, Languages, Mountain, Info } from "lucide-react";
+import { ArrowLeft, Flag, Building, Languages, Mountain, Info } from "lucide-react";
 import { ALL_COUNTRIES } from "@/data/countries-full";
 import { capitals } from "@/data/capitals";
 import { countryMountains } from "@/data/mountains";
@@ -19,6 +22,8 @@ interface QuizQuestion {
   countryCode: string;
   question: string;
   answer: string;
+  lat: number;
+  lng: number;
 }
 
 const countryCoordinates: Record<string, { lat: number; lng: number }> = {
@@ -222,6 +227,24 @@ const countryCoordinates: Record<string, { lat: number; lng: number }> = {
   AQ: { lat: -75.2509, lng: 0.0000 },
 };
 
+const userIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+const correctIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
 function getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -234,15 +257,37 @@ function getDistance(lat1: number, lon1: number, lat2: number, lon2: number): nu
   return R * c;
 }
 
-function getScoreFromDistance(distance: number): number {
-  if (distance < 50) return 1000;
-  if (distance < 100) return 950;
-  if (distance < 200) return 900;
-  if (distance < 500) return 800;
-  if (distance < 1000) return 600;
-  if (distance < 2000) return 400;
-  if (distance < 5000) return 200;
-  return 50;
+function getScoreFromDistance(distance: number, isMountain: boolean = false): number {
+  if (isMountain) {
+    if (distance < 10) return 1000;
+    if (distance < 25) return 950;
+    if (distance < 50) return 900;
+    if (distance < 100) return 800;
+    if (distance < 200) return 600;
+    if (distance < 500) return 400;
+    if (distance < 1000) return 200;
+    return 50;
+  } else {
+    if (distance < 50) return 1000;
+    if (distance < 100) return 950;
+    if (distance < 200) return 900;
+    if (distance < 500) return 800;
+    if (distance < 1000) return 600;
+    if (distance < 2000) return 400;
+    if (distance < 5000) return 200;
+    return 50;
+  }
+}
+
+function MapClickHandler({ onMapClick, disabled }: { onMapClick: (lat: number, lng: number) => void, disabled: boolean }) {
+  useMapEvents({
+    click: (e) => {
+      if (!disabled) {
+        onMapClick(e.latlng.lat, e.latlng.lng);
+      }
+    },
+  });
+  return null;
 }
 
 export default function MapQuiz({ onBack }: MapQuizProps) {
@@ -250,20 +295,23 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
   const t = useTranslation(language);
   const [selectedCategory, setSelectedCategory] = useState<QuizCategory | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
-  const [clickPosition, setClickPosition] = useState<{ x: number; y: number } | null>(null);
+  const [userGuess, setUserGuess] = useState<{ lat: number; lng: number } | null>(null);
   const [hasGuessed, setHasGuessed] = useState(false);
   const [score, setScore] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [questionCount, setQuestionCount] = useState(0);
   const [distance, setDistance] = useState<number | null>(null);
-  const mapRef = useRef<HTMLDivElement>(null);
-  const [showInfo, setShowInfo] = useState(true);
 
-  const generateQuestion = (category: QuizCategory): QuizQuestion => {
+  const generateQuestion = (category: QuizCategory): QuizQuestion | null => {
     const randomCountry = ALL_COUNTRIES[Math.floor(Math.random() * ALL_COUNTRIES.length)];
+    const coords = countryCoordinates[randomCountry.code];
+
+    if (!coords) return null;
 
     let question = '';
     let answer = randomCountry.name;
+    let questionLat = coords.lat;
+    let questionLng = coords.lng;
 
     switch (category) {
       case 'flags':
@@ -280,13 +328,15 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
         break;
       }
       case 'languages':
-        question = `Wo liegt ${randomCountry.name}? (Amtssprache)`;
+        question = `Wo liegt ${randomCountry.name}?`;
         break;
       case 'mountains': {
         const mountain = countryMountains.find(m => m.code === randomCountry.code);
-        if (mountain) {
+        if (mountain && mountain.coordinates) {
           question = `Wo liegt der Berg ${mountain.highestPeak}?`;
-          answer = randomCountry.name;
+          answer = mountain.highestPeak;
+          questionLat = mountain.coordinates.lat;
+          questionLng = mountain.coordinates.lng;
         } else {
           return generateQuestion(category);
         }
@@ -297,61 +347,45 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
     return {
       countryCode: randomCountry.code,
       question,
-      answer
+      answer,
+      lat: questionLat,
+      lng: questionLng
     };
   };
 
   const startQuiz = (category: QuizCategory) => {
     setSelectedCategory(category);
-    setCurrentQuestion(generateQuestion(category));
+    const question = generateQuestion(category);
+    setCurrentQuestion(question);
     setQuestionCount(0);
     setTotalScore(0);
-    setShowInfo(false);
   };
 
-  const handleMapClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (hasGuessed || !currentQuestion || !mapRef.current) return;
+  const handleMapClick = (lat: number, lng: number) => {
+    if (hasGuessed || !currentQuestion) return;
 
-    const rect = mapRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setUserGuess({ lat, lng });
 
-    const clickedLng = (x / 100) * 360 - 180;
-    const clickedLat = 90 - (y / 100) * 180;
+    const dist = getDistance(lat, lng, currentQuestion.lat, currentQuestion.lng);
+    const isMountain = selectedCategory === 'mountains';
+    const earnedScore = getScoreFromDistance(dist, isMountain);
 
-    setClickPosition({ x, y });
-
-    const correctCoords = countryCoordinates[currentQuestion.countryCode];
-    if (correctCoords) {
-      const dist = getDistance(clickedLat, clickedLng, correctCoords.lat, correctCoords.lng);
-      const earnedScore = getScoreFromDistance(dist);
-
-      setDistance(Math.round(dist));
-      setScore(earnedScore);
-      setTotalScore(prev => prev + earnedScore);
-      setHasGuessed(true);
-    }
+    setDistance(Math.round(dist));
+    setScore(earnedScore);
+    setTotalScore(prev => prev + earnedScore);
+    setHasGuessed(true);
   };
 
   const nextQuestion = () => {
     if (!selectedCategory) return;
 
-    setCurrentQuestion(generateQuestion(selectedCategory));
-    setClickPosition(null);
+    const question = generateQuestion(selectedCategory);
+    setCurrentQuestion(question);
+    setUserGuess(null);
     setHasGuessed(false);
     setDistance(null);
     setScore(0);
     setQuestionCount(prev => prev + 1);
-  };
-
-  const getCorrectPosition = () => {
-    if (!currentQuestion) return null;
-    const coords = countryCoordinates[currentQuestion.countryCode];
-    if (!coords) return null;
-
-    const x = ((coords.lng + 180) / 360) * 100;
-    const y = ((90 - coords.lat) / 180) * 100;
-    return { x, y };
   };
 
   if (!selectedCategory) {
@@ -376,9 +410,11 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
                     <p className="font-semibold">So funktioniert das Karten Quiz:</p>
                     <ul className="list-disc list-inside space-y-1 ml-2">
                       <li>Wähle eine Kategorie aus</li>
-                      <li>Du bekommst eine Frage zu einem Land, einer Hauptstadt, einer Sprache oder einem Berg</li>
-                      <li>Klicke auf die Weltkarte, wo du denkst, dass es liegt</li>
+                      <li>Du bekommst eine Frage zu einem Land, einer Hauptstadt oder einem Berg</li>
+                      <li>Klicke auf die interaktive Weltkarte, wo du denkst, dass es liegt</li>
+                      <li>Du kannst zoomen und die Karte verschieben</li>
                       <li>Je näher dein Klick am richtigen Ort ist, desto mehr Punkte bekommst du</li>
+                      <li>Bei Bergen: Je präziser auf dem Berg, desto höher die Punkte</li>
                       <li>Das Quiz läuft unendlich - spiele so lange du willst!</li>
                     </ul>
                   </div>
@@ -441,8 +477,6 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
     );
   }
 
-  const correctPos = getCorrectPosition();
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 p-4">
       <div className="max-w-6xl mx-auto">
@@ -450,7 +484,7 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
           <div className="flex items-center gap-4">
             <Button onClick={() => {
               setSelectedCategory(null);
-              setClickPosition(null);
+              setUserGuess(null);
               setHasGuessed(false);
               setCurrentQuestion(null);
             }} variant="ghost" size="icon">
@@ -472,6 +506,9 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
             <CardContent className="pt-6">
               <div className="text-center">
                 <h2 className="text-2xl font-bold mb-2">{currentQuestion.question}</h2>
+                {!hasGuessed && (
+                  <p className="text-muted-foreground">Klicke auf die Karte oder zoome für mehr Details</p>
+                )}
                 {hasGuessed && (
                   <div className="mt-4 space-y-2">
                     <p className="text-lg">
@@ -494,41 +531,35 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
 
         <Card>
           <CardContent className="p-0">
-            <div
-              ref={mapRef}
-              className="relative w-full aspect-[2/1] bg-gradient-to-br from-blue-200 to-blue-100 dark:from-blue-950 dark:to-blue-900 cursor-crosshair overflow-hidden rounded-lg"
-              onClick={handleMapClick}
-              style={{
-                backgroundImage: 'url("https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg")',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }}
-            >
-              {clickPosition && (
-                <div
-                  className="absolute w-6 h-6 -translate-x-1/2 -translate-y-full"
-                  style={{ left: `${clickPosition.x}%`, top: `${clickPosition.y}%` }}
-                >
-                  <MapPin className="h-6 w-6 text-red-500 drop-shadow-lg" fill="currentColor" />
-                </div>
-              )}
+            <div className="h-[600px] w-full rounded-lg overflow-hidden">
+              <MapContainer
+                center={[20, 0]}
+                zoom={2}
+                minZoom={2}
+                maxZoom={18}
+                style={{ height: '100%', width: '100%' }}
+                worldCopyJump={true}
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <MapClickHandler onMapClick={handleMapClick} disabled={hasGuessed} />
 
-              {hasGuessed && correctPos && (
-                <div
-                  className="absolute w-6 h-6 -translate-x-1/2 -translate-y-full"
-                  style={{ left: `${correctPos.x}%`, top: `${correctPos.y}%` }}
-                >
-                  <MapPin className="h-6 w-6 text-green-500 drop-shadow-lg" fill="currentColor" />
-                </div>
-              )}
+                {userGuess && (
+                  <Marker position={[userGuess.lat, userGuess.lng]} icon={userIcon}>
+                    <Popup>Deine Vermutung</Popup>
+                  </Marker>
+                )}
 
-              {!hasGuessed && (
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="bg-black/50 text-white px-6 py-3 rounded-lg text-sm">
-                    Klicke auf die Karte, um zu raten
-                  </div>
-                </div>
-              )}
+                {hasGuessed && currentQuestion && (
+                  <Marker position={[currentQuestion.lat, currentQuestion.lng]} icon={correctIcon}>
+                    <Popup>
+                      Richtige Position: {currentQuestion.answer}
+                    </Popup>
+                  </Marker>
+                )}
+              </MapContainer>
             </div>
           </CardContent>
         </Card>
