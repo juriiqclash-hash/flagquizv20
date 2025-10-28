@@ -6,7 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock, Loader2, Zap, Monitor, Contrast, Wifi, Keyboard, Save, Languages, Palette } from 'lucide-react';
+import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock, Loader2, Zap, Monitor, Contrast, Wifi } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -64,10 +64,6 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   const [adminPassword, setAdminPassword] = useState('');
   const [showAdminPassword, setShowAdminPassword] = useState(false);
   const [isConnectingToServer, setIsConnectingToServer] = useState(false);
-  const [autoSave, setAutoSave] = useState(true);
-  const [keyboardShortcuts, setKeyboardShortcuts] = useState(true);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [colorTheme, setColorTheme] = useState('default');
 
   const navigate = useNavigate();
 
@@ -115,10 +111,6 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     const savedPerformanceMode = localStorage.getItem('performanceMode');
     const savedHighContrast = localStorage.getItem('highContrastMode');
     const savedNetworkStats = localStorage.getItem('networkStatsEnabled');
-    const savedAutoSave = localStorage.getItem('autoSave');
-    const savedKeyboardShortcuts = localStorage.getItem('keyboardShortcuts');
-    const savedReducedMotion = localStorage.getItem('reducedMotion');
-    const savedColorTheme = localStorage.getItem('colorTheme');
 
     if (savedProfileVisibility) setProfileVisibility(savedProfileVisibility);
     if (savedStatisticsPublic) setStatisticsPublic(savedStatisticsPublic === 'true');
@@ -128,10 +120,6 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     if (savedPerformanceMode) setPerformanceMode(savedPerformanceMode);
     if (savedHighContrast) setHighContrastMode(savedHighContrast === 'true');
     if (savedNetworkStats) setNetworkStatsEnabled(savedNetworkStats === 'true');
-    if (savedAutoSave) setAutoSave(savedAutoSave === 'true');
-    if (savedKeyboardShortcuts) setKeyboardShortcuts(savedKeyboardShortcuts === 'true');
-    if (savedReducedMotion) setReducedMotion(savedReducedMotion === 'true');
-    if (savedColorTheme) setColorTheme(savedColorTheme);
 
     if (user) {
       const { data, error } = await (supabase as any)
@@ -306,28 +294,6 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
       measureNetworkStats();
     }
   }, [networkStatsEnabled]);
-
-  useEffect(() => {
-    localStorage.setItem('autoSave', autoSave.toString());
-  }, [autoSave]);
-
-  useEffect(() => {
-    localStorage.setItem('keyboardShortcuts', keyboardShortcuts.toString());
-  }, [keyboardShortcuts]);
-
-  useEffect(() => {
-    if (reducedMotion) {
-      document.documentElement.classList.add('reduce-motion');
-    } else {
-      document.documentElement.classList.remove('reduce-motion');
-    }
-    localStorage.setItem('reducedMotion', reducedMotion.toString());
-  }, [reducedMotion]);
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', colorTheme);
-    localStorage.setItem('colorTheme', colorTheme);
-  }, [colorTheme]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -719,7 +685,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
               </Label>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
-                  {notificationsEnabled ? 'ON' : 'OFF'}
+                  {notificationsEnabled ? 'Aktiviert' : 'Deaktiviert'}
                 </span>
                 <Switch
                   id="notifications"
@@ -890,7 +856,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                         Netzwerkstatistiken
                       </Label>
                       <p className="text-xs text-muted-foreground">
-                        Zeigt Ping und Latenz wie FPS an
+                        Zeigt Ping und Latenz an
                       </p>
                     </div>
                     <Switch
@@ -899,11 +865,42 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                       onCheckedChange={setNetworkStatsEnabled}
                     />
                   </div>
+                  {networkStatsEnabled && (
+                    <div className="pl-6 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <Wifi className="h-3 w-3" />
+                        <span>Ping: {ping}ms | Latenz: {latency}ms</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
 
             <Separator />
+
+            <div className="space-y-3">
+              <Label className="flex items-center gap-2 text-base">
+                <Type className="h-5 w-5" />
+                Schriftart
+              </Label>
+              <Select value={fontFamily} onValueChange={setFontFamily}>
+                <SelectTrigger id="font-family">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="default">Standard (System)</SelectItem>
+                  <SelectItem value="'Arial', sans-serif">Arial</SelectItem>
+                  <SelectItem value="'Helvetica', sans-serif">Helvetica</SelectItem>
+                  <SelectItem value="'Verdana', sans-serif">Verdana</SelectItem>
+                  <SelectItem value="'Georgia', serif">Georgia</SelectItem>
+                  <SelectItem value="'Times New Roman', serif">Times New Roman</SelectItem>
+                  <SelectItem value="'Courier New', monospace">Courier New</SelectItem>
+                  <SelectItem value="'Comic Sans MS', cursive">Comic Sans MS</SelectItem>
+                  <SelectItem value="'Inter', sans-serif">Inter</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
             <div className="space-y-3">
               <Label htmlFor="performance-mode" className="flex items-center gap-2 text-base">
@@ -933,7 +930,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
               </Label>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
-                  {highContrastMode ? 'ON' : 'OFF'}
+                  {highContrastMode ? 'Aktiviert' : 'Deaktiviert'}
                 </span>
                 <Switch
                   id="high-contrast"
@@ -942,7 +939,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                Stark erhöhter Kontrast und Sättigung für optimale Lesbarkeit
+                Erhöht den Kontrast für bessere Lesbarkeit
               </p>
             </div>
 
@@ -979,97 +976,6 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
               >
                 Alle Einstellungen zurücksetzen
               </Button>
-            </div>
-
-            <Separator />
-
-            <div className="space-y-3">
-              <Label className="flex items-center gap-2 text-base">
-                <Keyboard className="h-5 w-5" />
-                Barrierefreiheit
-              </Label>
-
-              <div className="space-y-4 pl-6">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="keyboard-shortcuts" className="text-sm font-medium">
-                        Tastaturkürzel
-                      </Label>
-                      <p className="text-xs text-muted-foreground">
-                        Aktiviert Tastatursteuerung
-                      </p>
-                    </div>
-                    <Switch
-                      id="keyboard-shortcuts"
-                      checked={keyboardShortcuts}
-                      onCheckedChange={setKeyboardShortcuts}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="reduced-motion" className="text-sm font-medium">
-                        Bewegung reduzieren
-                      </Label>
-                      <p className="text-xs text-muted-foreground">
-                        Minimiert Animationen für empfindliche Nutzer
-                      </p>
-                    </div>
-                    <Switch
-                      id="reduced-motion"
-                      checked={reducedMotion}
-                      onCheckedChange={setReducedMotion}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="space-y-3">
-              <Label className="flex items-center gap-2 text-base">
-                <Palette className="h-5 w-5" />
-                Farbschema
-              </Label>
-              <Select value={colorTheme} onValueChange={setColorTheme}>
-                <SelectTrigger id="color-theme">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="default">Standard (Blau)</SelectItem>
-                  <SelectItem value="green">Grün</SelectItem>
-                  <SelectItem value="red">Rot</SelectItem>
-                  <SelectItem value="orange">Orange</SelectItem>
-                  <SelectItem value="purple">Lila</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">
-                Ändert die Hauptfarbe der Benutzeroberfläche
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <Label className="flex items-center gap-2 text-base">
-                <Save className="h-5 w-5" />
-                Automatisches Speichern
-              </Label>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {autoSave ? 'ON' : 'OFF'}
-                </span>
-                <Switch
-                  id="auto-save"
-                  checked={autoSave}
-                  onCheckedChange={setAutoSave}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Speichert Fortschritt automatisch
-              </p>
             </div>
 
             <Separator />
