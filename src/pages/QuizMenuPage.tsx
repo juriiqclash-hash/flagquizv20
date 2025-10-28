@@ -5,6 +5,11 @@ export default function QuizMenuPage() {
   const navigate = useNavigate();
 
   const handleStartQuiz = (mode: string, continent?: string, timeLimit?: number, difficulty?: string) => {
+    if (mode === 'map-quiz') {
+      navigate('/quizmenu/map-quiz');
+      return;
+    }
+
     const params = new URLSearchParams();
     if (continent) params.set('continent', continent);
     if (timeLimit) params.set('time', timeLimit.toString());

@@ -18,6 +18,7 @@ const QUIZ_MODE_ICONS: { [key: string]: React.ReactNode } = {
   'world-knowledge': <Globe className="w-5 h-5" />,
   'combi-quiz': <Layers className="w-5 h-5" />,
   'flag-archive': <BookMarked className="w-5 h-5" />,
+  'map-quiz': <MapPin className="w-5 h-5" />,
   'multiplayer': <Users className="w-5 h-5" />,
 };
 import ContinentSelector from "./ContinentSelector";
@@ -35,7 +36,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import FlagQuizLogo from "@/components/FlagQuizLogo";
 interface StartScreenProps {
-  onStartQuiz: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz' | 'flag-archive', continent?: string, timeLimit?: number) => void;
+  onStartQuiz: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz' | 'flag-archive' | 'map-quiz', continent?: string, timeLimit?: number) => void;
   onStartMultiplayer: () => void;
   currentView: string;
   onOpenAdminPanel?: () => void;
@@ -78,6 +79,7 @@ const QUIZ_MODES: QuizResult[] = [
   { id: 'world-knowledge', name: 'Weltwissen Quiz', description: 'Teste dein Wissen über Weltfakten', icon: '🌏' },
   { id: 'combi-quiz', name: 'Combi-Quiz', description: 'Wähle deine Kategorien und spiele endlos', icon: '🎭' },
   { id: 'flag-archive', name: 'Flaggen-Archiv', description: 'Durchsuche alle Flaggen von A-Z', icon: '📚' },
+  { id: 'map-quiz', name: 'Karten Quiz', description: 'Finde Länder auf der interaktiven Weltkarte', icon: '📍' },
   { id: 'multiplayer', name: 'Multiplayer', description: 'Spiele gegen andere in Echtzeit', icon: '👥' },
 ];
 
@@ -385,6 +387,7 @@ export default function StartScreen({
                           quiz.id === 'world-knowledge' ? 'text-teal-500' :
                           quiz.id === 'combi-quiz' ? 'text-pink-500' :
                           quiz.id === 'flag-archive' ? 'text-amber-500' :
+                          quiz.id === 'map-quiz' ? 'text-rose-500' :
                           quiz.id === 'multiplayer' ? 'text-purple-500' :
                           ''
                         }`}>
@@ -715,6 +718,25 @@ export default function StartScreen({
                 Durchsuche alle Flaggen von A-Z
               </p>
               <Button onClick={() => handleModeClick('flag-archive')} className="w-full mt-auto">
+                <Play className="mr-2 h-4 w-4" />
+                {t.start}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Map Quiz */}
+          <Card className="group cursor-pointer hover:shadow-lg transition-shadow duration-200">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <MapPin className="w-6 h-6 text-rose-500" />
+                Karten Quiz
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
+                Finde Länder, Hauptstädte und Berge auf der Weltkarte
+              </p>
+              <Button onClick={() => handleModeClick('map-quiz')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>

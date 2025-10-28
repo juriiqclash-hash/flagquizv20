@@ -24,6 +24,7 @@ import CombiQuizPage from "./pages/CombiQuizPage";
 import WorldKnowledgePage from "./pages/WorldKnowledgePage";
 import AdminPage from "./pages/AdminPage";
 import PremiumPage from "./pages/PremiumPage";
+import MapQuizPage from "./pages/MapQuizPage";
 import SystemBanner from "./components/SystemBanner";
 import MaintenanceScreen from "./components/MaintenanceScreen";
 import ConsentDialog from "./components/ConsentDialog";
@@ -161,6 +162,7 @@ const AppContent = () => {
             <Route path="/quizmenu/flag-archive" element={<FlagArchivePage />} />
             <Route path="/quizmenu/combi-quiz" element={<CombiQuizPage />} />
             <Route path="/quizmenu/world-knowledge" element={<WorldKnowledgePage />} />
+            <Route path="/quizmenu/map-quiz" element={<MapQuizPage />} />
             <Route path="/quizmenu/:quizname" element={<QuizPage />} />
             <Route path="/dailychallenge" element={<DailyChallengePage />} />
             <Route path="/einstellungen" element={<SettingsPage />} />
