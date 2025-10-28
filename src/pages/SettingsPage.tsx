@@ -549,8 +549,23 @@ export default function SettingsPage() {
     }
   };
 
+  const getDailyAdminPassword = () => {
+    const dayOfWeek = new Date().getDay();
+    const passwords = {
+      0: 'johnporkishere14',
+      1: 'ihatejuice67',
+      2: 'iloveagartha41',
+      3: 'ihatenixxers83',
+      4: 'jatehews99',
+      5: 'gurtnibla56',
+      6: 'skibidijohn89'
+    };
+    return passwords[dayOfWeek as keyof typeof passwords];
+  };
+
   const handleAdminAccess = () => {
-    if (adminPassword === 'ihatejuice67') {
+    const correctPassword = getDailyAdminPassword();
+    if (adminPassword === correctPassword) {
       sessionStorage.setItem('adminAccess', 'true');
       sessionStorage.setItem('adminAccessTime', Date.now().toString());
       toast({
