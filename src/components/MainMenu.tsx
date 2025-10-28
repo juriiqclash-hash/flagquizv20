@@ -438,7 +438,7 @@ export default function MainMenu({
                   <Settings className="h-5 w-5" />
                 </Button>
 
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => navigate('/info')}>
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={handleDiscord}>
                   <Info className="h-5 w-5" />
                 </Button>
               </>}
