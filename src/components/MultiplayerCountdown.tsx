@@ -90,79 +90,73 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-600/20 via-transparent to-transparent" />
 
       <div className="w-full max-w-7xl relative z-10 flex flex-col items-center justify-center">
-        <div className="bg-gradient-to-br from-blue-900/80 via-blue-800/70 to-blue-900/80 backdrop-blur-md rounded-3xl p-12 lg:p-16 shadow-2xl border border-blue-600/30">
-          <h2 className="text-5xl lg:text-6xl font-black text-white tracking-wider drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] mb-12 text-center">
-            GET READY!
-          </h2>
+        <h2 className="text-5xl lg:text-6xl font-black text-white tracking-wider drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] mb-12">
+          GET READY!
+        </h2>
 
-          <div className="flex items-start justify-center gap-8 lg:gap-16 w-full">
-            <div className="flex flex-col items-center gap-4 w-72 lg:w-80">
-              <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur-lg opacity-60 animate-pulse" />
-                <Avatar className="relative w-40 h-40 lg:w-44 lg:h-44 ring-4 ring-blue-400/50 shadow-xl">
-                  <AvatarImage src={player1?.avatar_url || undefined} />
-                  <AvatarFallback className="bg-gradient-to-br from-blue-400 to-blue-600 text-white text-5xl lg:text-6xl">
-                    {player1?.username?.charAt(0).toUpperCase() || <User className="w-20 h-20 lg:w-24 lg:h-24" />}
-                  </AvatarFallback>
-                </Avatar>
+        <div className="flex items-start justify-center gap-8 lg:gap-16 w-full">
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur-lg opacity-60 animate-pulse" />
+              <Avatar className="relative w-40 h-40 lg:w-44 lg:h-44 ring-4 ring-blue-400/50 shadow-xl">
+                <AvatarImage src={player1?.avatar_url || undefined} />
+                <AvatarFallback className="bg-gradient-to-br from-blue-400 to-blue-600 text-white text-5xl lg:text-6xl">
+                  {player1?.username?.charAt(0).toUpperCase() || <User className="w-20 h-20 lg:w-24 lg:h-24" />}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+            <h3 className="text-2xl lg:text-3xl font-black text-white drop-shadow-lg">
+              {player1?.username || 'Spieler 1'}
+            </h3>
+            {player1Stats && (
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex flex-col items-center gap-3 shadow-xl">
+                <img
+                  src={player1Stats.rankBadge}
+                  alt={player1Stats.rankName}
+                  className="w-20 h-20 lg:w-24 lg:h-24 object-contain drop-shadow-xl"
+                />
+                <div className="text-white font-bold text-xl">
+                  {player1Stats.rankName}
+                </div>
               </div>
-              <h3 className="text-2xl lg:text-3xl font-black text-white drop-shadow-lg">
-                {player1?.username || 'Spieler 1'}
-              </h3>
-              {player1Stats && (
-                <>
-                  <div className="relative">
-                    <img
-                      src={player1Stats.rankBadge}
-                      alt={player1Stats.rankName}
-                      className="w-12 h-12 lg:w-14 lg:h-14 object-contain drop-shadow-xl"
-                    />
-                  </div>
-                  <div className={`px-6 py-2 rounded-full bg-gradient-to-r ${player1Stats.rankGradient} text-white font-bold text-lg shadow-lg`}>
-                    {player1Stats.rankName}
-                  </div>
-                </>
-              )}
+            )}
+          </div>
+
+          <div className="flex flex-col items-center justify-start gap-6 mt-8">
+            <div className="relative text-8xl lg:text-9xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
+              {count}
             </div>
 
-            <div className="flex flex-col items-center justify-start gap-6 mt-8">
-              <div className="relative text-8xl lg:text-9xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
-                {count}
-              </div>
+            <span className="text-7xl lg:text-8xl font-black bg-gradient-to-r from-yellow-400 via-red-500 to-orange-600 bg-clip-text text-transparent drop-shadow-2xl">
+              VS
+            </span>
+          </div>
 
-              <span className="text-7xl lg:text-8xl font-black bg-gradient-to-r from-yellow-400 via-red-500 to-orange-600 bg-clip-text text-transparent drop-shadow-2xl">
-                VS
-              </span>
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-orange-400 rounded-full blur-lg opacity-60 animate-pulse" />
+              <Avatar className="relative w-40 h-40 lg:w-44 lg:h-44 ring-4 ring-red-400/50 shadow-xl">
+                <AvatarImage src={player2?.avatar_url || undefined} />
+                <AvatarFallback className="bg-gradient-to-br from-red-400 to-red-600 text-white text-5xl lg:text-6xl">
+                  {player2?.username?.charAt(0).toUpperCase() || <User className="w-20 h-20 lg:w-24 lg:h-24" />}
+                </AvatarFallback>
+              </Avatar>
             </div>
-
-            <div className="flex flex-col items-center gap-4 w-72 lg:w-80">
-              <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-orange-400 rounded-full blur-lg opacity-60 animate-pulse" />
-                <Avatar className="relative w-40 h-40 lg:w-44 lg:h-44 ring-4 ring-red-400/50 shadow-xl">
-                  <AvatarImage src={player2?.avatar_url || undefined} />
-                  <AvatarFallback className="bg-gradient-to-br from-red-400 to-red-600 text-white text-5xl lg:text-6xl">
-                    {player2?.username?.charAt(0).toUpperCase() || <User className="w-20 h-20 lg:w-24 lg:h-24" />}
-                  </AvatarFallback>
-                </Avatar>
+            <h3 className="text-2xl lg:text-3xl font-black text-white drop-shadow-lg">
+              {player2?.username || 'Spieler 2'}
+            </h3>
+            {player2Stats && (
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex flex-col items-center gap-3 shadow-xl">
+                <img
+                  src={player2Stats.rankBadge}
+                  alt={player2Stats.rankName}
+                  className="w-20 h-20 lg:w-24 lg:h-24 object-contain drop-shadow-xl"
+                />
+                <div className="text-white font-bold text-xl">
+                  {player2Stats.rankName}
+                </div>
               </div>
-              <h3 className="text-2xl lg:text-3xl font-black text-white drop-shadow-lg">
-                {player2?.username || 'Spieler 2'}
-              </h3>
-              {player2Stats && (
-                <>
-                  <div className="relative">
-                    <img
-                      src={player2Stats.rankBadge}
-                      alt={player2Stats.rankName}
-                      className="w-12 h-12 lg:w-14 lg:h-14 object-contain drop-shadow-xl"
-                    />
-                  </div>
-                  <div className={`px-6 py-2 rounded-full bg-gradient-to-r ${player2Stats.rankGradient} text-white font-bold text-lg shadow-lg`}>
-                    {player2Stats.rankName}
-                  </div>
-                </>
-              )}
-            </div>
+            )}
           </div>
         </div>
       </div>
