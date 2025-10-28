@@ -90,22 +90,22 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-600/20 via-transparent to-transparent" />
 
       <div className="w-full max-w-7xl relative z-10 flex flex-col items-center justify-center">
-        <h2 className="text-5xl lg:text-6xl font-black text-white tracking-wider drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] mb-12">
+        <h2 className="text-5xl lg:text-6xl font-black text-white tracking-wider drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] mb-8">
           GET READY!
         </h2>
 
-        <div className="flex items-start justify-center gap-8 lg:gap-16 w-full max-w-6xl px-4">
-          <div className="flex flex-col items-center gap-4 w-72 lg:w-80">
+        <div className="flex items-start justify-center gap-6 lg:gap-8 w-full max-w-5xl px-4">
+          <div className="flex flex-col items-center gap-3 w-60 lg:w-64">
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur-lg opacity-60 animate-pulse" />
-              <Avatar className="relative w-40 h-40 lg:w-44 lg:h-44 ring-4 ring-blue-400/50 shadow-xl">
+              <Avatar className="relative w-32 h-32 lg:w-36 lg:h-36 ring-4 ring-blue-400/50 shadow-xl">
                 <AvatarImage src={player1?.avatar_url || undefined} />
                 <AvatarFallback className="bg-gradient-to-br from-blue-400 to-blue-600 text-white text-5xl lg:text-6xl">
-                  {player1?.username?.charAt(0).toUpperCase() || <User className="w-20 h-20 lg:w-24 lg:h-24" />}
+                  {player1?.username?.charAt(0).toUpperCase() || <User className="w-16 h-16 lg:w-18 lg:h-18" />}
                 </AvatarFallback>
               </Avatar>
             </div>
-            <h3 className="text-2xl lg:text-3xl font-black text-white drop-shadow-lg">
+            <h3 className="text-xl lg:text-2xl font-black text-white drop-shadow-lg">
               {player1?.username || 'Spieler 1'}
             </h3>
             {player1Stats && (
@@ -113,36 +113,36 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
                 <img
                   src={player1Stats.rankBadge}
                   alt={player1Stats.rankName}
-                  className="w-16 h-16 lg:w-20 lg:h-20 object-contain drop-shadow-xl"
+                  className="w-12 h-12 lg:w-14 lg:h-14 object-contain drop-shadow-xl"
                 />
-                <div className="text-white font-bold text-xl">
+                <div className="text-white font-bold text-lg">
                   {player1Stats.rankName}
                 </div>
               </div>
             )}
           </div>
 
-          <div className="flex flex-col items-center justify-start gap-6 mt-12">
-            <div className="relative text-8xl lg:text-9xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
+          <div className="flex flex-col items-center justify-start gap-4 mt-6">
+            <div className="relative text-6xl lg:text-7xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
               {count}
             </div>
 
-            <span className="text-7xl lg:text-8xl font-black bg-gradient-to-r from-yellow-400 via-red-500 to-orange-600 bg-clip-text text-transparent drop-shadow-2xl">
+            <span className="text-5xl lg:text-6xl font-black bg-gradient-to-r from-yellow-400 via-red-500 to-orange-600 bg-clip-text text-transparent drop-shadow-2xl">
               VS
             </span>
           </div>
 
-          <div className="flex flex-col items-center gap-4 w-72 lg:w-80">
+          <div className="flex flex-col items-center gap-3 w-60 lg:w-64">
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-orange-400 rounded-full blur-lg opacity-60 animate-pulse" />
-              <Avatar className="relative w-40 h-40 lg:w-44 lg:h-44 ring-4 ring-red-400/50 shadow-xl">
+              <Avatar className="relative w-32 h-32 lg:w-36 lg:h-36 ring-4 ring-red-400/50 shadow-xl">
                 <AvatarImage src={player2?.avatar_url || undefined} />
                 <AvatarFallback className="bg-gradient-to-br from-red-400 to-red-600 text-white text-5xl lg:text-6xl">
-                  {player2?.username?.charAt(0).toUpperCase() || <User className="w-20 h-20 lg:w-24 lg:h-24" />}
+                  {player2?.username?.charAt(0).toUpperCase() || <User className="w-16 h-16 lg:w-18 lg:h-18" />}
                 </AvatarFallback>
               </Avatar>
             </div>
-            <h3 className="text-2xl lg:text-3xl font-black text-white drop-shadow-lg">
+            <h3 className="text-xl lg:text-2xl font-black text-white drop-shadow-lg">
               {player2?.username || 'Spieler 2'}
             </h3>
             {player2Stats && (
@@ -150,9 +150,9 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
                 <img
                   src={player2Stats.rankBadge}
                   alt={player2Stats.rankName}
-                  className="w-16 h-16 lg:w-20 lg:h-20 object-contain drop-shadow-xl"
+                  className="w-12 h-12 lg:w-14 lg:h-14 object-contain drop-shadow-xl"
                 />
-                <div className="text-white font-bold text-xl">
+                <div className="text-white font-bold text-lg">
                   {player2Stats.rankName}
                 </div>
               </div>
