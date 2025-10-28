@@ -1,3 +1,5 @@
+import { countryEnglishNames } from './country-english-names';
+
 export interface Country {
   name: string;
   code: string; // ISO 2-letter country code
@@ -5,6 +7,7 @@ export interface Country {
   capital: string;
   aliases?: string[]; // alternative names for input matching
   emojis?: string; // emoji representation of the country
+  englishName?: string; // English name for input matching
 }
 
 export function getFlagUrl(code: string): string {
@@ -13,60 +16,60 @@ export function getFlagUrl(code: string): string {
 
 export const countries: Country[] = [
   // Afrika (54 Länder)
-  { name: "Ägypten", code: "EG", continent: "Afrika", capital: "Kairo", emojis: "🏜️🕌🐪" },
-  { name: "Äquatorialguinea", code: "GQ", continent: "Afrika", capital: "Malabo", emojis: "🌴🐒🦁" },
-  { name: "Äthiopien", code: "ET", continent: "Afrika", capital: "Addis Abeba", emojis: "🏔️🦁☕" },
-  { name: "Algerien", code: "DZ", continent: "Afrika", capital: "Algier", emojis: "🏜️🌴🕌" },
-  { name: "Angola", code: "AO", continent: "Afrika", capital: "Luanda", emojis: "🥭⛏️🦁" },
-  { name: "Benin", code: "BJ", continent: "Afrika", capital: "Porto-Novo", emojis: "🌾🦁🎶" },
-  { name: "Botswana", code: "BW", continent: "Afrika", capital: "Gaborone", emojis: "🐘🏜️🌾" },
-  { name: "Burkina Faso", code: "BF", continent: "Afrika", capital: "Ouagadougou", emojis: "🌾🦁🎶" },
-  { name: "Burundi", code: "BI", continent: "Afrika", capital: "Gitega", emojis: "🌾🐒🏞️" },
-  { name: "Dschibuti", code: "DJ", continent: "Afrika", capital: "Dschibuti", emojis: "🌊🏜️🦎" },
-  { name: "Elfenbeinküste", code: "CI", continent: "Afrika", capital: "Yamoussoukro", aliases: ["Côte d'Ivoire", "Cote d'Ivoire"], emojis: "🌴🐘🥭" },
-  { name: "Eritrea", code: "ER", continent: "Afrika", capital: "Asmara", emojis: "🏜️⛵🦎" },
-  { name: "Eswatini", code: "SZ", continent: "Afrika", capital: "Mbabane", aliases: ["Swasiland"], emojis: "🏞️🦁🥁" },
-  { name: "Gabun", code: "GA", continent: "Afrika", capital: "Libreville", emojis: "🌴🐒🦁" },
-  { name: "Gambia", code: "GM", continent: "Afrika", capital: "Banjul", emojis: "🌊🐘🌴" },
-  { name: "Ghana", code: "GH", continent: "Afrika", capital: "Accra", emojis: "🥭🦁🎶" },
-  { name: "Guinea", code: "GN", continent: "Afrika", capital: "Conakry", emojis: "🌾🦁🥭" },
-  { name: "Guinea-Bissau", code: "GW", continent: "Afrika", capital: "Bissau", emojis: "🏖️🌴🦁" },
-  { name: "Kamerun", code: "CM", continent: "Afrika", capital: "Yaoundé", emojis: "🌴🦁🍍" },
-  { name: "Kap Verde", code: "CV", continent: "Afrika", capital: "Praia", emojis: "🏝️🌊⛵" },
-  { name: "Kenia", code: "KE", continent: "Afrika", capital: "Nairobi", emojis: "🦁🏞️🌾" },
-  { name: "Komoren", code: "KM", continent: "Afrika", capital: "Moroni", emojis: "🏝️🌊🐠" },
-  { name: "Kongo, Demokratische Republik", code: "CD", continent: "Afrika", capital: "Kinshasa", aliases: ["Demokratische Republik Kongo", "DR Kongo"], emojis: "🌴🏞️🐒" },
-  { name: "Kongo, Republik", code: "CG", continent: "Afrika", capital: "Brazzaville", aliases: ["Republik Kongo"], emojis: "🌴🏞️🦁" },
-  { name: "Lesotho", code: "LS", continent: "Afrika", capital: "Maseru", emojis: "🏔️🛖🦘" },
-  { name: "Liberia", code: "LR", continent: "Afrika", capital: "Monrovia", emojis: "🌊🏖️🦁" },
-  { name: "Libyen", code: "LY", continent: "Afrika", capital: "Tripolis", emojis: "🏜️🌴🕌" },
-  { name: "Madagaskar", code: "MG", continent: "Afrika", capital: "Antananarivo", emojis: "🌴🦎🐒" },
-  { name: "Malawi", code: "MW", continent: "Afrika", capital: "Lilongwe", emojis: "🌄🦁🌾" },
-  { name: "Mali", code: "ML", continent: "Afrika", capital: "Bamako", emojis: "🌾🦁🌴" },
-  { name: "Marokko", code: "MA", continent: "Afrika", capital: "Rabat", emojis: "🏜️🕌🐪" },
-  { name: "Mauretanien", code: "MR", continent: "Afrika", capital: "Nouakchott", emojis: "🏜️🐪🌴" },
-  { name: "Mauritius", code: "MU", continent: "Afrika", capital: "Port Louis", emojis: "🏝️🌴🐠" },
-  { name: "Mosambik", code: "MZ", continent: "Afrika", capital: "Maputo", emojis: "🌾🐘🛶" },
-  { name: "Namibia", code: "NA", continent: "Afrika", capital: "Windhoek", emojis: "🏜️🦁🐘" },
-  { name: "Niger", code: "NE", continent: "Afrika", capital: "Niamey", emojis: "🏜️🌾🦁" },
-  { name: "Nigeria", code: "NG", continent: "Afrika", capital: "Abuja", emojis: "🌾🦁🥭" },
-  { name: "Ruanda", code: "RW", continent: "Afrika", capital: "Kigali", emojis: "🦍🌾🏞️" },
-  { name: "Sambia", code: "ZM", continent: "Afrika", capital: "Lusaka", emojis: "🦁🌾🏞️" },
-  { name: "São Tomé und Príncipe", code: "ST", continent: "Afrika", capital: "São Tomé", aliases: ["Sao Tome und Principe"], emojis: "🌴🐒🍍" },
-  { name: "Senegal", code: "SN", continent: "Afrika", capital: "Dakar", emojis: "🌴🦁🎶" },
-  { name: "Seychellen", code: "SC", continent: "Afrika", capital: "Victoria", emojis: "🏝️🌴🐠" },
-  { name: "Sierra Leone", code: "SL", continent: "Afrika", capital: "Freetown", emojis: "🌴🌊🦁" },
-  { name: "Simbabwe", code: "ZW", continent: "Afrika", capital: "Harare", aliases: ["Zimbabwe"], emojis: "🦁🏞️🌾" },
-  { name: "Somalia", code: "SO", continent: "Afrika", capital: "Mogadischu", emojis: "🏖️🌴🐪" },
-  { name: "Südafrika", code: "ZA", continent: "Afrika", capital: "Kapstadt", emojis: "🦁🏞️🌊" },
-  { name: "Sudan", code: "SD", continent: "Afrika", capital: "Khartum", emojis: "🏜️🌾🐪" },
-  { name: "Südsudan", code: "SS", continent: "Afrika", capital: "Juba", emojis: "🌾🦁🏞️" },
-  { name: "Tansania", code: "TZ", continent: "Afrika", capital: "Dodoma", emojis: "🦁🌴🏞️" },
-  { name: "Togo", code: "TG", continent: "Afrika", capital: "Lomé", emojis: "🌴🥭🦁" },
-  { name: "Tschad", code: "TD", continent: "Afrika", capital: "N'Djamena", emojis: "🏜️🌾🦁" },
-  { name: "Tunesien", code: "TN", continent: "Afrika", capital: "Tunis", emojis: "🏜️🕌🌊" },
-  { name: "Uganda", code: "UG", continent: "Afrika", capital: "Kampala", emojis: "🦁🌾🏞️" },
-  { name: "Zentralafrikanische Republik", code: "CF", continent: "Afrika", capital: "Bangui", emojis: "🦁🌴🏞️" },
+  { name: "Ägypten", code: "EG", continent: "Afrika", capital: "Kairo", emojis: "🏜️🕌🐪", englishName: "Egypt" },
+  { name: "Äquatorialguinea", code: "GQ", continent: "Afrika", capital: "Malabo", emojis: "🌴🐒🦁", englishName: "Equatorial Guinea" },
+  { name: "Äthiopien", code: "ET", continent: "Afrika", capital: "Addis Abeba", emojis: "🏔️🦁☕", englishName: "Ethiopia" },
+  { name: "Algerien", code: "DZ", continent: "Afrika", capital: "Algier", emojis: "🏜️🌴🕌", englishName: "Algeria" },
+  { name: "Angola", code: "AO", continent: "Afrika", capital: "Luanda", emojis: "🥭⛏️🦁", englishName: "Angola" },
+  { name: "Benin", code: "BJ", continent: "Afrika", capital: "Porto-Novo", emojis: "🌾🦁🎶", englishName: "Benin" },
+  { name: "Botswana", code: "BW", continent: "Afrika", capital: "Gaborone", emojis: "🐘🏜️🌾", englishName: "Botswana" },
+  { name: "Burkina Faso", code: "BF", continent: "Afrika", capital: "Ouagadougou", emojis: "🌾🦁🎶", englishName: "Burkina Faso" },
+  { name: "Burundi", code: "BI", continent: "Afrika", capital: "Gitega", emojis: "🌾🐒🏞️", englishName: "Burundi" },
+  { name: "Dschibuti", code: "DJ", continent: "Afrika", capital: "Dschibuti", emojis: "🌊🏜️🦎", englishName: "Djibouti" },
+  { name: "Elfenbeinküste", code: "CI", continent: "Afrika", capital: "Yamoussoukro", aliases: ["Côte d'Ivoire", "Cote d'Ivoire"], emojis: "🌴🐘🥭", englishName: "Ivory Coast" },
+  { name: "Eritrea", code: "ER", continent: "Afrika", capital: "Asmara", emojis: "🏜️⛵🦎", englishName: "Eritrea" },
+  { name: "Eswatini", code: "SZ", continent: "Afrika", capital: "Mbabane", aliases: ["Swasiland"], emojis: "🏞️🦁🥁", englishName: "Eswatini" },
+  { name: "Gabun", code: "GA", continent: "Afrika", capital: "Libreville", emojis: "🌴🐒🦁", englishName: "Gabon" },
+  { name: "Gambia", code: "GM", continent: "Afrika", capital: "Banjul", emojis: "🌊🐘🌴", englishName: "Gambia" },
+  { name: "Ghana", code: "GH", continent: "Afrika", capital: "Accra", emojis: "🥭🦁🎶", englishName: "Ghana" },
+  { name: "Guinea", code: "GN", continent: "Afrika", capital: "Conakry", emojis: "🌾🦁🥭", englishName: "Guinea" },
+  { name: "Guinea-Bissau", code: "GW", continent: "Afrika", capital: "Bissau", emojis: "🏖️🌴🦁", englishName: "Guinea-Bissau" },
+  { name: "Kamerun", code: "CM", continent: "Afrika", capital: "Yaoundé", emojis: "🌴🦁🍍", englishName: "Cameroon" },
+  { name: "Kap Verde", code: "CV", continent: "Afrika", capital: "Praia", emojis: "🏝️🌊⛵", englishName: "Cabo Verde" },
+  { name: "Kenia", code: "KE", continent: "Afrika", capital: "Nairobi", emojis: "🦁🏞️🌾", englishName: "Kenya" },
+  { name: "Komoren", code: "KM", continent: "Afrika", capital: "Moroni", emojis: "🏝️🌊🐠", englishName: "Comoros" },
+  { name: "Kongo, Demokratische Republik", code: "CD", continent: "Afrika", capital: "Kinshasa", aliases: ["Demokratische Republik Kongo", "DR Kongo"], emojis: "🌴🏞️🐒", englishName: "DR Congo" },
+  { name: "Kongo, Republik", code: "CG", continent: "Afrika", capital: "Brazzaville", aliases: ["Republik Kongo"], emojis: "🌴🏞️🦁", englishName: "Congo" },
+  { name: "Lesotho", code: "LS", continent: "Afrika", capital: "Maseru", emojis: "🏔️🛖🦘", englishName: "Lesotho" },
+  { name: "Liberia", code: "LR", continent: "Afrika", capital: "Monrovia", emojis: "🌊🏖️🦁", englishName: "Liberia" },
+  { name: "Libyen", code: "LY", continent: "Afrika", capital: "Tripolis", emojis: "🏜️🌴🕌", englishName: "Libya" },
+  { name: "Madagaskar", code: "MG", continent: "Afrika", capital: "Antananarivo", emojis: "🌴🦎🐒", englishName: "Madagascar" },
+  { name: "Malawi", code: "MW", continent: "Afrika", capital: "Lilongwe", emojis: "🌄🦁🌾", englishName: "Malawi" },
+  { name: "Mali", code: "ML", continent: "Afrika", capital: "Bamako", emojis: "🌾🦁🌴", englishName: "Mali" },
+  { name: "Marokko", code: "MA", continent: "Afrika", capital: "Rabat", emojis: "🏜️🕌🐪", englishName: "Morocco" },
+  { name: "Mauretanien", code: "MR", continent: "Afrika", capital: "Nouakchott", emojis: "🏜️🐪🌴", englishName: "Mauritania" },
+  { name: "Mauritius", code: "MU", continent: "Afrika", capital: "Port Louis", emojis: "🏝️🌴🐠", englishName: "Mauritius" },
+  { name: "Mosambik", code: "MZ", continent: "Afrika", capital: "Maputo", emojis: "🌾🐘🛶", englishName: "Mozambique" },
+  { name: "Namibia", code: "NA", continent: "Afrika", capital: "Windhoek", emojis: "🏜️🦁🐘", englishName: "Namibia" },
+  { name: "Niger", code: "NE", continent: "Afrika", capital: "Niamey", emojis: "🏜️🌾🦁", englishName: "Niger" },
+  { name: "Nigeria", code: "NG", continent: "Afrika", capital: "Abuja", emojis: "🌾🦁🥭", englishName: "Nigeria" },
+  { name: "Ruanda", code: "RW", continent: "Afrika", capital: "Kigali", emojis: "🦍🌾🏞️", englishName: "Rwanda" },
+  { name: "Sambia", code: "ZM", continent: "Afrika", capital: "Lusaka", emojis: "🦁🌾🏞️", englishName: "Zambia" },
+  { name: "São Tomé und Príncipe", code: "ST", continent: "Afrika", capital: "São Tomé", aliases: ["Sao Tome und Principe"], emojis: "🌴🐒🍍", englishName: "Sao Tome and Principe" },
+  { name: "Senegal", code: "SN", continent: "Afrika", capital: "Dakar", emojis: "🌴🦁🎶", englishName: "Senegal" },
+  { name: "Seychellen", code: "SC", continent: "Afrika", capital: "Victoria", emojis: "🏝️🌴🐠", englishName: "Seychelles" },
+  { name: "Sierra Leone", code: "SL", continent: "Afrika", capital: "Freetown", emojis: "🌴🌊🦁", englishName: "Sierra Leone" },
+  { name: "Simbabwe", code: "ZW", continent: "Afrika", capital: "Harare", aliases: ["Zimbabwe"], emojis: "🦁🏞️🌾", englishName: "Zimbabwe" },
+  { name: "Somalia", code: "SO", continent: "Afrika", capital: "Mogadischu", emojis: "🏖️🌴🐪", englishName: "Somalia" },
+  { name: "Südafrika", code: "ZA", continent: "Afrika", capital: "Kapstadt", emojis: "🦁🏞️🌊", englishName: "South Africa" },
+  { name: "Sudan", code: "SD", continent: "Afrika", capital: "Khartum", emojis: "🏜️🌾🐪", englishName: "Sudan" },
+  { name: "Südsudan", code: "SS", continent: "Afrika", capital: "Juba", emojis: "🌾🦁🏞️", englishName: "South Sudan" },
+  { name: "Tansania", code: "TZ", continent: "Afrika", capital: "Dodoma", emojis: "🦁🌴🏞️", englishName: "Tanzania" },
+  { name: "Togo", code: "TG", continent: "Afrika", capital: "Lomé", emojis: "🌴🥭🦁", englishName: "Togo" },
+  { name: "Tschad", code: "TD", continent: "Afrika", capital: "N'Djamena", emojis: "🏜️🌾🦁", englishName: "Chad" },
+  { name: "Tunesien", code: "TN", continent: "Afrika", capital: "Tunis", emojis: "🏜️🕌🌊", englishName: "Tunisia" },
+  { name: "Uganda", code: "UG", continent: "Afrika", capital: "Kampala", emojis: "🦁🌾🏞️", englishName: "Uganda" },
+  { name: "Zentralafrikanische Republik", code: "CF", continent: "Afrika", capital: "Bangui", emojis: "🦁🌴🏞️", englishName: "Central African Republic" },
 
   // Asien (49 Länder)
   { name: "Afghanistan", code: "AF", continent: "Asien", capital: "Kabul", emojis: "🏔️🕌🐪" },
@@ -252,14 +255,20 @@ export function normalizeInput(input: string): string {
 export function checkAnswer(input: string, country: Country): boolean {
   const normalizedInput = normalizeInput(input);
   const normalizedName = normalizeInput(country.name);
-  
+
   if (normalizedInput === normalizedName) return true;
-  
+
+  const englishName = country.englishName || countryEnglishNames[country.code];
+  if (englishName) {
+    const normalizedEnglishName = normalizeInput(englishName);
+    if (normalizedInput === normalizedEnglishName) return true;
+  }
+
   if (country.aliases) {
-    return country.aliases.some(alias => 
+    return country.aliases.some(alias =>
       normalizeInput(alias) === normalizedInput
     );
   }
-  
+
   return false;
 }
