@@ -89,98 +89,81 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 flex flex-col items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-600/20 via-transparent to-transparent" />
 
-      <div className="w-full max-w-7xl relative z-10 flex flex-col items-center justify-center gap-12">
-        <div className="text-center space-y-2">
-          <h2 className="text-4xl lg:text-5xl font-black text-white tracking-wider drop-shadow-[0_0_30px_rgba(255,255,255,0.5)]">
-            GET READY!
-          </h2>
-          <div className="relative inline-block">
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 blur-3xl opacity-60 animate-pulse" />
-            <div className="relative text-8xl lg:text-9xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
-              {count}
-            </div>
-          </div>
-        </div>
+      <div className="w-full max-w-7xl relative z-10 flex flex-col items-center justify-center">
+        <h2 className="text-5xl lg:text-6xl font-black text-white tracking-wider drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] mb-8">
+          GET READY!
+        </h2>
 
-        <div className="flex items-center justify-between w-full max-w-5xl px-4 lg:px-8">
-          <div className="flex flex-col items-center gap-4 transform hover:scale-105 transition-transform duration-300">
+        <div className="flex items-start justify-center gap-8 lg:gap-16 w-full max-w-6xl px-4">
+          <div className="bg-blue-900/60 backdrop-blur-sm rounded-3xl p-8 flex flex-col items-center gap-4 w-72 lg:w-80 shadow-2xl border border-blue-700/30">
             <div className="relative group">
-              <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur-xl opacity-75 group-hover:opacity-100 animate-pulse" />
-              <Avatar className="relative w-48 h-48 lg:w-56 lg:h-56 ring-8 ring-blue-400/50 shadow-[0_0_50px_rgba(59,130,246,0.6)]">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur-lg opacity-60 animate-pulse" />
+              <Avatar className="relative w-40 h-40 lg:w-44 lg:h-44 ring-4 ring-blue-400/50 shadow-xl">
                 <AvatarImage src={player1?.avatar_url || undefined} />
-                <AvatarFallback className="bg-gradient-to-br from-blue-400 to-blue-600 text-white text-6xl lg:text-7xl">
-                  {player1?.username?.charAt(0).toUpperCase() || <User className="w-24 h-24 lg:w-28 lg:h-28" />}
+                <AvatarFallback className="bg-gradient-to-br from-blue-400 to-blue-600 text-white text-5xl lg:text-6xl">
+                  {player1?.username?.charAt(0).toUpperCase() || <User className="w-20 h-20 lg:w-24 lg:h-24" />}
                 </AvatarFallback>
               </Avatar>
             </div>
-            <h3 className="text-2xl lg:text-3xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+            <h3 className="text-2xl lg:text-3xl font-black text-white drop-shadow-lg">
               {player1?.username || 'Spieler 1'}
             </h3>
             {player1Stats && (
-              <div className="flex flex-col items-center gap-2">
+              <>
                 <div className="relative">
-                  <div className="absolute inset-0 blur-md opacity-60">
-                    <img
-                      src={player1Stats.rankBadge}
-                      alt={player1Stats.rankName}
-                      className="w-14 h-14 lg:w-16 lg:h-16 object-contain"
-                    />
-                  </div>
                   <img
                     src={player1Stats.rankBadge}
                     alt={player1Stats.rankName}
-                    className="relative w-14 h-14 lg:w-16 lg:h-16 object-contain drop-shadow-2xl"
+                    className="w-12 h-12 lg:w-14 lg:h-14 object-contain drop-shadow-xl"
                   />
                 </div>
-                <div className={`px-4 py-1.5 rounded-full bg-gradient-to-r ${player1Stats.rankGradient} text-white font-bold text-base shadow-lg`}>
+                <div className={`px-6 py-2 rounded-full bg-gradient-to-r ${player1Stats.rankGradient} text-white font-bold text-lg shadow-lg`}>
                   {player1Stats.rankName}
                 </div>
-              </div>
+              </>
             )}
           </div>
 
-          <div className="flex items-center justify-center">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-red-500 to-orange-600 blur-3xl opacity-40 animate-pulse" />
-              <span className="relative text-7xl lg:text-8xl font-black bg-gradient-to-r from-yellow-400 via-red-500 to-orange-600 bg-clip-text text-transparent drop-shadow-2xl">
+          <div className="flex flex-col items-center justify-start gap-6 mt-12">
+            <div className="bg-blue-800/70 backdrop-blur-sm rounded-2xl px-16 py-8 shadow-2xl border border-blue-600/40">
+              <div className="relative text-8xl lg:text-9xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
+                {count}
+              </div>
+            </div>
+
+            <div className="bg-blue-800/70 backdrop-blur-sm rounded-2xl px-20 py-6 shadow-2xl border border-blue-600/40">
+              <span className="text-7xl lg:text-8xl font-black bg-gradient-to-r from-yellow-400 via-red-500 to-orange-600 bg-clip-text text-transparent drop-shadow-2xl">
                 VS
               </span>
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-4 transform hover:scale-105 transition-transform duration-300">
+          <div className="bg-blue-900/60 backdrop-blur-sm rounded-3xl p-8 flex flex-col items-center gap-4 w-72 lg:w-80 shadow-2xl border border-blue-700/30">
             <div className="relative group">
-              <div className="absolute -inset-2 bg-gradient-to-r from-red-400 to-orange-400 rounded-full blur-xl opacity-75 group-hover:opacity-100 animate-pulse" />
-              <Avatar className="relative w-48 h-48 lg:w-56 lg:h-56 ring-8 ring-red-400/50 shadow-[0_0_50px_rgba(239,68,68,0.6)]">
+              <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-orange-400 rounded-full blur-lg opacity-60 animate-pulse" />
+              <Avatar className="relative w-40 h-40 lg:w-44 lg:h-44 ring-4 ring-red-400/50 shadow-xl">
                 <AvatarImage src={player2?.avatar_url || undefined} />
-                <AvatarFallback className="bg-gradient-to-br from-red-400 to-red-600 text-white text-6xl lg:text-7xl">
-                  {player2?.username?.charAt(0).toUpperCase() || <User className="w-24 h-24 lg:w-28 lg:h-28" />}
+                <AvatarFallback className="bg-gradient-to-br from-red-400 to-red-600 text-white text-5xl lg:text-6xl">
+                  {player2?.username?.charAt(0).toUpperCase() || <User className="w-20 h-20 lg:w-24 lg:h-24" />}
                 </AvatarFallback>
               </Avatar>
             </div>
-            <h3 className="text-2xl lg:text-3xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+            <h3 className="text-2xl lg:text-3xl font-black text-white drop-shadow-lg">
               {player2?.username || 'Spieler 2'}
             </h3>
             {player2Stats && (
-              <div className="flex flex-col items-center gap-2">
+              <>
                 <div className="relative">
-                  <div className="absolute inset-0 blur-md opacity-60">
-                    <img
-                      src={player2Stats.rankBadge}
-                      alt={player2Stats.rankName}
-                      className="w-14 h-14 lg:w-16 lg:h-16 object-contain"
-                    />
-                  </div>
                   <img
                     src={player2Stats.rankBadge}
                     alt={player2Stats.rankName}
-                    className="relative w-14 h-14 lg:w-16 lg:h-16 object-contain drop-shadow-2xl"
+                    className="w-12 h-12 lg:w-14 lg:h-14 object-contain drop-shadow-xl"
                   />
                 </div>
-                <div className={`px-4 py-1.5 rounded-full bg-gradient-to-r ${player2Stats.rankGradient} text-white font-bold text-base shadow-lg`}>
+                <div className={`px-6 py-2 rounded-full bg-gradient-to-r ${player2Stats.rankGradient} text-white font-bold text-lg shadow-lg`}>
                   {player2Stats.rankName}
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>
