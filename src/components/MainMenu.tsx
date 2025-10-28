@@ -438,7 +438,7 @@ export default function MainMenu({
                   <Settings className="h-5 w-5" />
                 </Button>
 
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => window.open('https://discord.gg/cC4fHpubn', '_blank')}>
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => navigate('/info')}>
                   <Info className="h-5 w-5" />
                 </Button>
               </>}
