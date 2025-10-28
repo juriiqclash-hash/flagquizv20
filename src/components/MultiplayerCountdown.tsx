@@ -94,8 +94,8 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
           GET READY!
         </h2>
 
-        <div className="flex items-start justify-center gap-8 lg:gap-16 w-full">
-          <div className="flex flex-col items-center gap-4">
+        <div className="flex items-start justify-center gap-8 lg:gap-16 w-full max-w-6xl px-4">
+          <div className="flex flex-col items-center gap-4 w-72 lg:w-80">
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur-lg opacity-60 animate-pulse" />
               <Avatar className="relative w-40 h-40 lg:w-44 lg:h-44 ring-4 ring-blue-400/50 shadow-xl">
@@ -109,11 +109,11 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
               {player1?.username || 'Spieler 1'}
             </h3>
             {player1Stats && (
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex flex-col items-center gap-3 shadow-xl">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-3 flex items-center gap-4 shadow-xl">
                 <img
                   src={player1Stats.rankBadge}
                   alt={player1Stats.rankName}
-                  className="w-20 h-20 lg:w-24 lg:h-24 object-contain drop-shadow-xl"
+                  className="w-16 h-16 lg:w-20 lg:h-20 object-contain drop-shadow-xl"
                 />
                 <div className="text-white font-bold text-xl">
                   {player1Stats.rankName}
@@ -122,7 +122,7 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
             )}
           </div>
 
-          <div className="flex flex-col items-center justify-start gap-6 mt-8">
+          <div className="flex flex-col items-center justify-start gap-6 mt-12">
             <div className="relative text-8xl lg:text-9xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
               {count}
             </div>
@@ -132,7 +132,7 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
             </span>
           </div>
 
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4 w-72 lg:w-80">
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-orange-400 rounded-full blur-lg opacity-60 animate-pulse" />
               <Avatar className="relative w-40 h-40 lg:w-44 lg:h-44 ring-4 ring-red-400/50 shadow-xl">
@@ -146,11 +146,11 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
               {player2?.username || 'Spieler 2'}
             </h3>
             {player2Stats && (
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex flex-col items-center gap-3 shadow-xl">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-3 flex items-center gap-4 shadow-xl">
                 <img
                   src={player2Stats.rankBadge}
                   alt={player2Stats.rankName}
-                  className="w-20 h-20 lg:w-24 lg:h-24 object-contain drop-shadow-xl"
+                  className="w-16 h-16 lg:w-20 lg:h-20 object-contain drop-shadow-xl"
                 />
                 <div className="text-white font-bold text-xl">
                   {player2Stats.rankName}
