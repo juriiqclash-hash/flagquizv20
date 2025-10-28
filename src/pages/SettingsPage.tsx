@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Settings, Image, Bell, Shield, Activity, Zap, Music, Languages, Database, Trash2, Lock, Info } from 'lucide-react';
+import { ArrowLeft, Settings, Image, Bell, Shield, Activity, Zap, Music, Languages, Database, Trash2, Lock, Info, Gamepad2, Palette, Download, Timer, Keyboard } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -24,18 +24,22 @@ const SERVER_REGIONS = [
 ];
 
 const CATEGORIES = [
-  { id: 'info', label: 'System-Info', icon: Info },
-  { id: 'admin', label: 'Admin', icon: Lock },
-  { id: 'cache', label: 'Cache', icon: Trash2 },
-  { id: 'data', label: 'Daten', icon: Database },
-  { id: 'language', label: 'Sprache', icon: Languages },
-  { id: 'audio', label: 'Audio & Haptik', icon: Music },
-  { id: 'performance', label: 'Leistung', icon: Zap },
-  { id: 'developer', label: 'Entwickler', icon: Activity },
-  { id: 'privacy', label: 'Datenschutz', icon: Shield },
-  { id: 'notifications', label: 'Benachrichtigungen', icon: Bell },
-  { id: 'graphics', label: 'Grafik', icon: Image },
   { id: 'general', label: 'Allgemein', icon: Settings },
+  { id: 'gameplay', label: 'Spielmechanik', icon: Gamepad2 },
+  { id: 'graphics', label: 'Grafik', icon: Image },
+  { id: 'theme', label: 'Personalisierung', icon: Palette },
+  { id: 'audio', label: 'Audio & Haptik', icon: Music },
+  { id: 'controls', label: 'Steuerung', icon: Keyboard },
+  { id: 'notifications', label: 'Benachrichtigungen', icon: Bell },
+  { id: 'privacy', label: 'Datenschutz', icon: Shield },
+  { id: 'performance', label: 'Leistung', icon: Zap },
+  { id: 'language', label: 'Sprache', icon: Languages },
+  { id: 'data', label: 'Daten', icon: Database },
+  { id: 'importexport', label: 'Import/Export', icon: Download },
+  { id: 'developer', label: 'Entwickler', icon: Activity },
+  { id: 'cache', label: 'Cache', icon: Trash2 },
+  { id: 'admin', label: 'Admin', icon: Lock },
+  { id: 'info', label: 'System-Info', icon: Info },
 ];
 
 export default function SettingsPage() {
@@ -79,6 +83,37 @@ export default function SettingsPage() {
   const [soundEffectsEnabled, setSoundEffectsEnabled] = useState(true);
   const [hapticFeedback, setHapticFeedback] = useState(true);
   const [dataUsageMode, setDataUsageMode] = useState('normal');
+
+  const [timerEnabled, setTimerEnabled] = useState(true);
+  const [timerSpeed, setTimerSpeed] = useState(100);
+  const [hintsEnabled, setHintsEnabled] = useState(true);
+  const [difficultyLevel, setDifficultyLevel] = useState('medium');
+  const [autoNextQuestion, setAutoNextQuestion] = useState(false);
+
+  const [themeColor, setThemeColor] = useState('blue');
+  const [backgroundStyle, setBackgroundStyle] = useState('gradient');
+  const [uiLayout, setUiLayout] = useState('normal');
+  const [buttonStyle, setButtonStyle] = useState('default');
+
+  const [musicVolume, setMusicVolume] = useState(50);
+  const [sfxVolume, setSfxVolume] = useState(50);
+  const [voiceVolume, setVoiceVolume] = useState(50);
+
+  const [keyboardShortcutsEnabled, setKeyboardShortcutsEnabled] = useState(true);
+  const [touchGesturesEnabled, setTouchGesturesEnabled] = useState(true);
+  const [mouseSpeed, setMouseSpeed] = useState(50);
+
+  const [notifyFriendRequests, setNotifyFriendRequests] = useState(true);
+  const [notifyGameInvites, setNotifyGameInvites] = useState(true);
+  const [notifyAchievements, setNotifyAchievements] = useState(true);
+  const [notifyLeaderboard, setNotifyLeaderboard] = useState(false);
+  const [emailNotifications, setEmailNotifications] = useState(false);
+  const [notificationSound, setNotificationSound] = useState('default');
+
+  const [colorBlindMode, setColorBlindMode] = useState('none');
+  const [screenReaderMode, setScreenReaderMode] = useState(false);
+  const [textToSpeech, setTextToSpeech] = useState(false);
+  const [keyboardNavigation, setKeyboardNavigation] = useState(false);
 
   const appVersion = '0.0.0';
   const buildNumber = Date.now().toString().slice(-8);
@@ -876,6 +911,88 @@ export default function SettingsPage() {
                   Deaktiviert Animationen für Personen mit Bewegungsempfindlichkeit
                 </p>
               </div>
+
+              <Separator />
+
+              <div className="space-y-3">
+                <Label htmlFor="colorblind-mode" className="flex items-center gap-2 text-base">
+                  <Eye className="h-5 w-5" />
+                  Farbblindheitsmodus
+                </Label>
+                <Select value={colorBlindMode} onValueChange={setColorBlindMode}>
+                  <SelectTrigger id="colorblind-mode">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Kein</SelectItem>
+                    <SelectItem value="protanopia">Protanopie (Rot-Schwäche)</SelectItem>
+                    <SelectItem value="deuteranopia">Deuteranopie (Grün-Schwäche)</SelectItem>
+                    <SelectItem value="tritanopia">Tritanopie (Blau-Schwäche)</SelectItem>
+                    <SelectItem value="monochromacy">Achromatopsie (Farbenblind)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                  Passt Farben für bessere Sichtbarkeit an
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="screen-reader" className="flex items-center gap-2 text-base">
+                  Screen Reader Support
+                </Label>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    {screenReaderMode ? 'Aktiviert' : 'Deaktiviert'}
+                  </span>
+                  <Switch
+                    id="screen-reader"
+                    checked={screenReaderMode}
+                    onCheckedChange={setScreenReaderMode}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Optimiert die App für Screenreader
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="text-to-speech" className="flex items-center gap-2 text-base">
+                  Text-zu-Sprache
+                </Label>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    {textToSpeech ? 'ON' : 'OFF'}
+                  </span>
+                  <Switch
+                    id="text-to-speech"
+                    checked={textToSpeech}
+                    onCheckedChange={setTextToSpeech}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Liest Text-Inhalte laut vor
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="keyboard-nav" className="flex items-center gap-2 text-base">
+                  <Keyboard className="h-5 w-5" />
+                  Tastatur-Navigation
+                </Label>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    {keyboardNavigation ? 'ON' : 'OFF'}
+                  </span>
+                  <Switch
+                    id="keyboard-nav"
+                    checked={keyboardNavigation}
+                    onCheckedChange={setKeyboardNavigation}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Verbesserte Tastatur-Navigation mit visuellen Fokus-Indikatoren
+                </p>
+              </div>
             </div>
           </div>
         );
@@ -916,6 +1033,121 @@ export default function SettingsPage() {
                   </p>
                 )}
               </div>
+
+              {notificationsEnabled && (
+                <>
+                  <Separator />
+
+                  <div className="space-y-4">
+                    <Label className="text-base font-medium">Benachrichtigungstypen</Label>
+
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-0.5">
+                          <Label htmlFor="notify-friend-requests" className="text-sm font-medium">
+                            Freundschaftsanfragen
+                          </Label>
+                          <p className="text-xs text-muted-foreground">
+                            Bei neuen Freundschaftsanfragen benachrichtigen
+                          </p>
+                        </div>
+                        <Switch
+                          id="notify-friend-requests"
+                          checked={notifyFriendRequests}
+                          onCheckedChange={setNotifyFriendRequests}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-0.5">
+                          <Label htmlFor="notify-game-invites" className="text-sm font-medium">
+                            Spiel-Einladungen
+                          </Label>
+                          <p className="text-xs text-muted-foreground">
+                            Bei Einladungen zu Multiplayer-Spielen
+                          </p>
+                        </div>
+                        <Switch
+                          id="notify-game-invites"
+                          checked={notifyGameInvites}
+                          onCheckedChange={setNotifyGameInvites}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-0.5">
+                          <Label htmlFor="notify-achievements" className="text-sm font-medium">
+                            Achievements
+                          </Label>
+                          <p className="text-xs text-muted-foreground">
+                            Bei erreichten Erfolgen und Meilensteinen
+                          </p>
+                        </div>
+                        <Switch
+                          id="notify-achievements"
+                          checked={notifyAchievements}
+                          onCheckedChange={setNotifyAchievements}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-0.5">
+                          <Label htmlFor="notify-leaderboard" className="text-sm font-medium">
+                            Leaderboard-Updates
+                          </Label>
+                          <p className="text-xs text-muted-foreground">
+                            Bei Änderungen in der Rangliste
+                          </p>
+                        </div>
+                        <Switch
+                          id="notify-leaderboard"
+                          checked={notifyLeaderboard}
+                          onCheckedChange={setNotifyLeaderboard}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  <div className="space-y-3">
+                    <Label htmlFor="notification-sound" className="flex items-center gap-2 text-base">
+                      <Music className="h-5 w-5" />
+                      Benachrichtigungston
+                    </Label>
+                    <Select value={notificationSound} onValueChange={setNotificationSound}>
+                      <SelectTrigger id="notification-sound">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="default">Standard</SelectItem>
+                        <SelectItem value="chime">Glockenspiel</SelectItem>
+                        <SelectItem value="bell">Glocke</SelectItem>
+                        <SelectItem value="ding">Ding</SelectItem>
+                        <SelectItem value="none">Kein Ton</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="email-notifications" className="text-sm font-medium">
+                          E-Mail-Benachrichtigungen
+                        </Label>
+                        <p className="text-xs text-muted-foreground">
+                          Erhalte wichtige Updates per E-Mail
+                        </p>
+                      </div>
+                      <Switch
+                        id="email-notifications"
+                        checked={emailNotifications}
+                        onCheckedChange={setEmailNotifications}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         );
@@ -1082,6 +1314,64 @@ export default function SettingsPage() {
             </div>
 
             <div className="space-y-6">
+              <div className="space-y-3">
+                <Label htmlFor="music-volume" className="flex items-center gap-2 text-base">
+                  <Music className="h-5 w-5" />
+                  Musik-Lautstärke
+                </Label>
+                <div className="flex items-center gap-4">
+                  <Slider
+                    id="music-volume"
+                    min={0}
+                    max={100}
+                    step={5}
+                    value={[musicVolume]}
+                    onValueChange={(value) => setMusicVolume(value[0])}
+                    className="flex-1"
+                  />
+                  <span className="text-sm font-medium w-12 text-right">{musicVolume}%</span>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="sfx-volume" className="flex items-center gap-2 text-base">
+                  <Volume2 className="h-5 w-5" />
+                  Soundeffekt-Lautstärke
+                </Label>
+                <div className="flex items-center gap-4">
+                  <Slider
+                    id="sfx-volume"
+                    min={0}
+                    max={100}
+                    step={5}
+                    value={[sfxVolume]}
+                    onValueChange={(value) => setSfxVolume(value[0])}
+                    className="flex-1"
+                  />
+                  <span className="text-sm font-medium w-12 text-right">{sfxVolume}%</span>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="voice-volume" className="flex items-center gap-2 text-base">
+                  Stimmen-Lautstärke
+                </Label>
+                <div className="flex items-center gap-4">
+                  <Slider
+                    id="voice-volume"
+                    min={0}
+                    max={100}
+                    step={5}
+                    value={[voiceVolume]}
+                    onValueChange={(value) => setVoiceVolume(value[0])}
+                    className="flex-1"
+                  />
+                  <span className="text-sm font-medium w-12 text-right">{voiceVolume}%</span>
+                </div>
+              </div>
+
+              <Separator />
+
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
@@ -1099,8 +1389,6 @@ export default function SettingsPage() {
                   />
                 </div>
               </div>
-
-              <Separator />
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -1321,6 +1609,386 @@ export default function SettingsPage() {
                     </div>
                   )}
                 </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'gameplay':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Spielmechanik</h2>
+              <p className="text-muted-foreground">Passe das Spielverhalten an deine Bedürfnisse an</p>
+            </div>
+
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <Label htmlFor="timer-enabled" className="flex items-center gap-2 text-base">
+                  <Timer className="h-5 w-5" />
+                  Timer
+                </Label>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    {timerEnabled ? 'Aktiviert' : 'Deaktiviert'}
+                  </span>
+                  <Switch
+                    id="timer-enabled"
+                    checked={timerEnabled}
+                    onCheckedChange={setTimerEnabled}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Zeit-Begrenzung für Quiz-Fragen
+                </p>
+              </div>
+
+              {timerEnabled && (
+                <div className="space-y-3">
+                  <Label htmlFor="timer-speed" className="flex items-center gap-2 text-base">
+                    Timer-Geschwindigkeit
+                  </Label>
+                  <div className="flex items-center gap-4">
+                    <Slider
+                      id="timer-speed"
+                      min={50}
+                      max={150}
+                      step={10}
+                      value={[timerSpeed]}
+                      onValueChange={(value) => setTimerSpeed(value[0])}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-medium w-12 text-right">{timerSpeed}%</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    100% = Normal, 50% = Langsamer, 150% = Schneller
+                  </p>
+                </div>
+              )}
+
+              <Separator />
+
+              <div className="space-y-3">
+                <Label htmlFor="difficulty" className="flex items-center gap-2 text-base">
+                  <Activity className="h-5 w-5" />
+                  Schwierigkeitsgrad
+                </Label>
+                <Select value={difficultyLevel} onValueChange={setDifficultyLevel}>
+                  <SelectTrigger id="difficulty">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="easy">Einfach</SelectItem>
+                    <SelectItem value="medium">Mittel</SelectItem>
+                    <SelectItem value="hard">Schwer</SelectItem>
+                    <SelectItem value="expert">Experte</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="hints-enabled" className="flex items-center gap-2 text-base">
+                  <Info className="h-5 w-5" />
+                  Hinweise
+                </Label>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    {hintsEnabled ? 'Aktiviert' : 'Deaktiviert'}
+                  </span>
+                  <Switch
+                    id="hints-enabled"
+                    checked={hintsEnabled}
+                    onCheckedChange={setHintsEnabled}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Hilfreiche Tipps während des Spiels
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="auto-next" className="flex items-center gap-2 text-base">
+                  Automatisch zur nächsten Frage
+                </Label>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    {autoNextQuestion ? 'ON' : 'OFF'}
+                  </span>
+                  <Switch
+                    id="auto-next"
+                    checked={autoNextQuestion}
+                    onCheckedChange={setAutoNextQuestion}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Springt automatisch zur nächsten Frage nach Beantwortung
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'theme':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Personalisierung</h2>
+              <p className="text-muted-foreground">Passe das Aussehen der App an</p>
+            </div>
+
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <Label htmlFor="theme-color" className="flex items-center gap-2 text-base">
+                  <Palette className="h-5 w-5" />
+                  Farbschema
+                </Label>
+                <Select value={themeColor} onValueChange={setThemeColor}>
+                  <SelectTrigger id="theme-color">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="blue">Blau</SelectItem>
+                    <SelectItem value="green">Grün</SelectItem>
+                    <SelectItem value="red">Rot</SelectItem>
+                    <SelectItem value="orange">Orange</SelectItem>
+                    <SelectItem value="purple">Lila</SelectItem>
+                    <SelectItem value="pink">Pink</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="background-style" className="flex items-center gap-2 text-base">
+                  <Image className="h-5 w-5" />
+                  Hintergrund-Stil
+                </Label>
+                <Select value={backgroundStyle} onValueChange={setBackgroundStyle}>
+                  <SelectTrigger id="background-style">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="solid">Einfarbig</SelectItem>
+                    <SelectItem value="gradient">Verlauf</SelectItem>
+                    <SelectItem value="pattern">Muster</SelectItem>
+                    <SelectItem value="image">Bild</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="ui-layout" className="flex items-center gap-2 text-base">
+                  <Monitor className="h-5 w-5" />
+                  UI-Layout
+                </Label>
+                <Select value={uiLayout} onValueChange={setUiLayout}>
+                  <SelectTrigger id="ui-layout">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="compact">Kompakt</SelectItem>
+                    <SelectItem value="normal">Normal</SelectItem>
+                    <SelectItem value="spacious">Geräumig</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="button-style" className="flex items-center gap-2 text-base">
+                  Button-Stil
+                </Label>
+                <Select value={buttonStyle} onValueChange={setButtonStyle}>
+                  <SelectTrigger id="button-style">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="default">Standard</SelectItem>
+                    <SelectItem value="rounded">Abgerundet</SelectItem>
+                    <SelectItem value="sharp">Eckig</SelectItem>
+                    <SelectItem value="pill">Pill-Form</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'controls':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Steuerung</h2>
+              <p className="text-muted-foreground">Tastatur, Maus und Touch-Einstellungen</p>
+            </div>
+
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <Label htmlFor="keyboard-shortcuts" className="flex items-center gap-2 text-base">
+                  <Keyboard className="h-5 w-5" />
+                  Tastaturkürzel
+                </Label>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    {keyboardShortcutsEnabled ? 'Aktiviert' : 'Deaktiviert'}
+                  </span>
+                  <Switch
+                    id="keyboard-shortcuts"
+                    checked={keyboardShortcutsEnabled}
+                    onCheckedChange={setKeyboardShortcutsEnabled}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Schnellzugriff via Tastatur (z.B. Leertaste für weiter)
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="touch-gestures" className="flex items-center gap-2 text-base">
+                  Touch-Gesten
+                </Label>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    {touchGesturesEnabled ? 'Aktiviert' : 'Deaktiviert'}
+                  </span>
+                  <Switch
+                    id="touch-gestures"
+                    checked={touchGesturesEnabled}
+                    onCheckedChange={setTouchGesturesEnabled}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Wischen und Touch-Gesten auf Mobilgeräten
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="mouse-speed" className="flex items-center gap-2 text-base">
+                  Maus-Empfindlichkeit
+                </Label>
+                <div className="flex items-center gap-4">
+                  <Slider
+                    id="mouse-speed"
+                    min={10}
+                    max={100}
+                    step={10}
+                    value={[mouseSpeed]}
+                    onValueChange={(value) => setMouseSpeed(value[0])}
+                    className="flex-1"
+                  />
+                  <span className="text-sm font-medium w-12 text-right">{mouseSpeed}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'importexport':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Import/Export</h2>
+              <p className="text-muted-foreground">Einstellungen sichern und wiederherstellen</p>
+            </div>
+
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <Label className="flex items-center gap-2 text-base">
+                  <Download className="h-5 w-5" />
+                  Einstellungen exportieren
+                </Label>
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    const settings = {
+                      fontSize,
+                      darkMode,
+                      volume,
+                      zoomLevel,
+                      serverRegion,
+                      animationsEnabled,
+                      imageQuality,
+                      themeColor,
+                      backgroundStyle,
+                      timerEnabled,
+                      timerSpeed,
+                      difficultyLevel,
+                    };
+                    const dataStr = JSON.stringify(settings, null, 2);
+                    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                    const url = URL.createObjectURL(dataBlob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'flagquiz-settings.json';
+                    link.click();
+                    toast({
+                      title: 'Export erfolgreich',
+                      description: 'Einstellungen wurden exportiert.',
+                    });
+                  }}
+                >
+                  Als JSON-Datei herunterladen
+                </Button>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-3">
+                <Label className="flex items-center gap-2 text-base">
+                  <Download className="h-5 w-5" />
+                  Einstellungen importieren
+                </Label>
+                <Input
+                  type="file"
+                  accept=".json"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        try {
+                          const settings = JSON.parse(event.target?.result as string);
+                          if (settings.fontSize) setFontSize(settings.fontSize);
+                          if (settings.darkMode !== undefined) setDarkMode(settings.darkMode);
+                          if (settings.volume) setVolume(settings.volume);
+                          if (settings.themeColor) setThemeColor(settings.themeColor);
+                          toast({
+                            title: 'Import erfolgreich',
+                            description: 'Einstellungen wurden importiert.',
+                          });
+                        } catch (error) {
+                          toast({
+                            title: 'Import fehlgeschlagen',
+                            description: 'Ungültige Einstellungsdatei.',
+                            variant: 'destructive',
+                          });
+                        }
+                      };
+                      reader.readAsText(file);
+                    }
+                  }}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Importiere eine zuvor exportierte JSON-Datei
+                </p>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-3">
+                <Label className="flex items-center gap-2 text-base">
+                  QR-Code für Einstellungen-Transfer
+                </Label>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    toast({
+                      title: 'In Entwicklung',
+                      description: 'QR-Code Feature kommt bald!',
+                    });
+                  }}
+                >
+                  QR-Code generieren
+                </Button>
               </div>
             </div>
           </div>
