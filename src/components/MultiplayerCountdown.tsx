@@ -113,32 +113,30 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
                 </AvatarFallback>
               </Avatar>
             </div>
-            <div className="text-center space-y-2">
-              <h3 className="text-xl lg:text-2xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
-                {player1?.username || 'Spieler 1'}
-              </h3>
-              {player1Stats && (
-                <div className="flex flex-col items-center gap-2">
-                  <div className="relative">
-                    <div className="absolute inset-0 blur-md opacity-60">
-                      <img
-                        src={player1Stats.rankBadge}
-                        alt={player1Stats.rankName}
-                        className="w-12 h-12 lg:w-16 lg:h-16 object-contain"
-                      />
-                    </div>
+            {player1Stats && (
+              <div className="flex flex-col items-center gap-2">
+                <div className="relative">
+                  <div className="absolute inset-0 blur-md opacity-60">
                     <img
                       src={player1Stats.rankBadge}
                       alt={player1Stats.rankName}
-                      className="relative w-12 h-12 lg:w-16 lg:h-16 object-contain drop-shadow-2xl"
+                      className="w-12 h-12 lg:w-16 lg:h-16 object-contain"
                     />
                   </div>
-                  <div className={`px-3 py-1 rounded-full bg-gradient-to-r ${player1Stats.rankGradient} text-white font-bold text-sm shadow-lg`}>
-                    {player1Stats.rankName}
-                  </div>
+                  <img
+                    src={player1Stats.rankBadge}
+                    alt={player1Stats.rankName}
+                    className="relative w-12 h-12 lg:w-16 lg:h-16 object-contain drop-shadow-2xl"
+                  />
                 </div>
-              )}
-            </div>
+                <div className={`px-3 py-1 rounded-full bg-gradient-to-r ${player1Stats.rankGradient} text-white font-bold text-sm shadow-lg`}>
+                  {player1Stats.rankName}
+                </div>
+              </div>
+            )}
+            <h3 className="text-xl lg:text-2xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+              {player1?.username || 'Spieler 1'}
+            </h3>
           </div>
 
           <div className="flex flex-col items-center justify-center px-4 lg:px-8">
@@ -160,32 +158,30 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
                 </AvatarFallback>
               </Avatar>
             </div>
-            <div className="text-center space-y-2">
-              <h3 className="text-xl lg:text-2xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
-                {player2?.username || 'Spieler 2'}
-              </h3>
-              {player2Stats && (
-                <div className="flex flex-col items-center gap-2">
-                  <div className="relative">
-                    <div className="absolute inset-0 blur-md opacity-60">
-                      <img
-                        src={player2Stats.rankBadge}
-                        alt={player2Stats.rankName}
-                        className="w-12 h-12 lg:w-16 lg:h-16 object-contain"
-                      />
-                    </div>
+            {player2Stats && (
+              <div className="flex flex-col items-center gap-2">
+                <div className="relative">
+                  <div className="absolute inset-0 blur-md opacity-60">
                     <img
                       src={player2Stats.rankBadge}
                       alt={player2Stats.rankName}
-                      className="relative w-12 h-12 lg:w-16 lg:h-16 object-contain drop-shadow-2xl"
+                      className="w-12 h-12 lg:w-16 lg:h-16 object-contain"
                     />
                   </div>
-                  <div className={`px-3 py-1 rounded-full bg-gradient-to-r ${player2Stats.rankGradient} text-white font-bold text-sm shadow-lg`}>
-                    {player2Stats.rankName}
-                  </div>
+                  <img
+                    src={player2Stats.rankBadge}
+                    alt={player2Stats.rankName}
+                    className="relative w-12 h-12 lg:w-16 lg:h-16 object-contain drop-shadow-2xl"
+                  />
                 </div>
-              )}
-            </div>
+                <div className={`px-3 py-1 rounded-full bg-gradient-to-r ${player2Stats.rankGradient} text-white font-bold text-sm shadow-lg`}>
+                  {player2Stats.rankName}
+                </div>
+              </div>
+            )}
+            <h3 className="text-xl lg:text-2xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+              {player2?.username || 'Spieler 2'}
+            </h3>
           </div>
         </div>
       </div>
