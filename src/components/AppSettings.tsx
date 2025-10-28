@@ -1275,15 +1275,15 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-full max-h-full h-screen p-0 gap-0">
-          <div className="flex h-full">
+        <DialogContent className="max-w-full max-h-full h-screen p-0 gap-0 flex flex-col overflow-hidden">
+          <div className="flex flex-1 overflow-hidden">
             {/* Left Sidebar - Categories */}
-            <div className="w-64 bg-muted/30 border-r flex flex-col">
-              <div className="p-6 border-b">
+            <div className="w-64 bg-muted/30 border-r flex flex-col overflow-y-auto">
+              <div className="p-6 border-b shrink-0">
                 <h1 className="text-2xl font-bold">Einstellungen</h1>
               </div>
 
-              <div className="flex-1 p-4 space-y-1">
+              <div className="flex-1 p-4 space-y-1 overflow-y-auto">
                 {CATEGORIES.map((category) => {
                   const Icon = category.icon;
                   return (
@@ -1306,7 +1306,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
             </div>
 
             {/* Right Content Area */}
-            <div className="flex-1 flex flex-col min-h-0">
+            <div className="flex-1 flex flex-col overflow-hidden">
               <div className="flex-1 overflow-y-auto p-6 pb-12">
                 <div className="max-w-3xl">
                   {renderContent()}
