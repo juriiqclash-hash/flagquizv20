@@ -9,6 +9,8 @@ import { ALL_COUNTRIES } from "@/data/countries-full";
 import { capitals } from "@/data/capitals";
 import { countryMountains } from "@/data/mountains";
 import { countryLanguages } from "@/data/languages";
+import { capitalCoordinates } from "@/data/capital-coordinates";
+import { getLanguageOrigin } from "@/data/language-origins";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
 
@@ -322,9 +324,12 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
         break;
       case 'capitals': {
         const capital = capitals.find(c => c.code === randomCountry.code);
-        if (capital) {
-          question = `Wo liegt das Land mit der Hauptstadt ${capital.capital}?`;
-          answer = randomCountry.name;
+        const capitalCoords = capitalCoordinates.find(c => c.code === randomCountry.code);
+        if (capital && capitalCoords) {
+          question = `Wo liegt die Hauptstadt ${capital.capital}?`;
+          answer = capital.capital;
+          questionLat = capitalCoords.lat;
+          questionLng = capitalCoords.lng;
         } else {
           return generateQuestion(category);
         }
@@ -333,22 +338,30 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
       case 'languages': {
         const language = countryLanguages.find(l => l.code === randomCountry.code);
         if (language) {
+          const languageOrigin = getLanguageOrigin(language.primaryLanguage);
           const allCountriesWithLanguage = countryLanguages.filter(
             l => l.primaryLanguage === language.primaryLanguage
           );
           const acceptedCodes = allCountriesWithLanguage.map(l => l.code);
-          const countryNames = allCountriesWithLanguage.map(l => l.country).join(', ');
 
-          question = `In welchem Land ist ${language.primaryLanguage} die Amtssprache?`;
-          answer = `${language.primaryLanguage} (${allCountriesWithLanguage.length} Länder)`;
+          question = `Wo hat ${language.primaryLanguage} seinen Ursprung?`;
+          answer = `${language.primaryLanguage}`;
+
+          if (languageOrigin) {
+            const originCoords = countryCoordinates[languageOrigin.originCountryCode];
+            if (originCoords) {
+              questionLat = originCoords.lat;
+              questionLng = originCoords.lng;
+            }
+          }
 
           return {
-            countryCode: randomCountry.code,
+            countryCode: languageOrigin?.originCountryCode || randomCountry.code,
             question,
             answer,
-            lat: coords.lat,
-            lng: coords.lng,
-            acceptedCountryCodes: acceptedCodes
+            lat: questionLat,
+            lng: questionLng,
+            acceptedCountryCodes: undefined
           };
         } else {
           return generateQuestion(category);
@@ -391,29 +404,8 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
 
     setUserGuess({ lat, lng });
 
-    let targetLat = currentQuestion.lat;
-    let targetLng = currentQuestion.lng;
-
-    if (selectedCategory === 'languages' && currentQuestion.acceptedCountryCodes) {
-      let closestCountry = null;
-      let closestDistance = Infinity;
-
-      for (const code of currentQuestion.acceptedCountryCodes) {
-        const coords = countryCoordinates[code];
-        if (coords) {
-          const dist = getDistance(lat, lng, coords.lat, coords.lng);
-          if (dist < closestDistance) {
-            closestDistance = dist;
-            closestCountry = { code, coords };
-          }
-        }
-      }
-
-      if (closestCountry) {
-        targetLat = closestCountry.coords.lat;
-        targetLng = closestCountry.coords.lng;
-      }
-    }
+    const targetLat = currentQuestion.lat;
+    const targetLng = currentQuestion.lng;
 
     const dist = getDistance(lat, lng, targetLat, targetLng);
     const isMountain = selectedCategory === 'mountains';
@@ -464,10 +456,12 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
                     <p className="font-semibold">So funktioniert das Karten Quiz:</p>
                     <ul className="list-disc list-inside space-y-1 ml-2">
                       <li>Wähle eine Kategorie aus</li>
-                      <li>Du bekommst eine Frage zu einem Land, einer Hauptstadt oder einem Berg</li>
+                      <li>Du bekommst eine Frage zu einem Land, einer Hauptstadt, Sprache oder Berg</li>
                       <li>Klicke auf die interaktive Weltkarte, wo du denkst, dass es liegt</li>
                       <li>Du kannst zoomen und die Karte verschieben</li>
                       <li>Je näher dein Klick am richtigen Ort ist, desto mehr Punkte bekommst du</li>
+                      <li>Bei Hauptstädten: Klicke die Stadt an, nicht das Land</li>
+                      <li>Bei Sprachen: Klicke das Ursprungsland an (z.B. Englisch → England)</li>
                       <li>Bei Bergen: Je präziser auf dem Berg, desto höher die Punkte</li>
                       <li>Das Quiz läuft unendlich - spiele so lange du willst!</li>
                     </ul>
@@ -496,7 +490,7 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
                   <Building className="h-12 w-12 text-amber-500" />
                   <div className="text-center">
                     <h3 className="font-bold text-lg mb-2">Hauptstädte</h3>
-                    <p className="text-sm text-muted-foreground">Finde Länder anhand ihrer Hauptstadt</p>
+                    <p className="text-sm text-muted-foreground">Finde Hauptstädte auf der Weltkarte</p>
                   </div>
                 </div>
               </CardContent>
@@ -508,7 +502,7 @@ export default function MapQuiz({ onBack }: MapQuizProps) {
                   <Languages className="h-12 w-12 text-cyan-500" />
                   <div className="text-center">
                     <h3 className="font-bold text-lg mb-2">Amtssprachen</h3>
-                    <p className="text-sm text-muted-foreground">Finde Länder anhand ihrer Amtssprache</p>
+                    <p className="text-sm text-muted-foreground">Finde den Ursprung von Sprachen</p>
                   </div>
                 </div>
               </CardContent>
