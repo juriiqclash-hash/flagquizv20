@@ -6,13 +6,13 @@ export interface Rank {
 }
 
 export const RANKS: Rank[] = [
-  { name: 'Bronze', level: 1, image: '/placeholder.svg', color: '#CD7F32' },
-  { name: 'Silver', level: 20, image: '/placeholder.svg', color: '#C0C0C0' },
-  { name: 'Gold', level: 40, image: '/placeholder.svg', color: '#FFD700' },
-  { name: 'Platinum', level: 60, image: '/placeholder.svg', color: '#E5E4E2' },
-  { name: 'Diamond', level: 75, image: '/placeholder.svg', color: '#B9F2FF' },
-  { name: 'Masters', level: 90, image: '/placeholder.svg', color: '#FF6B9D' },
-  { name: 'Legends', level: 100, image: '/placeholder.svg', color: '#FF0000' },
+  { name: 'Bronze', level: 1, image: '/src/assets/bronze copy copy.webp', color: '#CD7F32' },
+  { name: 'Silver', level: 20, image: '/src/assets/silber copy copy copy copy.webp', color: '#C0C0C0' },
+  { name: 'Gold', level: 40, image: '/src/assets/gold copy copy copy copy.webp', color: '#FFD700' },
+  { name: 'Platinum', level: 60, image: '/src/assets/plartinum copy copy copy copy.webp', color: '#E5E4E2' },
+  { name: 'Diamond', level: 75, image: '/src/assets/diamant copy copy copy copy.webp', color: '#B9F2FF' },
+  { name: 'Masters', level: 90, image: '/src/assets/masters copy copy.webp', color: '#FF6B9D' },
+  { name: 'Legends', level: 100, image: '/src/assets/legends.webp', color: '#FF0000' },
 ];
 
 export const getRankFromLevel = (level: number): Rank => {
