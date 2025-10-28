@@ -5,6 +5,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import AppSettings from "@/components/AppSettings";
+import InfoDialog from "@/components/InfoDialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { Play, Loader as Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu, BookMarked, Crown, Settings, Info } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -146,6 +148,8 @@ export default function MainMenu({
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const {
     user
@@ -385,16 +389,16 @@ export default function MainMenu({
                     </Button>
 
                     <Button variant="ghost" className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12" onClick={() => {
-                  navigate('/settings');
                   setMobileMenuOpen(false);
+                  setSettingsOpen(true);
                 }}>
                       <Settings className="h-5 w-5 mr-3" />
                       Einstellungen
                     </Button>
 
                     <Button variant="ghost" className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12" onClick={() => {
-                  window.open('https://discord.gg/cC4fHpubn', '_blank');
                   setMobileMenuOpen(false);
+                  setInfoOpen(true);
                 }}>
                       <Info className="h-5 w-5 mr-3" />
                       Info
@@ -434,11 +438,11 @@ export default function MainMenu({
                   <Shield className="h-5 w-5" />
                 </Button>
 
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => navigate('/settings')}>
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => setSettingsOpen(true)}>
                   <Settings className="h-5 w-5" />
                 </Button>
 
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={handleDiscord}>
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => setInfoOpen(true)}>
                   <Info className="h-5 w-5" />
                 </Button>
               </>}
@@ -742,5 +746,15 @@ export default function MainMenu({
       setSelectedUserId(null);
       navigate(`/clans?clanId=${clanId}`);
     }} />}
+
+      <AppSettings
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+      />
+
+      <InfoDialog
+        open={infoOpen}
+        onOpenChange={setInfoOpen}
+      />
     </div>;
 }
