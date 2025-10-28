@@ -11,7 +11,7 @@ export type RankTier = {
 export const RANK_TIERS: RankTier[] = [
   {
     name: 'Legends',
-    badge: '/src/assets/legends.webp',
+    badge: '/legends.webp',
     gradient: 'from-purple-600 via-purple-500 to-pink-500',
     minStreak: 1000,
     minTimeSeconds: 480,
@@ -20,7 +20,7 @@ export const RANK_TIERS: RankTier[] = [
   },
   {
     name: 'Masters',
-    badge: '/src/assets/masters copy copy.webp',
+    badge: '/masters.webp',
     gradient: 'from-blue-600 via-blue-500 to-purple-500',
     minStreak: 100,
     minTimeSeconds: 480,
@@ -29,7 +29,7 @@ export const RANK_TIERS: RankTier[] = [
   },
   {
     name: 'Diamond',
-    badge: '/src/assets/diamant copy copy copy copy.webp',
+    badge: '/diamant.webp',
     gradient: 'from-cyan-400 via-blue-400 to-cyan-300',
     minStreak: 60,
     minTimeSeconds: 480,
@@ -38,7 +38,7 @@ export const RANK_TIERS: RankTier[] = [
   },
   {
     name: 'Platinum',
-    badge: '/src/assets/plartinum copy copy copy copy.webp',
+    badge: '/plartinum.webp',
     gradient: 'from-slate-400 via-slate-300 to-slate-200',
     minStreak: 30,
     minTimeSeconds: 600,
@@ -47,7 +47,7 @@ export const RANK_TIERS: RankTier[] = [
   },
   {
     name: 'Gold',
-    badge: '/src/assets/gold copy copy copy copy.webp',
+    badge: '/gold.webp',
     gradient: 'from-yellow-600 via-yellow-500 to-yellow-400',
     minStreak: 15,
     minTimeSeconds: 720,
@@ -56,7 +56,7 @@ export const RANK_TIERS: RankTier[] = [
   },
   {
     name: 'Silver',
-    badge: '/src/assets/silber copy copy copy copy.webp',
+    badge: '/silber.webp',
     gradient: 'from-gray-400 via-gray-300 to-gray-400',
     minStreak: 5,
     minTimeSeconds: 900,
@@ -65,7 +65,7 @@ export const RANK_TIERS: RankTier[] = [
   },
   {
     name: 'Bronze',
-    badge: '/src/assets/bronze copy copy.webp',
+    badge: '/bronze.webp',
     gradient: 'from-orange-600 via-orange-500 to-orange-400',
     minStreak: 0,
     minTimeSeconds: 1200,
