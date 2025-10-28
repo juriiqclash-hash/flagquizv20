@@ -1,23 +1,36 @@
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock, Loader2, Zap, Monitor, Contrast, Wifi, Save, Gauge, Languages, Music, Vibrate, Database } from 'lucide-react';
+import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Image, Bell, Maximize, Focus, Trash2, RotateCcw, Info, Copy, Check, Shield, Eye, EyeOff, Activity, Lock, Loader2, Zap, Monitor, Contrast, Wifi, Save, Gauge, Languages, Music, Vibrate, Database, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { cn } from '@/lib/utils';
 
 interface AppSettingsProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
+
+type Category = 'graphics' | 'audio' | 'network' | 'privacy' | 'accessibility' | 'developer' | 'system';
+
+const CATEGORIES = [
+  { id: 'graphics' as Category, label: 'Grafik', icon: Monitor },
+  { id: 'audio' as Category, label: 'Audio', icon: Music },
+  { id: 'network' as Category, label: 'Netzwerk', icon: Wifi },
+  { id: 'privacy' as Category, label: 'Datenschutz', icon: Shield },
+  { id: 'accessibility' as Category, label: 'Barrierefreiheit', icon: Eye },
+  { id: 'developer' as Category, label: 'Entwickler', icon: Activity },
+  { id: 'system' as Category, label: 'System', icon: Info },
+];
 
 const SERVER_REGIONS = [
   { value: 'auto', label: 'Automatisch', ping: 0 },
@@ -31,12 +44,13 @@ const SERVER_REGIONS = [
 const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
+  const [activeCategory, setActiveCategory] = useState<Category>('graphics');
   const [fontSize, setFontSize] = useState(16);
   const [darkMode, setDarkMode] = useState(false);
   const [volume, setVolume] = useState(50);
   const [zoomLevel, setZoomLevel] = useState(100);
-
   const [serverRegion, setServerRegion] = useState('auto');
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
   const [imageQuality, setImageQuality] = useState('high');
@@ -44,13 +58,11 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   const [fullscreenMode, setFullscreenMode] = useState(false);
   const [blurEnabled, setBlurEnabled] = useState(true);
   const [blurIntensity, setBlurIntensity] = useState(10);
-
   const [showClearCacheDialog, setShowClearCacheDialog] = useState(false);
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [cacheSize, setCacheSize] = useState('0 KB');
   const [copiedId, setCopiedId] = useState(false);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
-
   const [profileVisibility, setProfileVisibility] = useState('public');
   const [statisticsPublic, setStatisticsPublic] = useState(true);
   const [analyticsEnabled, setAnalyticsEnabled] = useState(true);
@@ -70,8 +82,6 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   const [soundEffectsEnabled, setSoundEffectsEnabled] = useState(true);
   const [hapticFeedback, setHapticFeedback] = useState(true);
   const [dataUsageMode, setDataUsageMode] = useState('normal');
-
-  const navigate = useNavigate();
 
   const appVersion = '0.0.0';
   const buildNumber = Date.now().toString().slice(-8);
@@ -589,45 +599,38 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
     }
   };
 
-  return (
-    <>
-      <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">Einstellungen</DialogTitle>
-          </DialogHeader>
-
-          <div className="space-y-6 py-4">
-            <div className="space-y-3">
-              <Label htmlFor="server-region" className="flex items-center gap-2 text-base">
-                <Globe className="h-5 w-5" />
-                Server-Region
-              </Label>
-              <Select value={serverRegion} onValueChange={setServerRegion} disabled={isConnectingToServer}>
-                <SelectTrigger id="server-region">
-                  {isConnectingToServer ? (
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Verbinde...</span>
-                    </div>
-                  ) : (
-                    <SelectValue />
-                  )}
-                </SelectTrigger>
-                <SelectContent>
-                  {SERVER_REGIONS.map((region) => (
-                    <SelectItem key={region.value} value={region.value}>
-                      {region.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">
-                Wählen Sie die Region für die beste Verbindung
-              </p>
+  const renderContent = () => {
+    switch (activeCategory) {
+      case 'graphics':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Grafik</h2>
+              <p className="text-muted-foreground">Passen Sie visuelle Einstellungen an</p>
             </div>
 
             <Separator />
+
+            <div className="space-y-3">
+              <Label htmlFor="performance-mode" className="flex items-center gap-2 text-base">
+                <Zap className="h-5 w-5" />
+                Leistungsmodus
+              </Label>
+              <Select value={performanceMode} onValueChange={setPerformanceMode}>
+                <SelectTrigger id="performance-mode">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="bad">Bad (Minimale Grafik)</SelectItem>
+                  <SelectItem value="performance">Performance (Reduzierte Effekte)</SelectItem>
+                  <SelectItem value="high">High (Empfohlen)</SelectItem>
+                  <SelectItem value="ultra">Ultra (Maximale Qualität)</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Passt Animationen, Bildqualität und Effekte automatisch an
+              </p>
+            </div>
 
             <div className="space-y-3">
               <Label htmlFor="animations" className="flex items-center gap-2 text-base">
@@ -667,132 +670,6 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
               </Select>
             </div>
 
-            <Separator />
-
-            <div className="space-y-3">
-              <Label htmlFor="font-size" className="flex items-center gap-2 text-base">
-                <Type className="h-5 w-5" />
-                Schriftgröße
-              </Label>
-              <div className="flex items-center gap-4">
-                <Slider
-                  id="font-size"
-                  min={12}
-                  max={24}
-                  step={1}
-                  value={[fontSize]}
-                  onValueChange={(value) => setFontSize(value[0])}
-                  className="flex-1"
-                />
-                <span className="text-sm font-medium w-12 text-right">{fontSize}px</span>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <Label htmlFor="dark-mode" className="flex items-center gap-2 text-base">
-                <Moon className="h-5 w-5" />
-                Dark Mode
-              </Label>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {darkMode ? 'Aktiviert' : 'Deaktiviert'}
-                </span>
-                <Switch
-                  id="dark-mode"
-                  checked={darkMode}
-                  onCheckedChange={setDarkMode}
-                />
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <Label htmlFor="volume" className="flex items-center gap-2 text-base">
-                <Volume2 className="h-5 w-5" />
-                Lautstärke
-              </Label>
-              <div className="flex items-center gap-4">
-                <Slider
-                  id="volume"
-                  min={0}
-                  max={100}
-                  step={5}
-                  value={[volume]}
-                  onValueChange={(value) => setVolume(value[0])}
-                  className="flex-1"
-                />
-                <span className="text-sm font-medium w-12 text-right">{volume}%</span>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <Label htmlFor="zoom-level" className="flex items-center gap-2 text-base">
-                <ZoomIn className="h-5 w-5" />
-                Zoom Level
-              </Label>
-              <div className="flex items-center gap-4">
-                <Slider
-                  id="zoom-level"
-                  min={75}
-                  max={150}
-                  step={5}
-                  value={[zoomLevel]}
-                  onValueChange={(value) => setZoomLevel(value[0])}
-                  className="flex-1"
-                />
-                <span className="text-sm font-medium w-12 text-right">{zoomLevel}%</span>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="space-y-3">
-              <Label htmlFor="notifications" className="flex items-center gap-2 text-base">
-                <Bell className="h-5 w-5" />
-                Benachrichtigungen
-              </Label>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {notificationsEnabled ? 'ON' : 'OFF'}
-                </span>
-                <Switch
-                  id="notifications"
-                  checked={notificationsEnabled}
-                  onCheckedChange={(checked) => {
-                    setNotificationsEnabled(checked);
-                    if (checked) {
-                      handleNotificationsToggle(true);
-                    }
-                  }}
-                  disabled={notificationPermission === 'denied'}
-                />
-              </div>
-              {notificationPermission === 'denied' && (
-                <p className="text-xs text-destructive">
-                  Benachrichtigungen sind in Ihrem Browser blockiert.
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-3">
-              <Label htmlFor="fullscreen" className="flex items-center gap-2 text-base">
-                <Maximize className="h-5 w-5" />
-                Vollbildmodus
-              </Label>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {fullscreenMode ? 'Aktiviert' : 'Deaktiviert'}
-                </span>
-                <Switch
-                  id="fullscreen"
-                  checked={fullscreenMode}
-                  onCheckedChange={handleFullscreenToggle}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Drücke F11 oder Esc zum Beenden
-              </p>
-            </div>
-
             <div className="space-y-3">
               <Label htmlFor="blur" className="flex items-center gap-2 text-base">
                 <Focus className="h-5 w-5" />
@@ -824,140 +701,319 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
               )}
             </div>
 
-            <Separator />
+            <div className="space-y-3">
+              <Label htmlFor="dark-mode" className="flex items-center gap-2 text-base">
+                <Moon className="h-5 w-5" />
+                Dark Mode
+              </Label>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">
+                  {darkMode ? 'Aktiviert' : 'Deaktiviert'}
+                </span>
+                <Switch
+                  id="dark-mode"
+                  checked={darkMode}
+                  onCheckedChange={setDarkMode}
+                />
+              </div>
+            </div>
 
             <div className="space-y-3">
-              <Label className="flex items-center gap-2 text-base">
-                <Shield className="h-5 w-5" />
-                Datenschutz
+              <Label htmlFor="zoom-level" className="flex items-center gap-2 text-base">
+                <ZoomIn className="h-5 w-5" />
+                Zoom Level
               </Label>
-
-              <div className="space-y-4 pl-6">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="profile-visibility" className="text-sm font-medium">
-                        Profilsichtbarkeit
-                      </Label>
-                      <p className="text-xs text-muted-foreground">
-                        {profileVisibility === 'public' ? 'Jeder kann Ihr Profil sehen' : 'Nur Sie können Ihr Profil sehen'}
-                      </p>
-                    </div>
-                    <Switch
-                      id="profile-visibility"
-                      checked={profileVisibility === 'public'}
-                      onCheckedChange={(checked) => setProfileVisibility(checked ? 'public' : 'private')}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="statistics-public" className="text-sm font-medium">
-                        Statistiken öffentlich
-                      </Label>
-                      <p className="text-xs text-muted-foreground">
-                        Andere können Ihre Spielstatistiken sehen
-                      </p>
-                    </div>
-                    <Switch
-                      id="statistics-public"
-                      checked={statisticsPublic}
-                      onCheckedChange={setStatisticsPublic}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="analytics" className="text-sm font-medium">
-                        Nutzungsdaten sammeln
-                      </Label>
-                      <p className="text-xs text-muted-foreground">
-                        Hilft uns die App zu verbessern
-                      </p>
-                    </div>
-                    <Switch
-                      id="analytics"
-                      checked={analyticsEnabled}
-                      onCheckedChange={setAnalyticsEnabled}
-                    />
-                  </div>
-                </div>
+              <div className="flex items-center gap-4">
+                <Slider
+                  id="zoom-level"
+                  min={75}
+                  max={150}
+                  step={5}
+                  value={[zoomLevel]}
+                  onValueChange={(value) => setZoomLevel(value[0])}
+                  className="flex-1"
+                />
+                <span className="text-sm font-medium w-12 text-right">{zoomLevel}%</span>
               </div>
+            </div>
+
+            <div className="space-y-3">
+              <Label htmlFor="fullscreen" className="flex items-center gap-2 text-base">
+                <Maximize className="h-5 w-5" />
+                Vollbildmodus
+              </Label>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">
+                  {fullscreenMode ? 'Aktiviert' : 'Deaktiviert'}
+                </span>
+                <Switch
+                  id="fullscreen"
+                  checked={fullscreenMode}
+                  onCheckedChange={handleFullscreenToggle}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Drücke F11 oder Esc zum Beenden
+              </p>
+            </div>
+          </div>
+        );
+
+      case 'audio':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Audio</h2>
+              <p className="text-muted-foreground">Verwalten Sie Sound-Einstellungen</p>
             </div>
 
             <Separator />
 
             <div className="space-y-3">
-              <Label className="flex items-center gap-2 text-base">
-                <Activity className="h-5 w-5" />
-                Entwickler-Optionen
+              <Label htmlFor="volume" className="flex items-center gap-2 text-base">
+                <Volume2 className="h-5 w-5" />
+                Lautstärke
               </Label>
-
-              <div className="space-y-4 pl-6">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="fps-display" className="text-sm font-medium">
-                        FPS-Anzeige
-                      </Label>
-                      <p className="text-xs text-muted-foreground">
-                        Zeigt Frames pro Sekunde in der Ecke an
-                      </p>
-                    </div>
-                    <Switch
-                      id="fps-display"
-                      checked={fpsDisplayEnabled}
-                      onCheckedChange={setFpsDisplayEnabled}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="network-stats" className="text-sm font-medium">
-                        Netzwerkstatistiken
-                      </Label>
-                      <p className="text-xs text-muted-foreground">
-                        Zeigt Ping und Latenz wie FPS an
-                      </p>
-                    </div>
-                    <Switch
-                      id="network-stats"
-                      checked={networkStatsEnabled}
-                      onCheckedChange={setNetworkStatsEnabled}
-                    />
-                  </div>
-                </div>
+              <div className="flex items-center gap-4">
+                <Slider
+                  id="volume"
+                  min={0}
+                  max={100}
+                  step={5}
+                  value={[volume]}
+                  onValueChange={(value) => setVolume(value[0])}
+                  className="flex-1"
+                />
+                <span className="text-sm font-medium w-12 text-right">{volume}%</span>
               </div>
+            </div>
+
+            <div className="space-y-3">
+              <Label htmlFor="sound-effects" className="flex items-center gap-2 text-base">
+                <Music className="h-5 w-5" />
+                Soundeffekte
+              </Label>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">
+                  {soundEffectsEnabled ? 'Aktiviert' : 'Deaktiviert'}
+                </span>
+                <Switch
+                  id="sound-effects"
+                  checked={soundEffectsEnabled}
+                  onCheckedChange={setSoundEffectsEnabled}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Aktiviert Soundeffekte in der App
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Label htmlFor="haptic-feedback" className="flex items-center gap-2 text-base">
+                <Vibrate className="h-5 w-5" />
+                Haptisches Feedback
+              </Label>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">
+                  {hapticFeedback ? 'Aktiviert' : 'Deaktiviert'}
+                </span>
+                <Switch
+                  id="haptic-feedback"
+                  checked={hapticFeedback}
+                  onCheckedChange={setHapticFeedback}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Vibrationen bei Interaktionen (Mobilgeräte)
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Label htmlFor="notifications" className="flex items-center gap-2 text-base">
+                <Bell className="h-5 w-5" />
+                Benachrichtigungen
+              </Label>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">
+                  {notificationsEnabled ? 'ON' : 'OFF'}
+                </span>
+                <Switch
+                  id="notifications"
+                  checked={notificationsEnabled}
+                  onCheckedChange={(checked) => {
+                    setNotificationsEnabled(checked);
+                    if (checked) {
+                      handleNotificationsToggle(true);
+                    }
+                  }}
+                  disabled={notificationPermission === 'denied'}
+                />
+              </div>
+              {notificationPermission === 'denied' && (
+                <p className="text-xs text-destructive">
+                  Benachrichtigungen sind in Ihrem Browser blockiert.
+                </p>
+              )}
+            </div>
+          </div>
+        );
+
+      case 'network':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Netzwerk</h2>
+              <p className="text-muted-foreground">Verbindungs- und Dateneinstellungen</p>
             </div>
 
             <Separator />
 
-
             <div className="space-y-3">
-              <Label htmlFor="performance-mode" className="flex items-center gap-2 text-base">
-                <Zap className="h-5 w-5" />
-                Leistungsmodus
+              <Label htmlFor="server-region" className="flex items-center gap-2 text-base">
+                <Globe className="h-5 w-5" />
+                Server-Region
               </Label>
-              <Select value={performanceMode} onValueChange={setPerformanceMode}>
-                <SelectTrigger id="performance-mode">
-                  <SelectValue />
+              <Select value={serverRegion} onValueChange={setServerRegion} disabled={isConnectingToServer}>
+                <SelectTrigger id="server-region">
+                  {isConnectingToServer ? (
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Verbinde...</span>
+                    </div>
+                  ) : (
+                    <SelectValue />
+                  )}
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="bad">Bad (Minimale Grafik)</SelectItem>
-                  <SelectItem value="performance">Performance (Reduzierte Effekte)</SelectItem>
-                  <SelectItem value="high">High (Empfohlen)</SelectItem>
-                  <SelectItem value="ultra">Ultra (Maximale Qualität)</SelectItem>
+                  {SERVER_REGIONS.map((region) => (
+                    <SelectItem key={region.value} value={region.value}>
+                      {region.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
-                Passt Animationen, Bildqualität und Effekte automatisch an
+                Wählen Sie die Region für die beste Verbindung
               </p>
+            </div>
+
+            <div className="space-y-3">
+              <Label htmlFor="data-usage" className="flex items-center gap-2 text-base">
+                <Database className="h-5 w-5" />
+                Datenverbrauch
+              </Label>
+              <Select value={dataUsageMode} onValueChange={setDataUsageMode}>
+                <SelectTrigger id="data-usage">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low">Niedrig (Daten sparen)</SelectItem>
+                  <SelectItem value="normal">Normal (Empfohlen)</SelectItem>
+                  <SelectItem value="high">Hoch (Beste Qualität)</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Steuert Bildqualität und Datenübertragung
+              </p>
+            </div>
+          </div>
+        );
+
+      case 'privacy':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Datenschutz</h2>
+              <p className="text-muted-foreground">Verwalten Sie Ihre Privatsphäre</p>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="profile-visibility" className="text-base font-medium">
+                      Profilsichtbarkeit
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      {profileVisibility === 'public' ? 'Jeder kann Ihr Profil sehen' : 'Nur Sie können Ihr Profil sehen'}
+                    </p>
+                  </div>
+                  <Switch
+                    id="profile-visibility"
+                    checked={profileVisibility === 'public'}
+                    onCheckedChange={(checked) => setProfileVisibility(checked ? 'public' : 'private')}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="statistics-public" className="text-base font-medium">
+                      Statistiken öffentlich
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Andere können Ihre Spielstatistiken sehen
+                    </p>
+                  </div>
+                  <Switch
+                    id="statistics-public"
+                    checked={statisticsPublic}
+                    onCheckedChange={setStatisticsPublic}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="analytics" className="text-base font-medium">
+                      Nutzungsdaten sammeln
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Hilft uns die App zu verbessern
+                    </p>
+                  </div>
+                  <Switch
+                    id="analytics"
+                    checked={analyticsEnabled}
+                    onCheckedChange={setAnalyticsEnabled}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'accessibility':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Barrierefreiheit</h2>
+              <p className="text-muted-foreground">Zugänglichkeit verbessern</p>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-3">
+              <Label htmlFor="font-size" className="flex items-center gap-2 text-base">
+                <Type className="h-5 w-5" />
+                Schriftgröße
+              </Label>
+              <div className="flex items-center gap-4">
+                <Slider
+                  id="font-size"
+                  min={12}
+                  max={24}
+                  step={1}
+                  value={[fontSize]}
+                  onValueChange={(value) => setFontSize(value[0])}
+                  className="flex-1"
+                />
+                <span className="text-sm font-medium w-12 text-right">{fontSize}px</span>
+              </div>
             </div>
 
             <div className="space-y-3">
@@ -1000,55 +1056,6 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
               </p>
             </div>
 
-            <Separator />
-
-            <div className="space-y-3">
-              <Label className="flex items-center gap-2 text-base">
-                <Music className="h-5 w-5" />
-                Audio & Haptik
-              </Label>
-
-              <div className="space-y-4 pl-6">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="sound-effects" className="text-sm font-medium">
-                        Soundeffekte
-                      </Label>
-                      <p className="text-xs text-muted-foreground">
-                        Aktiviert Soundeffekte in der App
-                      </p>
-                    </div>
-                    <Switch
-                      id="sound-effects"
-                      checked={soundEffectsEnabled}
-                      onCheckedChange={setSoundEffectsEnabled}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="haptic-feedback" className="text-sm font-medium">
-                        Haptisches Feedback
-                      </Label>
-                      <p className="text-xs text-muted-foreground">
-                        Vibrationen bei Interaktionen (Mobilgeräte)
-                      </p>
-                    </div>
-                    <Switch
-                      id="haptic-feedback"
-                      checked={hapticFeedback}
-                      onCheckedChange={setHapticFeedback}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <Separator />
-
             <div className="space-y-3">
               <Label htmlFor="language" className="flex items-center gap-2 text-base">
                 <Languages className="h-5 w-5" />
@@ -1071,26 +1078,102 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                 App-Sprache ändern (erfordert Neuladen)
               </p>
             </div>
+          </div>
+        );
+
+      case 'developer':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Entwickler</h2>
+              <p className="text-muted-foreground">Erweiterte Einstellungen und Statistiken</p>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="fps-display" className="text-base font-medium">
+                      FPS-Anzeige
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Zeigt Frames pro Sekunde in der Ecke an
+                    </p>
+                  </div>
+                  <Switch
+                    id="fps-display"
+                    checked={fpsDisplayEnabled}
+                    onCheckedChange={setFpsDisplayEnabled}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="network-stats" className="text-base font-medium">
+                      Netzwerkstatistiken
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Zeigt Ping und Latenz wie FPS an
+                    </p>
+                  </div>
+                  <Switch
+                    id="network-stats"
+                    checked={networkStatsEnabled}
+                    onCheckedChange={setNetworkStatsEnabled}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <Separator />
 
             <div className="space-y-3">
-              <Label htmlFor="data-usage" className="flex items-center gap-2 text-base">
-                <Database className="h-5 w-5" />
-                Datenverbrauch
+              <Label className="flex items-center gap-2 text-base">
+                <Lock className="h-5 w-5" />
+                Admin-Bereich
               </Label>
-              <Select value={dataUsageMode} onValueChange={setDataUsageMode}>
-                <SelectTrigger id="data-usage">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">Niedrig (Daten sparen)</SelectItem>
-                  <SelectItem value="normal">Normal (Empfohlen)</SelectItem>
-                  <SelectItem value="high">Hoch (Beste Qualität)</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">
-                Steuert Bildqualität und Datenübertragung
-              </p>
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <Input
+                    type={showAdminPassword ? 'text' : 'password'}
+                    placeholder="Admin-Passwort eingeben"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAdminAccess()}
+                  />
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    type="button"
+                    onClick={() => setShowAdminPassword(!showAdminPassword)}
+                  >
+                    {showAdminPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
+                  <Button onClick={handleAdminAccess} disabled={!adminPassword}>
+                    Zugriff
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Nur für autorisierte Administratoren
+                </p>
+              </div>
             </div>
+          </div>
+        );
+
+      case 'system':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">System</h2>
+              <p className="text-muted-foreground">Cache, Speicher und Informationen</p>
+            </div>
+
+            <Separator />
 
             <div className="space-y-3">
               <Label htmlFor="auto-save" className="flex items-center gap-2 text-base">
@@ -1151,40 +1234,6 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
 
             <div className="space-y-3">
               <Label className="flex items-center gap-2 text-base">
-                <Lock className="h-5 w-5" />
-                Admin-Bereich
-              </Label>
-              <div className="space-y-2">
-                <div className="flex gap-2">
-                  <Input
-                    type={showAdminPassword ? 'text' : 'password'}
-                    placeholder="Admin-Passwort eingeben"
-                    value={adminPassword}
-                    onChange={(e) => setAdminPassword(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleAdminAccess()}
-                  />
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    type="button"
-                    onClick={() => setShowAdminPassword(!showAdminPassword)}
-                  >
-                    {showAdminPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </Button>
-                  <Button onClick={handleAdminAccess} disabled={!adminPassword}>
-                    Zugriff
-                  </Button>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Nur für autorisierte Administratoren
-                </p>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="space-y-3">
-              <Label className="flex items-center gap-2 text-base">
                 <Info className="h-5 w-5" />
                 System-Informationen
               </Label>
@@ -1213,6 +1262,66 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="max-w-full max-h-full h-screen p-0 gap-0">
+          <div className="flex h-full">
+            {/* Left Sidebar - Categories */}
+            <div className="w-64 bg-muted/30 border-r flex flex-col">
+              <div className="p-6 border-b">
+                <h1 className="text-2xl font-bold">Einstellungen</h1>
+              </div>
+
+              <div className="flex-1 p-4 space-y-1">
+                {CATEGORIES.map((category) => {
+                  const Icon = category.icon;
+                  return (
+                    <button
+                      key={category.id}
+                      onClick={() => setActiveCategory(category.id)}
+                      className={cn(
+                        "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left",
+                        activeCategory === category.id
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-muted"
+                      )}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span className="font-medium">{category.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Right Content Area */}
+            <div className="flex-1 flex flex-col">
+              <div className="flex items-center justify-between p-6 border-b">
+                <div />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onOpenChange(false)}
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-6">
+                <div className="max-w-3xl">
+                  {renderContent()}
+                </div>
               </div>
             </div>
           </div>
