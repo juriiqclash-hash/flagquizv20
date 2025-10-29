@@ -29,16 +29,16 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
 
       for (const participant of participants) {
         const { data: stats } = await supabase
-          .from('leaderboard')
-          .select('best_streak, best_time_mode, duel_wins, level')
+          .from('user_stats')
+          .select('best_streak, time_mode_best_score, multiplayer_wins, level')
           .eq('user_id', participant.user_id)
           .maybeSingle();
 
         if (stats) {
           const leaderboardStats: LeaderboardStatsInput = {
             bestStreak: stats.best_streak || 0,
-            bestTimeMode: stats.best_time_mode || 9999,
-            duelWins: stats.duel_wins || 0,
+            bestTimeMode: stats.time_mode_best_score || 9999,
+            duelWins: stats.multiplayer_wins || 0,
           };
 
           const rank = calculateRank(leaderboardStats, stats.level || 1);

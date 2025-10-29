@@ -162,3 +162,8 @@ export const getXPProgress = (totalXP: number): {
 export const applyXPBoost = (xp: number, plan: 'free' | 'premium' | 'ultimate'): number => {
   return plan === 'ultimate' ? xp * 2 : xp;
 };
+
+export const applyRankBoost = (level: number, plan: 'free' | 'premium' | 'ultimate'): number => {
+  // Ultimate users get +5 levels display boost (cosmetic only)
+  return plan === 'ultimate' ? level + 5 : level;
+};
