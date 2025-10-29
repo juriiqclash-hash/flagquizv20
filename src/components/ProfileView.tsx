@@ -12,7 +12,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTranslation } from '@/data/translations';
 import { calculateRank, calculateRankScore, RANK_TIERS } from '@/lib/profileRank';
 import { getFlagEmoji } from '@/lib/flagUtils';
-import { SubscriptionManager } from './SubscriptionManager';
 import { useSubscription } from '@/hooks/useSubscription';
 import { checkCountryChangeLimit, incrementCountryChange } from '@/lib/planLimits';
 import { toast } from 'sonner';
