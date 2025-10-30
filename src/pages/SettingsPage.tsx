@@ -13,7 +13,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Volume2, Type, ZoomIn, Moon, Globe, Sparkles, Maximize, Focus, RotateCcw, Copy, Check, Eye, EyeOff, Loader2, Monitor, Contrast, Save, Gauge, Vibrate } from 'lucide-react';
-import { SubscriptionManager } from '@/components/SubscriptionManager';
 import { AccountManager } from '@/components/AccountManager';
 
 const SERVER_REGIONS = [
@@ -642,11 +641,6 @@ export default function SettingsPage() {
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold mb-2">Allgemeine Einstellungen</h2>
               <p className="text-sm sm:text-base text-muted-foreground">Grundlegende Einstellungen für die Anwendung</p>
-            </div>
-
-            {/* Subscription Section */}
-            <div className="mb-6">
-              <SubscriptionManager />
             </div>
 
             {/* Account Manager Section */}
