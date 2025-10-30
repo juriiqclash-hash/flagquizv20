@@ -5,8 +5,8 @@ import { useAuth } from './useAuth';
 export interface UserStats {
   xp: number;
   level: number;
-  best_streak: number;
-  time_mode_best_score: number;
+  best_streak: number; // from leaderboards
+  time_mode_best_score: number; // from leaderboards
   multiplayer_wins: number;
   total_correct_answers: number;
   created_at: string;
@@ -37,9 +37,8 @@ export const useUserStats = () => {
         return;
       }
 
-      if (data) {
-        setStats(data);
-      } else {
+      let userStatsData = data;
+      if (!data) {
         // Initialize stats if they don't exist
         const { data: newStats, error: insertError } = await supabase
           .from('user_stats')
@@ -48,8 +47,36 @@ export const useUserStats = () => {
           .single();
 
         if (!insertError && newStats) {
-          setStats(newStats);
+          userStatsData = newStats;
         }
+      }
+
+      if (userStatsData) {
+        // Load best streak from leaderboards
+        const { data: streakData } = await supabase
+          .from('leaderboards')
+          .select('score')
+          .eq('user_id', user.id)
+          .eq('game_mode', 'streak')
+          .order('score', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        // Load best time from leaderboards
+        const { data: timedData } = await supabase
+          .from('leaderboards')
+          .select('score')
+          .eq('user_id', user.id)
+          .eq('game_mode', 'timed')
+          .order('score', { ascending: true })
+          .limit(1)
+          .maybeSingle();
+
+        setStats({
+          ...userStatsData,
+          best_streak: streakData?.score || 0,
+          time_mode_best_score: timedData?.score || 0,
+        });
       }
     } catch (error) {
       console.error('Error in fetchStats:', error);

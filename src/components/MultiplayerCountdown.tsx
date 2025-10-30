@@ -28,35 +28,47 @@ export default function MultiplayerCountdown({ onCountdownEnd }: MultiplayerCoun
       const statsMap = new Map<string, PlayerStats>();
 
       for (const participant of participants) {
-        const { data: stats } = await supabase
+        // Load user stats for level
+        const { data: userStats } = await supabase
           .from('user_stats')
-          .select('best_streak, time_mode_best_score, multiplayer_wins, level')
+          .select('level, multiplayer_wins')
           .eq('user_id', participant.user_id)
           .maybeSingle();
 
-        if (stats) {
-          const leaderboardStats: LeaderboardStatsInput = {
-            bestStreak: stats.best_streak || 0,
-            bestTimeMode: stats.time_mode_best_score || 9999,
-            duelWins: stats.multiplayer_wins || 0,
-          };
+        // Load best streak from leaderboards
+        const { data: streakData } = await supabase
+          .from('leaderboards')
+          .select('score')
+          .eq('user_id', participant.user_id)
+          .eq('game_mode', 'streak')
+          .order('score', { ascending: false })
+          .limit(1)
+          .maybeSingle();
 
-          const rank = calculateRank(leaderboardStats, stats.level || 1);
+        // Load best time from leaderboards
+        const { data: timedData } = await supabase
+          .from('leaderboards')
+          .select('score')
+          .eq('user_id', participant.user_id)
+          .eq('game_mode', 'timed')
+          .order('score', { ascending: true })
+          .limit(1)
+          .maybeSingle();
 
-          statsMap.set(participant.user_id, {
-            userId: participant.user_id,
-            rankBadge: rank.badge,
-            rankName: rank.name,
-            rankGradient: rank.gradient,
-          });
-        } else {
-          statsMap.set(participant.user_id, {
-            userId: participant.user_id,
-            rankBadge: '/bronze.webp',
-            rankName: 'Bronze',
-            rankGradient: 'from-orange-600 via-orange-500 to-orange-400',
-          });
-        }
+        const leaderboardStats: LeaderboardStatsInput = {
+          bestStreak: streakData?.score || 0,
+          bestTimeMode: timedData?.score || 9999,
+          duelWins: userStats?.multiplayer_wins || 0,
+        };
+
+        const rank = calculateRank(leaderboardStats, userStats?.level || 1);
+
+        statsMap.set(participant.user_id, {
+          userId: participant.user_id,
+          rankBadge: rank.badge,
+          rankName: rank.name,
+          rankGradient: rank.gradient,
+        });
       }
 
       setPlayerStats(statsMap);
