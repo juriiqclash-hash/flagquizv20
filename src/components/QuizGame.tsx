@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Pause, Play, Home, Eye, EyeOff, SkipForward, MapPin, Map, Mountain, Languages, Menu } from "lucide-react";
 import QuizHomeButton from "@/components/QuizHomeButton";
-import { countries, shuffleArray, checkAnswer, continentEmojis, getFlagUrl, type Country } from "@/data/countries";
+import { countries, shuffleArray, checkAnswer, checkAnswerMatch, continentEmojis, getFlagUrl, type Country } from "@/data/countries";
 import { countryMountains, getMountainByCountry } from "@/data/mountains";
 import { countryLanguages, getLanguageByCountry } from "@/data/languages";
 import { useToast } from "@/hooks/use-toast";
@@ -149,22 +149,16 @@ export default function QuizGame({
       if (mode === 'capital-to-country') {
         isCorrect = checkAnswer(value, currentCountry);
       } else if (mode === 'country-to-capital') {
-        const normalizedInput = value.toLowerCase().trim();
-        const normalizedCapital = currentCountry.capital.toLowerCase().trim();
-        isCorrect = normalizedInput === normalizedCapital;
+        isCorrect = checkAnswerMatch(value, currentCountry.capital);
       } else if (mode === 'highest-mountain') {
         const mountainData = getMountainByCountry(currentCountry.name);
         if (mountainData) {
-          const normalizedInput = value.toLowerCase().trim();
-          const normalizedMountain = mountainData.highestPeak.toLowerCase().trim();
-          isCorrect = normalizedInput === normalizedMountain;
+          isCorrect = checkAnswerMatch(value, mountainData.highestPeak);
         }
       } else if (mode === 'official-language') {
         const languageData = getLanguageByCountry(currentCountry.name);
         if (languageData) {
-          const normalizedInput = value.toLowerCase().trim();
-          const normalizedLanguage = languageData.primaryLanguage.toLowerCase().trim();
-          isCorrect = normalizedInput === normalizedLanguage;
+          isCorrect = checkAnswerMatch(value, languageData.primaryLanguage);
         }
       } else {
         isCorrect = checkAnswer(value, currentCountry);

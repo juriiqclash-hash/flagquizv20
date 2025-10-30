@@ -33,7 +33,7 @@ export const countries: Country[] = [
   { name: "Gambia", code: "GM", continent: "Afrika", capital: "Banjul", emojis: "🌊🐘🌴", englishName: "Gambia" },
   { name: "Ghana", code: "GH", continent: "Afrika", capital: "Accra", emojis: "🥭🦁🎶", englishName: "Ghana" },
   { name: "Guinea", code: "GN", continent: "Afrika", capital: "Conakry", emojis: "🌾🦁🥭", englishName: "Guinea" },
-  { name: "Guinea-Bissau", code: "GW", continent: "Afrika", capital: "Bissau", emojis: "🏖️🌴🦁", englishName: "Guinea-Bissau" },
+  { name: "Guinea-Bissau", code: "GW", continent: "Afrika", capital: "Bissau", aliases: ["Guinea Bissau", "GuineaBissau"], emojis: "🏖️🌴🦁", englishName: "Guinea-Bissau" },
   { name: "Kamerun", code: "CM", continent: "Afrika", capital: "Yaoundé", emojis: "🌴🦁🍍", englishName: "Cameroon" },
   { name: "Kap Verde", code: "CV", continent: "Afrika", capital: "Praia", emojis: "🏝️🌊⛵", englishName: "Cabo Verde" },
   { name: "Kenia", code: "KE", continent: "Afrika", capital: "Nairobi", emojis: "🦁🏞️🌾", englishName: "Kenya" },
@@ -55,7 +55,7 @@ export const countries: Country[] = [
   { name: "Nigeria", code: "NG", continent: "Afrika", capital: "Abuja", emojis: "🌾🦁🥭", englishName: "Nigeria" },
   { name: "Ruanda", code: "RW", continent: "Afrika", capital: "Kigali", emojis: "🦍🌾🏞️", englishName: "Rwanda" },
   { name: "Sambia", code: "ZM", continent: "Afrika", capital: "Lusaka", emojis: "🦁🌾🏞️", englishName: "Zambia" },
-  { name: "São Tomé und Príncipe", code: "ST", continent: "Afrika", capital: "São Tomé", aliases: ["Sao Tome und Principe"], emojis: "🌴🐒🍍", englishName: "Sao Tome and Principe" },
+  { name: "São Tomé und Príncipe", code: "ST", continent: "Afrika", capital: "São Tomé", aliases: ["Sao Tome und Principe", "Sao Tome", "São Tomé"], emojis: "🌴🐒🍍", englishName: "Sao Tome and Principe" },
   { name: "Senegal", code: "SN", continent: "Afrika", capital: "Dakar", emojis: "🌴🦁🎶", englishName: "Senegal" },
   { name: "Seychellen", code: "SC", continent: "Afrika", capital: "Victoria", emojis: "🏝️🌴🐠", englishName: "Seychelles" },
   { name: "Sierra Leone", code: "SL", continent: "Afrika", capital: "Freetown", emojis: "🌴🌊🦁", englishName: "Sierra Leone" },
@@ -114,7 +114,7 @@ export const countries: Country[] = [
   { name: "Syrien", code: "SY", continent: "Asien", capital: "Damaskus", emojis: "🏜️🕌🕊️" },
   { name: "Tadschikistan", code: "TJ", continent: "Asien", capital: "Duschanbe", emojis: "🏔️🍇🌾" },
   { name: "Thailand", code: "TH", continent: "Asien", capital: "Bangkok", emojis: "🛕🐘🥥" },
-  { name: "Timor-Leste", code: "TL", continent: "Asien", capital: "Dili", emojis: "🌴🏝️🐟" },
+  { name: "Timor-Leste", code: "TL", continent: "Asien", capital: "Dili", aliases: ["Timor Leste", "Osttimor", "Ost-Timor"], emojis: "🌴🏝️🐟" },
   { name: "Türkei", code: "TR", continent: "Asien", capital: "Ankara", aliases: ["Turkei"], emojis: "🕌🐓🌊" },
   { name: "Turkmenistan", code: "TM", continent: "Asien", capital: "Aschgabat", emojis: "🏜️🕌🐎" },
   { name: "Usbekistan", code: "UZ", continent: "Asien", capital: "Taschkent", emojis: "🏜️🕌🐎" },
@@ -127,7 +127,7 @@ export const countries: Country[] = [
   { name: "Albanien", code: "AL", continent: "Europa", capital: "Tirana", emojis: "🦅🏰🌊" },
   { name: "Andorra", code: "AD", continent: "Europa", capital: "Andorra la Vella", emojis: "🏔️🏰⛷️" },
   { name: "Belgien", code: "BE", continent: "Europa", capital: "Brüssel", emojis: "🏰🍺⚽" },
-  { name: "Bosnien und Herzegowina", code: "BA", continent: "Europa", capital: "Sarajevo", emojis: "⛰️🌊🕌" },
+  { name: "Bosnien und Herzegowina", code: "BA", continent: "Europa", capital: "Sarajevo", aliases: ["Bosnien", "Bosnien-Herzegowina"], emojis: "⛰️🌊🕌" },
   { name: "Bulgarien", code: "BG", continent: "Europa", capital: "Sofia", emojis: "🏰🌲🥛" },
   { name: "Dänemark", code: "DK", continent: "Europa", capital: "Kopenhagen", aliases: ["Daenemark"], emojis: "🏰⛵🍰" },
   { name: "Deutschland", code: "DE", continent: "Europa", capital: "Berlin", emojis: "🏰🍺🥨" },
@@ -170,7 +170,7 @@ export const countries: Country[] = [
   { name: "Weißrussland", code: "BY", continent: "Europa", capital: "Minsk", aliases: ["Belarus", "Weissrussland"], emojis: "🌲🏰🎭" },
 
   // Nordamerika (23 Länder)
-  { name: "Antigua und Barbuda", code: "AG", continent: "Nordamerika", capital: "Saint John's", emojis: "🏖️🌅⛵" },
+  { name: "Antigua und Barbuda", code: "AG", continent: "Nordamerika", capital: "Saint John's", aliases: ["Antigua", "Antigua-Barbuda"], emojis: "🏖️🌅⛵" },
   { name: "Bahamas", code: "BS", continent: "Nordamerika", capital: "Nassau", emojis: "🏝️🌊🐠" },
   { name: "Barbados", code: "BB", continent: "Nordamerika", capital: "Bridgetown", emojis: "🏖️🌴🎶" },
   { name: "Belize", code: "BZ", continent: "Nordamerika", capital: "Belmopan", emojis: "🌴🐒🏝️" },
@@ -188,10 +188,10 @@ export const countries: Country[] = [
   { name: "Mexiko", code: "MX", continent: "Nordamerika", capital: "Mexiko-Stadt", emojis: "🌮🦅⛪" },
   { name: "Nicaragua", code: "NI", continent: "Nordamerika", capital: "Managua", emojis: "🌋🏖️🌴" },
   { name: "Panama", code: "PA", continent: "Nordamerika", capital: "Panama-Stadt", emojis: "🌴🌊🛶" },
-  { name: "St. Kitts und Nevis", code: "KN", continent: "Nordamerika", capital: "Basseterre", aliases: ["Saint Kitts und Nevis"], emojis: "🏝️🌴🎶" },
-  { name: "St. Lucia", code: "LC", continent: "Nordamerika", capital: "Castries", aliases: ["Saint Lucia"], emojis: "🏝️⛰️🌊" },
-  { name: "St. Vincent und die Grenadinen", code: "VC", continent: "Nordamerika", capital: "Kingstown", aliases: ["Saint Vincent und die Grenadinen"], emojis: "🏝️🌊🍌" },
-  { name: "Trinidad und Tobago", code: "TT", continent: "Nordamerika", capital: "Port of Spain", emojis: "🌴🎶🏖️" },
+  { name: "St. Kitts und Nevis", code: "KN", continent: "Nordamerika", capital: "Basseterre", aliases: ["Saint Kitts und Nevis", "St Kitts und Nevis", "Saint Kitts", "St Kitts"], emojis: "🏝️🌴🎶" },
+  { name: "St. Lucia", code: "LC", continent: "Nordamerika", capital: "Castries", aliases: ["Saint Lucia", "St Lucia"], emojis: "🏝️⛰️🌊" },
+  { name: "St. Vincent und die Grenadinen", code: "VC", continent: "Nordamerika", capital: "Kingstown", aliases: ["Saint Vincent und die Grenadinen", "St Vincent und die Grenadinen", "Saint Vincent", "St Vincent"], emojis: "🏝️🌊🍌" },
+  { name: "Trinidad und Tobago", code: "TT", continent: "Nordamerika", capital: "Port of Spain", aliases: ["Trinidad", "Trinidad-Tobago"], emojis: "🌴🎶🏖️" },
   { name: "USA", code: "US", continent: "Nordamerika", capital: "Washington D.C.", aliases: ["Vereinigte Staaten", "Amerika"], emojis: "🦅🏙️🗽" },
 
   // Südamerika (12 Länder)
@@ -217,7 +217,7 @@ export const countries: Country[] = [
   { name: "Nauru", code: "NR", continent: "Ozeanien", capital: "Yaren", emojis: "🏝️🐟⛵" },
   { name: "Neuseeland", code: "NZ", continent: "Ozeanien", capital: "Wellington", emojis: "🐑🏔️🦘" },
   { name: "Palau", code: "PW", continent: "Ozeanien", capital: "Ngerulmud", emojis: "🏝️🐠🌺" },
-  { name: "Papua-Neuguinea", code: "PG", continent: "Ozeanien", capital: "Port Moresby", emojis: "🦜🌴🏔️" },
+  { name: "Papua-Neuguinea", code: "PG", continent: "Ozeanien", capital: "Port Moresby", aliases: ["Papua Neuguinea", "PapuaNeuguinea"], emojis: "🦜🌴🏔️" },
   { name: "Salomonen", code: "SB", continent: "Ozeanien", capital: "Honiara", emojis: "🏝️🐠🦜" },
   { name: "Samoa", code: "WS", continent: "Ozeanien", capital: "Apia", emojis: "🏝️🌺⛵" },
   { name: "Tonga", code: "TO", continent: "Ozeanien", capital: "Nukuʻalofa", emojis: "🏝️👑🌊" },
@@ -247,27 +247,46 @@ export function shuffleArray<T>(array: T[]): T[] {
 export function normalizeInput(input: string): string {
   return input.toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
-    .replace(/[^a-z0-9\s]/g, "") // Remove special chars
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[.\-_]/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/[^a-z0-9\s]/g, "")
     .trim();
+}
+
+export function checkAnswerMatch(input: string, target: string): boolean {
+  const normalizedInput = normalizeInput(input);
+  const normalizedInputNoSpaces = normalizedInput.replace(/\s+/g, "");
+  const normalizedTarget = normalizeInput(target);
+  const normalizedTargetNoSpaces = normalizedTarget.replace(/\s+/g, "");
+
+  return normalizedInput === normalizedTarget || normalizedInputNoSpaces === normalizedTargetNoSpaces;
 }
 
 export function checkAnswer(input: string, country: Country): boolean {
   const normalizedInput = normalizeInput(input);
+  const normalizedInputNoSpaces = normalizedInput.replace(/\s+/g, "");
   const normalizedName = normalizeInput(country.name);
+  const normalizedNameNoSpaces = normalizedName.replace(/\s+/g, "");
 
   if (normalizedInput === normalizedName) return true;
+  if (normalizedInputNoSpaces === normalizedNameNoSpaces) return true;
 
   const englishName = country.englishName || countryEnglishNames[country.code];
   if (englishName) {
     const normalizedEnglishName = normalizeInput(englishName);
+    const normalizedEnglishNameNoSpaces = normalizedEnglishName.replace(/\s+/g, "");
     if (normalizedInput === normalizedEnglishName) return true;
+    if (normalizedInputNoSpaces === normalizedEnglishNameNoSpaces) return true;
   }
 
   if (country.aliases) {
-    return country.aliases.some(alias =>
-      normalizeInput(alias) === normalizedInput
-    );
+    const matchFound = country.aliases.some(alias => {
+      const normalizedAlias = normalizeInput(alias);
+      const normalizedAliasNoSpaces = normalizedAlias.replace(/\s+/g, "");
+      return normalizedInput === normalizedAlias || normalizedInputNoSpaces === normalizedAliasNoSpaces;
+    });
+    if (matchFound) return true;
   }
 
   return false;

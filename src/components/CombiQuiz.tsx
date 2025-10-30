@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Home, Eye, ArrowLeft, MapPin, Mountain, Languages, Smile, Globe } from "lucide-react";
 import QuizHomeButton from "@/components/QuizHomeButton";
-import { countries, shuffleArray, checkAnswer, getFlagUrl, type Country } from "@/data/countries";
+import { countries, shuffleArray, checkAnswer, checkAnswerMatch, getFlagUrl, type Country } from "@/data/countries";
 import { getMountainByCountry } from "@/data/mountains";
 import { getLanguageByCountry } from "@/data/languages";
 import { getFactsByDifficulty, type WorldKnowledgeFact } from "@/data/worldKnowledge";
@@ -132,19 +132,19 @@ export default function CombiQuiz({ onBackToStart, isDailyChallenge = false, max
         isCorrect = checkAnswer(value, currentCountry);
         break;
       case 'country-to-capital':
-        isCorrect = value.toLowerCase().trim() === currentCountry.capital.toLowerCase().trim();
+        isCorrect = checkAnswerMatch(value, currentCountry.capital);
         break;
       case 'highest-mountain': {
         const mountainData = getMountainByCountry(currentCountry.name);
         if (mountainData) {
-          isCorrect = value.toLowerCase().trim() === mountainData.highestPeak.toLowerCase().trim();
+          isCorrect = checkAnswerMatch(value, mountainData.highestPeak);
         }
         break;
       }
       case 'official-language': {
         const languageData = getLanguageByCountry(currentCountry.name);
         if (languageData) {
-          isCorrect = value.toLowerCase().trim() === languageData.primaryLanguage.toLowerCase().trim();
+          isCorrect = checkAnswerMatch(value, languageData.primaryLanguage);
         }
         break;
       }
