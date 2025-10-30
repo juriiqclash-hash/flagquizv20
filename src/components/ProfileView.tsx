@@ -566,42 +566,42 @@ export const ProfileView = ({
               </button>
             </div>
           </div>
+
+          {/* Subscription Manager Section */}
+          <div className="px-4 mb-6">
+            <h2 className="text-xs md:text-sm font-bold text-gray-300 uppercase tracking-[0.2em] md:tracking-[0.25em] mb-3 text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+              ABONNEMENT
+            </h2>
+            <SubscriptionManager />
+          </div>
+
+          {/* Account Deactivation */}
+          <div className="px-4 mb-6">
+            <h2 className="text-xs md:text-sm font-bold text-gray-300 uppercase tracking-[0.2em] md:tracking-[0.25em] mb-3 text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
+              KONTO DEAKTIVIEREN
+            </h2>
+            <Button
+              variant="destructive"
+              className="w-full"
+              onClick={async () => {
+                const confirmed = window.confirm('Möchtest du dein Konto wirklich deaktivieren?');
+                if (confirmed && user) {
+                  try {
+                    // Sign out the user - deactivation would require database migration
+                    await supabase.auth.signOut();
+                    toast.success('Konto wird deaktiviert - kontaktiere den Support');
+                    onOpenChange(false);
+                  } catch (error) {
+                    console.error('Error:', error);
+                    toast.error('Fehler');
+                  }
+                }
+              }}
+            >
+              Konto deaktivieren
+            </Button>
+          </div>
         </div>
-      </div>
-
-      {/* Subscription Manager Section */}
-      <div className="px-4 mb-6">
-        <h2 className="text-xs md:text-sm font-bold text-gray-300 uppercase tracking-[0.2em] md:tracking-[0.25em] mb-3 text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
-          ABONNEMENT
-        </h2>
-        <SubscriptionManager />
-      </div>
-
-      {/* Account Deactivation */}
-      <div className="px-4 mb-6">
-        <h2 className="text-xs md:text-sm font-bold text-gray-300 uppercase tracking-[0.2em] md:tracking-[0.25em] mb-3 text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
-          KONTO DEAKTIVIEREN
-        </h2>
-        <Button
-          variant="destructive"
-          className="w-full"
-          onClick={async () => {
-            const confirmed = window.confirm('Möchtest du dein Konto wirklich deaktivieren?');
-            if (confirmed && user) {
-              try {
-                // Sign out the user - deactivation would require database migration
-                await supabase.auth.signOut();
-                toast.success('Konto wird deaktiviert - kontaktiere den Support');
-                onOpenChange(false);
-              } catch (error) {
-                console.error('Error:', error);
-                toast.error('Fehler');
-              }
-            }
-          }}
-        >
-          Konto deaktivieren
-        </Button>
       </div>
 
       {/* Rank Info Dialog */}
