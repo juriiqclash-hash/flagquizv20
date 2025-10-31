@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { ProfileView } from '@/components/ProfileView';
 import { PublicProfileView } from '@/components/PublicProfileView';
 import { useAuth } from '@/hooks/useAuth';
@@ -7,18 +7,24 @@ import { supabase } from '@/integrations/supabase/client';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { username } = useParams<{ username: string }>();
   const { user } = useAuth();
   const [viewedUserId, setViewedUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const handleClose = () => {
-    navigate('/');
+    // If we came from mainmenu, go back to mainmenu
+    if (location.state?.from === '/') {
+      navigate('/');
+    } else {
+      navigate(-1);
+    }
   };
 
   const handleOpenChange = (newOpen: boolean) => {
     if (!newOpen) {
-      navigate('/');
+      handleClose();
     }
   };
 

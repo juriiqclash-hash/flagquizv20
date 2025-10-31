@@ -3,7 +3,8 @@ import { Button } from './ui/button';
 import { Label } from './ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Paintbrush, X } from 'lucide-react';
+import { Paintbrush, X, CreditCard } from 'lucide-react';
+import { SubscriptionSettings } from './SubscriptionSettings';
 
 interface ProfileCustomizationProps {
   userId: string;
@@ -47,6 +48,7 @@ export const ProfileCustomization = ({
   const [backgroundColor, setBackgroundColor] = useState(currentBackgroundColor || '');
   const [borderStyle, setBorderStyle] = useState(currentBorderStyle || 'solid');
   const [saving, setSaving] = useState(false);
+  const [subscriptionOpen, setSubscriptionOpen] = useState(false);
 
   const handleSave = async () => {
     setSaving(true);
@@ -91,6 +93,18 @@ export const ProfileCustomization = ({
         </div>
 
         <div className="space-y-6">
+          {/* Subscription Management Button */}
+          <div className="space-y-3">
+            <Label className="text-lg font-semibold">Abonnement</Label>
+            <Button 
+              onClick={() => setSubscriptionOpen(true)} 
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              <CreditCard className="mr-2 h-5 w-5" />
+              Abonnement verwalten
+            </Button>
+          </div>
+
           {/* Username Color */}
           <div className="space-y-3">
             <Label className="text-lg font-semibold">Benutzername Farbe</Label>
@@ -210,6 +224,12 @@ export const ProfileCustomization = ({
           </div>
         </div>
       </div>
+
+      {/* Subscription Settings Dialog */}
+      <SubscriptionSettings 
+        open={subscriptionOpen} 
+        onOpenChange={setSubscriptionOpen} 
+      />
     </div>
   );
 };

@@ -5,6 +5,15 @@ import { AuthProvider } from "@/hooks/useAuth";
 export default function Index() {
   const navigate = useNavigate();
 
+  const handleProfileOpen = () => {
+    // Navigate to quizmenu first, then immediately open profile
+    navigate('/quizmenu');
+    // Use setTimeout to ensure navigation completes first
+    setTimeout(() => {
+      navigate('/profile/me', { state: { from: '/' } });
+    }, 0);
+  };
+
   return (
     <AuthProvider>
       <MainMenu
@@ -22,7 +31,7 @@ export default function Index() {
             navigate(`/quizmenu/${mode}`);
           }
         }}
-        onProfileOpen={() => navigate('/profile/me')}
+        onProfileOpen={handleProfileOpen}
       />
     </AuthProvider>
   );

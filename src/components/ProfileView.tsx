@@ -16,7 +16,6 @@ import { useSubscription } from '@/hooks/useSubscription';
 import { checkCountryChangeLimit, incrementCountryChange } from '@/lib/planLimits';
 import { toast } from 'sonner';
 import { ProfileCustomization } from './ProfileCustomization';
-import { SubscriptionManager } from './SubscriptionManager';
 
 interface ProfileViewProps {
   open: boolean;
@@ -565,14 +564,6 @@ export const ProfileView = ({
                 <Info className="w-3 h-3 md:w-5 md:h-5 text-gray-600" />
               </button>
             </div>
-          </div>
-
-          {/* Subscription Manager Section */}
-          <div className="px-4 mb-6">
-            <h2 className="text-xs md:text-sm font-bold text-gray-300 uppercase tracking-[0.2em] md:tracking-[0.25em] mb-3 text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>
-              ABONNEMENT
-            </h2>
-            <SubscriptionManager />
           </div>
 
           {/* Account Deactivation */}
