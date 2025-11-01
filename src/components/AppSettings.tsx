@@ -181,10 +181,15 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
 
     const { error } = await (supabase as any)
       .from('user_settings')
-      .upsert({
-        user_id: user.id,
-        ...settings,
-      });
+      .upsert(
+        {
+          user_id: user.id,
+          ...settings,
+        },
+        {
+          onConflict: 'user_id',
+        }
+      );
 
     if (error) {
       console.error('Error saving settings:', error);

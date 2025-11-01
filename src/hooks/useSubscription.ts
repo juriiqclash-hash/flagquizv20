@@ -124,7 +124,7 @@ export const useSubscription = () => {
         {
           event: '*',
           schema: 'public',
-          table: 'stripe_subscriptions',
+          table: 'stripe_user_subscriptions',
         },
         () => {
           loadSubscription();
