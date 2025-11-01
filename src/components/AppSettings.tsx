@@ -179,20 +179,24 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   const saveToDatabase = async (settings: any) => {
     if (!user) return;
 
-    const { error } = await (supabase as any)
-      .from('user_settings')
-      .upsert(
-        {
-          user_id: user.id,
-          ...settings,
-        },
-        {
-          onConflict: 'user_id',
-        }
-      );
+    try {
+      const { error } = await (supabase as any)
+        .from('user_settings')
+        .upsert(
+          {
+            user_id: user.id,
+            ...settings,
+          },
+          {
+            onConflict: 'user_id',
+          }
+        );
 
-    if (error) {
-      console.error('Error saving settings:', error);
+      if (error) {
+        console.error('Error saving settings:', error);
+      }
+    } catch (err) {
+      console.error('Failed to save settings:', err);
     }
   };
 
