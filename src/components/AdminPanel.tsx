@@ -231,11 +231,23 @@ export default function AdminPanel({ onBack }: AdminPanelProps) {
   const deleteUser = async (userId: string) => {
     setLoading(true);
     try {
-      const { error } = await supabase.functions.invoke('admin-delete-user', {
+      console.log('Calling admin-delete-user function for userId:', userId);
+      
+      const { data, error } = await supabase.functions.invoke('admin-delete-user', {
         body: { userId }
       });
 
-      if (error) throw error;
+      console.log('Edge function response:', { data, error });
+
+      if (error) {
+        console.error('Edge function error:', error);
+        throw error;
+      }
+
+      if (data?.error) {
+        console.error('Edge function returned error:', data.error);
+        throw new Error(data.error);
+      }
 
       await logAction('user_deleted', { userId });
 
@@ -247,6 +259,7 @@ export default function AdminPanel({ onBack }: AdminPanelProps) {
       fetchUsers();
       setDeleteUserId(null);
     } catch (error: any) {
+      console.error('Delete user error:', error);
       toast({
         title: 'Fehler',
         description: error.message || 'Benutzer konnte nicht gelöscht werden',

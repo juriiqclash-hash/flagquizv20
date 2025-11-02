@@ -54,12 +54,8 @@ export default function BanOverlay() {
   if (!isBanned) return null
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-background/80 backdrop-blur-sm flex items-center justify-center pointer-events-auto">
-      {/* Block all interaction underneath */}
-      <div className="fixed inset-0" style={{ pointerEvents: 'auto' }} />
-      <div className="w-full max-w-xl p-4">
-        <BannedScreen banReason={banInfo.reason} bannedAt={banInfo.bannedAt} />
-      </div>
+    <div className="fixed inset-0 z-[9999] bg-background">
+      <BannedScreen banReason={banInfo.reason} bannedAt={banInfo.bannedAt} />
     </div>
   )
 }
