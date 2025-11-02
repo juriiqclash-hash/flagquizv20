@@ -286,7 +286,7 @@ export default function MainMenu({
     }
   };
   const handleDiscord = () => {
-    window.open('https://discord.gg/u2wfWpsfU', '_blank');
+    window.open('https://discord.gg/invite/u2wdWpsfU', '_blank');
   };
   const handleQuizClick = (quizId: string) => {
     if (quizId === 'multiplayer') {
