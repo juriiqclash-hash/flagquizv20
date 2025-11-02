@@ -231,18 +231,11 @@ export default function AdminPanel({ onBack }: AdminPanelProps) {
   const deleteUser = async (userId: string) => {
     setLoading(true);
     try {
-      // First delete from profiles table (will cascade to other tables)
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .delete()
-        .eq('user_id', userId);
+      const { error } = await supabase.functions.invoke('admin-delete-user', {
+        body: { userId }
+      });
 
-      if (profileError) throw profileError;
-
-      // Then delete from auth
-      const { error: authError } = await supabase.auth.admin.deleteUser(userId);
-      
-      if (authError) throw authError;
+      if (error) throw error;
 
       await logAction('user_deleted', { userId });
 

@@ -31,6 +31,7 @@ import ConsentDialog from "./components/ConsentDialog";
 import { InvitationBanner } from "./components/InvitationBanner";
 import { useAdmin } from "./hooks/useAdmin";
 import FPSDisplay from "./components/FPSDisplay";
+import BanOverlay from "./components/BanOverlay";
 
 const queryClient = new QueryClient();
 
@@ -146,6 +147,7 @@ const AppContent = () => {
     <LanguageProvider>
       <TooltipProvider>
         <SystemBanner />
+        <BanOverlay />
         <Toaster />
         <Sonner />
         <FPSDisplay enabled={fpsEnabled} showNetworkStats={networkStatsEnabled} />
