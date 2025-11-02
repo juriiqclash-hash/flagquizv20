@@ -109,21 +109,19 @@ export default function AdminProfileManager() {
         if (statsTimeError) throw statsTimeError;
       }
 
-      // Update multiplayer wins
-      const updates: any = {};
+      // Update multiplayer wins in user_stats
       if (duelWins && duelWins.trim() !== '') {
-        updates.multiplayer_wins = parseInt(duelWins);
-      }
-
-      if (Object.keys(updates).length > 0) {
-        const { error } = await supabase
+        const { error: winsError } = await supabase
           .from('user_stats')
-          .update(updates)
-          .eq('user_id', selectedUserId);
+          .upsert({
+            user_id: selectedUserId,
+            multiplayer_wins: parseInt(duelWins)
+          }, {
+            onConflict: 'user_id',
+            ignoreDuplicates: false
+          });
 
-        if (error) throw error;
-
-        console.log('Admin updated user stats:', { selectedUserId, updates });
+        if (winsError) throw winsError;
       }
 
       toast({
