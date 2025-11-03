@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import FlagQuizLogo from '@/components/FlagQuizLogo';
 import { ArrowLeft, Shield } from 'lucide-react';
 
-const ADMIN_PASSWORD = 'stalinnigga67';
+const ADMIN_PASSWORD = 'JurDae!64Vy?';
 
 export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
