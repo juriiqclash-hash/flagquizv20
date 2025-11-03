@@ -23,6 +23,7 @@ import FlagArchivePage from "./pages/FlagArchivePage";
 import CombiQuizPage from "./pages/CombiQuizPage";
 import WorldKnowledgePage from "./pages/WorldKnowledgePage";
 import AdminPage from "./pages/AdminPage";
+import AdminLoginPage from "./pages/AdminLoginPage";
 import PremiumPage from "./pages/PremiumPage";
 import MapQuizPage from "./pages/MapQuizPage";
 import SystemBanner from "./components/SystemBanner";
@@ -173,6 +174,7 @@ const AppContent = () => {
             <Route path="/profile/:username" element={<ProfilePage />} />
             <Route path="/multiplayer" element={<MultiplayerPage />} />
             <Route path="/multiplayer/:roomCode" element={<MultiplayerPage />} />
+            <Route path="/admin-login" element={<AdminLoginPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/premium" element={<PremiumPage />} />
             {/* Legacy routes for backwards compatibility */}
