@@ -601,12 +601,7 @@ export default function SettingsPage() {
   };
 
   const handleAdminAccess = () => {
-    sessionStorage.setItem('admin_access', 'true');
-    toast({
-      title: 'Zugriff gewährt',
-      description: 'Sie werden zum Admin-Panel weitergeleitet.',
-    });
-    navigate('/admin');
+    navigate('/admin-login');
   };
 
   const copyUserId = () => {
