@@ -19,9 +19,9 @@ export default function BannedScreen({ banReason, bannedAt, onBack }: BannedScre
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-500/10 via-background to-red-500/5 flex items-center justify-center p-4 relative">
-      <div className="absolute top-6 right-6">
-        <Button onClick={handleLogout} variant="outline" size="lg" className="gap-2">
+    <div className="min-h-screen w-full bg-gradient-to-br from-red-500/10 via-background to-red-500/5 flex items-center justify-center p-4 relative">
+      <div className="absolute top-6 right-6 z-10">
+        <Button onClick={handleLogout} variant="outline" size="lg" className="gap-2 bg-background">
           <LogOut className="h-5 w-5" />
           Ausloggen
         </Button>

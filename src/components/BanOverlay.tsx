@@ -54,7 +54,7 @@ export default function BanOverlay() {
   if (!isBanned) return null
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-background">
+    <div className="fixed inset-0 z-[9999]">
       <BannedScreen banReason={banInfo.reason} bannedAt={banInfo.bannedAt} />
     </div>
   )
