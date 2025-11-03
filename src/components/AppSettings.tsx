@@ -576,24 +576,7 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
   };
 
   const handleAdminAccess = () => {
-    const correctPassword = getDailyAdminPassword();
-    if (adminPassword === correctPassword) {
-      sessionStorage.setItem('adminAccess', 'true');
-      sessionStorage.setItem('adminAccessTime', Date.now().toString());
-      toast({
-        title: 'Zugriff gewährt',
-        description: 'Sie werden zum Admin-Panel weitergeleitet.',
-      });
-      navigate('/admin');
-      setAdminPassword('');
-    } else {
-      toast({
-        title: 'Zugriff verweigert',
-        description: 'Falsches Passwort.',
-        variant: 'destructive',
-      });
-      setAdminPassword('');
-    }
+    navigate('/admin-login');
   };
 
   const copyUserId = () => {
@@ -1146,26 +1129,9 @@ const AppSettings = ({ open, onOpenChange }: AppSettingsProps) => {
                 Admin-Bereich
               </Label>
               <div className="space-y-2">
-                <div className="flex gap-2">
-                  <Input
-                    type={showAdminPassword ? 'text' : 'password'}
-                    placeholder="Admin-Passwort eingeben"
-                    value={adminPassword}
-                    onChange={(e) => setAdminPassword(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleAdminAccess()}
-                  />
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    type="button"
-                    onClick={() => setShowAdminPassword(!showAdminPassword)}
-                  >
-                    {showAdminPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </Button>
-                  <Button onClick={handleAdminAccess} disabled={!adminPassword}>
-                    Zugriff
-                  </Button>
-                </div>
+                <Button onClick={handleAdminAccess} className="w-full">
+                  Zugriff
+                </Button>
                 <p className="text-xs text-muted-foreground">
                   Nur für autorisierte Administratoren
                 </p>
