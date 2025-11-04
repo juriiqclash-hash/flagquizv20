@@ -10,8 +10,13 @@ interface BannedScreenProps {
 
 export default function BannedScreen({ banReason, bannedAt, onBack }: BannedScreenProps) {
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    window.location.href = '/login';
+    try {
+      await supabase.auth.signOut();
+      // Nach dem Logout zur Root-Seite, wo dann das Login-Menü erscheint
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return (
