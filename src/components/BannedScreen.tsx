@@ -22,7 +22,7 @@ export default function BannedScreen({ banReason, bannedAt, onBack }: BannedScre
   return (
     <div className="fixed inset-0 w-full h-full bg-gradient-to-br from-red-950 via-red-900 to-red-950 flex items-center justify-center p-4 overflow-hidden">
       {/* Animated background effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.15),transparent_50%)] animate-pulse" />
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.15),transparent_50%)] animate-pulse" />
       <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(220,38,38,0.05)_50%,transparent_75%)]" />
       
       {/* Logout button */}

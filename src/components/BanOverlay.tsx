@@ -13,7 +13,14 @@ export default function BanOverlay() {
     let channel: ReturnType<typeof supabase.channel> | null = null
 
     const fetchStatus = async () => {
-      if (!user) return
+      if (!user) {
+        // Wenn kein Benutzer vorhanden ist, Overlay sofort schließen
+        setIsBanned(false)
+        setBanInfo({})
+        if (channel) supabase.removeChannel(channel)
+        return
+      }
+
       const { data } = await supabase
         .from('profiles')
         .select('banned, ban_reason, banned_at')
