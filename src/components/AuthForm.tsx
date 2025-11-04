@@ -112,7 +112,7 @@ const AuthForm = ({ onSuccess, mode = 'signin', message }: AuthFormProps) => {
             <p className="text-sm text-blue-400 font-medium">{message}</p>
           </div>
         )}
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-white">
           {currentMode === 'signin'
             ? 'Melde dich an, um fortzufahren'
             : 'Erstelle ein neues Konto'}
@@ -206,7 +206,7 @@ const AuthForm = ({ onSuccess, mode = 'signin', message }: AuthFormProps) => {
           <span className="w-full border-t border-border" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">oder</span>
+          <span className="bg-background px-2 text-white">oder</span>
         </div>
       </div>
 
