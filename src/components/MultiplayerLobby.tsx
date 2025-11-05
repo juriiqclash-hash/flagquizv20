@@ -9,6 +9,7 @@ import { useMultiplayer } from '@/hooks/useMultiplayer';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { FriendInviteDialog } from './FriendInviteDialog';
+import { LobbyChat } from './LobbyChat';
 interface MultiplayerLobbyProps {
   onStartGame: () => void;
   onBackToMenu: () => void;
@@ -140,8 +141,9 @@ export default function MultiplayerLobby({
         </Card>
       </div>;
   }
+  
   return <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 p-4">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
@@ -162,8 +164,12 @@ export default function MultiplayerLobby({
           </Button>
         </div>
 
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Content - VS Layout and Settings */}
+          <div className="lg:col-span-2 space-y-6">
+
         {/* VS Layout */}
-        <div className="flex items-center justify-center mb-12">
+        <div className="flex items-center justify-center mb-8">
           <div className="flex items-center gap-8 lg:gap-16">
             {/* Player 1 */}
             <div className="flex flex-col items-center">
@@ -253,7 +259,7 @@ export default function MultiplayerLobby({
         </div>
 
         {/* Game Settings */}
-        <Card className="mb-8 bg-white/10 backdrop-blur border-white/20">
+        <Card className="bg-white/10 backdrop-blur border-white/20">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <Users className="w-5 h-5" />
@@ -337,6 +343,13 @@ export default function MultiplayerLobby({
               </p>
             </CardContent>
           </Card>}
+        </div>
+
+        {/* Chat Sidebar */}
+        <div className="lg:col-span-1 min-h-[600px]">
+          <LobbyChat lobbyId={currentLobby.id} />
+        </div>
+      </div>
       </div>
 
       <FriendInviteDialog 
@@ -345,5 +358,5 @@ export default function MultiplayerLobby({
         type="lobby"
         lobbyId={currentLobby?.id}
       />
-    </div>;
+    </div>
 }
