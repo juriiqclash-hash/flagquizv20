@@ -79,6 +79,72 @@ export const useMultiplayer = () => {
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const [isTabVisible, setIsTabVisible] = useState(true);
 
+  // Check for pending lobby join on mount
+  useEffect(() => {
+    const checkPendingJoin = async () => {
+      const pendingJoin = localStorage.getItem('pendingLobbyJoin');
+      if (pendingJoin && user) {
+        try {
+          const { lobbyId, roomCode } = JSON.parse(pendingJoin);
+          localStorage.removeItem('pendingLobbyJoin');
+          
+          console.log('🔄 Processing pending lobby join:', lobbyId, roomCode);
+          
+          // Load the lobby
+          const { data: lobby, error } = await supabase
+            .from('lobbies')
+            .select('*')
+            .eq('id', lobbyId)
+            .single();
+
+          if (!error && lobby) {
+            setCurrentLobby({ 
+              ...lobby, 
+              status: lobby.status as 'waiting' | 'started' | 'finished'
+            } as Lobby);
+            
+            // Select 10 random countries using seeded shuffle
+            const shuffled = seededShuffle(countries, roomCode);
+            setGameCountries(shuffled.slice(0, 10));
+
+            // Load all participants
+            const { data: participants } = await supabase
+              .from('match_participants')
+              .select('*')
+              .eq('lobby_id', lobbyId)
+              .order('joined_at', { ascending: true });
+            
+            if (participants) {
+              const participantsWithAvatars = await Promise.all(
+                participants.map(async (p) => {
+                  const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('avatar_url')
+                    .eq('user_id', p.user_id)
+                    .single();
+                  
+                  return { 
+                    ...p, 
+                    status: p.status as 'alive' | 'eliminated',
+                    lives: p.lives || 5,
+                    avatar_url: profile?.avatar_url || null
+                  };
+                })
+              );
+              
+              setParticipants(participantsWithAvatars);
+              console.log('✅ Loaded lobby from invitation:', participantsWithAvatars.length, 'participants');
+            }
+          }
+        } catch (error) {
+          console.error('Error processing pending lobby join:', error);
+        }
+      }
+    };
+
+    checkPendingJoin();
+  }, [user]);
+
   // Tab visibility tracking
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -158,7 +224,7 @@ export const useMultiplayer = () => {
       )
       .subscribe();
 
-    // Subscribe to participant updates with unique channel name
+    // Subscribe to participant updates with unique channel name - CRITICAL FOR NEW JOINS
     const participantChannel = supabase
       .channel(`participant-updates-${currentLobby.id}`)
       .on(
@@ -169,36 +235,40 @@ export const useMultiplayer = () => {
           table: 'match_participants',
           filter: `lobby_id=eq.${currentLobby.id}`
         },
-        (payload) => {
+        async (payload) => {
           console.log('🎯 Participant update payload:', payload.eventType, payload.new || payload.old);
           if (payload.eventType === 'INSERT') {
             const newParticipant = { ...payload.new, status: payload.new.status as 'alive' | 'eliminated' } as Participant;
             console.log('➕ New participant joining:', newParticipant.username, newParticipant.user_id);
             
             // Load avatar for new participant
-            supabase
+            const { data: profile } = await supabase
               .from('profiles')
               .select('avatar_url')
               .eq('user_id', newParticipant.user_id)
-              .single()
-              .then(({ data: profile }) => {
-                const participantWithAvatar = { 
-                  ...newParticipant, 
-                  avatar_url: profile?.avatar_url || null 
-                };
-                
-                setParticipants(prev => {
-                  // Check if participant already exists to avoid duplicates
-                  const exists = prev.find(p => p.user_id === participantWithAvatar.user_id);
-                  if (exists) {
-                    console.log('⚠️ Participant already exists, skipping:', participantWithAvatar.username);
-                    return prev;
-                  }
-                  const updated = [...prev, participantWithAvatar];
-                  console.log('✅ Updated participants list:', updated.map(p => ({ username: p.username, user_id: p.user_id })));
-                  return updated;
-                });
-              });
+              .single();
+            
+            const participantWithAvatar = { 
+              ...newParticipant, 
+              avatar_url: profile?.avatar_url || null 
+            };
+            
+            setParticipants(prev => {
+              // Check if participant already exists to avoid duplicates
+              const exists = prev.find(p => p.user_id === participantWithAvatar.user_id);
+              if (exists) {
+                console.log('⚠️ Participant already exists, updating:', participantWithAvatar.username);
+                // Update existing participant
+                return prev.map(p => 
+                  p.user_id === participantWithAvatar.user_id 
+                    ? participantWithAvatar 
+                    : p
+                );
+              }
+              const updated = [...prev, participantWithAvatar];
+              console.log('✅ Updated participants list:', updated.map(p => ({ username: p.username, user_id: p.user_id })));
+              return updated;
+            });
           } else if (payload.eventType === 'UPDATE') {
             console.log('🔄 Participant updated:', payload.new.username);
             setParticipants(prev => 

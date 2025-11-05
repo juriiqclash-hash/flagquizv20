@@ -152,6 +152,28 @@ export function InvitationBanner() {
           .update({ status: 'accepted' })
           .eq('id', invitation.id);
 
+        // Get lobby data first
+        const { data: lobby, error: lobbyError } = await supabase
+          .from('lobbies')
+          .select('*')
+          .eq('id', invitation.lobby_id)
+          .single();
+
+        if (lobbyError) {
+          console.error('Error fetching lobby:', lobbyError);
+          throw new Error('Lobby nicht gefunden');
+        }
+
+        // Check if lobby is still waiting (not started yet)
+        if (lobby.status !== 'waiting') {
+          toast({
+            title: 'Lobby bereits gestartet',
+            description: 'Diese Lobby hat bereits begonnen',
+            variant: 'destructive'
+          });
+          return;
+        }
+
         // Join the lobby
         const { data: profile } = await supabase
           .from('profiles')
@@ -159,7 +181,7 @@ export function InvitationBanner() {
           .eq('user_id', user.id)
           .single();
 
-        await supabase
+        const { error: insertError } = await supabase
           .from('match_participants')
           .insert({
             lobby_id: invitation.lobby_id,
@@ -170,12 +192,24 @@ export function InvitationBanner() {
             lives: 5
           });
 
+        if (insertError) {
+          console.error('Error joining lobby:', insertError);
+          throw insertError;
+        }
+
+        console.log('✅ Successfully joined lobby via invitation');
+
         toast({
           title: 'Lobby beigetreten!',
           description: `Du bist der Lobby ${invitation.lobby_code} beigetreten`
         });
 
-        // Navigate to multiplayer page
+        // Navigate to multiplayer page with lobby data in localStorage for immediate load
+        localStorage.setItem('pendingLobbyJoin', JSON.stringify({
+          lobbyId: invitation.lobby_id,
+          roomCode: lobby.room_code
+        }));
+        
         window.location.hash = '#/multiplayer';
       } else if (invitation.type === 'clan') {
         // Update invitation status
