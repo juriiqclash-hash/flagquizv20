@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/integrations/supabase/client'
 import { useAuth } from '@/hooks/useAuth'
 import BannedScreen from './BannedScreen'
@@ -8,16 +8,35 @@ export default function BanOverlay() {
   const { user } = useAuth()
   const [isBanned, setIsBanned] = useState(false)
   const [banInfo, setBanInfo] = useState<{ reason?: string; bannedAt?: string }>({})
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
+
+  // Listen to auth state changes to close overlay on logout
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') {
+        setIsBanned(false)
+        setBanInfo({})
+        if (channelRef.current) {
+          supabase.removeChannel(channelRef.current)
+          channelRef.current = null
+        }
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
 
   useEffect(() => {
-    let channel: ReturnType<typeof supabase.channel> | null = null
 
     const fetchStatus = async () => {
       if (!user) {
         // Wenn kein Benutzer vorhanden ist, Overlay sofort schließen
         setIsBanned(false)
         setBanInfo({})
-        if (channel) supabase.removeChannel(channel)
+        if (channelRef.current) {
+          supabase.removeChannel(channelRef.current)
+          channelRef.current = null
+        }
         return
       }
 
@@ -36,7 +55,7 @@ export default function BanOverlay() {
       }
 
       // Realtime subscribe
-      channel = supabase
+      channelRef.current = supabase
         .channel('ban-overlay-profile-changes')
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `user_id=eq.${user.id}` }, (payload) => {
           const newData = payload.new as any
@@ -54,7 +73,10 @@ export default function BanOverlay() {
     fetchStatus()
 
     return () => {
-      if (channel) supabase.removeChannel(channel)
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current)
+        channelRef.current = null
+      }
     }
   }, [user])
 
@@ -62,7 +84,11 @@ export default function BanOverlay() {
 
   return (
     <div className="fixed inset-0 z-[9999]">
-      <BannedScreen banReason={banInfo.reason} bannedAt={banInfo.bannedAt} />
+      <BannedScreen 
+        banReason={banInfo.reason} 
+        bannedAt={banInfo.bannedAt} 
+        onBack={() => setIsBanned(false)}
+      />
     </div>
   )
 }

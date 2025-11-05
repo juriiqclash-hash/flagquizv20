@@ -12,8 +12,8 @@ export default function BannedScreen({ banReason, bannedAt, onBack }: BannedScre
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
-      // Nach dem Logout zur Root-Seite, wo dann das Login-Menü erscheint
-      window.location.href = '/';
+      onBack?.();
+      window.location.replace('/');
     } catch (error) {
       console.error('Logout error:', error);
     }
@@ -22,11 +22,11 @@ export default function BannedScreen({ banReason, bannedAt, onBack }: BannedScre
   return (
     <div className="fixed inset-0 w-full h-full bg-gradient-to-br from-red-950 via-red-900 to-red-950 flex items-center justify-center p-4 overflow-hidden">
       {/* Animated background effects */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.15),transparent_50%)] animate-pulse" />
-      <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(220,38,38,0.05)_50%,transparent_75%)]" />
+      <div className="absolute inset-0 pointer-events-none -z-10 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.15),transparent_50%)] animate-pulse" />
+      <div className="absolute inset-0 pointer-events-none -z-10 bg-[linear-gradient(45deg,transparent_25%,rgba(220,38,38,0.05)_50%,transparent_75%)]" />
       
       {/* Logout button */}
-      <div className="absolute top-4 right-4 z-20">
+      <div className="absolute top-4 right-4 z-50 pointer-events-auto">
         <Button 
           onClick={handleLogout} 
           variant="outline" 
@@ -43,7 +43,7 @@ export default function BannedScreen({ banReason, bannedAt, onBack }: BannedScre
         {/* Icon */}
         <div className="flex justify-center mb-4">
           <div className="relative">
-            <div className="absolute inset-0 bg-red-500 blur-2xl opacity-50 animate-pulse" />
+            <div className="absolute inset-0 pointer-events-none bg-red-500 blur-2xl opacity-50 animate-pulse" />
             <div className="relative w-24 h-24 bg-gradient-to-br from-red-600 to-red-800 rounded-full flex items-center justify-center shadow-2xl border-4 border-red-500/30">
               <ShieldAlert className="w-14 h-14 text-white drop-shadow-2xl animate-pulse" strokeWidth={2} />
             </div>
