@@ -345,8 +345,10 @@ export default function MultiplayerLobby({
           </Card>}
         </div>
 
-        {/* Collapsible Chat - Always available */}
-        <LobbyChat lobbyId={currentLobby.id} />
+        {/* Chat Sidebar */}
+        <div className="lg:col-span-1 min-h-[600px]">
+          <LobbyChat lobbyId={currentLobby.id} />
+        </div>
       </div>
       </div>
 

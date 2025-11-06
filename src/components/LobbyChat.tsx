@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { MessageCircle, Send, X } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { MessageCircle, Send } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
@@ -25,9 +25,6 @@ export function LobbyChat({ lobbyId }: LobbyChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [sending, setSending] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [lastReadTime, setLastReadTime] = useState<string>(new Date().toISOString());
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Load initial messages
@@ -55,19 +52,12 @@ export function LobbyChat({ lobbyId }: LobbyChatProps) {
           const newMsg = payload.new as Message;
           setMessages(prev => [...prev, newMsg]);
           
-          // Increment unread if chat is closed and message is not from me
-          if (!isOpen && newMsg.user_id !== user?.id) {
-            setUnreadCount(prev => prev + 1);
-          }
-          
-          // Auto-scroll to bottom if open
-          if (isOpen) {
-            setTimeout(() => {
-              if (scrollRef.current) {
-                scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-              }
-            }, 100);
-          }
+          // Auto-scroll to bottom
+          setTimeout(() => {
+            if (scrollRef.current) {
+              scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+            }
+          }, 100);
         }
       )
       .subscribe();
@@ -75,20 +65,7 @@ export function LobbyChat({ lobbyId }: LobbyChatProps) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [lobbyId, isOpen, user?.id]);
-
-  // Reset unread count when opening chat
-  useEffect(() => {
-    if (isOpen) {
-      setUnreadCount(0);
-      setLastReadTime(new Date().toISOString());
-      setTimeout(() => {
-        if (scrollRef.current) {
-          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        }
-      }, 100);
-    }
-  }, [isOpen]);
+  }, [lobbyId]);
 
   const loadMessages = async () => {
     try {
@@ -103,11 +80,12 @@ export function LobbyChat({ lobbyId }: LobbyChatProps) {
 
       setMessages(data || []);
       
-      // Count unread messages
-      const unread = (data || []).filter(
-        msg => msg.created_at > lastReadTime && msg.user_id !== user?.id
-      ).length;
-      setUnreadCount(unread);
+      // Auto-scroll to bottom
+      setTimeout(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+      }, 100);
     } catch (error: any) {
       console.error('Error loading messages:', error);
     }
@@ -152,98 +130,75 @@ export function LobbyChat({ lobbyId }: LobbyChatProps) {
     }
   };
 
-  if (!isOpen) {
-    return (
-      <Button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg bg-primary hover:bg-primary/90 z-50"
-        size="icon"
-      >
-        <MessageCircle className="w-6 h-6" />
-        {unreadCount > 0 && (
-          <Badge 
-            variant="destructive" 
-            className="absolute -top-1 -right-1 h-6 w-6 rounded-full p-0 flex items-center justify-center"
-          >
-            {unreadCount > 9 ? '9+' : unreadCount}
-          </Badge>
-        )}
-      </Button>
-    );
-  }
-
   return (
-    <div className="fixed bottom-4 right-4 w-80 h-[500px] bg-card border border-border rounded-lg shadow-xl z-50 flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between p-3 border-b border-border">
-        <div className="flex items-center gap-2">
+    <Card className="bg-white/10 backdrop-blur border-white/20 h-full flex flex-col">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-white flex items-center gap-2 text-lg">
           <MessageCircle className="w-5 h-5" />
-          <span className="font-semibold">Lobby-Chat</span>
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsOpen(false)}
-          className="h-8 w-8"
+          Lobby-Chat
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="flex-1 flex flex-col p-4 pt-0 gap-3 min-h-0">
+        {/* Messages Area */}
+        <ScrollArea 
+          className="flex-1 pr-4 min-h-0" 
+          ref={scrollRef}
         >
-          <X className="w-4 h-4" />
-        </Button>
-      </div>
-
-      {/* Messages Area */}
-      <ScrollArea className="flex-1 p-3" ref={scrollRef}>
-        <div className="space-y-2">
-          {messages.length === 0 ? (
-            <p className="text-muted-foreground text-sm text-center py-4">
-              Noch keine Nachrichten. Schreibe etwas!
-            </p>
-          ) : (
-            messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`p-2 rounded-lg ${
-                  msg.user_id === user?.id
-                    ? 'bg-primary/20 ml-4'
-                    : 'bg-muted mr-4'
-                }`}
-              >
-                <div className="flex items-baseline gap-2">
-                  <span className="font-semibold text-sm">
-                    {msg.username}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(msg.created_at).toLocaleTimeString('de-DE', {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </span>
+          <div className="space-y-2">
+            {messages.length === 0 ? (
+              <p className="text-white/60 text-sm text-center py-4">
+                Noch keine Nachrichten. Schreibe etwas!
+              </p>
+            ) : (
+              messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`p-2 rounded-lg ${
+                    msg.user_id === user?.id
+                      ? 'bg-blue-500/20 ml-4'
+                      : 'bg-white/10 mr-4'
+                  }`}
+                >
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-semibold text-white text-sm">
+                      {msg.username}
+                    </span>
+                    <span className="text-xs text-white/50">
+                      {new Date(msg.created_at).toLocaleTimeString('de-DE', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </span>
+                  </div>
+                  <p className="text-white/90 text-sm mt-1 break-words">
+                    {msg.message}
+                  </p>
                 </div>
-                <p className="text-sm mt-1 break-words">
-                  {msg.message}
-                </p>
-              </div>
-            ))
-          )}
-        </div>
-      </ScrollArea>
+              ))
+            )}
+          </div>
+        </ScrollArea>
 
-      {/* Input Area */}
-      <form onSubmit={sendMessage} className="p-3 border-t border-border flex gap-2">
-        <Input
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Nachricht..."
-          maxLength={200}
-          disabled={sending}
-        />
-        <Button
-          type="submit"
-          size="icon"
-          disabled={!newMessage.trim() || sending}
-        >
-          <Send className="w-4 h-4" />
-        </Button>
-      </form>
-    </div>
+        {/* Input Area */}
+        <form onSubmit={sendMessage} className="flex gap-2">
+          <Input
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Nachricht schreiben..."
+            maxLength={200}
+            className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+            disabled={sending}
+          />
+          <Button
+            type="submit"
+            size="icon"
+            disabled={!newMessage.trim() || sending}
+            className="bg-blue-500 hover:bg-blue-600 text-white shrink-0"
+          >
+            <Send className="w-4 h-4" />
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
