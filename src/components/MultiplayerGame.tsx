@@ -79,32 +79,30 @@ export default function MultiplayerGame({ onBackToLobby, onBackToMenu }: Multipl
     setOpponentProgress(opponentAnswers.length);
   }, [opponentParticipant?.current_answer, currentLobby]);
 
-  // Check for game end via lobby status
+  // Check for game end - immediately when someone completes all 10
   useEffect(() => {
     if (!currentLobby || !myParticipant) return;
 
+    // Check if I won immediately when I get 10 correct answers
+    if (correctAnswers.size === 10 && gameStatus === 'playing') {
+      setGameStatus('won');
+      incrementMultiplayerWins();
+      return;
+    }
+
+    // Check if opponent won via lobby status
     if (currentLobby.status === 'finished' && gameStatus !== 'won' && gameStatus !== 'lost') {
       if (currentLobby.winner_id === user?.id) {
         setGameStatus('won');
         incrementMultiplayerWins();
-        toast({
-          title: '🏆 Gewonnen!',
-          description: 'Du hast alle 10 Flaggen erraten!',
-          className: 'bg-success text-success-foreground',
-        });
       } else {
         setGameStatus('lost');
-        toast({
-          title: '😔 Verloren',
-          description: 'Dein Gegner war schneller!',
-          variant: 'destructive',
-        });
       }
     } else if (currentLobby.status === 'started' && gameStatus === 'waiting') {
       setGameStatus('playing');
       setTimeout(() => inputRef.current?.focus(), 100);
     }
-  }, [currentLobby?.status, currentLobby?.winner_id, user?.id, gameStatus, toast, myParticipant, incrementMultiplayerWins]);
+  }, [currentLobby?.status, currentLobby?.winner_id, user?.id, gameStatus, correctAnswers.size, myParticipant, incrementMultiplayerWins]);
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

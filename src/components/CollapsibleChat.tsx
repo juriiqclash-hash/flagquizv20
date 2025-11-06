@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { MessageCircle, Send, X } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
 
 interface Message {
   id: string;
@@ -16,11 +16,14 @@ interface Message {
   created_at: string;
 }
 
-interface LobbyChatProps {
-  lobbyId: string;
+interface CollapsibleChatProps {
+  contextId: string;
+  contextType: 'lobby' | 'clan' | 'friend';
+  tableName: string;
+  filterColumn: string;
 }
 
-export function LobbyChat({ lobbyId }: LobbyChatProps) {
+export function CollapsibleChat({ contextId, contextType, tableName, filterColumn }: CollapsibleChatProps) {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -32,24 +35,23 @@ export function LobbyChat({ lobbyId }: LobbyChatProps) {
 
   // Load initial messages
   useEffect(() => {
-    if (!lobbyId) return;
-
+    if (!contextId) return;
     loadMessages();
-  }, [lobbyId]);
+  }, [contextId]);
 
   // Subscribe to new messages
   useEffect(() => {
-    if (!lobbyId) return;
+    if (!contextId) return;
 
     const channel = supabase
-      .channel(`lobby-chat-${lobbyId}`)
+      .channel(`chat-${contextType}-${contextId}`)
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'lobby_messages',
-          filter: `lobby_id=eq.${lobbyId}`
+          table: tableName,
+          filter: `${filterColumn}=eq.${contextId}`
         },
         (payload) => {
           const newMsg = payload.new as Message;
@@ -75,7 +77,7 @@ export function LobbyChat({ lobbyId }: LobbyChatProps) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [lobbyId, isOpen, user?.id]);
+  }, [contextId, contextType, tableName, filterColumn, isOpen, user?.id]);
 
   // Reset unread count when opening chat
   useEffect(() => {
@@ -92,19 +94,20 @@ export function LobbyChat({ lobbyId }: LobbyChatProps) {
 
   const loadMessages = async () => {
     try {
-      const { data, error } = await supabase
-        .from('lobby_messages')
+      const query = supabase
+        .from(tableName as any)
         .select('*')
-        .eq('lobby_id', lobbyId)
         .order('created_at', { ascending: true })
         .limit(50);
+      
+      const { data, error } = await (query as any).eq(filterColumn, contextId);
 
       if (error) throw error;
 
-      setMessages(data || []);
+      setMessages((data as Message[]) || []);
       
       // Count unread messages
-      const unread = (data || []).filter(
+      const unread = ((data as Message[]) || []).filter(
         msg => msg.created_at > lastReadTime && msg.user_id !== user?.id
       ).length;
       setUnreadCount(unread);
@@ -128,14 +131,16 @@ export function LobbyChat({ lobbyId }: LobbyChatProps) {
     setSending(true);
     
     try {
-      const { error } = await supabase
-        .from('lobby_messages')
-        .insert({
-          lobby_id: lobbyId,
-          user_id: user.id,
-          username: profile?.username || 'Spieler',
-          message: newMessage.trim()
-        });
+      const messageData: Record<string, any> = {
+        user_id: user.id,
+        username: profile?.username || 'Spieler',
+        message: newMessage.trim(),
+        [filterColumn]: contextId
+      };
+
+      const { error } = await (supabase
+        .from(tableName as any) as any)
+        .insert([messageData]);
 
       if (error) throw error;
 
@@ -156,7 +161,7 @@ export function LobbyChat({ lobbyId }: LobbyChatProps) {
     return (
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg bg-primary hover:bg-primary/90 z-50"
+        className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg z-50"
         size="icon"
       >
         <MessageCircle className="w-6 h-6" />
@@ -178,7 +183,7 @@ export function LobbyChat({ lobbyId }: LobbyChatProps) {
       <div className="flex items-center justify-between p-3 border-b border-border">
         <div className="flex items-center gap-2">
           <MessageCircle className="w-5 h-5" />
-          <span className="font-semibold">Lobby-Chat</span>
+          <span className="font-semibold">Chat</span>
         </div>
         <Button
           variant="ghost"
