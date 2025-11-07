@@ -104,6 +104,15 @@ export default function MultiplayerContinentGame({ onBackToLobby, onBackToMenu }
 
           // Check if we got all countries
           if (newCorrectAnswers.size === totalCountries) {
+            // Immediately show win screen
+            setGameStatus('won');
+            incrementMultiplayerWins();
+            toast({
+              title: '🏆 Gewonnen!',
+              description: `Du hast alle ${totalCountries} Länder zuerst genannt!`,
+              className: 'bg-success text-success-foreground',
+            });
+            
             // Send win signal to edge function
             await supabase.functions.invoke('multiplayer-game-engine', {
               body: { 

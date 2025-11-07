@@ -136,6 +136,15 @@ export default function MultiplayerGame({ onBackToLobby, onBackToMenu }: Multipl
 
           // Check if we got all 10
           if (newCorrectAnswers.size === 10) {
+            // Immediately show win screen
+            setGameStatus('won');
+            incrementMultiplayerWins();
+            toast({
+              title: '🏆 Gewonnen!',
+              description: 'Du hast alle 10 Flaggen erraten!',
+              className: 'bg-success text-success-foreground',
+            });
+            
             // Send win signal to edge function
             await supabase.functions.invoke('multiplayer-game-engine', {
               body: { 
