@@ -1,20 +1,22 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import StartScreen from '@/components/StartScreen';
 
 export default function QuizMenuPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [shouldOpenProfile, setShouldOpenProfile] = useState(false);
 
   useEffect(() => {
     const openProfile = searchParams.get('openProfile');
     if (openProfile === 'true') {
-      navigate('/profile/me', { 
-        state: { from: 'mainmenu' },
-        replace: true 
-      });
+      setShouldOpenProfile(true);
+      // Remove the openProfile parameter from URL
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('openProfile');
+      setSearchParams(newParams, { replace: true });
     }
-  }, [searchParams, navigate]);
+  }, [searchParams, setSearchParams]);
 
   const handleStartQuiz = (mode: string, continent?: string, timeLimit?: number, difficulty?: string) => {
     if (mode === 'map-quiz') {
@@ -29,12 +31,18 @@ export default function QuizMenuPage() {
     navigate(`/quizmenu/${mode}?${params.toString()}`);
   };
 
+  const handleProfileOpened = () => {
+    setShouldOpenProfile(false);
+  };
+
   return (
     <StartScreen 
       onStartQuiz={handleStartQuiz} 
       onStartMultiplayer={() => navigate('/multiplayer')}
       currentView="start"
-      onBackToMainMenu={() => navigate('/')} 
+      onBackToMainMenu={() => navigate('/')}
+      shouldOpenProfile={shouldOpenProfile}
+      onProfileOpened={handleProfileOpened}
     />
   );
 }
