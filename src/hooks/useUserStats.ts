@@ -134,9 +134,26 @@ export const useUserStats = () => {
     if (!user) return;
 
     try {
+      // Increment the counter in user_stats
       await supabase.rpc('increment_multiplayer_wins', {
         p_user_id: user.id
       });
+
+      // Get current win count
+      const { data: statsData } = await supabase
+        .from('user_stats')
+        .select('multiplayer_wins')
+        .eq('user_id', user.id)
+        .single();
+
+      if (statsData) {
+        // Update leaderboard with new win count
+        await supabase.rpc('upsert_leaderboard_score', {
+          p_user_id: user.id,
+          p_game_mode: 'multiplayer',
+          p_score: statsData.multiplayer_wins
+        });
+      }
 
       await fetchStats();
     } catch (error) {

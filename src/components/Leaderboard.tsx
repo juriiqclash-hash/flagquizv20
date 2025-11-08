@@ -31,6 +31,7 @@ const Leaderboard = () => {
     { key: 'streak', label: t.streak },
     { key: 'timed', label: t.onTime },
     { key: 'speedrush', label: t.speedRushShort, hasSubcategories: true },
+    { key: 'multiplayer', label: 'Multiplayer' },
   ];
 
   const speedRushModes = [
@@ -185,7 +186,7 @@ const Leaderboard = () => {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="streak">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             {gameModes.map(mode => (
               <TabsTrigger key={mode.key} value={mode.key} className="text-sm">
                 {mode.label}
