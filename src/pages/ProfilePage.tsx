@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { ProfileView } from '@/components/ProfileView';
 import { PublicProfileView } from '@/components/PublicProfileView';
 import { useAuth } from '@/hooks/useAuth';
@@ -7,18 +7,29 @@ import { supabase } from '@/integrations/supabase/client';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { username } = useParams<{ username: string }>();
   const { user } = useAuth();
   const [viewedUserId, setViewedUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const handleClose = () => {
-    navigate('/');
+    const from = (location.state as any)?.from;
+    if (from === 'mainmenu') {
+      navigate('/');
+    } else {
+      navigate('/quizmenu');
+    }
   };
 
   const handleOpenChange = (newOpen: boolean) => {
     if (!newOpen) {
-      navigate('/');
+      const from = (location.state as any)?.from;
+      if (from === 'mainmenu') {
+        navigate('/');
+      } else {
+        navigate('/quizmenu');
+      }
     }
   };
 

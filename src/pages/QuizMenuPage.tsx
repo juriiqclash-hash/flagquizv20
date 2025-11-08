@@ -1,8 +1,20 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import StartScreen from '@/components/StartScreen';
 
 export default function QuizMenuPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const openProfile = searchParams.get('openProfile');
+    if (openProfile === 'true') {
+      navigate('/profile/me', { 
+        state: { from: 'mainmenu' },
+        replace: true 
+      });
+    }
+  }, [searchParams, navigate]);
 
   const handleStartQuiz = (mode: string, continent?: string, timeLimit?: number, difficulty?: string) => {
     if (mode === 'map-quiz') {
