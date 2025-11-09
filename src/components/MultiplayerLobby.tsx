@@ -101,15 +101,16 @@ export default function MultiplayerLobby({
   }
   const copyRoomCode = () => {
     try {
-      navigator.clipboard.writeText(currentLobby.room_code);
+      const shareableUrl = `${window.location.origin}/multiplayer/lobby/${currentLobby.room_code}`;
+      navigator.clipboard.writeText(shareableUrl);
       toast({
-        title: 'Kopiert!',
-        description: 'Raumcode wurde in die Zwischenablage kopiert.'
+        title: 'Link kopiert!',
+        description: 'Der Lobby-Link wurde in die Zwischenablage kopiert. Teile ihn mit Freunden!'
       });
     } catch (error) {
       toast({
         title: 'Fehler',
-        description: 'Raumcode konnte nicht kopiert werden.',
+        description: 'Link konnte nicht kopiert werden.',
         variant: 'destructive'
       });
     }

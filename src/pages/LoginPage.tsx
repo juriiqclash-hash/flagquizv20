@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import AuthForm from '@/components/AuthForm';
@@ -7,13 +7,15 @@ import { Button } from '@/components/ui/button';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
+  const redirectPath = searchParams.get('redirect') || '/';
 
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate(redirectPath);
     }
-  }, [user, navigate]);
+  }, [user, navigate, redirectPath]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 p-4 flex items-center justify-center">
@@ -26,7 +28,7 @@ export default function LoginPage() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Zurück
         </Button>
-        <AuthForm onSuccess={() => navigate('/')} />
+        <AuthForm onSuccess={() => navigate(redirectPath)} />
       </div>
     </div>
   );

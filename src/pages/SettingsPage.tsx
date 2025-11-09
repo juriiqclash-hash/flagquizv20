@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Settings, Image, Bell, Shield, Activity, Zap, Music, Languages, Database, Trash2, Lock, Info, Gamepad2, Palette, Download, Timer, Keyboard, Menu, X } from 'lucide-react';
 import { Label } from '@/components/ui/label';
@@ -45,10 +45,26 @@ const CATEGORIES = [
 
 export default function SettingsPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const { toast } = useToast();
-  const [activeCategory, setActiveCategory] = useState('general');
+  
+  const getCategoryFromPath = () => {
+    const pathParts = location.pathname.split('/');
+    const category = pathParts[pathParts.length - 1];
+    const validCategories = CATEGORIES.map(c => c.id);
+    return validCategories.includes(category) ? category : 'general';
+  };
+  
+  const [activeCategory, setActiveCategory] = useState(getCategoryFromPath());
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  useEffect(() => {
+    const newCategory = getCategoryFromPath();
+    if (newCategory !== activeCategory) {
+      setActiveCategory(newCategory);
+    }
+  }, [location.pathname]);
 
   const [fontSize, setFontSize] = useState(16);
   const [darkMode, setDarkMode] = useState(false);
@@ -2027,7 +2043,7 @@ export default function SettingsPage() {
                 <button
                   key={category.id}
                   onClick={() => {
-                    setActiveCategory(category.id);
+                    navigate(`/einstellungen/${category.id}`);
                     setIsMobileMenuOpen(false);
                   }}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${

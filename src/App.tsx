@@ -106,7 +106,6 @@ const AppContent = () => {
 
     checkMaintenanceMode();
 
-    // Subscribe to changes
     const channel = supabase
       .channel('maintenance-changes')
       .on(
@@ -139,7 +138,6 @@ const AppContent = () => {
     </div>;
   }
 
-  // Only show maintenance screen to non-admin users
   if (maintenanceMode && !isAdmin) {
     return <MaintenanceScreen message={maintenanceMessage} />;
   }
@@ -156,11 +154,16 @@ const AppContent = () => {
         <BrowserRouter>
           <InvitationBanner />
           <Routes>
+            {/* Main Routes */}
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<LoginPage />} />
+            
+            {/* Social Routes */}
             <Route path="/friends" element={<FriendsPage />} />
             <Route path="/clans" element={<ClansPage />} />
             <Route path="/leaderboards" element={<LeaderboardPage />} />
+            
+            {/* Quiz Routes */}
             <Route path="/quizmenu" element={<QuizMenuPage />} />
             <Route path="/quizmenu/flag-archive" element={<FlagArchivePage />} />
             <Route path="/quizmenu/combi-quiz" element={<CombiQuizPage />} />
@@ -168,19 +171,53 @@ const AppContent = () => {
             <Route path="/quizmenu/map-quiz" element={<MapQuizPage />} />
             <Route path="/quizmenu/:quizname" element={<QuizPage />} />
             <Route path="/dailychallenge" element={<DailyChallengePage />} />
+            
+            {/* Settings Routes - with categories */}
             <Route path="/einstellungen" element={<SettingsPage />} />
+            <Route path="/einstellungen/general" element={<SettingsPage />} />
+            <Route path="/einstellungen/gameplay" element={<SettingsPage />} />
+            <Route path="/einstellungen/graphics" element={<SettingsPage />} />
+            <Route path="/einstellungen/theme" element={<SettingsPage />} />
+            <Route path="/einstellungen/audio" element={<SettingsPage />} />
+            <Route path="/einstellungen/controls" element={<SettingsPage />} />
+            <Route path="/einstellungen/notifications" element={<SettingsPage />} />
+            <Route path="/einstellungen/privacy" element={<SettingsPage />} />
+            <Route path="/einstellungen/performance" element={<SettingsPage />} />
+            <Route path="/einstellungen/language" element={<SettingsPage />} />
+            <Route path="/einstellungen/data" element={<SettingsPage />} />
+            <Route path="/einstellungen/importexport" element={<SettingsPage />} />
+            <Route path="/einstellungen/developer" element={<SettingsPage />} />
+            <Route path="/einstellungen/cache" element={<SettingsPage />} />
+            <Route path="/einstellungen/admin" element={<SettingsPage />} />
+            <Route path="/einstellungen/info" element={<SettingsPage />} />
+            
+            {/* Profile Routes */}
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/me" element={<ProfilePage />} />
             <Route path="/profile/:username" element={<ProfilePage />} />
+            
+            {/* Multiplayer Routes */}
             <Route path="/multiplayer" element={<MultiplayerPage />} />
+            <Route path="/multiplayer/lobby/:roomCode" element={<MultiplayerPage />} />
             <Route path="/multiplayer/:roomCode" element={<MultiplayerPage />} />
+            
+            {/* Admin Routes */}
             <Route path="/admin-login" element={<AdminLoginPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin/dashboard" element={<AdminPage />} />
+            <Route path="/admin/users" element={<AdminPage />} />
+            <Route path="/admin/settings" element={<AdminPage />} />
+            <Route path="/admin/logs" element={<AdminPage />} />
+            <Route path="/admin/statistics" element={<AdminPage />} />
+            
+            {/* Premium Route */}
             <Route path="/premium" element={<PremiumPage />} />
+            
             {/* Legacy routes for backwards compatibility */}
             <Route path="/quiz" element={<QuizPage />} />
             <Route path="/quiz/:quizname" element={<QuizPage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            
+            {/* 404 - MUST BE LAST */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
