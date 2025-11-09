@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Plus, Flame, Clock, Trophy, X, Info, Shield, Paintbrush } from 'lucide-react';
+import { Plus, Flame, Clock, Trophy, X, Info, Shield, Paintbrush, Share2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from './ui/button';
@@ -358,6 +358,18 @@ export const ProfileView = ({
     );
   }
 
+  const handleShare = async () => {
+    const shareUrl = `${window.location.origin}/profile/${username}`;
+    
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success(`Link kopiert! ${shareUrl}`);
+    } catch (error) {
+      console.error('Error copying to clipboard:', error);
+      toast.error('Link konnte nicht kopiert werden.');
+    }
+  };
+
   return <>
       <div
         className={`fixed inset-0 z-[100] flex items-center justify-center p-4 ${!backgroundColor ? 'bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900' : ''}`}
@@ -365,6 +377,10 @@ export const ProfileView = ({
           background: backgroundColor || undefined,
         }}
       >
+        {/* Share Button */}
+        <button onClick={handleShare} className="fixed top-4 right-20 z-[110] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors" title="Profil teilen">
+          <Share2 className="w-5 h-5 text-gray-600" />
+        </button>
         {/* Close Button */}
         <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-[110] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
