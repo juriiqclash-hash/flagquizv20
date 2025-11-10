@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Plus, Flame, Clock, Trophy, X, Info, Shield, Paintbrush, Share2 } from 'lucide-react';
+import { Plus, Flame, Clock, Trophy, X, Info, Shield, Paintbrush, Upload } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from './ui/button';
@@ -378,8 +378,8 @@ export const ProfileView = ({
         }}
       >
         {/* Share Button */}
-        <button onClick={handleShare} className="fixed top-4 right-20 z-[110] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors" title="Profil teilen">
-          <Share2 className="w-5 h-5 text-gray-600" />
+        <button onClick={handleShare} className="fixed top-4 right-16 z-[110] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors" title="Profil teilen">
+          <Upload className="w-5 h-5 text-gray-600" />
         </button>
         {/* Close Button */}
         <button onClick={() => onOpenChange(false)} className="fixed top-4 right-4 z-[110] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Flame, Clock, Trophy, X, Info, UserPlus, UserMinus, Check, Plus, Users, Share2 } from 'lucide-react';
+import { Flame, Clock, Trophy, X, Info, UserPlus, UserMinus, Check, Plus, Users, Upload } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { getXPProgress } from '@/lib/xpSystem';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -445,8 +445,8 @@ export const PublicProfileView = ({
   if (!userId) return null;
   return <>
       <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 overflow-y-auto bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900">
-        <button onClick={handleShare} className="fixed top-4 right-20 z-[310] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors" title="Profil teilen">
-          <Share2 className="w-5 h-5 text-gray-600" />
+        <button onClick={handleShare} className="fixed top-4 right-16 z-[310] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors" title="Profil teilen">
+          <Upload className="w-5 h-5 text-gray-600" />
         </button>
         <button onClick={onClose} className="fixed top-4 right-4 z-[310] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors">
           <X className="w-5 h-5 text-gray-600" />
