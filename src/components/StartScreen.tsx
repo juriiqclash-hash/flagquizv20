@@ -19,6 +19,7 @@ const QUIZ_MODE_ICONS: { [key: string]: React.ReactNode } = {
   'combi-quiz': <Layers className="w-5 h-5" />,
   'flag-archive': <BookMarked className="w-5 h-5" />,
   'map-quiz': <MapPin className="w-5 h-5" />,
+  'swiss-cantons': <MapPin className="w-5 h-5" />,
   'multiplayer': <Users className="w-5 h-5" />,
 };
 import ContinentSelector from "./ContinentSelector";
@@ -80,6 +81,7 @@ const QUIZ_MODES: QuizResult[] = [
   { id: 'combi-quiz', name: 'Combi-Quiz', description: 'Wähle deine Kategorien und spiele endlos', icon: '🎭' },
   { id: 'flag-archive', name: 'Flaggen-Archiv', description: 'Durchsuche alle Flaggen von A-Z', icon: '📚' },
   { id: 'map-quiz', name: 'Karten Quiz', description: 'Finde Länder auf der interaktiven Weltkarte', icon: '📍' },
+  { id: 'swiss-cantons', name: 'Schweiz Kantone Quiz', description: 'Teste dein Wissen über die 26 Schweizer Kantone', icon: '🇨🇭' },
   { id: 'multiplayer', name: 'Multiplayer', description: 'Spiele gegen andere in Echtzeit', icon: '👥' },
 ];
 
