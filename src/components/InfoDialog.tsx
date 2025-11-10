@@ -15,7 +15,7 @@ const InfoDialog = ({ open, onOpenChange }: InfoDialogProps) => {
         <div className="space-y-6">
           {/* Logo */}
           <div className="flex justify-center">
-            <FlagQuizLogo size="md" variant="dark" />
+            <FlagQuizLogo size="md" variant="light" className="mb-4 md:scale-110" />
           </div>
 
           {/* Über FlagQuiz.ch */}
