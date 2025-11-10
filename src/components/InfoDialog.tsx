@@ -1,6 +1,7 @@
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Mail } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import FlagQuizLogo from '@/components/FlagQuizLogo';
 
 interface InfoDialogProps {
   open: boolean;
@@ -14,7 +15,7 @@ const InfoDialog = ({ open, onOpenChange }: InfoDialogProps) => {
         <div className="space-y-6">
           {/* Logo */}
           <div className="flex justify-center">
-            <img src="/logo.svg" alt="FlagQuiz Logo" className="h-20 w-auto" />
+            <FlagQuizLogo size="md" variant="dark" />
           </div>
 
           {/* Über FlagQuiz.ch */}
