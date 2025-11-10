@@ -37,7 +37,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import FlagQuizLogo from "@/components/FlagQuizLogo";
 interface StartScreenProps {
-  onStartQuiz: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz' | 'flag-archive' | 'map-quiz', continent?: string, timeLimit?: number) => void;
+  onStartQuiz: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz' | 'flag-archive' | 'map-quiz' | 'swiss-cantons', continent?: string, timeLimit?: number) => void;
   onStartMultiplayer: () => void;
   currentView: string;
   onOpenAdminPanel?: () => void;
@@ -390,6 +390,7 @@ export default function StartScreen({
                           quiz.id === 'combi-quiz' ? 'text-pink-500' :
                           quiz.id === 'flag-archive' ? 'text-amber-500' :
                           quiz.id === 'map-quiz' ? 'text-rose-500' :
+                          quiz.id === 'swiss-cantons' ? 'text-red-600' :
                           quiz.id === 'multiplayer' ? 'text-purple-500' :
                           ''
                         }`}>
@@ -739,6 +740,25 @@ export default function StartScreen({
                 Finde Länder, Hauptstädte und Berge auf der Weltkarte
               </p>
               <Button onClick={() => handleModeClick('map-quiz')} className="w-full mt-auto">
+                <Play className="mr-2 h-4 w-4" />
+                {t.start}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Swiss Cantons Quiz */}
+          <Card className="group cursor-pointer hover:shadow-lg transition-shadow duration-200">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <MapPin className="w-6 h-6 text-red-600" />
+                Schweiz Kantone Quiz
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
+                Teste dein Wissen über die 26 Schweizer Kantone
+              </p>
+              <Button onClick={() => handleModeClick('swiss-cantons')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>

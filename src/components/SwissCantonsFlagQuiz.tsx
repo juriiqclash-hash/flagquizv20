@@ -27,6 +27,14 @@ export default function SwissCantonsFlagQuiz({ onBack, order }: SwissCantonsFlag
 
   const currentCanton = cantons[currentIndex];
 
+  if (cantons.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50 flex items-center justify-center">
+        <p className="text-lg text-muted-foreground">Lade Kantone...</p>
+      </div>
+    );
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!userAnswer.trim() || !currentCanton) return;
@@ -48,10 +56,6 @@ export default function SwissCantonsFlagQuiz({ onBack, order }: SwissCantonsFlag
       }
     }, 1500);
   };
-
-  if (!currentCanton && cantons.length > 0) {
-    return null;
-  }
 
   if (showResult) {
     return (
