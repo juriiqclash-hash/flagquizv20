@@ -48,6 +48,7 @@ const InfoDialog = ({ open, onOpenChange }: InfoDialogProps) => {
               <span className="text-muted-foreground">E-Mail:</span>
               <a href="mailto:flagquiz.support@gmail.com" className="text-primary hover:underline">
                 flagquiz.support@gmail.com
+                Or add on Discord: ijuriqu
               </a>
             </div>
           </div>
