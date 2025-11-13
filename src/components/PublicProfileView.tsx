@@ -99,6 +99,7 @@ export const PublicProfileView = ({
   const { toast } = useToast();
   const [username, setUsername] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
+  const [bannerUrl, setBannerUrl] = useState('');
   const [accountCreated, setAccountCreated] = useState('');
   const [level, setLevel] = useState(0);
   const [xp, setXp] = useState(0);
@@ -317,10 +318,11 @@ export const PublicProfileView = ({
     try {
       const {
         data: profile
-      } = await supabase.from('profiles').select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan').eq('user_id', userId).single();
+      } = await supabase.from('profiles').select('username, avatar_url, banner_url, created_at, selected_flag, selected_continent, selected_clan').eq('user_id', userId).single();
       if (profile) {
         setUsername(profile.username || 'User');
         setAvatarUrl(profile.avatar_url || '');
+        setBannerUrl((profile as any).banner_url || '');
         setAccountCreated(new Date(profile.created_at).toLocaleDateString('de-DE', {
           day: '2-digit',
           month: '2-digit',
@@ -453,8 +455,21 @@ export const PublicProfileView = ({
         </button>
 
         <div className="w-full max-w-7xl flex flex-col py-16 md:py-8">
-          <div className="flex-1 flex items-center mb-3 md:mb-4 md:pl-2">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full">
+          <div 
+            className="flex-1 flex items-center mb-3 md:mb-4 md:pl-2 relative overflow-hidden rounded-3xl"
+            style={{
+              backgroundImage: bannerUrl ? `url(${bannerUrl})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              minHeight: '300px',
+            }}
+          >
+            {/* Overlay gradient for better text readability */}
+            {bannerUrl && (
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60" />
+            )}
+
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full relative z-10">
               <div className="flex flex-col items-center">
                 <Avatar className="h-40 w-40 md:h-64 md:w-64 ring-4 md:ring-8 ring-white shadow-2xl">
                   <AvatarImage src={avatarUrl} />
@@ -471,9 +486,15 @@ export const PublicProfileView = ({
 
               <div className="flex-1 flex flex-col items-center md:items-start w-full">
                 <div className="flex items-center gap-2 mb-1 md:mb-3">
-                  <h1 className="text-4xl md:text-7xl font-bold text-white leading-none text-center md:text-left" style={{
-                  fontFamily: '"VAG Rounded", sans-serif'
-                }}>
+                  <h1 
+                    className="text-4xl md:text-7xl font-bold text-white leading-none text-center md:text-left px-4 py-2 rounded-xl" 
+                    style={{
+                      fontFamily: '"VAG Rounded", sans-serif',
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                      backgroundColor: 'rgba(128, 128, 128, 0.3)',
+                      backdropFilter: 'blur(10px)',
+                    }}
+                  >
                     {username}
                   </h1>
                   {profileData.flag && (
