@@ -40,26 +40,18 @@ const InfoDialog = ({ open, onOpenChange }: InfoDialogProps) => {
 
           <Separator />
 
-{/* Support */}
-<div className="space-y-3">
-  <h3 className="text-lg font-semibold text-center">Support</h3>
-  <div className="flex flex-col items-center justify-center gap-1 text-sm">
-    <div className="flex items-center gap-2">
-      <Mail className="h-4 w-4 text-primary" />
-      <span className="text-muted-foreground">E-Mail:</span>
-      <a
-        href="mailto:flagquiz.support@gmail.com"
-        className="text-primary hover:underline"
-      >
-        flagquiz.support@gmail.com
-      </a>
-    </div>
-    <span className="text-muted-foreground">OR</span>
-    <span className="text-muted-foreground">
-      add on Discord: <span className="text-primary">ijuriqu</span>
-    </span>
-  </div>
-</div>
+          {/* Support */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-center">Support</h3>
+            <div className="flex items-center justify-center gap-2 text-sm">
+              <Mail className="h-4 w-4 text-primary" />
+              <span className="text-muted-foreground">E-Mail:</span>
+              <a href="mailto:flagquiz.support@gmail.com" className="text-primary hover:underline">
+                flagquiz.support@gmail.com
+                Or add on Discord: ijuriqu
+              </a>
+            </div>
+          </div>
 
           <Separator />
 

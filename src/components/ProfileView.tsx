@@ -106,7 +106,6 @@ export const ProfileView = ({
   const t = useTranslation(language);
   const [username, setUsername] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
-  const [bannerUrl, setBannerUrl] = useState('');
   const [accountCreated, setAccountCreated] = useState('');
   const [level, setLevel] = useState(0);
   const [xp, setXp] = useState(0);
@@ -164,11 +163,10 @@ export const ProfileView = ({
       // Load profile
       const {
         data: profile
-      } = await supabase.from('profiles').select('username, avatar_url, banner_url, created_at, selected_flag, selected_continent, selected_clan, username_color, background_color, profile_border_style').eq('user_id', user.id).single();
+      } = await supabase.from('profiles').select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan, username_color, background_color, profile_border_style').eq('user_id', user.id).single();
       if (profile) {
         setUsername(profile.username || user.email?.split('@')[0] || 'User');
         setAvatarUrl(profile.avatar_url || '');
-        setBannerUrl((profile as any).banner_url || '');
         setAccountCreated(new Date(profile.created_at).toLocaleDateString('de-DE', {
           day: '2-digit',
           month: '2-digit',
@@ -372,40 +370,6 @@ export const ProfileView = ({
     }
   };
 
-  const handleBannerUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file || !user) return;
-
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${user.id}-${Math.random()}.${fileExt}`;
-      const filePath = `${user.id}/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(filePath, file, { upsert: true });
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('avatars')
-        .getPublicUrl(filePath);
-
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({ banner_url: publicUrl } as any)
-        .eq('user_id', user.id);
-
-      if (updateError) throw updateError;
-
-      setBannerUrl(publicUrl);
-      toast.success('Banner aktualisiert!');
-    } catch (error) {
-      console.error('Error uploading banner:', error);
-      toast.error('Banner konnte nicht hochgeladen werden.');
-    }
-  };
-
   return <>
       <div
         className={`fixed inset-0 z-[100] flex items-center justify-center p-4 ${!backgroundColor ? 'bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900' : ''}`}
@@ -413,11 +377,6 @@ export const ProfileView = ({
           background: backgroundColor || undefined,
         }}
       >
-        {/* Banner Upload Button */}
-        <label className="fixed top-4 right-28 z-[110] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors cursor-pointer" title="Banner hochladen">
-          <Upload className="w-5 h-5 text-gray-600" />
-          <input type="file" accept="image/*" onChange={handleBannerUpload} className="hidden" />
-        </label>
         {/* Share Button */}
         <button onClick={handleShare} className="fixed top-4 right-16 z-[110] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors" title="Profil teilen">
           <Upload className="w-5 h-5 text-gray-600" />
@@ -428,22 +387,9 @@ export const ProfileView = ({
         </button>
 
         <div className="w-full max-w-7xl flex flex-col h-full max-h-screen pb-8">
-          {/* Top Section with Banner Background */}
-          <div 
-            className="flex-1 flex items-end mb-3 md:mb-4 md:pl-2 relative overflow-hidden rounded-3xl"
-            style={{
-              backgroundImage: bannerUrl ? `url(${bannerUrl})` : undefined,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              minHeight: '300px',
-            }}
-          >
-            {/* Overlay gradient for better text readability */}
-            {bannerUrl && (
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60" />
-            )}
-            
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full relative z-10">
+          {/* Top Section: Avatar + Username + Level + Progress + Customization */}
+          <div className="flex-1 flex items-end mb-3 md:mb-4 md:pl-2">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full">
             {/* Avatar Column - Centered on mobile */}
             <div className="flex flex-col items-center">
               <Avatar className="h-40 w-40 md:h-64 md:w-64 ring-4 md:ring-8 ring-white shadow-2xl">
@@ -459,13 +405,11 @@ export const ProfileView = ({
             <div className="flex-1 flex flex-col items-center md:items-start w-full">
               <div className="flex items-center gap-2 mb-1 md:mb-3">
                 <h1 
-                  className="text-4xl md:text-7xl font-bold leading-none text-center md:text-left px-4 py-2 rounded-xl" 
+                  className="text-4xl md:text-7xl font-bold leading-none text-center md:text-left" 
                   style={{ 
                     fontFamily: '"VAG Rounded", sans-serif',
                     color: usernameColor,
                     textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-                    backgroundColor: 'rgba(128, 128, 128, 0.3)',
-                    backdropFilter: 'blur(10px)',
                   }}
                 >
                   {username}
