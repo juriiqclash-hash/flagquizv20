@@ -50,6 +50,13 @@ const InfoDialog = ({ open, onOpenChange }: InfoDialogProps) => {
                 flagquiz.support@gmail.com
               </a>
             </div>
+
+            {/* OR + Discord */}
+            <p className="text-center text-sm text-muted-foreground">oder</p>
+            <div className="flex items-center justify-center gap-2 text-sm">
+              <span className="text-muted-foreground">Add me on Discord:</span>
+              <span className="text-primary font-medium">ijuriqu</span>
+            </div>
           </div>
 
           <Separator />
