@@ -54,7 +54,7 @@ const InfoDialog = ({ open, onOpenChange }: InfoDialogProps) => {
             {/* OR + Discord */}
             <p className="text-center text-sm text-muted-foreground">oder</p>
             <div className="flex items-center justify-center gap-2 text-sm">
-              <span className="text-muted-foreground">Add mich auf Discord:</span>
+              <span className="text-muted-foreground">Adde mich auf Discord:</span>
               <span className="text-primary font-medium">ijuriqu</span>
             </div>
           </div>
