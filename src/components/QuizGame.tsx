@@ -38,6 +38,7 @@ export default function QuizGame({
   const [streak, setStreak] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(timeLimit || 0);
+  const [sortMode, setSortMode] = useState<'random' | 'alphabetical'>('random');
   const inputRef = useRef<HTMLInputElement>(null);
   const intervalRef = useRef<NodeJS.Timeout>();
   const {
@@ -47,13 +48,16 @@ export default function QuizGame({
     saveScore
   } = useLeaderboard();
   const { addXP, updateBestStreak, updateTimeModeScore } = useUserStats();
-  useEffect(() => {
-    // Initialize game
+  
+  const initializeGameWithSort = (newSortMode: 'random' | 'alphabetical' = sortMode) => {
     let shuffledCountries;
     if (mode === 'continent' && continent) {
-      // Filter by selected continent
       shuffledCountries = countries.filter(country => country.continent === continent);
-      shuffledCountries = shuffleArray(shuffledCountries);
+      if (newSortMode === 'random') {
+        shuffledCountries = shuffleArray(shuffledCountries);
+      } else {
+        shuffledCountries = shuffledCountries.sort((a, b) => a.name.localeCompare(b.name));
+      }
     } else if (mode === 'timed') {
       shuffledCountries = shuffleArray(countries);
     } else if (mode === 'streak') {
@@ -62,22 +66,36 @@ export default function QuizGame({
       shuffledCountries = shuffleArray(countries);
       setTimeRemaining(timeLimit || 300);
     } else if (mode === 'capital-to-country' || mode === 'country-to-capital') {
-      shuffledCountries = shuffleArray(countries);
+      if (newSortMode === 'random') {
+        shuffledCountries = shuffleArray(countries);
+      } else {
+        shuffledCountries = countries.sort((a, b) => a.name.localeCompare(b.name));
+      }
     } else if (mode === 'emoji') {
-      // For emoji mode, use infinite shuffled countries
       shuffledCountries = shuffleArray(countries);
     } else if (mode === 'highest-mountain' || mode === 'official-language') {
-      // Gleiche Sortierung wie im Lernmodus
       const continents = ['Afrika', 'Asien', 'Europa', 'Nordamerika', 'Südamerika', 'Ozeanien', 'Inselstaaten'];
-      shuffledCountries = continents.flatMap(continent => countries.filter(country => country.continent === continent).sort((a, b) => a.name.localeCompare(b.name)));
+      if (newSortMode === 'random') {
+        shuffledCountries = shuffleArray(
+          continents.flatMap(continent => countries.filter(country => country.continent === continent))
+        );
+      } else {
+        shuffledCountries = continents.flatMap(continent => countries.filter(country => country.continent === continent).sort((a, b) => a.name.localeCompare(b.name)));
+      }
     } else {
-      // Group by continent for learning mode
       const continents = ['Afrika', 'Asien', 'Europa', 'Nordamerika', 'Südamerika', 'Ozeanien', 'Inselstaaten'];
       shuffledCountries = continents.flatMap(continent => countries.filter(country => country.continent === continent));
     }
     setGameCountries(shuffledCountries);
     setStartTime(new Date());
     setCurrentContinent(shuffledCountries[0]?.continent || "");
+    setCurrentIndex(0);
+    setUserInput("");
+    setIsRevealed(false);
+  };
+
+  useEffect(() => {
+    initializeGameWithSort(sortMode);
 
     // Start timer for timed mode or speed rush
     if (mode === 'timed') {
@@ -119,7 +137,7 @@ export default function QuizGame({
         clearInterval(intervalRef.current);
       }
     };
-  }, [mode, isPaused, continent, timeLimit, gameOver, toast]);
+  }, [mode, isPaused, continent, timeLimit, gameOver, toast, sortMode]);
   useEffect(() => {
     if (gameCountries.length > 0 && currentIndex < gameCountries.length) {
       const newContinent = gameCountries[currentIndex].continent;
@@ -520,6 +538,31 @@ export default function QuizGame({
             <Button variant="outline" onClick={togglePause}>
               {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
             </Button>
+            
+            {(mode === 'capital-to-country' || mode === 'country-to-capital' || mode === 'highest-mountain' || mode === 'official-language') && (
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant={sortMode === 'random' ? 'default' : 'outline'} 
+                  size="sm"
+                  onClick={() => {
+                    setSortMode('random');
+                  }}
+                  className="text-xs"
+                >
+                  🎲 Zufällig
+                </Button>
+                <Button 
+                  variant={sortMode === 'alphabetical' ? 'default' : 'outline'} 
+                  size="sm"
+                  onClick={() => {
+                    setSortMode('alphabetical');
+                  }}
+                  className="text-xs"
+                >
+                  A-Z
+                </Button>
+              </div>
+            )}
           </div>
           
           <div className="flex items-center gap-4">
