@@ -24,6 +24,11 @@ export default function QuizMenuPage() {
       return;
     }
 
+    if (mode === 'continent-challenge') {
+      navigate('/quizmenu/continent-challenge');
+      return;
+    }
+
     const params = new URLSearchParams();
     if (continent) params.set('continent', continent);
     if (timeLimit) params.set('time', timeLimit.toString());

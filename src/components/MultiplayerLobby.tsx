@@ -3,7 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Users, Copy, Play, LogOut, Crown, User, Flag, UserX, UserPlus } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Users, Copy, Play, LogOut, Crown, User, Flag, UserX, UserPlus, MapPin } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useMultiplayer } from '@/hooks/useMultiplayer';
 import { useToast } from '@/hooks/use-toast';
@@ -40,6 +42,7 @@ export default function MultiplayerLobby({
   const [countdownTriggered, setCountdownTriggered] = useState(false);
   const [selectedGameMode, setSelectedGameMode] = useState<string>('flags');
   const [selectedContinent, setSelectedContinent] = useState<string>('');
+  const [mapEnabled, setMapEnabled] = useState(false);
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const isCreator = currentLobby?.owner_id === user?.id;
   const canStart = participants.length >= 2 && (selectedGameMode !== 'continents' || selectedContinent !== '');
@@ -53,10 +56,13 @@ export default function MultiplayerLobby({
       if (currentLobby.selected_continent) {
         setSelectedContinent(currentLobby.selected_continent);
       }
+      if ((currentLobby as any).map_enabled !== undefined) {
+        setMapEnabled((currentLobby as any).map_enabled);
+      }
     }
-  }, [currentLobby?.selected_game_mode, currentLobby?.selected_continent, isCreator]);
+  }, [currentLobby?.selected_game_mode, currentLobby?.selected_continent, (currentLobby as any)?.map_enabled, isCreator]);
 
-  // Update lobby when creator changes game mode or continent
+  // Update lobby when creator changes game mode, continent, or map setting
   useEffect(() => {
     const updateLobbySettings = async () => {
       if (!isCreator || !currentLobby) return;
@@ -66,7 +72,8 @@ export default function MultiplayerLobby({
         .from('lobbies')
         .update({
           selected_game_mode: selectedGameMode,
-          selected_continent: selectedContinent || null
+          selected_continent: selectedContinent || null,
+          map_enabled: mapEnabled
         })
         .eq('id', currentLobby.id);
     };
@@ -74,7 +81,7 @@ export default function MultiplayerLobby({
     if (isCreator) {
       updateLobbySettings();
     }
-  }, [selectedGameMode, selectedContinent, isCreator, currentLobby?.id]);
+  }, [selectedGameMode, selectedContinent, mapEnabled, isCreator, currentLobby?.id]);
 
   // Update parent component when game mode changes
   useEffect(() => {
@@ -299,6 +306,26 @@ export default function MultiplayerLobby({
                       <SelectItem value="Ozeanien">Ozeanien</SelectItem>
                     </SelectContent>
                   </Select>
+                </div>}
+
+              {/* Map Toggle - Only show for continent mode */}
+              {isCreator && selectedGameMode === 'continents' && selectedContinent && <div className="p-4 bg-white/5 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="map-toggle" className="text-white font-medium flex items-center gap-2">
+                        <MapPin className="w-4 h-4" />
+                        Karte anzeigen
+                      </Label>
+                      <p className="text-sm text-blue-200">
+                        Zeige eine Karte zur Hilfe (ohne Ländernamen)
+                      </p>
+                    </div>
+                    <Switch
+                      id="map-toggle"
+                      checked={mapEnabled}
+                      onCheckedChange={setMapEnabled}
+                    />
+                  </div>
                 </div>}
 
               {/* Display selected mode for non-creators */}
