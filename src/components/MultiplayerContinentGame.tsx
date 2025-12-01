@@ -3,13 +3,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Home, Users, Check } from 'lucide-react';
+import { Home, Users, Check, MapPin } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useMultiplayer } from '@/hooks/useMultiplayer';
 import { useAuth } from '@/hooks/useAuth';
 import { countries, checkAnswer } from '@/data/countries';
 import { useToast } from '@/hooks/use-toast';
 import { useUserStats } from '@/hooks/useUserStats';
+import { MapContainer, TileLayer } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 
 interface MultiplayerContinentGameProps {
   onBackToLobby: () => void;
@@ -39,6 +41,7 @@ export default function MultiplayerContinentGame({ onBackToLobby, onBackToMenu }
   }, [currentLobby?.selected_continent]);
 
   const totalCountries = continentCountries.length;
+  const mapEnabled = (currentLobby as any)?.map_enabled || false;
 
   // Monitor opponent's progress via realtime updates
   useEffect(() => {
@@ -218,106 +221,141 @@ export default function MultiplayerContinentGame({ onBackToLobby, onBackToMenu }
           </div>
         </div>
 
-        {/* Title */}
-        <Card className="mb-6 bg-gradient-to-r from-primary/10 to-secondary/10">
-          <CardContent className="p-6 text-center">
-            <h2 className="text-3xl font-bold mb-2">
-              {currentLobby.selected_continent}
-            </h2>
-            <p className="text-muted-foreground">
-              Nenne alle Länder dieses Kontinents!
-            </p>
-          </CardContent>
-        </Card>
+        <div className={`grid ${mapEnabled ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'} gap-6`}>
+          {/* Left Side - Game Info */}
+          <div className="space-y-6">
+            {/* Title */}
+            <Card className="bg-gradient-to-r from-primary/10 to-secondary/10">
+              <CardContent className="p-6 text-center">
+                <h2 className="text-3xl font-bold mb-2">
+                  {currentLobby.selected_continent}
+                </h2>
+                <p className="text-muted-foreground">
+                  Nenne alle Länder dieses Kontinents!
+                </p>
+              </CardContent>
+            </Card>
 
-        {/* Players Progress */}
-        <div className="grid grid-cols-2 gap-4 mb-8">
-          <Card className="border-2 border-primary">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3 mb-2">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={myParticipant?.avatar_url || undefined} />
-                  <AvatarFallback className="bg-primary text-primary-foreground">
-                    {myParticipant?.username?.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="font-medium flex-1">{myParticipant?.username} (Du)</span>
-                <Badge variant="default" className="text-lg px-3 py-1">
-                  {correctAnswers.size}/{totalCountries}
-                </Badge>
-              </div>
-              <div className="w-full bg-muted rounded-full h-3">
-                <div 
-                  className="bg-primary h-3 rounded-full transition-all duration-300"
-                  style={{ width: `${(correctAnswers.size / totalCountries) * 100}%` }}
-                />
-              </div>
-            </CardContent>
-          </Card>
+            {/* Players Progress */}
+            <div className="grid grid-cols-2 gap-4">
+              <Card className="border-2 border-primary">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={myParticipant?.avatar_url || undefined} />
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {myParticipant?.username?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="font-medium flex-1">{myParticipant?.username} (Du)</span>
+                    <Badge variant="default" className="text-lg px-3 py-1">
+                      {correctAnswers.size}/{totalCountries}
+                    </Badge>
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-3">
+                    <div 
+                      className="bg-primary h-3 rounded-full transition-all duration-300"
+                      style={{ width: `${(correctAnswers.size / totalCountries) * 100}%` }}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
 
-          <Card className="border-2 border-secondary">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3 mb-2">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={opponentParticipant?.avatar_url || undefined} />
-                  <AvatarFallback className="bg-secondary text-secondary-foreground">
-                    {opponentParticipant?.username?.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="font-medium flex-1">{opponentParticipant?.username}</span>
-                <Badge variant="secondary" className="text-lg px-3 py-1">
-                  {opponentProgress}/{totalCountries}
-                </Badge>
-              </div>
-              <div className="w-full bg-muted rounded-full h-3">
-                <div 
-                  className="bg-secondary h-3 rounded-full transition-all duration-300"
-                  style={{ width: `${(opponentProgress / totalCountries) * 100}%` }}
-                />
-              </div>
-            </CardContent>
-          </Card>
+              <Card className="border-2 border-secondary">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={opponentParticipant?.avatar_url || undefined} />
+                      <AvatarFallback className="bg-secondary text-secondary-foreground">
+                        {opponentParticipant?.username?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="font-medium flex-1">{opponentParticipant?.username}</span>
+                    <Badge variant="secondary" className="text-lg px-3 py-1">
+                      {opponentProgress}/{totalCountries}
+                    </Badge>
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-3">
+                    <div 
+                      className="bg-secondary h-3 rounded-full transition-all duration-300"
+                      style={{ width: `${(opponentProgress / totalCountries) * 100}%` }}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Input Field */}
+            <Card>
+              <CardContent className="p-6">
+                <form onSubmit={(e) => e.preventDefault()}>
+                  <Input
+                    ref={inputRef}
+                    value={userInput}
+                    onChange={handleInputChange}
+                    placeholder="Land eingeben..."
+                    className="text-center text-xl py-6"
+                    autoFocus
+                    disabled={gameStatus !== 'playing'}
+                  />
+                  <p className="text-center text-sm text-muted-foreground mt-3">
+                    Tippe die Ländernamen ein - Reihenfolge egal
+                  </p>
+                </form>
+              </CardContent>
+            </Card>
+
+            {/* Correctly guessed list */}
+            {correctAnswers.size > 0 && (
+              <Card>
+                <CardContent className="p-4">
+                  <h4 className="font-medium mb-3 flex items-center gap-2">
+                    <Check className="w-5 h-5 text-success" />
+                    Richtig erraten ({correctAnswers.size}/{totalCountries}):
+                  </h4>
+                  <div className="flex flex-wrap gap-2 max-h-[300px] overflow-y-auto">
+                    {Array.from(correctAnswers).sort().map((name) => (
+                      <Badge key={name} variant="default" className="bg-success text-success-foreground">
+                        <Check className="w-3 h-3 mr-1" />
+                        {name}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          {/* Right Side - Map (if enabled) */}
+          {mapEnabled && (
+            <div className="space-y-6">
+              <Card className="h-[600px]">
+                <CardContent className="p-4 h-full">
+                  <div className="flex items-center gap-2 mb-2">
+                    <MapPin className="w-5 h-5" />
+                    <h3 className="font-medium">Karte zur Hilfe</h3>
+                  </div>
+                  <div className="h-[calc(100%-40px)] rounded-lg overflow-hidden border">
+                    <MapContainer
+                      center={[0, 0]}
+                      zoom={2}
+                      style={{ height: '100%', width: '100%' }}
+                      scrollWheelZoom={true}
+                    >
+                      <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                    </MapContainer>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2 text-center">
+                    Die Karte zeigt nur die Grenzen, keine Namen
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </div>
-
-        {/* Input Field */}
-        <Card className="mb-6">
-          <CardContent className="p-6">
-            <form onSubmit={(e) => e.preventDefault()} className="max-w-md mx-auto">
-              <Input
-                ref={inputRef}
-                value={userInput}
-                onChange={handleInputChange}
-                placeholder="Land eingeben..."
-                className="text-center text-xl py-6"
-                autoFocus
-                disabled={gameStatus !== 'playing'}
-              />
-              <p className="text-center text-sm text-muted-foreground mt-3">
-                Tippe die Ländernamen ein - Reihenfolge egal
-              </p>
-            </form>
-          </CardContent>
-        </Card>
-
-        {/* Correctly guessed list */}
-        {correctAnswers.size > 0 && (
-          <Card>
-            <CardContent className="p-4">
-              <h4 className="font-medium mb-3 flex items-center gap-2">
-                <Check className="w-5 h-5 text-success" />
-                Richtig erraten ({correctAnswers.size}/{totalCountries}):
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {Array.from(correctAnswers).sort().map((name) => (
-                  <Badge key={name} variant="default" className="bg-success text-success-foreground">
-                    <Check className="w-3 h-3 mr-1" />
-                    {name}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
       </div>
     </div>
   );

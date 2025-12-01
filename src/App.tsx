@@ -22,6 +22,7 @@ import LoginPage from "./pages/LoginPage";
 import FlagArchivePage from "./pages/FlagArchivePage";
 import CombiQuizPage from "./pages/CombiQuizPage";
 import WorldKnowledgePage from "./pages/WorldKnowledgePage";
+import ContinentChallengePage from "./pages/ContinentChallengePage";
 import AdminPage from "./pages/AdminPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import PremiumPage from "./pages/PremiumPage";
@@ -169,6 +170,7 @@ const AppContent = () => {
             <Route path="/quizmenu/combi-quiz" element={<CombiQuizPage />} />
             <Route path="/quizmenu/world-knowledge" element={<WorldKnowledgePage />} />
             <Route path="/quizmenu/map-quiz" element={<MapQuizPage />} />
+            <Route path="/quizmenu/continent-challenge" element={<ContinentChallengePage />} />
             <Route path="/quizmenu/:quizname" element={<QuizPage />} />
             <Route path="/dailychallenge" element={<DailyChallengePage />} />
             

@@ -108,6 +108,41 @@ export type Database = {
           },
         ]
       }
+      clan_messages: {
+        Row: {
+          clan_id: string
+          created_at: string
+          id: string
+          message: string
+          user_id: string
+          username: string
+        }
+        Insert: {
+          clan_id: string
+          created_at?: string
+          id?: string
+          message: string
+          user_id: string
+          username: string
+        }
+        Update: {
+          clan_id?: string
+          created_at?: string
+          id?: string
+          message?: string
+          user_id?: string
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clan_messages_clan_id_fkey"
+            columns: ["clan_id"]
+            isOneToOne: false
+            referencedRelation: "clans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clans: {
         Row: {
           avatar_url: string | null
@@ -135,6 +170,33 @@ export type Database = {
           emoji?: string
           id?: string
           name?: string
+        }
+        Relationships: []
+      }
+      friend_messages: {
+        Row: {
+          created_at: string
+          friendship_id: string
+          id: string
+          message: string
+          user_id: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          friendship_id: string
+          id?: string
+          message: string
+          user_id: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          friendship_id?: string
+          id?: string
+          message?: string
+          user_id?: string
+          username?: string
         }
         Relationships: []
       }
@@ -199,6 +261,7 @@ export type Database = {
           current_question_index: number
           game_mode: string
           id: string
+          map_enabled: boolean | null
           owner_id: string
           room_code: string
           round_start_timestamp: number | null
@@ -215,6 +278,7 @@ export type Database = {
           current_question_index?: number
           game_mode?: string
           id?: string
+          map_enabled?: boolean | null
           owner_id: string
           room_code: string
           round_start_timestamp?: number | null
@@ -231,6 +295,7 @@ export type Database = {
           current_question_index?: number
           game_mode?: string
           id?: string
+          map_enabled?: boolean | null
           owner_id?: string
           room_code?: string
           round_start_timestamp?: number | null

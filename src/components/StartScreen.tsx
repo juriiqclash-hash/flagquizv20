@@ -36,7 +36,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import FlagQuizLogo from "@/components/FlagQuizLogo";
 interface StartScreenProps {
-  onStartQuiz: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz' | 'flag-archive' | 'map-quiz', continent?: string, timeLimit?: number) => void;
+  onStartQuiz: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'continent-challenge' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz' | 'flag-archive' | 'map-quiz', continent?: string, timeLimit?: number) => void;
   onStartMultiplayer: () => void;
   currentView: string;
   onOpenAdminPanel?: () => void;
@@ -71,6 +71,7 @@ const QUIZ_MODES: QuizResult[] = [
   { id: 'learn', name: 'Lernmodus', description: 'Üben ohne Zeitdruck', icon: '📖' },
   { id: 'streak', name: 'Streak Modus', description: 'Wie viele richtige Antworten schaffst du in Folge?', icon: '🎯' },
   { id: 'continent', name: 'Kontinent Modus', description: 'Wähle einen spezifischen Kontinent', icon: '🌍' },
+  { id: 'continent-challenge', name: 'Kontinent Challenge', description: 'Nenne alle Länder eines Kontinents', icon: '🏁' },
   { id: 'speedrush', name: 'Speed Rush', description: 'Beantworte 10 Fragen so schnell wie möglich', icon: '⚡' },
   { id: 'capitals', name: 'Hauptstädte', description: 'Erkenne das Land anhand der Hauptstadt', icon: '🏛️' },
   { id: 'emoji', name: 'Emoji Modus', description: 'Erkenne Länder anhand ihrer Flaggen-Emojis', icon: '😃' },
