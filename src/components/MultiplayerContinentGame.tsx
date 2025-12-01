@@ -339,8 +339,14 @@ export default function MultiplayerContinentGame({ onBackToLobby, onBackToMenu }
                     <MapContainer
                       center={[0, 0]}
                       zoom={2}
+                      minZoom={2}
+                      maxZoom={2}
                       style={{ height: '100%', width: '100%' }}
-                      scrollWheelZoom={true}
+                      scrollWheelZoom={false}
+                      doubleClickZoom={false}
+                      touchZoom={false}
+                      dragging={false}
+                      zoomControl={false}
                     >
                       <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

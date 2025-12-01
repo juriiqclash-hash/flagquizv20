@@ -273,6 +273,8 @@ export default function StartScreen({
     
     if (mode === 'continent') {
       setShowContinentSelector(true);
+    } else if (mode === 'continent-challenge') {
+      onStartQuiz('continent-challenge');
     } else if (mode === 'speedrush') {
       setShowTimeSelector(true);
     } else if (mode === 'capitals') {
