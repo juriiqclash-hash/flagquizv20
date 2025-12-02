@@ -10,6 +10,7 @@ const QUIZ_MODE_ICONS: { [key: string]: React.ReactNode } = {
   'learn': <BookOpen className="w-5 h-5" />,
   'streak': <Target className="w-5 h-5" />,
   'continent': <Globe className="w-5 h-5" />,
+  'continent-challenge': <Map className="w-5 h-5" />,
   'speedrush': <Zap className="w-5 h-5" />,
   'capitals': <Building className="w-5 h-5" />,
   'emoji': <Smile className="w-5 h-5" />,
@@ -382,6 +383,7 @@ export default function StartScreen({
                           quiz.id === 'learn' ? 'text-green-500' :
                           quiz.id === 'streak' ? 'text-red-500' :
                           quiz.id === 'continent' ? 'text-purple-500' :
+                          quiz.id === 'continent-challenge' ? 'text-lime-500' :
                           quiz.id === 'speedrush' ? 'text-orange-500' :
                           quiz.id === 'capitals' ? 'text-indigo-500' :
                           quiz.id === 'emoji' ? 'text-yellow-500' :
