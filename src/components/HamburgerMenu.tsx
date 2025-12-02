@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Home, Trophy, Users, Shield, Loader2, Search, Settings, Info } from 'lucide-react';
+import { Menu, Home, Trophy, Users, Shield, Loader2, Search, Settings, Info, MessageCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Leaderboard from '@/components/Leaderboard';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,11 +9,13 @@ import { FriendsMenu } from '@/components/FriendsMenu';
 import { ClansMenu } from '@/components/ClansMenu';
 import AppSettings from '@/components/AppSettings';
 import InfoDialog from '@/components/InfoDialog';
+import GlobalChat from '@/components/GlobalChat';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTranslation } from '@/data/translations';
+import { useGlobalChatUnread } from '@/hooks/useGlobalChatUnread';
 
 interface HamburgerMenuProps {
   onNavigateHome: () => void;
@@ -49,6 +51,7 @@ const QUIZ_MODES: QuizResult[] = [
   { id: 'learn', name: 'Lernmodus', description: 'Üben ohne Zeitdruck', icon: '📖' },
   { id: 'streak', name: 'Streak Modus', description: 'Wie viele richtige Antworten schaffst du in Folge?', icon: '🎯' },
   { id: 'continent', name: 'Kontinent Modus', description: 'Wähle einen spezifischen Kontinent', icon: '🌍' },
+  { id: 'continent-challenge', name: 'Kontinent Challenge', description: 'Nenne alle Länder eines Kontinents', icon: '🏁' },
   { id: 'speedrush', name: 'Speed Rush', description: 'Beantworte 10 Fragen so schnell wie möglich', icon: '⚡' },
   { id: 'capitals', name: 'Hauptstädte', description: 'Erkenne das Land anhand der Hauptstadt', icon: '🏛️' },
   { id: 'emoji', name: 'Emoji Modus', description: 'Erkenne Länder anhand ihrer Flaggen-Emojis', icon: '😃' },
@@ -68,6 +71,7 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
   const [clansDialogOpen, setClansDialogOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
+  const [globalChatOpen, setGlobalChatOpen] = useState(false);
   const [isLoadingQuiz, setIsLoadingQuiz] = useState(false);
   const [searchDialogOpen, setSearchDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -76,6 +80,7 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
   const [clanResults, setClanResults] = useState<ClanResult[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
+  const { unreadCount: globalChatUnread, markAsRead: markChatAsRead } = useGlobalChatUnread();
 
   const handleNavigateHome = () => {
     setOpen(false);
@@ -116,6 +121,12 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
   const handleOpenInfo = () => {
     setOpen(false);
     setInfoOpen(true);
+  };
+
+  const handleOpenGlobalChat = () => {
+    setOpen(false);
+    setGlobalChatOpen(true);
+    markChatAsRead();
   };
 
   const handleOpenSearch = () => {
@@ -349,6 +360,20 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
               Info
             </Button>
 
+            <Button
+              variant="outline"
+              className="w-full justify-start text-lg h-14 relative"
+              onClick={handleOpenGlobalChat}
+            >
+              <MessageCircle className="h-5 w-5 mr-3" />
+              Global Chat
+              {globalChatUnread > 0 && (
+                <span className="absolute top-3 left-8 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
+                  {globalChatUnread > 99 ? '99+' : globalChatUnread}
+                </span>
+              )}
+            </Button>
+
           </div>
         </SheetContent>
       </Sheet>
@@ -380,6 +405,14 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
       <InfoDialog
         open={infoOpen}
         onOpenChange={setInfoOpen}
+      />
+
+      <GlobalChat
+        open={globalChatOpen}
+        onOpenChange={(open) => {
+          setGlobalChatOpen(open);
+          if (open) markChatAsRead();
+        }}
       />
 
       <Dialog open={searchDialogOpen} onOpenChange={setSearchDialogOpen}>

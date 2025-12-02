@@ -227,6 +227,36 @@ export type Database = {
         }
         Relationships: []
       }
+      global_messages: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string | null
+          message: string | null
+          user_id: string
+          username: string
+          video_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          message?: string | null
+          user_id: string
+          username: string
+          video_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          message?: string | null
+          user_id?: string
+          username?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       leaderboards: {
         Row: {
           created_at: string
@@ -665,6 +695,27 @@ export type Database = {
           updated_at?: string | null
           updated_by?: string | null
           value?: Json
+        }
+        Relationships: []
+      }
+      user_global_chat_reads: {
+        Row: {
+          created_at: string
+          id: string
+          last_read_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_read_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_read_at?: string
+          user_id?: string
         }
         Relationships: []
       }

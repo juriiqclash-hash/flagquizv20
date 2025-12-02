@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Clock, BookOpen, Target, MapPin, Map, Zap, Building, Globe, Smile, Trophy, Users, Play, Mountain, Languages, ArrowLeft, Home, Layers, Search, BookMarked } from "lucide-react";
+import { Clock, BookOpen, Target, MapPin, Map, Zap, Building, Globe, Smile, Trophy, Users, Play, Mountain, Languages, ArrowLeft, Home, Layers, Search, BookMarked, MessageCircle } from "lucide-react";
 
 const QUIZ_MODE_ICONS: { [key: string]: React.ReactNode } = {
   'timed': <Clock className="w-5 h-5" />,
@@ -31,10 +31,12 @@ import ProfileButton from "./ProfileButton";
 import MultiplayerMenu from "./MultiplayerMenu";
 import BannedScreen from "./BannedScreen";
 import { PublicProfileView } from "./PublicProfileView";
+import GlobalChat from "./GlobalChat";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/data/translations";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useGlobalChatUnread } from "@/hooks/useGlobalChatUnread";
 import FlagQuizLogo from "@/components/FlagQuizLogo";
 interface StartScreenProps {
   onStartQuiz: (mode: 'learn' | 'timed' | 'streak' | 'continent' | 'continent-challenge' | 'speedrush' | 'capital-to-country' | 'country-to-capital' | 'emoji' | 'highest-mountain' | 'official-language' | 'world-knowledge' | 'combi-quiz' | 'flag-archive' | 'map-quiz', continent?: string, timeLimit?: number) => void;
@@ -99,11 +101,13 @@ export default function StartScreen({
   } = useLanguage();
   const t = useTranslation(language);
   const { user } = useAuth();
+  const { unreadCount: globalChatUnread, markAsRead: markChatAsRead } = useGlobalChatUnread();
   const [showContinentSelector, setShowContinentSelector] = useState(false);
   const [showTimeSelector, setShowTimeSelector] = useState(false);
   const [showCapitalVariantSelector, setShowCapitalVariantSelector] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showMultiplayerMenu, setShowMultiplayerMenu] = useState(false);
+  const [showGlobalChat, setShowGlobalChat] = useState(false);
   const [isBanned, setIsBanned] = useState(false);
   const [banInfo, setBanInfo] = useState<{ reason?: string; bannedAt?: string }>({});
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -467,6 +471,22 @@ export default function StartScreen({
             </div>
           )}
         </div>
+        <Button
+          variant="outline"
+          size="icon"
+          className="relative"
+          onClick={() => {
+            setShowGlobalChat(true);
+            markChatAsRead();
+          }}
+        >
+          <MessageCircle className="h-5 w-5" />
+          {globalChatUnread > 0 && (
+            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
+              {globalChatUnread > 99 ? '99+' : globalChatUnread}
+            </span>
+          )}
+        </Button>
         <ProfileButton
           onOpenAdminPanel={onOpenAdminPanel}
           initialOpen={shouldOpenProfile}
@@ -571,6 +591,25 @@ export default function StartScreen({
                 Flaggen nur von einem bestimmten Kontinent
               </p>
               <Button onClick={() => handleModeClick('continent')} className="w-full mt-auto">
+                <Play className="mr-2 h-4 w-4" />
+                {t.start}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Continent Challenge */}
+          <Card className="group cursor-pointer hover:shadow-lg transition-shadow duration-200">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Map className="w-6 h-6 text-lime-500" />
+                Kontinent Challenge
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col min-h-[120px]">
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
+                Nenne alle Länder eines Kontinents so schnell wie möglich
+              </p>
+              <Button onClick={() => handleModeClick('continent-challenge')} className="w-full mt-auto">
                 <Play className="mr-2 h-4 w-4" />
                 {t.start}
               </Button>
@@ -779,5 +818,13 @@ export default function StartScreen({
           onClose={() => setSelectedUserId(null)}
         />
       )}
+
+      <GlobalChat
+        open={showGlobalChat}
+        onOpenChange={(open) => {
+          setShowGlobalChat(open);
+          if (open) markChatAsRead();
+        }}
+      />
     </div>;
 }
