@@ -109,18 +109,20 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
         { event: 'INSERT', schema: 'public', table: 'global_messages' },
         async (payload) => {
           const newMsg = payload.new as GlobalMessage;
-          // Load profile for new message
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('avatar_url, selected_clan')
-            .eq('user_id', newMsg.user_id)
-            .single();
-
-          setMessages(prev => [...prev, {
-            ...newMsg,
-            avatar_url: profile?.avatar_url,
-            selected_clan: profile?.selected_clan,
-          }]);
+          
+          // Check if message already exists (from optimistic update)
+          setMessages(prev => {
+            const exists = prev.some(m => m.id === newMsg.id || (m.id.startsWith('temp-') && m.user_id === newMsg.user_id && m.message === newMsg.message));
+            if (exists) {
+              // Replace temp message with real one
+              return prev.map(m => 
+                m.id.startsWith('temp-') && m.user_id === newMsg.user_id && m.message === newMsg.message
+                  ? { ...newMsg }
+                  : m
+              );
+            }
+            return prev;
+          });
 
           // Update last read if chat is open
           if (user) {
@@ -158,20 +160,42 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
   const sendMessage = async () => {
     if (!newMessage.trim() || !user || !currentUsername) return;
 
-    const { error } = await supabase
+    const messageText = newMessage.trim();
+    setNewMessage('');
+
+    // Optimistic update - add message immediately
+    const optimisticMessage: GlobalMessage = {
+      id: `temp-${Date.now()}`,
+      user_id: user.id,
+      username: currentUsername,
+      message: messageText,
+      image_url: null,
+      video_url: null,
+      created_at: new Date().toISOString(),
+    };
+    setMessages(prev => [...prev, optimisticMessage]);
+
+    const { data, error } = await supabase
       .from('global_messages')
       .insert({
         user_id: user.id,
         username: currentUsername,
-        message: newMessage.trim(),
-      });
+        message: messageText,
+      })
+      .select()
+      .single();
 
     if (error) {
       toast.error('Nachricht konnte nicht gesendet werden');
+      // Remove optimistic message on error
+      setMessages(prev => prev.filter(m => m.id !== optimisticMessage.id));
       return;
     }
 
-    setNewMessage('');
+    // Replace optimistic message with real one
+    if (data) {
+      setMessages(prev => prev.map(m => m.id === optimisticMessage.id ? { ...data } : m));
+    }
   };
 
   const uploadMedia = async (file: File, type: 'image' | 'video') => {
@@ -206,12 +230,29 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
       insertData.video_url = publicUrl;
     }
 
-    const { error } = await supabase
+    // Optimistic update for media
+    const optimisticMessage: GlobalMessage = {
+      id: `temp-${Date.now()}`,
+      user_id: user.id,
+      username: currentUsername,
+      message: null,
+      image_url: type === 'image' ? publicUrl : null,
+      video_url: type === 'video' ? publicUrl : null,
+      created_at: new Date().toISOString(),
+    };
+    setMessages(prev => [...prev, optimisticMessage]);
+
+    const { data, error } = await supabase
       .from('global_messages')
-      .insert(insertData);
+      .insert(insertData)
+      .select()
+      .single();
 
     if (error) {
       toast.error('Nachricht konnte nicht gesendet werden');
+      setMessages(prev => prev.filter(m => m.id !== optimisticMessage.id));
+    } else if (data) {
+      setMessages(prev => prev.map(m => m.id === optimisticMessage.id ? { ...data } : m));
     }
 
     setUploading(false);
@@ -280,8 +321,8 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-2xl h-[80vh] flex flex-col p-0 gap-0 bg-[#0a1448]/90 backdrop-blur-xl border-white/20">
-          <DialogHeader className="p-4 border-b border-white/20">
+        <DialogContent className="max-w-2xl h-[80vh] flex flex-col p-0 gap-0 bg-blue-950/80 backdrop-blur-xl border-blue-400/20">
+          <DialogHeader className="p-4 border-b border-blue-400/20">
             <DialogTitle className="flex items-center gap-2 text-white">
               <Users className="h-5 w-5" />
               Global Chat
@@ -370,7 +411,7 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
             )}
           </div>
 
-          <div className="p-4 border-t border-white/20">
+          <div className="p-4 border-t border-blue-400/20">
             <div className="flex gap-2">
               <input
                 type="file"
@@ -387,20 +428,20 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
                 className="hidden"
               />
               <Button
-                variant="outline"
+                variant="ghost"
                 size="icon"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
-                className="border-white/20 text-white hover:bg-white/10"
+                className="bg-blue-600/30 hover:bg-blue-600/50 text-white border-0"
               >
                 <Image className="h-4 w-4" />
               </Button>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="icon"
                 onClick={() => videoInputRef.current?.click()}
                 disabled={uploading}
-                className="border-white/20 text-white hover:bg-white/10"
+                className="bg-blue-600/30 hover:bg-blue-600/50 text-white border-0"
               >
                 <Video className="h-4 w-4" />
               </Button>
@@ -409,7 +450,7 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                className="flex-1 bg-blue-900/40 border-blue-400/20 text-white placeholder:text-white/50"
                 disabled={uploading}
               />
               <Button onClick={sendMessage} disabled={!newMessage.trim() || uploading} className="bg-blue-600 hover:bg-blue-700">
