@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import AppSettings from "@/components/AppSettings";
 import InfoDialog from "@/components/InfoDialog";
 import { Card, CardContent } from "@/components/ui/card";
-import { Play, Loader as Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu, BookMarked, Crown, Settings, Info } from "lucide-react";
+import { Play, Loader as Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu, BookMarked, Crown, Settings, Info, MessageCircle } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 const QUIZ_MODE_ICONS: {
@@ -38,6 +38,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { PublicProfileView } from "@/components/PublicProfileView";
 import { calculateLevel } from "@/lib/xpSystem";
 import { calculateRank as calculateProfileRank } from "@/lib/profileRank";
+import { GlobalChat } from "@/components/GlobalChat";
+import { useGlobalChatUnread } from "@/hooks/useGlobalChatUnread";
 interface MainMenuProps {
   onStart: () => void;
   onMultiplayerStart?: () => void;
@@ -150,7 +152,9 @@ export default function MainMenu({
   const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
+  const [globalChatOpen, setGlobalChatOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const { unreadCount: globalChatUnread, markAsRead: markGlobalChatAsRead } = useGlobalChatUnread();
   const {
     user
   } = useAuth();
@@ -403,6 +407,20 @@ export default function MainMenu({
                       <Info className="h-5 w-5 mr-3" />
                       Info
                     </Button>
+
+                    <Button variant="ghost" className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12 relative" onClick={() => {
+                  setMobileMenuOpen(false);
+                  setGlobalChatOpen(true);
+                  markGlobalChatAsRead();
+                }}>
+                      <MessageCircle className="h-5 w-5 mr-3" />
+                      Global Chat
+                      {globalChatUnread > 0 && (
+                        <span className="absolute top-2 left-8 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
+                          {globalChatUnread > 99 ? '99+' : globalChatUnread}
+                        </span>
+                      )}
+                    </Button>
                   </div>
                 </SheetContent>
               </Sheet> : <>
@@ -444,6 +462,18 @@ export default function MainMenu({
 
                 <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => setInfoOpen(true)}>
                   <Info className="h-5 w-5" />
+                </Button>
+
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg relative" onClick={() => {
+                  setGlobalChatOpen(true);
+                  markGlobalChatAsRead();
+                }}>
+                  <MessageCircle className="h-5 w-5" />
+                  {globalChatUnread > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
+                      {globalChatUnread > 99 ? '99+' : globalChatUnread}
+                    </span>
+                  )}
                 </Button>
               </>}
           </div>
@@ -755,6 +785,11 @@ export default function MainMenu({
       <InfoDialog
         open={infoOpen}
         onOpenChange={setInfoOpen}
+      />
+
+      <GlobalChat
+        open={globalChatOpen}
+        onOpenChange={setGlobalChatOpen}
       />
     </div>;
 }

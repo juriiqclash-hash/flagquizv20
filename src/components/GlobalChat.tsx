@@ -3,9 +3,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu';
-import { Send, Image, Video, Flag, UserPlus, Users, Eye, X } from 'lucide-react';
+import { Send, Image, Video, Flag, UserPlus, Users, Eye, Trash2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -145,12 +144,16 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
     };
   }, [open, user]);
 
-  // Auto scroll to bottom
+  // Auto scroll to bottom when messages change or dialog opens
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    if (scrollRef.current && open) {
+      setTimeout(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+      }, 100);
     }
-  }, [messages]);
+  }, [messages, open]);
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !user || !currentUsername) return;
@@ -232,6 +235,21 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
     toast.success('Nachricht wurde gemeldet');
   };
 
+  const handleDeleteMessage = async (messageId: string) => {
+    const { error } = await supabase
+      .from('global_messages')
+      .delete()
+      .eq('id', messageId);
+
+    if (error) {
+      toast.error('Nachricht konnte nicht gelöscht werden');
+      return;
+    }
+
+    setMessages(prev => prev.filter(m => m.id !== messageId));
+    toast.success('Nachricht gelöscht');
+  };
+
   const handleAddFriend = async (userId: string) => {
     if (!user) return;
     
@@ -262,21 +280,21 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-2xl h-[80vh] flex flex-col p-0 gap-0 bg-background/80 backdrop-blur-xl border-border/50">
-          <DialogHeader className="p-4 border-b border-border/50">
-            <DialogTitle className="flex items-center gap-2">
+        <DialogContent className="max-w-2xl h-[80vh] flex flex-col p-0 gap-0 bg-[#0a1448]/90 backdrop-blur-xl border-white/20">
+          <DialogHeader className="p-4 border-b border-white/20">
+            <DialogTitle className="flex items-center gap-2 text-white">
               <Users className="h-5 w-5" />
               Global Chat
             </DialogTitle>
           </DialogHeader>
 
-          <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+          <div className="flex-1 overflow-y-auto p-4" ref={scrollRef}>
             {loading ? (
-              <div className="flex items-center justify-center h-full text-muted-foreground">
+              <div className="flex items-center justify-center h-full text-white/60">
                 Lade Nachrichten...
               </div>
             ) : messages.length === 0 ? (
-              <div className="flex items-center justify-center h-full text-muted-foreground">
+              <div className="flex items-center justify-center h-full text-white/60">
                 Noch keine Nachrichten. Sei der Erste!
               </div>
             ) : (
@@ -292,18 +310,18 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
                           </AvatarFallback>
                         </Avatar>
                         <div className={`flex flex-col ${msg.user_id === user?.id ? 'items-end' : 'items-start'}`}>
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-sm font-semibold cursor-pointer hover:underline" onClick={() => setSelectedUserId(msg.user_id)}>
+                        <div className="flex items-center gap-2 mb-1">
+                            <span className="text-sm font-semibold cursor-pointer hover:underline text-white" onClick={() => setSelectedUserId(msg.user_id)}>
                               {msg.username}
                             </span>
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-white/50">
                               {formatTime(msg.created_at)}
                             </span>
                           </div>
                           <div className={`rounded-2xl px-4 py-2 max-w-md ${
                             msg.user_id === user?.id 
-                              ? 'bg-primary text-primary-foreground' 
-                              : 'bg-muted'
+                              ? 'bg-blue-600 text-white' 
+                              : 'bg-white/10 text-white'
                           }`}>
                             {msg.message && <p className="break-words">{msg.message}</p>}
                             {msg.image_url && (
@@ -324,18 +342,24 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
                         </div>
                       </div>
                     </ContextMenuTrigger>
-                    <ContextMenuContent>
-                      <ContextMenuItem onClick={() => setSelectedUserId(msg.user_id)}>
+                    <ContextMenuContent className="bg-slate-900/95 backdrop-blur-md border-white/20">
+                      <ContextMenuItem onClick={() => setSelectedUserId(msg.user_id)} className="text-white hover:bg-white/10">
                         <Eye className="h-4 w-4 mr-2" />
                         Profil anschauen
                       </ContextMenuItem>
                       {msg.user_id !== user?.id && (
-                        <ContextMenuItem onClick={() => handleAddFriend(msg.user_id)}>
+                        <ContextMenuItem onClick={() => handleAddFriend(msg.user_id)} className="text-white hover:bg-white/10">
                           <UserPlus className="h-4 w-4 mr-2" />
                           Freund hinzufügen
                         </ContextMenuItem>
                       )}
-                      <ContextMenuItem onClick={() => handleReport(msg.id)} className="text-destructive">
+                      {msg.user_id === user?.id && (
+                        <ContextMenuItem onClick={() => handleDeleteMessage(msg.id)} className="text-red-400 hover:bg-white/10">
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Nachricht löschen
+                        </ContextMenuItem>
+                      )}
+                      <ContextMenuItem onClick={() => handleReport(msg.id)} className="text-red-400 hover:bg-white/10">
                         <Flag className="h-4 w-4 mr-2" />
                         Nachricht melden
                       </ContextMenuItem>
@@ -344,9 +368,9 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
                 ))}
               </div>
             )}
-          </ScrollArea>
+          </div>
 
-          <div className="p-4 border-t border-border/50">
+          <div className="p-4 border-t border-white/20">
             <div className="flex gap-2">
               <input
                 type="file"
@@ -367,6 +391,7 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
                 size="icon"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
+                className="border-white/20 text-white hover:bg-white/10"
               >
                 <Image className="h-4 w-4" />
               </Button>
@@ -375,6 +400,7 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
                 size="icon"
                 onClick={() => videoInputRef.current?.click()}
                 disabled={uploading}
+                className="border-white/20 text-white hover:bg-white/10"
               >
                 <Video className="h-4 w-4" />
               </Button>
@@ -383,10 +409,10 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                className="flex-1 bg-background/50"
+                className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/50"
                 disabled={uploading}
               />
-              <Button onClick={sendMessage} disabled={!newMessage.trim() || uploading}>
+              <Button onClick={sendMessage} disabled={!newMessage.trim() || uploading} className="bg-blue-600 hover:bg-blue-700">
                 <Send className="h-4 w-4" />
               </Button>
             </div>
