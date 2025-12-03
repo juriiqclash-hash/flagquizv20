@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,8 +8,12 @@ import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } 
 import { Send, Image, Video, Flag, UserPlus, Users, Eye, Trash2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useAdmin } from '@/hooks/useAdmin';
 import { toast } from 'sonner';
 import { PublicProfileView } from './PublicProfileView';
+import { CommandSuggestions } from './CommandSuggestions';
+import { FakeAttackOverlay } from './FakeAttackOverlay';
+import { chatCommands, parseCommand, getCommandSuggestions, ChatCommand } from '@/hooks/useChatCommands';
 
 interface GlobalMessage {
   id: string;
@@ -29,15 +34,80 @@ interface GlobalChatProps {
 
 export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
   const { user } = useAuth();
+  const { isAdmin } = useAdmin();
+  const navigate = useNavigate();
   const [messages, setMessages] = useState<GlobalMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [commandSuggestions, setCommandSuggestions] = useState<ChatCommand[]>([]);
+  const [selectedCommandIndex, setSelectedCommandIndex] = useState(0);
+  const [attackOverlay, setAttackOverlay] = useState<{ type: 'ddos' | 'attack'; userData?: any } | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const [currentUsername, setCurrentUsername] = useState('');
+
+  // Listen for admin actions (kick, ddos, attack)
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase.channel('admin_actions')
+      .on('broadcast', { event: 'kick' }, (payload) => {
+        if (payload.payload.user_id === user.id) {
+          supabase.auth.signOut();
+          toast.error('Du wurdest gekickt!');
+        }
+      })
+      .on('broadcast', { event: 'ddos' }, (payload) => {
+        if (payload.payload.user_id === user.id) {
+          setAttackOverlay({ type: 'ddos' });
+        }
+      })
+      .on('broadcast', { event: 'attack' }, async (payload) => {
+        if (payload.payload.user_id === user.id) {
+          // Get user stats for display
+          const { data: stats } = await supabase
+            .from('user_stats')
+            .select('xp, level, multiplayer_wins')
+            .eq('user_id', user.id)
+            .single();
+          
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('username')
+            .eq('user_id', user.id)
+            .single();
+          
+          setAttackOverlay({ 
+            type: 'attack',
+            userData: {
+              username: profile?.username,
+              xp: stats?.xp,
+              level: stats?.level,
+              wins: stats?.multiplayer_wins
+            }
+          });
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
+
+  // Update command suggestions when input changes
+  useEffect(() => {
+    if (newMessage.startsWith('/')) {
+      const suggestions = getCommandSuggestions(newMessage, isAdmin);
+      setCommandSuggestions(suggestions);
+      setSelectedCommandIndex(0);
+    } else {
+      setCommandSuggestions([]);
+    }
+  }, [newMessage, isAdmin]);
 
   // Load current user's username
   useEffect(() => {
@@ -157,10 +227,71 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
     }
   }, [messages, open]);
 
+  const executeCommand = async (command: ChatCommand, args: string[]) => {
+    const context = {
+      userId: user!.id,
+      navigate,
+      onClose: () => onOpenChange(false),
+      setSelectedUserId,
+    };
+    
+    if (command.adminOnly && !isAdmin) {
+      toast.error('Dieser Befehl ist nur für Admins');
+      return;
+    }
+    
+    await command.execute(args, context);
+  };
+
+  const selectCommand = (command: ChatCommand) => {
+    setNewMessage(`/${command.name} `);
+    setCommandSuggestions([]);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (commandSuggestions.length > 0) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedCommandIndex(prev => (prev + 1) % commandSuggestions.length);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedCommandIndex(prev => (prev - 1 + commandSuggestions.length) % commandSuggestions.length);
+      } else if (e.key === 'Tab' || (e.key === 'Enter' && commandSuggestions.length > 0)) {
+        e.preventDefault();
+        selectCommand(commandSuggestions[selectedCommandIndex]);
+      } else if (e.key === 'Escape') {
+        setCommandSuggestions([]);
+      }
+      return;
+    }
+    
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  };
+
   const sendMessage = async () => {
     if (!newMessage.trim() || !user || !currentUsername) return;
 
     const messageText = newMessage.trim();
+    
+    // Check if it's a command
+    const parsed = parseCommand(messageText);
+    if (parsed) {
+      setNewMessage('');
+      const command = chatCommands.find(c => c.name === parsed.command);
+      if (command) {
+        if (command.adminOnly && !isAdmin) {
+          toast.error('Dieser Befehl ist nur für Admins');
+          return;
+        }
+        await executeCommand(command, parsed.args);
+      } else {
+        toast.error(`Unbekannter Befehl: /${parsed.command}`);
+      }
+      return;
+    }
+
     setNewMessage('');
 
     // Optimistic update - add message immediately
@@ -411,7 +542,14 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
             )}
           </div>
 
-          <div className="p-4 border-t border-blue-400/20">
+          <div className="p-4 border-t border-blue-400/20 relative">
+            {commandSuggestions.length > 0 && (
+              <CommandSuggestions
+                commands={commandSuggestions}
+                selectedIndex={selectedCommandIndex}
+                onSelect={selectCommand}
+              />
+            )}
             <div className="flex gap-2">
               <input
                 type="file"
@@ -446,10 +584,10 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
                 <Video className="h-4 w-4" />
               </Button>
               <Input
-                placeholder="Nachricht schreiben..."
+                placeholder="Nachricht oder /befehl..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+                onKeyDown={handleKeyDown}
                 className="flex-1 bg-blue-900/40 border-blue-400/20 text-white placeholder:text-white/50"
                 disabled={uploading}
               />
@@ -465,6 +603,14 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
         <PublicProfileView
           userId={selectedUserId}
           onClose={() => setSelectedUserId(null)}
+        />
+      )}
+
+      {attackOverlay && (
+        <FakeAttackOverlay
+          type={attackOverlay.type}
+          userData={attackOverlay.userData}
+          onComplete={() => setAttackOverlay(null)}
         />
       )}
     </>
