@@ -173,6 +173,35 @@ export type Database = {
         }
         Relationships: []
       }
+      code_redemptions: {
+        Row: {
+          code_id: string
+          id: string
+          redeemed_at: string | null
+          user_id: string
+        }
+        Insert: {
+          code_id: string
+          id?: string
+          redeemed_at?: string | null
+          user_id: string
+        }
+        Update: {
+          code_id?: string
+          id?: string
+          redeemed_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "code_redemptions_code_id_fkey"
+            columns: ["code_id"]
+            isOneToOne: false
+            referencedRelation: "redemption_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       friend_messages: {
         Row: {
           created_at: string
@@ -581,6 +610,45 @@ export type Database = {
         }
         Relationships: []
       }
+      redemption_codes: {
+        Row: {
+          code: string
+          code_type: Database["public"]["Enums"]["code_type"]
+          created_at: string | null
+          created_by: string
+          current_uses: number | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          max_uses: number | null
+          value: Json
+        }
+        Insert: {
+          code: string
+          code_type: Database["public"]["Enums"]["code_type"]
+          created_at?: string | null
+          created_by: string
+          current_uses?: number | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_uses?: number | null
+          value: Json
+        }
+        Update: {
+          code?: string
+          code_type?: Database["public"]["Enums"]["code_type"]
+          created_at?: string | null
+          created_by?: string
+          current_uses?: number | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_uses?: number | null
+          value?: Json
+        }
+        Relationships: []
+      }
       stripe_user_subscriptions: {
         Row: {
           cancel_at_period_end: boolean | null
@@ -698,6 +766,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_badges: {
+        Row: {
+          badge_color: string | null
+          badge_emoji: string | null
+          badge_id: string
+          badge_name: string
+          expires_at: string | null
+          granted_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          badge_color?: string | null
+          badge_emoji?: string | null
+          badge_id: string
+          badge_name: string
+          expires_at?: string | null
+          granted_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          badge_color?: string | null
+          badge_emoji?: string | null
+          badge_id?: string
+          badge_name?: string
+          expires_at?: string | null
+          granted_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_global_chat_reads: {
         Row: {
           created_at: string
@@ -718,6 +819,41 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_perks: {
+        Row: {
+          code_id: string | null
+          expires_at: string
+          granted_at: string | null
+          id: string
+          perk_type: string
+          user_id: string
+        }
+        Insert: {
+          code_id?: string | null
+          expires_at: string
+          granted_at?: string | null
+          id?: string
+          perk_type: string
+          user_id: string
+        }
+        Update: {
+          code_id?: string | null
+          expires_at?: string
+          granted_at?: string | null
+          id?: string
+          perk_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_perks_code_id_fkey"
+            columns: ["code_id"]
+            isOneToOne: false
+            referencedRelation: "redemption_codes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -873,6 +1009,10 @@ export type Database = {
         Args: { p_user_id: string }
         Returns: undefined
       }
+      redeem_code: {
+        Args: { p_code: string; p_user_id: string }
+        Returns: Json
+      }
       update_best_streak: {
         Args: { p_streak: number; p_user_id: string }
         Returns: undefined
@@ -907,6 +1047,15 @@ export type Database = {
         | "moderator"
         | "member"
         | "newbie"
+      code_type:
+        | "premium_time"
+        | "ultimate_time"
+        | "xp"
+        | "badge"
+        | "chat_style"
+        | "admin_time"
+        | "double_xp"
+        | "profile_frame"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1042,6 +1191,16 @@ export const Constants = {
         "moderator",
         "member",
         "newbie",
+      ],
+      code_type: [
+        "premium_time",
+        "ultimate_time",
+        "xp",
+        "badge",
+        "chat_style",
+        "admin_time",
+        "double_xp",
+        "profile_frame",
       ],
     },
   },
