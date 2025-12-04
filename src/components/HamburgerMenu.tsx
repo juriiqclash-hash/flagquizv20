@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Home, Trophy, Users, Shield, Loader2, Search, Settings, Info, MessageCircle } from 'lucide-react';
+import { Menu, Home, Trophy, Users, Shield, Loader2, Search, Settings, Info, MessageCircle, Ticket } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Leaderboard from '@/components/Leaderboard';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,6 +10,7 @@ import { ClansMenu } from '@/components/ClansMenu';
 import AppSettings from '@/components/AppSettings';
 import InfoDialog from '@/components/InfoDialog';
 import GlobalChat from '@/components/GlobalChat';
+import { RedeemCodeDialog } from '@/components/RedeemCodeDialog';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
@@ -72,6 +73,7 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
   const [globalChatOpen, setGlobalChatOpen] = useState(false);
+  const [redeemCodeOpen, setRedeemCodeOpen] = useState(false);
   const [isLoadingQuiz, setIsLoadingQuiz] = useState(false);
   const [searchDialogOpen, setSearchDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -354,6 +356,18 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
             <Button
               variant="outline"
               className="w-full justify-start text-lg h-14"
+              onClick={() => {
+                setOpen(false);
+                setRedeemCodeOpen(true);
+              }}
+            >
+              <Ticket className="h-5 w-5 mr-3" />
+              Code einlösen
+            </Button>
+
+            <Button
+              variant="outline"
+              className="w-full justify-start text-lg h-14"
               onClick={handleOpenInfo}
             >
               <Info className="h-5 w-5 mr-3" />
@@ -413,6 +427,11 @@ const HamburgerMenu = ({ onNavigateHome, onNavigateQuiz, currentPage = 'quiz', o
           setGlobalChatOpen(open);
           if (open) markChatAsRead();
         }}
+      />
+
+      <RedeemCodeDialog
+        open={redeemCodeOpen}
+        onOpenChange={setRedeemCodeOpen}
       />
 
       <Dialog open={searchDialogOpen} onOpenChange={setSearchDialogOpen}>

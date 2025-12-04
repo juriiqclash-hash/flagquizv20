@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import AppSettings from "@/components/AppSettings";
 import InfoDialog from "@/components/InfoDialog";
 import { Card, CardContent } from "@/components/ui/card";
-import { Play, Loader as Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu, BookMarked, Crown, Settings, Info, MessageCircle } from "lucide-react";
+import { Play, Loader as Loader2, Languages, Users, Calendar, Search, Clock, BookOpen, Target, Globe, Zap, Building, Smile, Mountain, Languages as LanguagesIcon, Layers, Trophy, Shield, Menu, BookMarked, Crown, Settings, Info, MessageCircle, Ticket } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 const QUIZ_MODE_ICONS: {
@@ -40,6 +40,7 @@ import { calculateLevel } from "@/lib/xpSystem";
 import { calculateRank as calculateProfileRank } from "@/lib/profileRank";
 import { GlobalChat } from "@/components/GlobalChat";
 import { useGlobalChatUnread } from "@/hooks/useGlobalChatUnread";
+import { RedeemCodeDialog } from "@/components/RedeemCodeDialog";
 interface MainMenuProps {
   onStart: () => void;
   onMultiplayerStart?: () => void;
@@ -153,6 +154,7 @@ export default function MainMenu({
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
   const [globalChatOpen, setGlobalChatOpen] = useState(false);
+  const [redeemCodeOpen, setRedeemCodeOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const { unreadCount: globalChatUnread, markAsRead: markGlobalChatAsRead } = useGlobalChatUnread();
   const {
@@ -402,6 +404,14 @@ export default function MainMenu({
 
                     <Button variant="ghost" className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12" onClick={() => {
                   setMobileMenuOpen(false);
+                  setRedeemCodeOpen(true);
+                }}>
+                      <Ticket className="h-5 w-5 mr-3" />
+                      Code einlösen
+                    </Button>
+
+                    <Button variant="ghost" className="w-full justify-start text-white hover:bg-white/20 rounded-lg h-12" onClick={() => {
+                  setMobileMenuOpen(false);
                   setInfoOpen(true);
                 }}>
                       <Info className="h-5 w-5 mr-3" />
@@ -458,6 +468,10 @@ export default function MainMenu({
 
                 <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => setSettingsOpen(true)}>
                   <Settings className="h-5 w-5" />
+                </Button>
+
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => setRedeemCodeOpen(true)} title="Code einlösen">
+                  <Ticket className="h-5 w-5" />
                 </Button>
 
                 <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-lg" onClick={() => setInfoOpen(true)}>
@@ -790,6 +804,11 @@ export default function MainMenu({
       <GlobalChat
         open={globalChatOpen}
         onOpenChange={setGlobalChatOpen}
+      />
+
+      <RedeemCodeDialog
+        open={redeemCodeOpen}
+        onOpenChange={setRedeemCodeOpen}
       />
     </div>;
 }

@@ -8,9 +8,10 @@ import { Switch } from './ui/switch';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Users, Settings, ArrowLeft, Trash2, Plus, Trophy, Ban, ShieldCheck, User } from 'lucide-react';
+import { Users, Settings, ArrowLeft, Trash2, Plus, Trophy, Ban, ShieldCheck, User, Ticket } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import AdminProfileManager from './AdminProfileManager';
+import AdminCodeManager from './AdminCodeManager';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -443,6 +444,10 @@ export default function AdminPanel({ onBack }: AdminPanelProps) {
               <Trophy className="mr-2 h-4 w-4" />
               Leaderboard
             </TabsTrigger>
+            <TabsTrigger value="codes">
+              <Ticket className="mr-2 h-4 w-4" />
+              Codes
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="settings" className="space-y-4">
@@ -770,6 +775,10 @@ export default function AdminPanel({ onBack }: AdminPanelProps) {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="codes">
+            <AdminCodeManager />
           </TabsContent>
 
         </Tabs>
