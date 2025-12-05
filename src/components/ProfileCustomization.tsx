@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Label } from './ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Paintbrush, X, CreditCard } from 'lucide-react';
+import { Paintbrush, X, CreditCard, Award, Check } from 'lucide-react';
 import { SubscriptionSettings } from './SubscriptionSettings';
+import { useUserPerks, UserBadge } from '@/hooks/useUserPerks';
 
 interface ProfileCustomizationProps {
   userId: string;
@@ -28,6 +29,19 @@ const PRESET_COLORS = [
   { name: 'Türkis', value: '#00CED1' },
 ];
 
+const BACKGROUND_COLORS = [
+  { name: 'Standard', value: '' },
+  { name: 'Dunkelblau', value: '#1e3a5f' },
+  { name: 'Dunkelgrün', value: '#1a472a' },
+  { name: 'Dunkelrot', value: '#5c1a1a' },
+  { name: 'Dunkelviolett', value: '#2d1f4e' },
+  { name: 'Schwarz', value: '#0a0a0a' },
+  { name: 'Midnight', value: '#191970' },
+  { name: 'Forest', value: '#0b3d0b' },
+  { name: 'Crimson', value: '#4a0000' },
+  { name: 'Royal', value: '#1a0033' },
+];
+
 const BORDER_STYLES = [
   { name: 'Standard', value: 'solid' },
   { name: 'Doppelt', value: 'double' },
@@ -49,6 +63,14 @@ export const ProfileCustomization = ({
   const [borderStyle, setBorderStyle] = useState(currentBorderStyle || 'solid');
   const [saving, setSaving] = useState(false);
   const [subscriptionOpen, setSubscriptionOpen] = useState(false);
+  const [selectedBadges, setSelectedBadges] = useState<string[]>([]);
+  const { badges: availableBadges } = useUserPerks(userId);
+
+  // Load currently selected/displayed badges
+  useEffect(() => {
+    // For now, all user badges are displayed - in the future could add a selection mechanism
+    setSelectedBadges(availableBadges.map(b => b.id));
+  }, [availableBadges]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -111,7 +133,7 @@ export const ProfileCustomization = ({
                 >
                   {usernameColor === color.value && (
                     <div className="w-full h-full flex items-center justify-center">
-                      <div className="w-4 h-4 bg-black/50 rounded-full" />
+                      <Check className="w-5 h-5 text-black/50" />
                     </div>
                   )}
                 </button>
@@ -121,44 +143,61 @@ export const ProfileCustomization = ({
 
           {/* Background Color */}
           <div className="space-y-3">
-            <Label className="text-lg font-semibold">Hintergrundfarbe (Optional)</Label>
+            <Label className="text-lg font-semibold">Hintergrundfarbe</Label>
             <div className="grid grid-cols-5 gap-2">
-              <button
-                onClick={() => setBackgroundColor('')}
-                className={`h-12 rounded-lg border-2 transition-all bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900 ${
-                  backgroundColor === ''
-                    ? 'border-blue-600 scale-110'
-                    : 'border-gray-300 hover:scale-105'
-                }`}
-                title="Standard"
-              >
-                {backgroundColor === '' && (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <div className="w-4 h-4 bg-white rounded-full" />
-                  </div>
-                )}
-              </button>
-              {PRESET_COLORS.map((color) => (
+              {BACKGROUND_COLORS.map((color) => (
                 <button
-                  key={color.value}
+                  key={color.value || 'default'}
                   onClick={() => setBackgroundColor(color.value)}
                   className={`h-12 rounded-lg border-2 transition-all ${
                     backgroundColor === color.value
                       ? 'border-blue-600 scale-110'
                       : 'border-gray-300 hover:scale-105'
                   }`}
-                  style={{ backgroundColor: color.value }}
+                  style={{ 
+                    backgroundColor: color.value || undefined,
+                    background: !color.value ? 'linear-gradient(to bottom right, rgb(23 37 84), rgb(30 58 138), rgb(29 78 216))' : undefined,
+                  }}
                   title={color.name}
                 >
                   {backgroundColor === color.value && (
                     <div className="w-full h-full flex items-center justify-center">
-                      <div className="w-4 h-4 bg-black/50 rounded-full" />
+                      <Check className="w-5 h-5 text-white" />
                     </div>
                   )}
                 </button>
               ))}
             </div>
           </div>
+
+          {/* Available Badges */}
+          {availableBadges.length > 0 && (
+            <div className="space-y-3">
+              <Label className="text-lg font-semibold flex items-center gap-2">
+                <Award className="w-5 h-5" />
+                Deine Badges ({availableBadges.length})
+              </Label>
+              <div className="flex flex-wrap gap-2 p-4 bg-gray-50 rounded-xl">
+                {availableBadges.map((badge) => (
+                  <div
+                    key={badge.id}
+                    className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-semibold text-sm"
+                    style={{
+                      backgroundColor: badge.badge_color ? `${badge.badge_color}30` : 'rgba(147, 51, 234, 0.2)',
+                      color: badge.badge_color || '#9333ea',
+                      border: `1px solid ${badge.badge_color || '#9333ea'}50`,
+                    }}
+                  >
+                    {badge.badge_emoji && <span>{badge.badge_emoji}</span>}
+                    <span>{badge.badge_name}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-gray-500">
+                Badges erhältst du durch das Einlösen von Codes.
+              </p>
+            </div>
+          )}
 
           {/* Border Style */}
           <div className="space-y-3">
@@ -198,6 +237,24 @@ export const ProfileCustomization = ({
               >
                 Benutzername
               </h1>
+              {availableBadges.length > 0 && (
+                <div className="flex flex-wrap gap-2 justify-center mt-4">
+                  {availableBadges.slice(0, 3).map((badge) => (
+                    <div
+                      key={badge.id}
+                      className="inline-flex items-center gap-1 rounded-full px-2 py-1 font-semibold text-xs"
+                      style={{
+                        backgroundColor: badge.badge_color ? `${badge.badge_color}30` : 'rgba(147, 51, 234, 0.2)',
+                        color: badge.badge_color || '#9333ea',
+                        border: `1px solid ${badge.badge_color || '#9333ea'}50`,
+                      }}
+                    >
+                      {badge.badge_emoji && <span>{badge.badge_emoji}</span>}
+                      <span>{badge.badge_name}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
