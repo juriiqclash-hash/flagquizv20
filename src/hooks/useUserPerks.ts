@@ -63,10 +63,49 @@ export const useUserPerks = (userId?: string) => {
 
   useEffect(() => {
     fetchPerks();
+
+    // Subscribe to changes if we have a target user
+    if (targetUserId) {
+      const channel = supabase
+        .channel(`user_perks_${targetUserId}`)
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'user_perks',
+            filter: `user_id=eq.${targetUserId}`,
+          },
+          () => {
+            fetchPerks();
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'user_badges',
+            filter: `user_id=eq.${targetUserId}`,
+          },
+          () => {
+            fetchPerks();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
   }, [targetUserId]);
 
   const hasPerk = (perkType: string): boolean => {
     return perks.some(p => p.perk_type === perkType);
+  };
+
+  const getPerk = (perkType: string): UserPerk | undefined => {
+    return perks.find(p => p.perk_type === perkType);
   };
 
   const hasBadge = (badgeId: string): boolean => {
@@ -93,17 +132,39 @@ export const useUserPerks = (userId?: string) => {
     return hasPerk('admin_time');
   };
 
+  // Get remaining time for a perk
+  const getPerkTimeRemaining = (perkType: string): string | null => {
+    const perk = getPerk(perkType);
+    if (!perk) return null;
+
+    const expiresAt = new Date(perk.expires_at);
+    const now = new Date();
+    const diff = expiresAt.getTime() - now.getTime();
+
+    if (diff <= 0) return null;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+    if (days > 0) {
+      return `${days}d ${hours}h`;
+    }
+    return `${hours}h`;
+  };
+
   return {
     perks,
     badges,
     loading,
     hasPerk,
+    getPerk,
     hasBadge,
     hasPremium,
     hasUltimate,
     hasChatStyle,
     hasDoubleXP,
     hasAdminPerk,
+    getPerkTimeRemaining,
     refresh: fetchPerks
   };
 };
