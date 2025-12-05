@@ -11,6 +11,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getFlagEmoji } from '@/lib/flagUtils';
+import { useUserPerks } from '@/hooks/useUserPerks';
+import { ProfileBadgesList } from './ProfileBadge';
+
 interface PublicProfileViewProps {
   userId: string | null;
   username?: string;
@@ -116,9 +119,12 @@ export const PublicProfileView = ({
   const [showClanView, setShowClanView] = useState(false);
   const [friendshipStatus, setFriendshipStatus] = useState<'none' | 'pending_sent' | 'pending_received' | 'friends'>('none');
   const [friendRequestId, setFriendRequestId] = useState<string | null>(null);
+  const [usernameColor, setUsernameColor] = useState<string>('#FFFFFF');
+  const [backgroundColor, setBackgroundColor] = useState<string>('');
   const {
     user: currentUser
   } = useAuth();
+  const { badges } = useUserPerks(userId || undefined);
   useEffect(() => {
     if (userId) {
       loadProfileData();
@@ -317,10 +323,12 @@ export const PublicProfileView = ({
     try {
       const {
         data: profile
-      } = await supabase.from('profiles').select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan').eq('user_id', userId).single();
+      } = await supabase.from('profiles').select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan, username_color, background_color').eq('user_id', userId).single();
       if (profile) {
         setUsername(profile.username || 'User');
         setAvatarUrl(profile.avatar_url || '');
+        setUsernameColor(profile.username_color || '#FFFFFF');
+        setBackgroundColor(profile.background_color || '');
         setAccountCreated(new Date(profile.created_at).toLocaleDateString('de-DE', {
           day: '2-digit',
           month: '2-digit',
@@ -444,7 +452,10 @@ export const PublicProfileView = ({
 
   if (!userId) return null;
   return <>
-      <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 overflow-y-auto bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900">
+      <div 
+        className={`fixed inset-0 z-[300] flex items-center justify-center p-4 overflow-y-auto ${!backgroundColor ? 'bg-gradient-to-br from-blue-950 via-blue-800 to-blue-900' : ''}`}
+        style={{ background: backgroundColor || undefined }}
+      >
         <button onClick={handleShare} className="fixed top-4 right-16 z-[310] p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors" title="Profil teilen">
           <Upload className="w-5 h-5 text-gray-600" />
         </button>
@@ -471,9 +482,14 @@ export const PublicProfileView = ({
 
               <div className="flex-1 flex flex-col items-center md:items-start w-full">
                 <div className="flex items-center gap-2 mb-1 md:mb-3">
-                  <h1 className="text-4xl md:text-7xl font-bold text-white leading-none text-center md:text-left" style={{
-                  fontFamily: '"VAG Rounded", sans-serif'
-                }}>
+                  <h1 
+                    className="text-4xl md:text-7xl font-bold leading-none text-center md:text-left" 
+                    style={{
+                      fontFamily: '"VAG Rounded", sans-serif',
+                      color: usernameColor,
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                    }}
+                  >
                     {username}
                   </h1>
                   {profileData.flag && (
@@ -493,6 +509,13 @@ export const PublicProfileView = ({
               }}>
                   {t.level} {level}
                 </p>
+
+                {/* User Badges */}
+                {badges.length > 0 && (
+                  <div className="mb-3">
+                    <ProfileBadgesList badges={badges} size="md" maxDisplay={4} />
+                  </div>
+                )}
 
                 <div className="h-5 md:h-7 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner w-full max-w-md md:max-w-2xl mb-3 md:mb-6">
                   <div className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-500 rounded-full" style={{
