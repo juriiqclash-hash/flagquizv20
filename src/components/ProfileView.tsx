@@ -13,10 +13,12 @@ import { useTranslation } from '@/data/translations';
 import { calculateRank, calculateRankScore, RANK_TIERS } from '@/lib/profileRank';
 import { getFlagEmoji } from '@/lib/flagUtils';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useUserPerks } from '@/hooks/useUserPerks';
 import { checkCountryChangeLimit, incrementCountryChange } from '@/lib/planLimits';
 import { toast } from 'sonner';
 import { ProfileCustomization } from './ProfileCustomization';
 import { SubscriptionManager } from './SubscriptionManager';
+import { ProfileBadgesList } from './ProfileBadge';
 
 interface ProfileViewProps {
   open: boolean;
@@ -127,6 +129,7 @@ export const ProfileView = ({
   const [backgroundColor, setBackgroundColor] = useState<string>('');
   const [borderStyle, setBorderStyle] = useState<string>('solid');
   const { subscription } = useSubscription();
+  const { badges } = useUserPerks();
 
   useEffect(() => {
     if (open && user) {
@@ -428,6 +431,12 @@ export const ProfileView = ({
               </div>
               <p className="text-xl md:text-2xl text-gray-300 mb-2 font-medium text-center md:text-left" style={{ fontFamily: '"VAG Rounded", sans-serif' }}>{t.level} {level}</p>
 
+              {/* User Badges */}
+              {badges.length > 0 && (
+                <div className="mb-3">
+                  <ProfileBadgesList badges={badges} size="md" maxDisplay={4} />
+                </div>
+              )}
 
               {/* XP Progress Bar */}
               <div className="h-5 md:h-7 bg-white/30 backdrop-blur-sm rounded-full overflow-hidden shadow-inner w-full max-w-md md:max-w-2xl mb-3 md:mb-6">

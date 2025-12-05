@@ -5,10 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu';
-import { Send, Image, Video, Flag, UserPlus, Users, Eye, Trash2 } from 'lucide-react';
+import { Send, Image, Video, Flag, UserPlus, Users, Eye, Trash2, Sparkles } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdmin } from '@/hooks/useAdmin';
+import { useUserPerks } from '@/hooks/useUserPerks';
 import { toast } from 'sonner';
 import { PublicProfileView } from './PublicProfileView';
 import { CommandSuggestions } from './CommandSuggestions';
@@ -25,6 +26,7 @@ interface GlobalMessage {
   created_at: string;
   avatar_url?: string;
   selected_clan?: string;
+  has_chat_style?: boolean;
 }
 
 interface GlobalChatProps {
@@ -35,6 +37,7 @@ interface GlobalChatProps {
 export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
   const { user } = useAuth();
   const { isAdmin } = useAdmin();
+  const { hasChatStyle } = useUserPerks();
   const navigate = useNavigate();
   const [messages, setMessages] = useState<GlobalMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -48,6 +51,7 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const [currentUsername, setCurrentUsername] = useState('');
+  const [userChatStyles, setUserChatStyles] = useState<Set<string>>(new Set());
 
   // Listen for admin actions (kick, ddos, attack)
   useEffect(() => {
@@ -150,12 +154,26 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
         .select('user_id, avatar_url, selected_clan')
         .in('user_id', userIds);
 
-      const profileMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
+      // Check which users have chat_style perk
+      const { data: chatStylePerks } = await supabase
+        .from('user_perks')
+        .select('user_id')
+        .in('user_id', userIds)
+        .eq('perk_type', 'chat_style')
+        .gt('expires_at', new Date().toISOString());
+
+      const chatStyleUsers = new Set<string>(chatStylePerks?.map(p => p.user_id as string) || []);
+      setUserChatStyles(chatStyleUsers);
+
+      const profileMap = new Map<string, { avatar_url: string | null; selected_clan: string | null }>(
+        profiles?.map(p => [p.user_id, { avatar_url: p.avatar_url, selected_clan: p.selected_clan }]) || []
+      );
 
       const messagesWithProfiles = (messagesData || []).map(msg => ({
         ...msg,
         avatar_url: profileMap.get(msg.user_id)?.avatar_url,
         selected_clan: profileMap.get(msg.user_id)?.selected_clan,
+        has_chat_style: chatStyleUsers.has(msg.user_id),
       }));
 
       setMessages(messagesWithProfiles);
@@ -494,8 +512,21 @@ export function GlobalChat({ open, onOpenChange }: GlobalChatProps) {
                             msg.user_id === user?.id 
                               ? 'bg-blue-600 text-white' 
                               : 'bg-white/10 text-white'
-                          }`}>
-                            {msg.message && <p className="break-words">{msg.message}</p>}
+                          } ${msg.has_chat_style || userChatStyles.has(msg.user_id) ? 'ring-2 ring-yellow-400/50 shadow-lg shadow-yellow-400/20' : ''}`}>
+                            {msg.message && (
+                              <p className={`break-words ${
+                                msg.has_chat_style || userChatStyles.has(msg.user_id)
+                                  ? 'text-lg font-bold bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200 bg-clip-text text-transparent'
+                                  : ''
+                              }`}>
+                                {msg.has_chat_style || userChatStyles.has(msg.user_id) ? (
+                                  <span className="flex items-center gap-1">
+                                    <Sparkles className="h-4 w-4 text-yellow-400 inline" />
+                                    {msg.message}
+                                  </span>
+                                ) : msg.message}
+                              </p>
+                            )}
                             {msg.image_url && (
                               <img 
                                 src={msg.image_url} 
