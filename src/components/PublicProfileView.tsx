@@ -121,10 +121,15 @@ export const PublicProfileView = ({
   const [friendRequestId, setFriendRequestId] = useState<string | null>(null);
   const [usernameColor, setUsernameColor] = useState<string>('#FFFFFF');
   const [backgroundColor, setBackgroundColor] = useState<string>('');
+  const [borderStyle, setBorderStyle] = useState<string>('solid');
+  const [equippedBadges, setEquippedBadges] = useState<string[]>([]);
   const {
     user: currentUser
   } = useAuth();
-  const { badges } = useUserPerks(userId || undefined);
+  const { badges: allBadges } = useUserPerks(userId || undefined);
+  
+  // Filter to only show equipped badges
+  const badges = allBadges.filter(b => equippedBadges.length === 0 || equippedBadges.includes(b.id));
   useEffect(() => {
     if (userId) {
       loadProfileData();
@@ -323,12 +328,14 @@ export const PublicProfileView = ({
     try {
       const {
         data: profile
-      } = await supabase.from('profiles').select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan, username_color, background_color').eq('user_id', userId).single();
+      } = await supabase.from('profiles').select('username, avatar_url, created_at, selected_flag, selected_continent, selected_clan, username_color, background_color, profile_border_style, equipped_badges').eq('user_id', userId).single();
       if (profile) {
         setUsername(profile.username || 'User');
         setAvatarUrl(profile.avatar_url || '');
         setUsernameColor(profile.username_color || '#FFFFFF');
         setBackgroundColor(profile.background_color || '');
+        setBorderStyle(profile.profile_border_style || 'solid');
+        setEquippedBadges((profile as any).equipped_badges || []);
         setAccountCreated(new Date(profile.created_at).toLocaleDateString('de-DE', {
           day: '2-digit',
           month: '2-digit',
@@ -467,7 +474,13 @@ export const PublicProfileView = ({
           <div className="flex-1 flex items-center mb-3 md:mb-4 md:pl-2">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-10 w-full">
               <div className="flex flex-col items-center">
-                <Avatar className="h-40 w-40 md:h-64 md:w-64 ring-4 md:ring-8 ring-white shadow-2xl">
+                <Avatar className={`h-40 w-40 md:h-64 md:w-64 shadow-2xl ${
+                  borderStyle === 'gold' ? 'ring-4 md:ring-8 ring-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.5)]' :
+                  borderStyle === 'rainbow' ? 'ring-4 md:ring-8 ring-purple-400 animate-pulse shadow-[0_0_20px_rgba(168,85,247,0.5)]' :
+                  borderStyle === 'glow' ? 'ring-4 md:ring-8 ring-cyan-400 shadow-[0_0_40px_rgba(34,211,238,0.7)]' :
+                  borderStyle === 'double' ? 'ring-4 md:ring-8 ring-white ring-offset-2 ring-offset-blue-500' :
+                  'ring-4 md:ring-8 ring-white'
+                }`}>
                   <AvatarImage src={avatarUrl} />
                   <AvatarFallback className="text-6xl md:text-9xl bg-blue-500 text-white">
                     {username.charAt(0).toUpperCase()}
