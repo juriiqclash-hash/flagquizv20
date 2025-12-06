@@ -548,6 +548,7 @@ export type Database = {
           banned_by: string | null
           country_changes_this_month: number | null
           created_at: string
+          equipped_badges: string[] | null
           id: string
           is_deactivated: boolean | null
           last_country_change: string | null
@@ -571,6 +572,7 @@ export type Database = {
           banned_by?: string | null
           country_changes_this_month?: number | null
           created_at?: string
+          equipped_badges?: string[] | null
           id?: string
           is_deactivated?: boolean | null
           last_country_change?: string | null
@@ -594,6 +596,7 @@ export type Database = {
           banned_by?: string | null
           country_changes_this_month?: number | null
           created_at?: string
+          equipped_badges?: string[] | null
           id?: string
           is_deactivated?: boolean | null
           last_country_change?: string | null
