@@ -40,7 +40,7 @@ export default function InfoPanelCarousel({ mobile = false, onOpenRedeemCode }: 
     }
   };
 
-  const panelHeight = mobile ? 'h-[200px]' : 'h-[200px]';
+  const panelHeight = mobile ? 'h-[180px]' : 'h-[185px]';
 
   const panels = [
     // Panel 1: Discord
