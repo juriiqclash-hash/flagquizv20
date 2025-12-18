@@ -40,12 +40,10 @@ export default function InfoPanelCarousel({ mobile = false, onOpenRedeemCode }: 
     }
   };
 
-  const panelHeight = mobile ? 'h-[180px]' : 'h-[185px]';
-
   const panels = [
     // Panel 1: Discord
-    <div key="discord" className={`${panelHeight} flex flex-col`} onClick={handleDiscord}>
-      <div className="flex-1 bg-gradient-to-br from-purple-600/40 to-blue-600/40 rounded-2xl flex items-center justify-center cursor-pointer hover:from-purple-600/50 hover:to-blue-600/50 transition-all">
+    <div key="discord" className="h-full flex flex-col" onClick={handleDiscord}>
+      <div className="flex-1 min-h-0 bg-gradient-to-br from-purple-600/40 to-blue-600/40 rounded-2xl flex items-center justify-center cursor-pointer hover:from-purple-600/50 hover:to-blue-600/50 transition-all">
         <div className="text-center p-4">
           <DiscordIcon />
           <h3 className="text-white text-lg font-bold mt-2">DISCORD</h3>
@@ -55,8 +53,8 @@ export default function InfoPanelCarousel({ mobile = false, onOpenRedeemCode }: 
     </div>,
 
     // Panel 2: Ultimate Info
-    <div key="ultimate" className={`${panelHeight} flex flex-col`} onClick={handleRedeemCode}>
-      <div className="flex-1 bg-gradient-to-br from-amber-500/30 to-yellow-600/30 rounded-2xl flex items-center justify-center cursor-pointer hover:from-amber-500/40 hover:to-yellow-600/40 transition-all relative overflow-hidden">
+    <div key="ultimate" className="h-full flex flex-col" onClick={handleRedeemCode}>
+      <div className="flex-1 min-h-0 bg-gradient-to-br from-amber-500/30 to-yellow-600/30 rounded-2xl flex items-center justify-center cursor-pointer hover:from-amber-500/40 hover:to-yellow-600/40 transition-all relative overflow-hidden">
         <Sparkles className="absolute top-3 left-3 w-5 h-5 text-yellow-400 animate-pulse" />
         <Sparkles className="absolute bottom-3 right-3 w-5 h-5 text-yellow-400 animate-pulse" />
         <Sparkles className="absolute top-3 right-8 w-4 h-4 text-amber-300 animate-pulse delay-100" />
@@ -75,8 +73,8 @@ export default function InfoPanelCarousel({ mobile = false, onOpenRedeemCode }: 
     </div>,
 
     // Panel 3: News
-    <div key="news" className={`${panelHeight} flex flex-col`}>
-      <div className="flex-1 bg-gradient-to-br from-blue-500/30 to-cyan-600/30 rounded-2xl p-4 overflow-hidden">
+    <div key="news" className="h-full flex flex-col">
+      <div className="flex-1 min-h-0 bg-gradient-to-br from-blue-500/30 to-cyan-600/30 rounded-2xl p-4 overflow-y-auto">
         <div className="flex items-center gap-2 mb-3">
           <Newspaper className="w-6 h-6 text-cyan-400" />
           <h3 className="text-white text-lg font-bold">NEWS</h3>
@@ -99,8 +97,8 @@ export default function InfoPanelCarousel({ mobile = false, onOpenRedeemCode }: 
     </div>,
 
     // Panel 4: Co-Admin
-    <div key="coadmin" className={`${panelHeight} flex flex-col`}>
-      <div className="flex-1 bg-gradient-to-br from-emerald-500/30 to-teal-600/30 rounded-2xl flex items-center justify-center">
+    <div key="coadmin" className="h-full flex flex-col">
+      <div className="flex-1 min-h-0 bg-gradient-to-br from-emerald-500/30 to-teal-600/30 rounded-2xl flex items-center justify-center">
         <div className="text-center p-4">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Shield className="w-10 h-10 text-emerald-400" />
@@ -116,8 +114,8 @@ export default function InfoPanelCarousel({ mobile = false, onOpenRedeemCode }: 
     </div>,
 
     // Panel 5: Badges
-    <div key="badges" className={`${panelHeight} flex flex-col`}>
-      <div className="flex-1 bg-gradient-to-br from-pink-500/30 to-rose-600/30 rounded-2xl p-4 overflow-hidden">
+    <div key="badges" className="h-full flex flex-col">
+      <div className="flex-1 min-h-0 bg-gradient-to-br from-pink-500/30 to-rose-600/30 rounded-2xl p-4 overflow-y-auto">
         <div className="flex items-center gap-2 mb-3">
           <Award className="w-6 h-6 text-pink-400" />
           <h3 className="text-white text-lg font-bold">BADGES</h3>
@@ -149,7 +147,7 @@ export default function InfoPanelCarousel({ mobile = false, onOpenRedeemCode }: 
   return (
     <div className="flex flex-col h-full">
       {/* Header with Navigation */}
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-2">
         <button
           onClick={prevPanel}
           className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
@@ -166,7 +164,7 @@ export default function InfoPanelCarousel({ mobile = false, onOpenRedeemCode }: 
       </div>
 
       {/* Panel Content */}
-      <div className="flex-1 relative overflow-hidden">
+      <div className="flex-1 min-h-0 relative overflow-hidden">
         <div 
           className="flex transition-transform duration-300 ease-in-out h-full"
           style={{ transform: `translateX(-${currentPanel * 100}%)` }}
@@ -180,7 +178,7 @@ export default function InfoPanelCarousel({ mobile = false, onOpenRedeemCode }: 
       </div>
 
       {/* Dot Indicators */}
-      <div className="flex items-center justify-center gap-2 mt-3">
+      <div className="flex items-center justify-center gap-2 mt-2">
         {Array.from({ length: totalPanels }).map((_, index) => (
           <button
             key={index}
